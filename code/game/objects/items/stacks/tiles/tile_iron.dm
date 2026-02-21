@@ -8,7 +8,7 @@
 	mats_per_unit = list(/datum/material/iron=SHEET_MATERIAL_AMOUNT*0.25)
 	throwforce = 10
 	obj_flags = CONDUCTS_ELECTRICITY
-	turf_type = /turf/open/floor/iron
+	turf_type = /turf/open/floor/iron_tile
 	armor_type = /datum/armor/tile_iron
 	resistance_flags = FIRE_PROOF
 	matter_amount = 1
