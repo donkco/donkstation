@@ -57,7 +57,7 @@
 	desc = "The striking red and black pattern seems familiar... Could this be indicative of syndicate activity?"
 
 	icon = 'icons/turf/floors/donkfloors/carpet_really_sus.dmi'
-	icon_state = "carpet_really_sus"
+	icon_state = "carpet_really_sus-0"
 	base_icon_state = "carpet__really_sus"
 	smoothing_groups = SMOOTH_GROUP_SUS_CARPET + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_SUS_CARPET

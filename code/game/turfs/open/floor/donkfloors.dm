@@ -181,12 +181,12 @@
 	desc = "A floor made of the finest Italian marble. Molto Bene!"
 
 	icon = 'icons/turf/floors/donkfloors/donktiles.dmi'
-	icon_state = "marble_tile"
+	icon_state = "marble"
 
 	floor_tile = /obj/item/stack/tile/marble
 	var/static/list/marble_variants = list(
-		"marble_tile",
-		"marble_tile-2",
+		"marble",
+		"marble-2",
 	)
 
 /turf/open/floor/marble/Initialize(mapload)
@@ -217,7 +217,7 @@
 	icon_state = "sludge_pool-0"
 	base_icon_state = "sludge_pool"
 	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
+	smoothing_groups = SMOOTH_GROUP_SLUDGE_POOL + SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_SLUDGE_POOL
 
 	overfloor_placed = FALSE

@@ -183,6 +183,8 @@
 	name = "really suspicious carpet roll"
 	singular_name = "really suspicious carpet roll"
 	desc = "I should unroll it and see what is going on with this thing.."
+
+	icon = 'icons/obj/donkstacks/carpet_rolls.dmi'
 	icon_state = "carpet_roll_sus"
 	turf_type = /turf/open/floor/carpet/sus
 	merge_type = /obj/item/stack/tile/carpet/sus
