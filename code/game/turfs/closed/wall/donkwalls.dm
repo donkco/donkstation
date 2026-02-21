@@ -12,12 +12,14 @@
 
 /turf/closed/wall/calabash/med
 	desc = "The wall of the future. This section has a soothing, clinical appearance."
+
 	icon = 'icons/turf/walls/donkwalls/calabash_med_wall.dmi'
 	icon_state = "calabash_med_wall-0"
 	base_icon_state = "calabash_med_wall"
 
 /turf/closed/wall/calabash/sus
 	desc = "The wall of the future. This one looks a bit suspicious."
+
 	icon = 'icons/turf/walls/donkwalls/calabash_sus_wall.dmi'
 	icon_state = "calabash_sus_wall-0"
 	base_icon_state = "calabash_sus_wall"
@@ -25,14 +27,19 @@
 /turf/closed/wall/tile
 	name = "tile wall"
 	desc = "A tiles hung on a metal grid frame. It does not seem very sturdy, but it is at least easy to build and maintain."
+
+	icon = 'icons/turf/walls/donkwalls/tile_wall.dmi'
+	icon_state = "tile_wall-0"
+	base_icon_state = "tile_wall"
+	smoothing_flags = SMOOTH_BITMASK
+	smoothing_groups = SMOOTH_GROUP_TILE_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
+	canSmoothWith = SMOOTH_GROUP_TILE_WALLS
+
 	sheet_type = /obj/item/stack/tile/cool
 	hardness = 80
 	sheet_amount = 1
 	custom_materials = list(/datum/material/iron =SHEET_MATERIAL_AMOUNT * 1)
 	rust_resistance = RUST_RESISTANCE_BASIC
-	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_TILE_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
-	canSmoothWith = SMOOTH_GROUP_TILE_WALLS
 
 /turf/closed/wall/tile/decaying
 	name = "decaying tile wall"
@@ -40,9 +47,7 @@
 	icon = 'icons/turf/walls/donkwalls/decaying_tile_wall.dmi'
 	icon_state = "decaying_tile_wall-0"
 	base_icon_state = "decaying_tile_wall"
-	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_DECAYING_TILE_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
-	canSmoothWith = SMOOTH_GROUP_DECAYING_TILE_WALLS
+
 
 /turf/closed/wall/plywood
 	name = "plywood wall"
