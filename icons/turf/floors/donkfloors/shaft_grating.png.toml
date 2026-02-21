@@ -1,0 +1,5 @@
+output_name = "shaft_grating"
+template = "bitmask/diagonal_32x32.toml"
+
+[prefabs]
+255 = 5
