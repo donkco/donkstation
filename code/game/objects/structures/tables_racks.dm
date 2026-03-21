@@ -527,9 +527,9 @@
 /obj/structure/table/glass
 	name = "glass table"
 	desc = "What did I say about leaning on the glass tables? Now you need surgery."
-	icon = 'icons/obj/smooth_structures/glass_table.dmi'
-	icon_state = "glass_table-0"
-	base_icon_state = "glass_table"
+	icon = 'icons/obj/smooth_structures/donk_tables/table_glass.dmi'
+	icon_state = "table_glass-0"
+	base_icon_state = "table_glass"
 	custom_materials = list(/datum/material/glass = SHEET_MATERIAL_AMOUNT)
 	buildstack = /obj/item/stack/sheet/glass
 	smoothing_groups = SMOOTH_GROUP_GLASS_TABLES
