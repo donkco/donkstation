@@ -96,3 +96,9 @@
 
 #define MONEY_MINING_SYMBOL "mp"
 #define MONEY_BITRUNNING_SYMBOL "np"
+
+/// The space is pegged to the credit at this ratio
+#define SPACE_CASH 50
+
+/// The glyph we have chosen as our space cash currency symbol
+#define SPACE_CASH_SYMBOL "ֆ"

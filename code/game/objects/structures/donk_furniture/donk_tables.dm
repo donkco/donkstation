@@ -19,6 +19,72 @@
 
 	can_flip = FALSE
 
+
+//----------- COARSE TABLES ------------------------------
+// Tables that don't smooth.
+//-----------------------------------------------------------------------------------
+/obj/structure/table/round
+	name = "round table"
+	desc = "An example of smooth design."
+
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "round-teak"
+	base_icon_state = "round-teak"
+	smoothing_flags = NONE
+	smoothing_groups = null
+	canSmoothWith = null
+
+	frame = /obj/structure/table_frame/wood
+	framestack = /obj/item/stack/sheet/mineral/wood
+	buildstack = /obj/item/stack/sheet/mineral/wood
+
+	resistance_flags = FLAMMABLE
+	max_integrity = 70
+
+	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT)
+
+	can_flip = FALSE
+
+/obj/structure/table/round/marble
+	name = "marble table"
+	desc = "Maybe this once held Marie Antionette's powder box."
+
+	icon_state = "round-marble"
+	base_icon_state = "round-marble"
+
+	buildstack = /obj/item/stack/sheet/marble
+
+	custom_materials = list(/datum/material/marble = SHEET_MATERIAL_AMOUNT)
+
+/obj/structure/table/shelves
+	name = "shelves"
+	desc = "Multi-level storage, we really are in the space age!"
+
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "shelves-grey"
+	base_icon_state = "shelves-grey"
+	smoothing_flags = NONE
+	smoothing_groups = null
+	canSmoothWith = null
+
+	frame = /obj/structure/table_frame
+	framestack = /obj/item/stack/rods
+	buildstack = /obj/item/stack/sheet/iron
+
+	can_flip = FALSE
+
+//-------- ROLLING TABLES----------------------------------
+// Tables that roll, like the famous rolly-polyrolling table.
+//----------------------------------------------------------
+
+/obj/structure/table/rolling/tool_cart
+	name = "tool cart"
+	desc = "A little cart with its little wheels."
+
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "cart-tool"
+
+
 // ----------- DESKS ---------------------------------------
 //-------------------------------------------------------------
 
