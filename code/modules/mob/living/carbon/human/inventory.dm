@@ -48,6 +48,10 @@
 			return r_store
 		if(ITEM_SLOT_SUITSTORE)
 			return s_store
+		if(ITEM_SLOT_L_TRINKET)
+			return l_trinket
+		if(ITEM_SLOT_R_TRINKET)
+			return r_trinket
 
 	return ..()
 
@@ -192,6 +196,16 @@
 		if(ITEM_SLOT_RPOCKET)
 			r_store = equipping
 			update_pockets()
+		if(ITEM_SLOT_L_TRINKET)
+			if(l_trinket)
+				return
+			l_trinket = equipping
+			update_worn_l_trinket()
+		if(ITEM_SLOT_R_TRINKET)
+			if(r_trinket)
+				return
+			r_trinket = equipping
+			update_worn_r_trinket()
 		if(ITEM_SLOT_SUITSTORE)
 			if(s_store)
 				return

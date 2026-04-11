@@ -64,6 +64,8 @@
 	var/obj/item/r_store = null
 	var/obj/item/l_store = null
 	var/obj/item/s_store = null
+	var/obj/item/l_trinket = null
+	var/obj/item/r_trinket = null
 
 	/// Allows for special overrides of voice
 	var/override_voice = ""

@@ -41,6 +41,10 @@
 		update_pockets()
 	if(slot_flags & ITEM_SLOT_HANDS)
 		update_held_items()
+	if(slot_flags & ITEM_SLOT_L_TRINKET)
+		update_worn_l_trinket()
+	if(slot_flags & ITEM_SLOT_R_TRINKET)
+		update_worn_r_trinket()
 
 /// Recalculates the mob's obscured and covered slots based on currently equipped items
 /mob/proc/refresh_obscured()
@@ -124,4 +128,12 @@
 
 ///Updates the headset overlay & HUD element.
 /mob/proc/update_worn_ears()
+	return
+
+///Updates the left trinket overlay & HUD element.
+/mob/proc/update_worn_l_trinket()
+	return
+
+///Updates the right trinket overlay & HUD element.
+/mob/proc/update_worn_r_trinket()
 	return
