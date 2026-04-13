@@ -89,6 +89,16 @@
 		/obj/item/fish/fryish,
 	))
 
+/// 2MM molusk round (spywatchammobox) box
+/datum/storage/spywatchammobox
+	max_slots = 4
+
+/datum/storage/spywatchammobox/New(atom/parent, max_slots, max_specific_storage, max_total_storage, rustle_sound, remove_rustle_sound)
+	. = ..()
+	set_holdable(list(
+		/obj/item/ammo_casing/spywatch,
+	))
+
 /// Jars of Pickles
 /datum/storage/pickles_jar
 	max_slots = 10

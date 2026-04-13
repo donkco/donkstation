@@ -891,6 +891,17 @@
 	new /obj/item/clothing/under/costume/gi(src)
 	new /obj/item/clothing/shoes/sandal(src)
 
+
+/obj/item/storage/box/syndicate/spywatch_kit
+	name = "A spywatch kit"
+	desc = "A box containing a spywatch and its ammo."
+
+
+/obj/item/storage/box/syndicate/spywatch_kit/PopulateContents()
+	new /obj/item/spywatch(src)
+	new /obj/item/storage/fancy/spywatchammobox(src)
+
+
 #undef KIT_RECON
 #undef KIT_BLOODY_SPAI
 #undef KIT_STEALTHY
