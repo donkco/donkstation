@@ -10,6 +10,8 @@
 #define PROJECTILE_DELETE_WITHOUT_HITTING 3
 
 // Caliber defines: (current count stands at 24)
+/// The caliber used by the [Spy Watch][/obj/item/gun/ballistic/spywatch].
+#define CALIBER_2MM "2mm"
 /// The caliber used by the [L6 SAW][/obj/item/gun/ballistic/automatic/l6_saw].
 #define CALIBER_A7MM "a7mm"
 /// The caliber used by the [security auto-rifle][/obj/item/gun/ballistic/automatic/wt550].

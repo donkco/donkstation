@@ -1127,7 +1127,7 @@
 	icon = 'icons/obj/toys/toy.dmi'
 	icon_state = "dread_ipad"
 	worn_icon_state = "dread_ipad"
-	slot_flags = ITEM_SLOT_BELT
+	slot_flags = ITEM_SLOT_L_TRINKET | ITEM_SLOT_R_TRINKET
 	w_class = WEIGHT_CLASS_SMALL
 	var/cooldown = 0
 

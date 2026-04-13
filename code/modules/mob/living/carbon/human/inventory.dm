@@ -288,6 +288,14 @@
 		s_store = null
 		if(!QDELETED(src))
 			update_suit_storage()
+	else if(item_dropping == l_trinket)
+		l_trinket = null
+		if(!QDELETED(src))
+			update_worn_l_trinket()
+	else if(item_dropping == r_trinket)
+		r_trinket = null
+		if(!QDELETED(src))
+			update_worn_r_trinket()
 
 /mob/living/carbon/human/item_coverage_changed(added_slots, removed_slots)
 	. = ..()
