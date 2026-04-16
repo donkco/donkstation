@@ -4,3 +4,10 @@
 		"dna_undiscovered.gif" = 'icons/ui/dna/dna_undiscovered.gif',
 		"dna_extra.gif" = 'icons/ui/dna/dna_extra.gif'
 	)
+
+
+/datum/asset/simple/charactercontract
+	assets = list(
+		"donkcopaper.png" = 'icons/ui/charactercontract/donkcopaper.png',
+
+	)

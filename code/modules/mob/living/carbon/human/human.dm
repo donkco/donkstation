@@ -37,6 +37,24 @@
 	GLOB.human_list += src
 	ADD_TRAIT(src, TRAIT_CAN_MOUNT_HUMANS, INNATE_TRAIT)
 	ADD_TRAIT(src, TRAIT_CAN_MOUNT_CYBORGS, INNATE_TRAIT)
+	ui_interact(src)
+
+/mob/living/carbon/human/ClickOn(atom/A, params)
+	. = ..()
+	if(A == src)
+		ui_interact(src)
+	return ..()
+
+/mob/living/carbon/human/ui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "CharacterContract")
+		ui.open()
+
+/mob/living/carbon/human/ui_assets(mob/user)
+	return list(
+		get_asset_datum(/datum/asset/simple/charactercontract),
+	)
 
 /mob/living/carbon/human/proc/setup_physiology()
 	physiology = new()
