@@ -168,6 +168,9 @@
 	layer = LIGHTING_ABOVE_ALL + 1 //Infinity plus one (not actually)
 	blend_mode = BLEND_MULTIPLY
 
+/atom/movable/screen/fullscreen/static_noise
+	icon_state = "static_noise"
+
 /atom/movable/screen/fullscreen/high/update_for_view(client_view)
 
 	animate(src, flags = ANIMATION_END_NOW) //Stop all animations.

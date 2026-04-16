@@ -1623,4 +1623,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 /// Object is dangerous to mobs buckled to it
 #define TRAIT_DANGEROUS_BUCKLE "dangerous_buckle"
 
+/// Humans with this trait don't get mood
+#define TRAIT_NO_MOOD "no_mood"
+
 // END TRAIT DEFINES

@@ -451,6 +451,18 @@
 		'sound/mobs/non-humanoids/monkey/monkey_screech_7.ogg',
 	)
 
+/datum/sound_effect/robot_screech
+	key = SFX_ROBOT_SCREECH
+	file_paths = list(
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_01.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_02.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_03.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_04.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_05.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_06.ogg',
+		'sound/mobs/non-humanoids/android_monkey/android_monkey_screech_07.ogg',
+	)
+
 /datum/sound_effect/tool_switch
 	key = SFX_TOOL_SWITCH
 	file_paths = list('sound/items/tools/tool_switch.ogg')

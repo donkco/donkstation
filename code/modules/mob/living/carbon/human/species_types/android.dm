@@ -48,6 +48,7 @@
 		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/robot/android,
 	)
 
+
 /datum/species/android/get_physical_attributes()
 	return "Androids are almost, but not quite, identical to fully augmented humans. \
 	Unlike those, though, they're completely immune to toxin damage, don't have blood or organs (besides their head), don't get hungry, and can reattach their limbs! \
@@ -101,3 +102,77 @@
 		SPECIES_PERK_DESC = "Being synthetic, Androids are vulnernable to EMPs.",
 	))
 	return perks
+
+
+///When an android and a monkey love each other very much...
+/datum/species/android/monkey
+	name = "Robot Monkey"
+	id = SPECIES_ANDROID
+	examine_limb_id = SPECIES_MONKEY
+	inherent_traits = list(
+		TRAIT_GENELESS,
+		TRAIT_LIMBATTACHMENT,
+		TRAIT_LIVERLESS_METABOLISM,
+		TRAIT_NOBLOOD,
+		TRAIT_NOBREATH,
+		TRAIT_NOCRITDAMAGE,
+		TRAIT_NOFIRE,
+		TRAIT_NOHUNGER,
+		TRAIT_NO_DNA_COPY,
+		TRAIT_NO_PLASMA_TRANSFORM,
+		TRAIT_NO_UNDERWEAR,
+		TRAIT_OVERDOSEIMMUNE,
+		TRAIT_PIERCEIMMUNE,
+		TRAIT_RADIMMUNE,
+		TRAIT_RESISTCOLD,
+		TRAIT_RESISTHEAT,
+		TRAIT_RESISTHIGHPRESSURE,
+		TRAIT_RESISTLOWPRESSURE,
+		TRAIT_TOXIMMUNE,
+		TRAIT_NO_AUGMENTS,
+		TRAIT_NO_BLOOD_OVERLAY,,
+		TRAIT_VENTCRAWLER_NUDE,
+		TRAIT_WEAK_SOUL,
+		TRAIT_NO_MOOD
+	)
+
+	mutant_organs = list(
+		/obj/item/organ/tail/android_monkey = "Monkey",
+	)
+
+	inherent_biotypes = MOB_ROBOTIC|MOB_HUMANOID
+	species_language_holder = /datum/language_holder/synthetic
+	sexes = FALSE
+	inherent_factions = list(FACTION_MONKEY)
+	no_equip_flags = ITEM_SLOT_OCLOTHING | ITEM_SLOT_GLOVES | ITEM_SLOT_FEET | ITEM_SLOT_SUITSTORE
+
+	fire_overlay = "monkey"
+	gib_anim = "gibbed-m"//We should probably get a robot version of this
+
+/datum/species/android/monkey/on_species_gain(mob/living/carbon/human/human_who_gained_species, datum/species/old_species, pref_load, regenerate_icons, replace_missing)
+	. = ..()
+	passtable_on(human_who_gained_species, SPECIES_TRAIT)
+	human_who_gained_species.AddElement(/datum/element/human_biter)
+	human_who_gained_species.update_mob_height()
+
+/datum/species/android/monkey/on_species_loss(mob/living/carbon/human/human, datum/species/new_species, pref_load)
+	. = ..()
+	passtable_off(human, SPECIES_TRAIT)
+	human.RemoveElement(/datum/element/human_biter)
+	human.update_mob_height()
+
+/datum/species/android/monkey/update_species_heights(mob/living/carbon/human/holder)
+	if(HAS_TRAIT(holder, TRAIT_DWARF))
+		return MONKEY_HEIGHT_DWARF
+
+	if(HAS_TRAIT(holder, TRAIT_TOO_TALL))
+		return MONKEY_HEIGHT_TALL
+
+	return MONKEY_HEIGHT_MEDIUM
+
+/datum/species/android/monkey/get_scream_sound(mob/living/carbon/human/monkey)
+	return get_sfx(SFX_ROBOT_SCREECH)
+
+/mob/living/carbon/human/species/androidmonkey
+	icon_state = "monkey" //for mapping
+	race = /datum/species/android/monkey
