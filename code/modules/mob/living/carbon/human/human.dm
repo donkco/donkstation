@@ -56,6 +56,18 @@
 		get_asset_datum(/datum/asset/simple/charactercontract),
 	)
 
+/mob/living/carbon/human/ui_data(mob/user)
+	var/list/data = list()
+	data["trait_title_1"] = "Blueblooded"
+	data["trait_title_2"] = "Nearsighted"
+	data["trait_title_3"] = "Polygamist"
+	data["trait_desc_1"] = "They are the ((Prince)) of ((Persia)) over at ((Ubisoft)).\n\nDespite some mixed assessments of their compency & general demeanor, it might be prudent to find a place for them."
+	data["trait_desc_2"] = "The physical examination has shown that their eyesight is very poor.\n\nThey will need corrective eyewear to see much of anything\n\nLiability?"
+	data["trait_desc_3"] = "They belong to a family that practices multiple marriage.\n\nI've been told this is quite ordinary in their culture\n\nStrange!"
+	return data
+
+
+
 /mob/living/carbon/human/proc/setup_physiology()
 	physiology = new()
 

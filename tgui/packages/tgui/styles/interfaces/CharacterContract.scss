@@ -1,0 +1,204 @@
+.CharacterContract {
+  // ── Shared tokens ─────────────────────────────────────
+  --cc-font: Georgia, 'Times New Roman', serif;
+  --cc-color: #2a1208;
+  --cc-border: 1px solid #3a1f08;
+  --cc-header-bg: #c4a96a;
+
+  // Block root — also serves as the canvas wrapper
+  position: relative;
+  width: 960px;
+  height: 960px;
+  flex-shrink: 0;
+  color: var(--cc-color);
+  font-family: var(--cc-font);
+
+  // ── Canvas wrapper (alias) ────────────────────────────
+  &__canvas {
+    position: relative;
+    width: 960px;
+    height: 960px;
+    flex-shrink: 0;
+  }
+
+  // ── Generic overlay block ─────────────────────────────
+  &__overlay {
+    position: absolute;
+    font-family: var(--cc-font);
+    color: var(--cc-color);
+  }
+
+  // ── Applicant table ───────────────────────────────────
+  &__table {
+    border: var(--cc-border);
+    font-size: 13px;
+    background-color: transparent;
+
+    &-header {
+      background-color: var(--cc-header-bg);
+      padding: 3px 7px;
+      font-weight: bold;
+      border-bottom: var(--cc-border);
+      color: var(--cc-color);
+    }
+
+    &-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      background-color: transparent;
+
+      &--bordered {
+        border-bottom: var(--cc-border);
+      }
+    }
+
+    &-cell {
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 3px 7px;
+      gap: 5px;
+      background-color: transparent;
+
+      &--right-border {
+        border-right: var(--cc-border);
+      }
+
+      &--dob {
+        gap: 4px;
+      }
+
+      &--titles {
+        padding: 3px 14px;
+        gap: 14px;
+      }
+    }
+
+    &-label {
+      white-space: nowrap;
+      color: var(--cc-color);
+      font-family: var(--cc-font);
+    }
+
+    // Override TGUI Input component styles to match paper look
+    // The tgui-core Input renders as a plain <input class="Input"> element
+    .Input {
+      background-color: rgba(255, 255, 255, 0.55) !important;
+      border: none !important;
+      border-bottom: 1px solid rgba(58, 31, 8, 0.5) !important;
+      border-radius: 0 !important;
+      color: var(--cc-color) !important;
+      font-family: var(--cc-font) !important;
+
+      &::placeholder {
+        color: rgba(42, 18, 8, 0.4) !important;
+        font-style: italic;
+      }
+
+      &:focus-within,
+      &:focus {
+        border-bottom-color: var(--cc-color) !important;
+      }
+    }
+  }
+
+  // ── Section divider title ─────────────────────────────
+  &__section-title {
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #b03020;
+    padding-bottom: 4px;
+  }
+
+  // ── Trait columns ─────────────────────────────────────
+  &__columns {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+  }
+
+  &__trait {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    // Staggered reveal — each column fades in and slides up
+    animation: cc-trait-reveal 0.7s ease-out both;
+
+    &:nth-child(1) {
+      animation-delay: 0.3s;
+    }
+    &:nth-child(2) {
+      animation-delay: 1.2s;
+    }
+    &:nth-child(3) {
+      animation-delay: 2.1s;
+    }
+
+    &-title {
+      position: relative;
+      font-weight: bold;
+      font-size: 24px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-highlighter {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.9;
+      image-rendering: auto;
+    }
+
+    &-title-text {
+      position: relative;
+      z-index: 0;
+    }
+
+    &-body {
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+  }
+
+  // ── Redaction bar ─────────────────────────────────────
+  &__redacted {
+    background-color: #111;
+    color: #111;
+    border-radius: 1px;
+    padding: 0 2px;
+    user-select: none;
+  }
+
+  // ── Title radio buttons ───────────────────────────────
+  &__radio-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--cc-color);
+    font-family: var(--cc-font);
+  }
+}
+
+@keyframes cc-trait-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
