@@ -2,6 +2,11 @@
 
 //Misc mob defines
 
+/// Bitfield for generate_random_name_species_based: generate the first name component.
+#define GENERATE_NAME_FIRST (1<<0)
+/// Bitfield for generate_random_name_species_based: generate the last name component.
+#define GENERATE_NAME_LAST (1<<1)
+
 //Ready states at roundstart for mob/dead/new_player
 #define PLAYER_NOT_READY "Not Ready"
 #define PLAYER_READY_TO_PLAY "Ready"

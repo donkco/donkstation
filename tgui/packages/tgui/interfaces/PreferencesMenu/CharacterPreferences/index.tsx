@@ -90,23 +90,6 @@ export function CharacterPreferenceWindow(props) {
   return (
     <Stack vertical fill>
       <Stack.Item>
-        <CharacterProfiles
-          activeSlot={data.active_slot - 1}
-          onClick={(slot) => {
-            act('change_slot', {
-              slot: slot + 1,
-            });
-          }}
-          profiles={data.character_profiles}
-        />
-      </Stack.Item>
-      {!data.content_unlocked && (
-        <Stack.Item align="center">
-          Buy BYOND premium for more slots!
-        </Stack.Item>
-      )}
-      <Stack.Divider />
-      <Stack.Item>
         <Stack fill>
           <Stack.Item grow>
             <PageButton
@@ -150,16 +133,6 @@ export function CharacterPreferenceWindow(props) {
               setPage={setCurrentPage}
             >
               Antagonists
-            </PageButton>
-          </Stack.Item>
-
-          <Stack.Item grow>
-            <PageButton
-              currentPage={currentPage}
-              page={Page.Quirks}
-              setPage={setCurrentPage}
-            >
-              Quirks and Personality
             </PageButton>
           </Stack.Item>
         </Stack>

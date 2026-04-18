@@ -361,6 +361,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Character
 	randomise = save_data?["randomise"]
 
+	//Archetype
+	archetype_id = save_data?["archetype"]
+	character_created = save_data?["character_created"] ? TRUE : FALSE
+
 	//Load prefs
 	job_preferences = save_data?["job_preferences"]
 
@@ -391,6 +395,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	SHOULD_NOT_SLEEP(TRUE)
 	if(!path)
 		return FALSE
+	// Do not persist character data until the character has been formally created via the CharacterContract UI.
+	if(!character_created)
+		return FALSE
 	var/tree_key = "character[default_slot]"
 	if(!(tree_key in savefile.get_entry()))
 		savefile.set_entry(tree_key, list())
@@ -419,12 +426,17 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Character
 	save_data["randomise"] = randomise
 
+	//Archetype
+	save_data["archetype"] = archetype_id
+	save_data["character_created"] = character_created
+
 	//Write prefs
 	save_data["job_preferences"] = job_preferences
 
 	//Quirks
 	save_data["all_quirks"] = all_quirks
 
+	SEND_SIGNAL(src, COMSIG_PREFS_CHARACTER_SLOT_SAVED, default_slot)
 	return TRUE
 
 /datum/preferences/proc/switch_to_slot(new_slot)
@@ -436,10 +448,15 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		randomise_appearance_prefs()
 		save_character()
 
+	// Reset the pending archetype selection so the contract page starts fresh
+	if(character_contract)
+		character_contract.pending_archetype_id = null
+
 	for (var/datum/preference_middleware/preference_middleware as anything in middleware)
 		preference_middleware.on_new_character(usr)
 
-	character_preview_view.update_body()
+	character_preview_view?.update_body()
+	SEND_SIGNAL(src, COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, new_slot)
 
 /datum/preferences/proc/remove_current_slot()
 	PRIVATE_PROC(TRUE)
@@ -462,8 +479,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		stack_trace("remove_current_slot() being called when there are no slots to go to, the client should prevent this")
 		return
 
+	var/deleted_slot = default_slot
 	savefile.remove_entry("character[default_slot]")
 	tainted_character_profiles = TRUE
+	SEND_SIGNAL(src, COMSIG_PREFS_CHARACTER_SLOT_DELETED, deleted_slot)
 	switch_to_slot(closest_slot)
 
 /datum/preferences/proc/sanitize_be_special(list/input_be_special)

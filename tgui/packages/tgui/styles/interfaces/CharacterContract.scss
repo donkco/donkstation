@@ -1,4 +1,5 @@
 .CharacterContract {
+  image-rendering: pixelated;
   // ── Shared tokens ─────────────────────────────────────
   --cc-font: Georgia, 'Times New Roman', serif;
   --cc-color: #2a1208;
@@ -18,7 +19,6 @@
     position: relative;
     width: 960px;
     height: 960px;
-    flex-shrink: 0;
   }
 
   // ── Generic overlay block ─────────────────────────────
@@ -102,6 +102,37 @@
         border-bottom-color: var(--cc-color) !important;
       }
     }
+
+    // Override TGUI NumberInput component styles to match paper look
+    .NumberInput {
+      background-color: rgba(255, 255, 255, 0.55) !important;
+      border: none !important;
+      border-bottom: 1px solid rgba(58, 31, 8, 0.5) !important;
+      border-radius: 0 !important;
+      color: var(--cc-color) !important;
+      font-family: var(--cc-font) !important;
+
+      &:active,
+      &:hover {
+        border-bottom-color: var(--cc-color) !important;
+      }
+
+      .NumberInput__content {
+        color: var(--cc-color) !important;
+        font-family: var(--cc-font) !important;
+      }
+
+      .NumberInput__bar {
+        background-color: rgba(58, 31, 8, 0.4) !important;
+        border-bottom-color: rgba(58, 31, 8, 0.4) !important;
+      }
+
+      .NumberInput__input {
+        background-color: transparent !important;
+        color: var(--cc-color) !important;
+        font-family: var(--cc-font) !important;
+      }
+    }
   }
 
   // ── Section divider title ─────────────────────────────
@@ -157,7 +188,8 @@
       pointer-events: none;
       z-index: 1;
       opacity: 0.9;
-      image-rendering: auto;
+      image-rendering: crisp-edges;
+      mix-blend-mode: overlay;
     }
 
     &-title-text {
@@ -189,6 +221,124 @@
     cursor: pointer;
     color: var(--cc-color);
     font-family: var(--cc-font);
+  }
+
+  // ── Archetype page memo body ──────────────────────────
+  &__memo-body {
+    font-family: var(--cc-font);
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--cc-color);
+    padding: 8px 12px;
+    overflow: hidden;
+
+    p {
+      margin: 0 0 10px 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // ── Archetype picker ──────────────────────────────────
+  &__archetype-picker {
+    position: relative;
+    display: inline-block;
+    width: 140px;
+  }
+
+  &__archetype-select {
+    width: 100%;
+    font-family: var(--cc-font);
+    font-size: 14px;
+    color: var(--cc-color);
+    background-color: rgba(255, 255, 255, 0.55);
+    border: none;
+    border-bottom: 1px solid rgba(58, 31, 8, 0.5);
+    border-radius: 0;
+    padding: 4px 6px;
+    appearance: auto;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-bottom-color: var(--cc-color);
+    }
+
+    option {
+      background-color: #f5ead5;
+      color: var(--cc-color);
+    }
+  }
+
+  &__archetype-overlay {
+    width: 384px;
+    height: auto;
+    pointer-events: none;
+    image-rendering: crisp-edges;
+  }
+
+  // ── Confirm button ────────────────────────────────────
+  &__archetype-confirm {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 5px 10px;
+    font-family: var(--cc-font);
+    font-size: 14px;
+    color: var(--cc-color);
+    background-color: rgba(196, 169, 106, 0.55);
+    border: var(--cc-border);
+    border-radius: 0;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(196, 169, 106, 0.85);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  // ── Signature image ───────────────────────────────────
+  &__signature {
+    width: 256px;
+    height: auto;
+    pointer-events: none;
+  }
+
+  // ── Hired stamp ───────────────────────────────────────
+  &__stamp {
+    width: 480px;
+    height: auto;
+    pointer-events: none;
+    transform-origin: center center;
+    mix-blend-mode: multiply;
+    animation: cc-stamp-land 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+@keyframes cc-stamp-land {
+  0% {
+    transform: scale(2.8) rotate(-8deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(0.92) rotate(-8deg);
+    opacity: 0.85;
+  }
+  78% {
+    transform: scale(1.05) rotate(-8deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(-8deg);
+    opacity: 1;
   }
 }
 

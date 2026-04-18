@@ -9,7 +9,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// Ensures that we always load the last used save, QOL
 	var/default_slot = 1
 	/// The maximum number of slots we're allowed to contain
-	var/max_save_slots = 3
+	var/max_save_slots = 5
 
 	/// Bitflags for communications that are muted
 	var/muted = NONE
@@ -88,7 +88,15 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// If set to TRUE, will update character_profiles on the next ui_data tick.
 	var/tainted_character_profiles = FALSE
 
+	/// The confirmed archetype ID for this character slot, null if not yet chosen. Matches a CHARACTER_ARCHETYPE_X define.
+	var/archetype_id = null
+	/// Whether this character slot has been formally created via the CharacterContract UI.
+	var/character_created = FALSE
+	/// The CharacterContract TGUI datum, opened from the lobby
+	var/datum/character_contract/character_contract
+
 /datum/preferences/Destroy(force)
+	QDEL_NULL(character_contract)
 	QDEL_NULL(character_preview_view)
 	QDEL_LIST(middleware)
 	value_cache = null
@@ -96,6 +104,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 /datum/preferences/New(client/parent)
 	src.parent = parent
+	character_contract = new /datum/character_contract(src)
 
 	for (var/middleware_type in subtypesof(/datum/preference_middleware))
 		middleware += new middleware_type(src)
@@ -578,7 +587,3 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	if(isnull(byond_member))
 		to_chat(parent, span_warning("There's been a connection failure while trying to check the status of your BYOND membership. Reconnecting may fix the issue, or BYOND could be experiencing downtime."))
-
-	unlock_content = !!byond_member
-	if(unlock_content)
-		max_save_slots = 8
