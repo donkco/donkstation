@@ -37,8 +37,8 @@ SUBSYSTEM_DEF(blackbox)
 			update_exp(10)
 
 	// Secretary Points playtime grant — independent of exp tracking config or DB
-	if((triggertime < 0) || (world.time > (triggertime + 1500)))
-		update_secretary_points(5)
+	if((triggertime < 0) || (world.time > (triggertime + 3000)))
+		update_secretary_points(10)
 
 /datum/controller/subsystem/blackbox/proc/CheckPlayerCount()
 	set waitfor = FALSE

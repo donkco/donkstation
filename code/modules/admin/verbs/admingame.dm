@@ -15,6 +15,7 @@ ADMIN_VERB_ONLY_CONTEXT_MENU(show_player_panel, R_ADMIN, "Show Player Panel", mo
 		body += "\[<A href='byond://?_src_=holder;[HrefToken()];editrights=[(GLOB.admin_datums[player.client.ckey] || GLOB.deadmins[player.client.ckey]) ? "rank" : "add"];key=[player.key]'>[player.client.holder ? player.client.holder.rank_names() : "Player"]</A>\]"
 		if(CONFIG_GET(flag/use_exp_tracking))
 			body += "\[<A href='byond://?_src_=holder;[HrefToken()];getplaytimewindow=[REF(player)]'>" + player.client.get_exp_living(FALSE) + "</a>\]"
+		//body += "\[<A href='byond://?_src_=holder;[HrefToken()];grantsp=[REF(player)]'>Add SP</A>\] "
 
 	if(isnewplayer(player))
 		body += " <B>Hasn't Entered Game</B> "
@@ -95,6 +96,8 @@ ADMIN_VERB_ONLY_CONTEXT_MENU(show_player_panel, R_ADMIN, "Show Player Panel", mo
 	body += "<A href='byond://?_src_=holder;[HrefToken()];jumpto=[REF(player)]'><b>Jump to</b></A> | "
 	body += "<A href='byond://?_src_=holder;[HrefToken()];getmob=[REF(player)]'>Get</A> | "
 	body += "<A href='byond://?_src_=holder;[HrefToken()];sendmob=[REF(player)]'>Send To</A>"
+	if(player.client)
+		body += " | <A href='byond://?_src_=holder;[HrefToken()];adjustsp=[REF(player)]'>Adjust SP</A>"
 
 	body += "<br><br>"
 	body += "<A href='byond://?_src_=holder;[HrefToken()];traitor=[REF(player)]'>Traitor panel</A> | "

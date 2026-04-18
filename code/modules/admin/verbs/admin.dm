@@ -99,6 +99,20 @@ ADMIN_VERB(cmd_admin_check_player_exp, R_ADMIN, "Player Playtime", "View player 
 		message_admins("[key_name_admin(usr)] has [newstate ? "activated" : "deactivated"] job exp exempt status on [key_name_admin(C)]")
 		log_admin("[key_name(usr)] has [newstate ? "activated" : "deactivated"] job exp exempt status on [key_name(C)]")
 
+/datum/admins/proc/cmd_adjust_secretary_points(client/C)
+	if(!check_rights(R_ADMIN))
+		return
+	if(!C)
+		to_chat(usr, span_danger("ERROR: Client not found."), confidential = TRUE)
+		return
+	var/current = C.prefs.secretary_points
+	var/amount = input(usr, "Current SP: [current]. Enter amount to add (negative to deduct):", "Adjust Secretary Points") as num|null
+	if(isnull(amount))
+		return
+	C.prefs.adjust_secretary_points(amount)
+	message_admins("[key_name_admin(usr)] adjusted secretary points for [key_name_admin(C)] by [amount] (new total: [C.prefs.secretary_points])")
+	log_admin("[key_name(usr)] adjusted secretary points for [key_name(C)] by [amount] (new total: [C.prefs.secretary_points])")
+
 /// Allow admin to add or remove traits of datum
 /datum/admins/proc/modify_traits(datum/D)
 	if(!D)
