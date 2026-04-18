@@ -245,6 +245,24 @@
 	inv_box.slot_id = ITEM_SLOT_BELT
 	static_inventory += inv_box
 
+	inv_box = new /atom/movable/screen/inventory(null, src)
+	inv_box.name = "left trinket"
+	inv_box.icon = ui_style
+	inv_box.icon_state = "belt"
+	inv_box.icon_full = "template_small"
+	inv_box.screen_loc = ui_l_trinket
+	inv_box.slot_id = ITEM_SLOT_L_TRINKET
+	toggleable_inventory += inv_box
+
+	inv_box = new /atom/movable/screen/inventory(null, src)
+	inv_box.name = "right trinket"
+	inv_box.icon = ui_style
+	inv_box.icon_state = "belt"
+	inv_box.icon_full = "template_small"
+	inv_box.screen_loc = ui_r_trinket
+	inv_box.slot_id = ITEM_SLOT_R_TRINKET
+	toggleable_inventory += inv_box
+
 	throw_icon = new /atom/movable/screen/throw_catch(null, src)
 	throw_icon.icon = ui_style
 	throw_icon.screen_loc = ui_drop_throw

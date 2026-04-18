@@ -69,6 +69,8 @@ There are several things that need to be remembered:
 		update_mutations_overlay()
 		//damage overlays
 		update_damage_overlays()
+		update_worn_l_trinket()
+		update_worn_r_trinket()
 
 /* --------------------------------------- */
 //vvvvvv UPDATE_INV PROCS vvvvvv
@@ -442,6 +444,32 @@ There are several things that need to be remembered:
 			if(hud_used.hud_shown)
 				client.screen += r_store
 			update_observer_view(r_store)
+
+/mob/living/carbon/human/update_worn_l_trinket()
+	if(client && hud_used)
+		var/atom/movable/screen/inventory/inv
+
+		inv = hud_used.inv_slots[TOBITSHIFT(ITEM_SLOT_L_TRINKET) + 1]
+		inv.update_icon()
+
+		if(l_trinket)
+			l_trinket.screen_loc = ui_l_trinket
+			if(hud_used.hud_shown)
+				client.screen += l_trinket
+			update_observer_view(l_trinket)
+
+/mob/living/carbon/human/update_worn_r_trinket()
+	if(client && hud_used)
+		var/atom/movable/screen/inventory/inv
+
+		inv = hud_used.inv_slots[TOBITSHIFT(ITEM_SLOT_R_TRINKET) + 1]
+		inv.update_icon()
+
+		if(r_trinket)
+			r_trinket.screen_loc = ui_r_trinket
+			if(hud_used.hud_shown)
+				client.screen += r_trinket
+			update_observer_view(r_trinket)
 
 /mob/living/carbon/human/update_worn_mask()
 	remove_overlay(FACEMASK_LAYER)

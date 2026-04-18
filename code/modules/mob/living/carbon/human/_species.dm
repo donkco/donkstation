@@ -681,6 +681,14 @@ GLOBAL_LIST_EMPTY(features_by_species)
 			if(H.num_legs < 2)
 				return FALSE
 			return TRUE
+		if(ITEM_SLOT_L_TRINKET)
+			if(!H.get_bodypart(BODY_ZONE_L_ARM))
+				return FALSE
+			return TRUE
+		if(ITEM_SLOT_R_TRINKET)
+			if(!H.get_bodypart(BODY_ZONE_R_ARM))
+				return FALSE
+			return TRUE
 	return FALSE //Unsupported slot
 
 /datum/species/proc/equip_delay_self_check(obj/item/I, mob/living/carbon/human/H, bypass_equip_delay_self)
