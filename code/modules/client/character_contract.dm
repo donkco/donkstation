@@ -29,14 +29,17 @@
 
 	// Archetype picker data — always sent so the frontend knows which page to show
 	data["character_created"] = prefs.character_created
+	data["secretary_points"] = prefs.secretary_points
 
 	// Build archetype list from the subsystem
 	var/list/archetype_list = list()
 	for(var/archetype_type in SScharacters.all_archetypes)
 		var/datum/character_archetype/arch = SScharacters.all_archetypes[archetype_type]
 		archetype_list += list(list(
-			"name" = "[arch.name] [arch.cost]SP",
+			"name" = arch.name,
 			"id" = arch.archetype_id,
+			"cost" = arch.cost,
+			"affordable" = (arch.cost <= prefs.secretary_points),
 		))
 	data["archetypes"] = archetype_list
 	data["selected_archetype"] = pending_archetype_id
@@ -83,17 +86,22 @@
 			// Silently reject if already created or nothing selected
 			if(prefs.character_created || isnull(pending_archetype_id))
 				return FALSE
-			// Re-validate pending ID against known archetypes
-			var/valid = FALSE
+			// Re-validate pending ID against known archetypes and check affordability
+			var/datum/character_archetype/chosen_arch = null
 			for(var/archetype_type in SScharacters.all_archetypes)
 				var/datum/character_archetype/arch = SScharacters.all_archetypes[archetype_type]
 				if(arch.archetype_id == pending_archetype_id)
-					valid = TRUE
+					chosen_arch = arch
 					break
-			if(!valid)
+			if(!chosen_arch)
 				return FALSE
+			// Check player has enough SP
+			if(prefs.secretary_points < chosen_arch.cost)
+				return FALSE
+			prefs.adjust_secretary_points(-chosen_arch.cost)
 			prefs.archetype_id = pending_archetype_id
 			prefs.character_created = TRUE
+			prefs.mark_character_prefs_dirty()
 			prefs.save_character()
 			return TRUE
 

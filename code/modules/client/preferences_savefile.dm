@@ -247,6 +247,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	hearted_until = savefile.get_entry("hearted_until", hearted_until)
 	if(hearted_until > world.realtime)
 		hearted = TRUE
+	// Secretary Points
+	secretary_points = sanitize_integer(savefile.get_entry("secretary_points", 0), 0, INFINITY, 0)
 	//favorite outfits
 	favorite_outfits = savefile.get_entry("favorite_outfits", favorite_outfits)
 
@@ -331,6 +333,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	savefile.set_entry("key_bindings", key_bindings)
 	savefile.set_entry("hearted_until", (hearted_until > world.realtime ? hearted_until : null))
 	savefile.set_entry("favorite_outfits", favorite_outfits)
+	savefile.set_entry("secretary_points", secretary_points)
 	savefile.save()
 	return TRUE
 
@@ -390,6 +393,16 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	validate_quirks()
 
 	return TRUE
+
+/// Marks all PREFERENCE_CHARACTER entries currently in value_cache as dirty so that
+/// save_character() will flush them. Use this before save_character() when prefs were
+/// populated outside the normal UI flow (e.g. randomise_appearance_prefs).
+/datum/preferences/proc/mark_character_prefs_dirty()
+	for(var/preference_type in value_cache)
+		var/datum/preference/pref = GLOB.preference_entries[preference_type]
+		if(!pref || pref.savefile_identifier != PREFERENCE_CHARACTER)
+			continue
+		recently_updated_keys |= preference_type
 
 /datum/preferences/proc/save_character()
 	SHOULD_NOT_SLEEP(TRUE)

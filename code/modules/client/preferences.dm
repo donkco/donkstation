@@ -94,6 +94,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/character_created = FALSE
 	/// The CharacterContract TGUI datum, opened from the lobby
 	var/datum/character_contract/character_contract
+	/// Account-level Secretary Points balance. Saved in preferences (not per-character).
+	var/secretary_points = 0
+	/// Transient accumulator for playtime-based SP grants. Resets on relog, never saved.
+	var/sp_minutes_accumulated = 0
 
 /datum/preferences/Destroy(force)
 	QDEL_NULL(character_contract)
@@ -587,3 +591,25 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 	if(isnull(byond_member))
 		to_chat(parent, span_warning("There's been a connection failure while trying to check the status of your BYOND membership. Reconnecting may fix the issue, or BYOND could be experiencing downtime."))
+
+/**
+ * Adjust this account's Secretary Points by `amount` (can be negative for spending/removing).
+ * Clamps to >= 0 and immediately saves preferences.
+ */
+/datum/preferences/proc/adjust_secretary_points(amount)
+	secretary_points = max(0, secretary_points + amount)
+	save_preferences()
+	if(character_contract)
+		SStgui.update_uis(character_contract)
+
+/**
+ * Called by the blackbox subsystem each fire tick with the number of non-AFK minutes elapsed.
+ * Accumulates minutes and grants SP once per SP_PLAYTIME_INTERVAL minutes completed.
+ */
+/datum/preferences/proc/accumulate_sp_playtime(minutes)
+	sp_minutes_accumulated += minutes
+	var/intervals = round(sp_minutes_accumulated / SP_PLAYTIME_INTERVAL)
+	if(intervals < 1)
+		return
+	sp_minutes_accumulated -= intervals * SP_PLAYTIME_INTERVAL
+	adjust_secretary_points(intervals * SP_PER_INTERVAL)

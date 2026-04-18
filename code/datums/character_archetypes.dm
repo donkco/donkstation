@@ -12,14 +12,22 @@
 	var/list/neutral_quirk_table
 
 
+/datum/character_archetype/intern
+	name = "Intern"
+	archetype_id = CHARACTER_ARCHETYPE_INTERN
+	cost = 0
+
 /datum/character_archetype/laborer
 	name = "Laborer"
 	archetype_id = CHARACTER_ARCHETYPE_LABORER
 
+
 /datum/character_archetype/manager
 	name = "Manager"
 	archetype_id = CHARACTER_ARCHETYPE_MANAGER
+	cost = 100
 
 /datum/character_archetype/scholar
 	name = "Scholar"
 	archetype_id = CHARACTER_ARCHETYPE_SCHOLAR
+	cost = 200

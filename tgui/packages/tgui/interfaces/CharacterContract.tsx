@@ -1,6 +1,6 @@
 import '../styles/interfaces/CharacterContract.scss';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Box, Image, Input, NumberInput } from 'tgui-core/components';
 
@@ -54,6 +54,8 @@ const TraitColumn = ({ title, description, highlighter }: TraitColumnProps) => (
 type ArchetypeEntry = {
   name: string;
   id: string;
+  cost: number;
+  affordable: boolean;
 };
 
 type Data = {
@@ -61,6 +63,7 @@ type Data = {
   archetypes?: ArchetypeEntry[];
   selected_archetype?: string | null;
   character_created?: boolean;
+  secretary_points?: number;
   // Contract details
   trait_title_1?: string;
   trait_desc_1?: string;
@@ -89,11 +92,33 @@ const STAMP_DURATION_MS = 950;
 
 const ArchetypePage = () => {
   const { data, act } = useBackend<Data>();
-  const { archetypes = [], selected_archetype } = data;
+  const { archetypes = [], selected_archetype, secretary_points = 0 } = data;
   const [stamping, setStamping] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close the custom dropdown when clicking outside of it
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const onMouseDown = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, [dropdownOpen]);
+
+  const selectedArch = archetypes.find((a) => a.id === selected_archetype);
+  const canConfirm =
+    !!selected_archetype && !stamping && (selectedArch?.affordable ?? false);
 
   const handleConfirm = () => {
     if (stamping) return;
+    if (!selectedArch?.affordable) return;
     setStamping(true);
     act('play_stamp_sound');
     setTimeout(() => act('confirm_archetype'), STAMP_DURATION_MS + 50);
@@ -106,6 +131,19 @@ const ArchetypePage = () => {
         height="960px"
         src={resolveAsset('donkcopaper.png')}
       />
+
+      {/* SP balance box — above the paper, top-right */}
+      <div
+        className="CharacterContract__overlay CharacterContract__sp-box"
+        style={{ top: '-50px', right: '60px' }}
+      >
+        <span className="CharacterContract__sp-box-label">
+          Secretary Points
+        </span>
+        <span className="CharacterContract__sp-box-value">
+          {secretary_points} SP
+        </span>
+      </div>
 
       {/* Memo body */}
       <div
@@ -149,31 +187,48 @@ const ArchetypePage = () => {
         className="CharacterContract__overlay"
         style={{ bottom: '230px', right: '260px' }}
       >
-        <div className="CharacterContract__archetype-picker">
-          <select
-            className="CharacterContract__archetype-select"
-            value={selected_archetype ?? ''}
-            onChange={(e) => {
-              if (e.target.value) {
-                act('select_archetype', { id: e.target.value });
-              }
-            }}
+        <div className="CharacterContract__archetype-picker" ref={dropdownRef}>
+          {/* Custom dropdown — avoids BYOND native <select> focus loss after alt-tab */}
+          <div
+            className={
+              'CharacterContract__archetype-trigger' +
+              (dropdownOpen ? ' is-open' : '')
+            }
+            onMouseDown={() => setDropdownOpen((o) => !o)}
           >
-            <option value="" disabled>
-              — Classification —
-            </option>
-            {archetypes.map((arch) => (
-              <option key={arch.id} value={arch.id}>
-                {arch.name}
-              </option>
-            ))}
-          </select>
+            <span>{selectedArch ? selectedArch.name : 'Classification'}</span>
+            <span className="CharacterContract__archetype-arrow">▾</span>
+          </div>
+          {dropdownOpen && (
+            <div className="CharacterContract__archetype-list">
+              {archetypes.map((arch) => (
+                <div
+                  key={arch.id}
+                  className={
+                    'CharacterContract__archetype-option' +
+                    (!arch.affordable ? ' is-disabled' : '') +
+                    (arch.id === selected_archetype ? ' is-selected' : '')
+                  }
+                  onMouseDown={() => {
+                    if (!arch.affordable) return;
+                    act('select_archetype', { id: arch.id });
+                    setDropdownOpen(false);
+                  }}
+                >
+                  <span>{arch.name}</span>
+                  <span className="CharacterContract__archetype-cost">
+                    {arch.cost}&nbsp;SP{!arch.affordable ? ' ✕' : ''}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <button
           className="CharacterContract__archetype-confirm"
           style={{ marginTop: '60px' }}
-          disabled={!selected_archetype || stamping}
+          disabled={!canConfirm}
           onClick={handleConfirm}
         >
           Confirm

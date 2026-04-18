@@ -250,27 +250,82 @@
   }
 
   &__archetype-select {
+    // Kept for reference; replaced by custom dropdown — see __archetype-trigger/list/option
+    display: none;
+  }
+
+  &__archetype-trigger {
     width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-family: var(--cc-font);
     font-size: 14px;
     color: var(--cc-color);
-    background-color: rgba(255, 255, 255, 0.55);
-    border: none;
-    border-bottom: 1px solid rgba(58, 31, 8, 0.5);
-    border-radius: 0;
-    padding: 4px 6px;
-    appearance: auto;
+    background-color: #f5ead5;
+    border: var(--cc-border);
+    padding: 4px 8px;
+    cursor: pointer;
+    user-select: none;
+
+    &.is-open {
+      background-color: var(--cc-header-bg);
+      border-bottom-color: transparent;
+    }
+
+    &:hover:not(.is-open) {
+      background-color: rgba(196, 169, 106, 0.55);
+    }
+  }
+
+  &__archetype-arrow {
+    margin-left: 6px;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  &__archetype-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: #f5ead5;
+    border: var(--cc-border);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  &__archetype-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 8px;
+    font-family: var(--cc-font);
+    font-size: 13px;
+    color: var(--cc-color);
     cursor: pointer;
 
-    &:focus {
-      outline: none;
-      border-bottom-color: var(--cc-color);
+    &:hover:not(.is-disabled) {
+      background-color: rgba(196, 169, 106, 0.4);
     }
 
-    option {
-      background-color: #f5ead5;
-      color: var(--cc-color);
+    &.is-selected {
+      background-color: rgba(196, 169, 106, 0.3);
+      font-weight: bold;
     }
+
+    &.is-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__archetype-cost {
+    font-size: 11px;
+    margin-left: 8px;
+    opacity: 0.75;
+    white-space: nowrap;
   }
 
   &__archetype-overlay {
@@ -320,6 +375,32 @@
     transform-origin: center center;
     mix-blend-mode: multiply;
     animation: cc-stamp-land 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  // ── Secretary Points balance box ──────────────────────
+  &__sp-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--cc-header-bg);
+    border: var(--cc-border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    min-width: 100px;
+    pointer-events: none;
+  }
+
+  &__sp-box-label {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  &__sp-box-value {
+    font-size: 16px;
+    font-weight: bold;
   }
 }
 

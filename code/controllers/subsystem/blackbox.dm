@@ -36,6 +36,10 @@ SUBSYSTEM_DEF(blackbox)
 		if((triggertime < 0) || (world.time > (triggertime +3000))) //subsystem fires once at roundstart then once every 10 minutes. a 5 min check skips the first fire. The <0 is midnight rollover check
 			update_exp(10)
 
+	// Secretary Points playtime grant — independent of exp tracking config or DB
+	if((triggertime < 0) || (world.time > (triggertime + 1500)))
+		update_secretary_points(5)
+
 /datum/controller/subsystem/blackbox/proc/CheckPlayerCount()
 	set waitfor = FALSE
 
@@ -59,6 +63,17 @@ SUBSYSTEM_DEF(blackbox)
 /datum/controller/subsystem/blackbox/Recover()
 	feedback_list = SSblackbox.feedback_list
 	sealed = SSblackbox.sealed
+
+/// Award Secretary Points to all non-AFK living or observer clients based on playtime elapsed.
+/datum/controller/subsystem/blackbox/proc/update_secretary_points(mins)
+	for(var/client/L in GLOB.clients)
+		if(L.is_afk())
+			continue
+		if(!L.prefs)
+			continue
+		if(!isobserver(L.mob) && !isliving(L.mob))
+			continue
+		L.prefs.accumulate_sp_playtime(mins)
 
 //no touchie
 /datum/controller/subsystem/blackbox/vv_get_var(var_name)
