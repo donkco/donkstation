@@ -7,6 +7,8 @@
 	var/preview_b64
 	/// Guard against concurrent preview generation.
 	var/generating_preview = FALSE
+	/// Tracks which slot the preview was last generated for — invalidates cache on slot switch.
+	var/preview_slot = -1
 	/// Set to TRUE when confirm_archetype is performed so the TSX plays the quirk reveal animation exactly once.
 	var/play_reveal_anim = FALSE
 
@@ -18,10 +20,10 @@
 	if(is_new_open)
 		ui = new(user, src, "CharacterContract")
 		ui.open()
-		// Always refresh the preview when the UI is freshly opened so the
-		// correct character slot is shown, not a stale cached snapshot.
-		if(prefs.character_created && !generating_preview)
-			preview_b64 = null
+	// Invalidate the cached preview whenever the active slot has changed
+	// (covers both fresh opens and slot switches while the UI is already open).
+	if(prefs.character_created && !generating_preview && prefs.default_slot != preview_slot)
+		preview_b64 = null
 	if(prefs.character_created && !preview_b64 && !generating_preview)
 		INVOKE_ASYNC(src, PROC_REF(generate_preview_async))
 
@@ -39,6 +41,7 @@
 		generating_preview = FALSE
 		return
 	preview_b64 = flat ? icon2base64(flat) : null
+	preview_slot = prefs.default_slot
 	generating_preview = FALSE
 	SStgui.update_uis(src)
 
