@@ -96,7 +96,14 @@
 	data["first_name"] = prefs.read_preference(/datum/preference/name/real_name)
 	data["last_name"] = prefs.read_preference(/datum/preference/name/last_name)
 	data["age"] = prefs.read_preference(/datum/preference/numeric/age)
-	data["place_of_birth"] = prefs.read_preference(/datum/preference/text/place_of_birth)
+	// Place of birth — send current selection id and full option list for the dropdown
+	var/datum/place_of_birth/selected_pob = prefs.read_preference(/datum/preference/choiced/place_of_birth)
+	data["place_of_birth"] = selected_pob.id
+	var/list/pob_options = list()
+	for(var/pob_id in GLOB.place_of_birth_list)
+		var/datum/place_of_birth/pob_inst = GLOB.place_of_birth_list[pob_id]
+		pob_options += list(list("id" = pob_id, "name" = pob_inst.name))
+	data["place_of_birth_options"] = pob_options
 	data["gender"] = prefs.read_preference(/datum/preference/choiced/gender)
 	// Send the species display name for the contract page
 	var/datum/species/species_type = prefs.read_preference(/datum/preference/choiced/species)
@@ -178,7 +185,7 @@
 				return FALSE
 			return TRUE
 		if("set_place_of_birth")
-			pref = GLOB.preference_entries[/datum/preference/text/place_of_birth]
+			pref = GLOB.preference_entries[/datum/preference/choiced/place_of_birth]
 			return prefs.write_preference(pref, params["value"])
 		if("set_gender")
 			pref = GLOB.preference_entries[/datum/preference/choiced/gender]

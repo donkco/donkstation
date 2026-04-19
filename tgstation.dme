@@ -561,6 +561,7 @@
 #include "code\_globalvars\lists\basic_ai.dm"
 #include "code\_globalvars\lists\canisters.dm"
 #include "code\_globalvars\lists\cargo.dm"
+#include "code\_globalvars\lists\character.dm"
 #include "code\_globalvars\lists\client.dm"
 #include "code\_globalvars\lists\clothing.dm"
 #include "code\_globalvars\lists\color.dm"

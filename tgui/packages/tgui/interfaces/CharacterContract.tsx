@@ -111,6 +111,7 @@ type Data = {
   last_name?: string;
   age?: number;
   place_of_birth?: string;
+  place_of_birth_options?: Array<{ id: string; name: string }>;
   gender?: string;
   species_name?: string;
 };
@@ -121,6 +122,70 @@ const GENDER_OPTIONS = [
   { value: 'plural', label: 'They/Them' },
   { value: 'neuter', label: 'It/Its' },
 ] as const;
+
+// ── Field dropdown (for paper-styled choiced fields) ──────────────────────────
+
+type FieldDropdownProps = {
+  value: string;
+  options: Array<{ id: string; name: string }>;
+  onSelect: (id: string) => void;
+};
+
+const FieldDropdown = ({ value, options, onSelect }: FieldDropdownProps) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  const selected = options.find((o) => o.id === value);
+
+  return (
+    <div
+      className="CharacterContract__archetype-picker"
+      ref={ref}
+      style={{ flex: 1, minWidth: 0 }}
+    >
+      <div
+        className={
+          'CharacterContract__archetype-trigger' + (open ? ' is-open' : '')
+        }
+        onMouseDown={() => setOpen((o) => !o)}
+        style={{ fontSize: '12px', padding: '2px 6px' }}
+      >
+        <span>{selected?.name ?? value}</span>
+        <span className="CharacterContract__archetype-arrow">▾</span>
+      </div>
+      {open && (
+        <div className="CharacterContract__archetype-list">
+          {options.map((opt) => (
+            <div
+              key={opt.id}
+              className={
+                'CharacterContract__archetype-option' +
+                (opt.id === value ? ' is-selected' : '')
+              }
+              onMouseDown={() => {
+                onSelect(opt.id);
+                setOpen(false);
+              }}
+            >
+              {opt.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ── Page 1: Archetype picker ──────────────────────────────────────────────────
 
@@ -325,6 +390,7 @@ const ContractPage = () => {
     last_name,
     age,
     place_of_birth,
+    place_of_birth_options = [],
     gender,
     species_name,
   } = data;
@@ -463,15 +529,17 @@ const ContractPage = () => {
 
         {/* Row 3: Place of birth / Species */}
         <div className="CharacterContract__table-row">
-          <div className="CharacterContract__table-cell CharacterContract__table-cell--right-border">
+          <div
+            className="CharacterContract__table-cell CharacterContract__table-cell--right-border"
+            style={{ overflow: 'visible' }}
+          >
             <span className="CharacterContract__table-label">
               Place of birth:
             </span>
-            <Input
-              fluid
-              placeholder="Place of birth"
-              value={place_of_birth ?? ''}
-              onChange={(val) => act('set_place_of_birth', { value: val })}
+            <FieldDropdown
+              value={place_of_birth ?? 'earth'}
+              options={place_of_birth_options}
+              onSelect={(id) => act('set_place_of_birth', { value: id })}
             />
           </div>
           <div className="CharacterContract__table-cell">
