@@ -1,5 +1,6 @@
 /datum/quirk/badback
 	name = "Bad Back"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Thanks to your poor posture, backpacks and other bags never sit right on your back. More evenly weighted objects are fine, though."
 	icon = FA_ICON_HIKING
 	value = -8

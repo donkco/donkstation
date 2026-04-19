@@ -1,5 +1,6 @@
 /datum/quirk/chip_connector
 	name = "Chip Connector"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You had a device installed that lets you manually add and remove skillchips! Just try not to get near any electromagnetic pulses."
 	icon = FA_ICON_PLUG
 	value = 4

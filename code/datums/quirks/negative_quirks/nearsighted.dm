@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/nearsighted
 	name = "Nearsighted"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are nearsighted without prescription glasses, but spawn with a pair."
 	icon = FA_ICON_GLASSES
 	value = -4

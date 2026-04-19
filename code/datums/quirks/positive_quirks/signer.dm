@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/signer
 	name = "Signer"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You possess excellent communication skills in sign language."
 	icon = FA_ICON_HANDS
 	value = 4

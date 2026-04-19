@@ -1,5 +1,6 @@
 /datum/quirk/body_purist
 	name = "Body Purist"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You believe your body is a temple and its natural form is an embodiment of perfection. Accordingly, you despise the idea of ever augmenting it with unnatural parts, cybernetic, prosthetic, or anything like it."
 	icon = FA_ICON_PERSON_RAYS
 	value = -2

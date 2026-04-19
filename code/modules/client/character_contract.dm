@@ -3,15 +3,42 @@
 	var/datum/preferences/prefs
 	///The archetype ID the user has highlighted in the picker but not yet confirmed.
 	var/pending_archetype_id
+	/// Base64-encoded PNG snapshot of the character — transparent background, no BYOND map view needed.
+	var/preview_b64
+	/// Guard against concurrent preview generation.
+	var/generating_preview = FALSE
 
 /datum/character_contract/New(datum/preferences/prefs)
 	src.prefs = prefs
 
 /datum/character_contract/ui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
-	if(!ui)
+	var/is_new_open = !SStgui.try_update_ui(user, src, ui)
+	if(is_new_open)
 		ui = new(user, src, "CharacterContract")
 		ui.open()
+		// Always refresh the preview when the UI is freshly opened so the
+		// correct character slot is shown, not a stale cached snapshot.
+		if(prefs.character_created && !generating_preview)
+			preview_b64 = null
+	if(prefs.character_created && !preview_b64 && !generating_preview)
+		INVOKE_ASYNC(src, PROC_REF(generate_preview_async))
+
+/datum/character_contract/proc/generate_preview_async()
+	if(generating_preview || QDELETED(src))
+		return
+	generating_preview = TRUE
+	var/mob/living/carbon/human/dummy/mannequin = new()
+	var/mutable_appearance/appearance = prefs?.render_new_preview_appearance(mannequin, FALSE)
+	var/icon/flat
+	if(appearance && !QDELETED(src))
+		flat = getFlatIcon(appearance, defdir = SOUTH, no_anim = TRUE)
+	qdel(mannequin)
+	if(QDELETED(src))
+		generating_preview = FALSE
+		return
+	preview_b64 = flat ? icon2base64(flat) : null
+	generating_preview = FALSE
+	SStgui.update_uis(src)
 
 /datum/character_contract/ui_assets(mob/user)
 	return list(
@@ -44,13 +71,20 @@
 	data["archetypes"] = archetype_list
 	data["selected_archetype"] = pending_archetype_id
 
-	// Contract page data
-	data["trait_title_1"] = "Blueblooded"
-	data["trait_title_2"] = "Nearsighted"
-	data["trait_title_3"] = "Polygamist"
-	data["trait_desc_1"] = "They are the ((Prince)) of ((Persia)) over at ((Ubisoft)).\n\nDespite some mixed assessments of their compency & general demeanor, it might be prudent to find a place for them."
-	data["trait_desc_2"] = "The physical examination has shown that their eyesight is very poor.\n\nThey will need corrective eyewear to see much of anything\n\nLiability?"
-	data["trait_desc_3"] = "They belong to a family that practices multiple marriage.\n\nI've been told this is quite ordinary in their culture\n\nStrange!"
+	// Contract page data — build from the player's rolled quirks
+	var/list/contract_quirks_data = list()
+	for(var/quirk_name in prefs.all_quirks)
+		var/quirk_type = SSquirks.quirks[quirk_name]
+		var/datum/quirk/prototype = SSquirks.quirk_prototypes[quirk_type]
+		if(!prototype)
+			continue
+		contract_quirks_data += list(list(
+			"name"        = quirk_name,
+			"category"    = prototype.quirk_category,
+			"flavor_text" = prototype.contract_flavor_text,
+		))
+	data["contract_quirks"] = contract_quirks_data
+	data["preview_icon"] = preview_b64
 	data["first_name"] = prefs.read_preference(/datum/preference/name/real_name)
 	data["last_name"] = prefs.read_preference(/datum/preference/name/last_name)
 	data["age"] = prefs.read_preference(/datum/preference/numeric/age)
@@ -101,6 +135,12 @@
 			prefs.adjust_secretary_points(-chosen_arch.cost)
 			prefs.archetype_id = pending_archetype_id
 			prefs.character_created = TRUE
+			// Roll quirks and register them — result is assoc typepath -> QUIRK_CATEGORY_*
+			var/list/rolled = chosen_arch.roll_quirks()
+			for(var/quirk_type in rolled)
+				var/datum/quirk/prototype = SSquirks.quirk_prototypes[quirk_type]
+				if(prototype)
+					prefs.all_quirks += prototype.name
 			prefs.mark_character_prefs_dirty()
 			prefs.save_character()
 			return TRUE
@@ -126,5 +166,11 @@
 			pref = GLOB.preference_entries[/datum/preference/choiced/gender]
 			if(!prefs.write_preference(pref, params["value"]))
 				return FALSE
+			return TRUE
+		if("open_preferences")
+			preview_b64 = null // Invalidate cache — will regenerate when prefs closes
+			prefs.current_window = PREFERENCE_TAB_CHARACTER_PREFERENCES
+			prefs.update_static_data(ui.user)
+			prefs.ui_interact(ui.user)
 			return TRUE
 	return FALSE

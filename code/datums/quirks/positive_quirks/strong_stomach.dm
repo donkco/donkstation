@@ -1,5 +1,6 @@
 /datum/quirk/strong_stomach
 	name = "Strong Stomach"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You can eat food discarded on the ground without getting sick, and vomiting affects you less."
 	icon = FA_ICON_FACE_GRIN_BEAM_SWEAT
 	value = 4

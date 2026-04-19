@@ -1,5 +1,6 @@
 /datum/quirk/mute
 	name = "Mute"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "For some reason you are completely unable to speak."
 	icon = FA_ICON_VOLUME_XMARK
 	value = -4

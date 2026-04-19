@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/tagger
 	name = "Tagger"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You're an experienced artist. People will actually be impressed by your graffiti, and you can get twice as many uses out of drawing supplies in half the time."
 	icon = FA_ICON_SPRAY_CAN
 	value = 4

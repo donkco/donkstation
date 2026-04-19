@@ -1,5 +1,6 @@
 /datum/quirk/hemiplegic
 	name = "Hemiplegic"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Half of your body doesn't work. Nothing will ever fix this."
 	icon = FA_ICON_CIRCLE_HALF_STROKE
 	value = -10 // slightly more bearable than paraplegic but not by much

@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/family_heirloom
 	name = "Family Heirloom"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are the current owner of an heirloom, passed down for generations. You have to keep it safe!"
 	icon = FA_ICON_TOOLBOX
 	value = -2

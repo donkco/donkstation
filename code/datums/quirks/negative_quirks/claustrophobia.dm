@@ -1,5 +1,6 @@
 /datum/quirk/claustrophobia
 	name = "Claustrophobia"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are terrified of small spaces and certain jolly figures. If you are placed inside any container, locker, or machinery, a panic attack sets in and you struggle to breathe."
 	icon = FA_ICON_BOX_OPEN
 	value = -4

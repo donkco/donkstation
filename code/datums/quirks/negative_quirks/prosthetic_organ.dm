@@ -1,5 +1,6 @@
 /datum/quirk/prosthetic_organ
 	name = "Prosthetic Organ"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "An accident caused you to lose one of your organs. Because of this, you now have a surplus prosthetic!"
 	icon = FA_ICON_LUNGS
 	value = -3

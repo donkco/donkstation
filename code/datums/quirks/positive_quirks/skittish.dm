@@ -1,5 +1,6 @@
 /datum/quirk/skittish
 	name = "Skittish"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You're easy to startle, and hide frequently. Run into a closed locker to jump into it, as long as you have access. You can walk to avoid this."
 	icon = FA_ICON_TRASH
 	value = 8

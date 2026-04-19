@@ -1,5 +1,6 @@
 /datum/quirk/glass_jaw
 	name = "Glass Jaw"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have a very fragile jaw. Any sufficiently hard blow to your head might knock you out."
 	icon = FA_ICON_HAND_FIST
 	value = -4

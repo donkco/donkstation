@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/mime_fan
 	name = "Mime Fan"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You're a fan of mime antics and get a mood boost from wearing your mime pin."
 	icon = FA_ICON_THUMBTACK
 	value = 2

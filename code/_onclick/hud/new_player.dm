@@ -813,13 +813,10 @@
 	if(!.)
 		return
 	var/datum/preferences/prefs = hud.mymob.canon_client.prefs
-	var/has_data = !isnull(prefs.savefile.get_entry("character[slot_index]"))
-	if(has_data)
-		prefs.switch_to_slot(slot_index)
-	else
-		// Switch to the empty slot first so prefs reflects it (clears character_created etc.)
-		prefs.switch_to_slot(slot_index)
-		prefs.character_contract.ui_interact(hud.mymob)
+	// Always switch to the slot first so prefs reflects the correct character
+	prefs.switch_to_slot(slot_index)
+	// Open the contract UI whether the slot has data or is empty
+	prefs.character_contract.ui_interact(hud.mymob)
 
 ///Creates a preview for this slot, showing an empty state if there is no save data
 /atom/movable/screen/lobby/button/character_slot/proc/build_preview(client/show_to, datum/hud/hud)

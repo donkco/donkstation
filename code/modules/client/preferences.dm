@@ -295,6 +295,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	save_character()
 	save_preferences()
 	QDEL_NULL(character_preview_view)
+	// Refresh the contract preview now that the player may have changed their appearance.
+	if(!QDELETED(character_contract) && character_created)
+		character_contract.preview_b64 = null
+		INVOKE_ASYNC(character_contract, TYPE_PROC_REF(/datum/character_contract, generate_preview_async))
 
 /datum/preferences/Topic(href, list/href_list)
 	. = ..()

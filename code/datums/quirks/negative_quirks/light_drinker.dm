@@ -1,5 +1,6 @@
 /datum/quirk/light_drinker
 	name = "Light Drinker"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You just can't handle your drinks and get drunk very quickly."
 	icon = FA_ICON_COCKTAIL
 	value = -2

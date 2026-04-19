@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/clown_enjoyer
 	name = "Clown Enjoyer"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You enjoy clown antics and get a mood boost from wearing your clown pin."
 	icon = FA_ICON_MAP_PIN
 	value = 2

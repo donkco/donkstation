@@ -1,5 +1,6 @@
 /datum/quirk/hypersensitive
 	name = "Hypersensitive"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "For better or worse, everything seems to affect your mood more than it should."
 	icon = FA_ICON_FLUSHED
 	value = -2

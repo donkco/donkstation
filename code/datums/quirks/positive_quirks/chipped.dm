@@ -1,5 +1,6 @@
 /datum/quirk/chipped
 	name = "Chipped"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You got caught up in the skillchip craze a few years back, and had one of the commercially available chips implanted into yourself."
 	icon = FA_ICON_MICROCHIP
 	value = 2

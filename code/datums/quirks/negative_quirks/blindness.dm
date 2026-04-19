@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/blindness
 	name = "Blind"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are completely blind, nothing can counteract this."
 	icon = FA_ICON_BLIND
 	value = -16

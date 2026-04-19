@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/scarred_eye
 	name = "Scarred Eye"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "An accident in your past has cost you one of your eyes, but you got a cool eyepatch. Yarr!"
 	icon = FA_ICON_EYE_SLASH
 	value = -2

@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/poster_boy
 	name = "Poster Boy"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You have some great posters! Hang them up and make everyone have a great time."
 	icon = FA_ICON_TAPE
 	value = 4

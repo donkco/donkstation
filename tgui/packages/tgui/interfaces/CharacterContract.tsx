@@ -58,6 +58,12 @@ type ArchetypeEntry = {
   affordable: boolean;
 };
 
+type ContractQuirk = {
+  name: string;
+  category: 'positive' | 'negative' | 'neutral';
+  flavor_text: string;
+};
+
 type Data = {
   // Archetype picker
   archetypes?: ArchetypeEntry[];
@@ -65,12 +71,8 @@ type Data = {
   character_created?: boolean;
   secretary_points?: number;
   // Contract details
-  trait_title_1?: string;
-  trait_desc_1?: string;
-  trait_title_2?: string;
-  trait_desc_2?: string;
-  trait_title_3?: string;
-  trait_desc_3?: string;
+  contract_quirks?: ContractQuirk[];
+  preview_icon?: string;
   first_name?: string;
   last_name?: string;
   age?: number;
@@ -270,15 +272,19 @@ const ArchetypePage = () => {
 
 // ── Page 2: Contract details ──────────────────────────────────────────────────
 
+const highlighterForCategory = (
+  category: ContractQuirk['category'],
+): string | undefined => {
+  if (category === 'positive') return resolveAsset('green_highlighter.png');
+  if (category === 'negative') return resolveAsset('red_highlighter.png');
+  return undefined;
+};
+
 const ContractPage = () => {
   const { data, act } = useBackend<Data>();
   const {
-    trait_title_1,
-    trait_title_2,
-    trait_title_3,
-    trait_desc_1,
-    trait_desc_2,
-    trait_desc_3,
+    contract_quirks = [],
+    preview_icon,
     first_name,
     last_name,
     age,
@@ -293,6 +299,59 @@ const ContractPage = () => {
         height="960px"
         src={resolveAsset('donkcopaper.png')}
       />
+
+      {/* Character preview + polaroid frame + edit button — top-right corner of the paper */}
+      <div
+        className="CharacterContract__overlay CharacterContract__char-preview"
+        style={{
+          top: '90px',
+          right: '-200px',
+          transform: 'rotate(3deg)',
+          transformOrigin: 'center top',
+        }}
+      >
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <img
+            src={resolveAsset('polaroid.png')}
+            style={{ display: 'block', width: '240px' }}
+            alt=""
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: '18px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {preview_icon ? (
+              <img
+                src={`data:image/png;base64,${preview_icon}`}
+                style={{
+                  width: '180px',
+                  imageRendering: 'pixelated',
+                  display: 'block',
+                }}
+                alt="Character Preview"
+              />
+            ) : (
+              <div style={{ width: '200px', height: '200px' }} />
+            )}
+          </div>
+        </div>
+        <button
+          className="CharacterContract__archetype-confirm"
+          style={{
+            marginTop: '8px',
+            width: '80px',
+            display: 'block',
+            margin: '8px auto 0',
+          }}
+          onClick={() => act('open_preferences')}
+        >
+          Edit
+        </button>
+      </div>
 
       {/* Applicant Information table */}
       <div
@@ -383,17 +442,14 @@ const ContractPage = () => {
         className="CharacterContract__overlay CharacterContract__columns"
         style={{ top: '460px', left: '68px', width: '824px' }}
       >
-        <TraitColumn
-          title={trait_title_1}
-          description={trait_desc_1}
-          highlighter={resolveAsset('green_highlighter.png')}
-        />
-        <TraitColumn
-          title={trait_title_2}
-          description={trait_desc_2}
-          highlighter={resolveAsset('red_highlighter.png')}
-        />
-        <TraitColumn title={trait_title_3} description={trait_desc_3} />
+        {contract_quirks.map((quirk) => (
+          <TraitColumn
+            key={quirk.name}
+            title={quirk.name}
+            description={quirk.flavor_text}
+            highlighter={highlighterForCategory(quirk.category)}
+          />
+        ))}
       </div>
     </div>
   );

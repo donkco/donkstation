@@ -1,5 +1,6 @@
 /datum/quirk/quadruple_amputee
 	name = "Quadruple Amputee"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Oops! All Prosthetics! Due to some truly cruel cosmic punishment, all your limbs have been replaced with surplus prosthetics."
 	icon = "tg-prosthetic-full"
 	value = -6

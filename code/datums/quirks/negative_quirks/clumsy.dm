@@ -1,5 +1,6 @@
 /datum/quirk/clumsy
 	name = "Clumsy"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You're clumsy, a goofball, a silly dude. You big loveable himbo/bimbo you! Hope you weren't planning on using your hands for anything that takes even a LICK of dexterity."
 	icon = FA_ICON_FACE_DIZZY
 	value = -8

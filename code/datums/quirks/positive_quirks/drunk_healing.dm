@@ -1,5 +1,6 @@
 /datum/quirk/drunkhealing
 	name = "Drunken Resilience"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "Nothing like a good drink to make you feel on top of the world. Whenever you're drunk, you slowly recover from injuries."
 	icon = FA_ICON_WINE_BOTTLE
 	value = 8
