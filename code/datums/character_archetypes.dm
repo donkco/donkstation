@@ -4,6 +4,12 @@
 	var/archetype_id
 	///Cost of the archetype in SP
 	var/cost = 50
+	///Weighted table of species typepaths to roll from when this archetype is confirmed.
+	var/list/species_table = list(
+		/datum/species/human = 5,
+		/datum/species/lizard = 1,
+		/datum/species/ethereal = 1,
+	)
 
 	///Dont have more than 3 quirks in total, we hardcode the UI for 3 right now. :(
 	///Amount of positive quirks to roll.
@@ -55,6 +61,11 @@
 	quirk_list.Remove(selected_quirk)
 	if(selected_quirk)
 		result[selected_quirk] = category
+
+/// Rolls a species typepath from species_table using weighted random selection.
+/// Returns a /datum/species typepath.
+/datum/character_archetype/proc/roll_species()
+	return pick_weight(species_table)
 
 /datum/character_archetype/intern
 	name = "Intern"

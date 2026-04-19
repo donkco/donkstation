@@ -98,6 +98,10 @@
 	data["age"] = prefs.read_preference(/datum/preference/numeric/age)
 	data["place_of_birth"] = prefs.read_preference(/datum/preference/text/place_of_birth)
 	data["gender"] = prefs.read_preference(/datum/preference/choiced/gender)
+	// Send the species display name for the contract page
+	var/datum/species/species_type = prefs.read_preference(/datum/preference/choiced/species)
+	var/datum/species/species_instance = GLOB.species_prototypes[species_type]
+	data["species_name"] = species_instance ? species_instance.name : "Human"
 	return data
 
 /datum/character_contract/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
@@ -149,6 +153,11 @@
 				var/datum/quirk/prototype = SSquirks.quirk_prototypes[quirk_type]
 				if(prototype)
 					prefs.all_quirks += prototype.name
+			// Roll species from the archetype's weighted table and save to preferences
+			var/species_path = chosen_arch.roll_species()
+			var/datum/species/rolled_species_proto = GLOB.species_prototypes[species_path]
+			if(rolled_species_proto)
+				prefs.write_preference(GLOB.preference_entries[/datum/preference/choiced/species], rolled_species_proto.id)
 			prefs.mark_character_prefs_dirty()
 			prefs.save_character()
 			play_reveal_anim = TRUE

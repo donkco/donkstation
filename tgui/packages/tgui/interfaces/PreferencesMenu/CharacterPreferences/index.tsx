@@ -64,9 +64,7 @@ export function CharacterPreferenceWindow(props) {
       pageContents = <JobsPage />;
       break;
     case Page.Main:
-      pageContents = (
-        <MainPage openSpecies={() => setCurrentPage(Page.Species)} />
-      );
+      pageContents = <MainPage />;
 
       break;
     case Page.Species:

@@ -112,6 +112,7 @@ type Data = {
   age?: number;
   place_of_birth?: string;
   gender?: string;
+  species_name?: string;
 };
 
 const GENDER_OPTIONS = [
@@ -325,6 +326,7 @@ const ContractPage = () => {
     age,
     place_of_birth,
     gender,
+    species_name,
   } = data;
 
   // Fire clear_reveal_anim after the last column's animation finishes so the
@@ -459,17 +461,23 @@ const ContractPage = () => {
           </div>
         </div>
 
-        {/* Row 3: Place of birth */}
-        <div className="CharacterContract__table-cell">
-          <span className="CharacterContract__table-label">
-            Place of birth:
-          </span>
-          <Input
-            fluid
-            placeholder="Place of birth"
-            value={place_of_birth ?? ''}
-            onChange={(val) => act('set_place_of_birth', { value: val })}
-          />
+        {/* Row 3: Place of birth / Species */}
+        <div className="CharacterContract__table-row">
+          <div className="CharacterContract__table-cell CharacterContract__table-cell--right-border">
+            <span className="CharacterContract__table-label">
+              Place of birth:
+            </span>
+            <Input
+              fluid
+              placeholder="Place of birth"
+              value={place_of_birth ?? ''}
+              onChange={(val) => act('set_place_of_birth', { value: val })}
+            />
+          </div>
+          <div className="CharacterContract__table-cell">
+            <span className="CharacterContract__table-label">Species:</span>
+            {species_name ?? 'Human'}
+          </div>
         </div>
       </div>
 
@@ -509,7 +517,7 @@ export const CharacterContract = (props) => {
   const { character_created } = data;
 
   return (
-    <Window width={1380} height={1200}>
+    <Window width={1450} height={1200}>
       <Window.Content
         backgroundColor="#5b210a"
         style={{ backgroundImage: 'none' }}
