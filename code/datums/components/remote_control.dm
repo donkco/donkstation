@@ -208,7 +208,7 @@
 /datum/action/cooldown/end_remote_control
 	name = "End Remote Control"
 	button_icon = 'icons/mob/actions/actions_items.dmi'
-	button_icon_state = "sniper_zoom"
+	button_icon_state = "radio_off"
 	desc = "Allows you to end remote control of the current mob."
 	cooldown_time = 0 SECONDS
 

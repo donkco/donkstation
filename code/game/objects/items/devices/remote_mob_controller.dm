@@ -51,12 +51,19 @@
 	desc = "A control device for monkey bots. For people that have gone both nutty and bananas."
 	///Has the monkey been created?
 	var/has_monkey_been_made = FALSE
+	///The name to give the monkey when it's created
+	var/monkey_name = "Robotic George"
 
 /obj/item/remote_mob_controller/bot/monkey/attack_self(mob/user)
 	if(has_monkey_been_made)
 		return ..()
 
+	var/chosen_name = tgui_input_text(user, "What will you name your robotic monkey?", "Name your monkey", monkey_name, max_length = MAX_NAME_LEN)
+	if(chosen_name && length(trim(chosen_name)))
+		monkey_name = trim(chosen_name)
+
 	has_monkey_been_made = TRUE
 	to_chat(user, span_notice("A small cube drops out of [src] and quickly unfolds into a robotic monkey."))
 	assigned_bot = new /mob/living/carbon/human/species/androidmonkey(get_turf(src))
+	assigned_bot.fully_replace_character_name(assigned_bot.real_name, monkey_name)
 	assigned_bot.Knockdown(2 SECONDS)

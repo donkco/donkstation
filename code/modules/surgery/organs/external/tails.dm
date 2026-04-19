@@ -179,7 +179,7 @@
 
 /obj/item/organ/tail/android_monkey
 	name = "robot monkey tail"
-	icon_state = "severedmonkeytail"
+	icon_state = "severedcabletail"
 	dna_block = null
 	bodypart_overlay = /datum/bodypart_overlay/mutant/tail/android_monkey
 

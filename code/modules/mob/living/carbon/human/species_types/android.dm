@@ -133,11 +133,21 @@
 		TRAIT_NO_BLOOD_OVERLAY,,
 		TRAIT_VENTCRAWLER_NUDE,
 		TRAIT_WEAK_SOUL,
-		TRAIT_NO_MOOD
+		TRAIT_NO_MOOD,
+		TRAIT_NO_CATACONIC
 	)
 
 	mutant_organs = list(
 		/obj/item/organ/tail/android_monkey = "Monkey",
+	)
+
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/robot/android/monkey,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/robot/android/monkey,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/arm/left/robot/android/monkey,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/arm/right/robot/android/monkey,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/leg/left/robot/android/monkey,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/robot/android/monkey,
 	)
 
 	inherent_biotypes = MOB_ROBOTIC|MOB_HUMANOID
@@ -147,7 +157,7 @@
 	no_equip_flags = ITEM_SLOT_OCLOTHING | ITEM_SLOT_GLOVES | ITEM_SLOT_FEET | ITEM_SLOT_SUITSTORE
 
 	fire_overlay = "monkey"
-	gib_anim = "gibbed-m"//We should probably get a robot version of this
+	gib_anim = "gibbed-rm"
 
 /datum/species/android/monkey/on_species_gain(mob/living/carbon/human/human_who_gained_species, datum/species/old_species, pref_load, regenerate_icons, replace_missing)
 	. = ..()
