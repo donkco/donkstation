@@ -7,4 +7,6 @@
         "signature.png" = 'icons/ui/charactercontract/signature.png',\
 		"hired_stamp.png" = 'icons/ui/charactercontract/hired_stamp.png',
 		"polaroid.png" = 'icons/ui/charactercontract/polaroid.png',
+		"understatement.png" = 'icons/ui/charactercontract/understatement.png',
+		"questionmark.png" = 'icons/ui/charactercontract/questionmark.png',
 	)

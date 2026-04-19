@@ -31,9 +31,17 @@ type TraitColumnProps = {
   title?: string;
   description?: string;
   highlighter?: string;
+  top_image?: string | null;
+  bottom_image?: string | null;
 };
 
-const TraitColumn = ({ title, description, highlighter }: TraitColumnProps) => (
+const TraitColumn = ({
+  title,
+  description,
+  highlighter,
+  top_image,
+  bottom_image,
+}: TraitColumnProps) => (
   <div className="CharacterContract__trait">
     <div className="CharacterContract__trait-title">
       {highlighter && (
@@ -46,7 +54,23 @@ const TraitColumn = ({ title, description, highlighter }: TraitColumnProps) => (
       <span className="CharacterContract__trait-title-text">{title}</span>
     </div>
     <div className="CharacterContract__trait-body">
+      {top_image && (
+        <img
+          src={resolveAsset(top_image)}
+          className="CharacterContract__trait-annotation--top"
+          style={{ top: '-50px', left: '45px' }}
+          alt=""
+        />
+      )}
       <RedactedText text={description} />
+      {bottom_image && (
+        <img
+          src={resolveAsset(bottom_image)}
+          className="CharacterContract__trait-annotation--bottom"
+          style={{ marginTop: '0px', marginLeft: '0px' }}
+          alt=""
+        />
+      )}
     </div>
   </div>
 );
@@ -62,6 +86,8 @@ type ContractQuirk = {
   name: string;
   category: 'positive' | 'negative' | 'neutral';
   flavor_text: string;
+  top_image?: string | null;
+  bottom_image?: string | null;
 };
 
 type Data = {
@@ -403,7 +429,7 @@ const ContractPage = () => {
                 className="CharacterContract__radio-label"
               >
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="gender"
                   value={option.value}
                   checked={gender === option.value}
@@ -448,6 +474,8 @@ const ContractPage = () => {
             title={quirk.name}
             description={quirk.flavor_text}
             highlighter={highlighterForCategory(quirk.category)}
+            top_image={quirk.top_image}
+            bottom_image={quirk.bottom_image}
           />
         ))}
       </div>

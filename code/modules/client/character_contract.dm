@@ -79,9 +79,11 @@
 		if(!prototype)
 			continue
 		contract_quirks_data += list(list(
-			"name"        = quirk_name,
-			"category"    = prototype.quirk_category,
-			"flavor_text" = prototype.contract_flavor_text,
+			"name"         = quirk_name,
+			"category"     = prototype.quirk_category,
+			"flavor_text"  = prototype.contract_flavor_text,
+			"top_image"    = prototype.contract_top_image,
+			"bottom_image" = prototype.contract_bottom_image,
 		))
 	data["contract_quirks"] = contract_quirks_data
 	data["preview_icon"] = preview_b64

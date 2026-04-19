@@ -45,6 +45,10 @@
 	var/list/no_process_traits
 	///Flavor text used in contracts to describe this quirk
 	var/contract_flavor_text = "Patient demonstrates a quirk. This is quirky!"
+	/// Optional asset key for an annotation image overlaid at the TOP of the flavor text (e.g. "understatement.png").
+	var/contract_top_image = null
+	/// Optional asset key for an annotation image placed BELOW the flavor text, anchored to where the text ends.
+	var/contract_bottom_image = null
 	/// Category for CharacterContract display. Set as a default on each subtype.
 	var/quirk_category = QUIRK_CATEGORY_NEUTRAL
 
