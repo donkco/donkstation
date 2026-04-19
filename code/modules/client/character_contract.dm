@@ -106,7 +106,7 @@
 		return
 	var/datum/preference/pref
 	switch(action)
-		// ── Archetype picker (page 1) ─────────────────────────────────────
+		// Archetype picker (page 1)
 		if("play_stamp_sound")
 			ui.user.playsound_local(usr, 'sound/items/rubber_stamp.ogg', 40, 1)
 			return TRUE
@@ -154,7 +154,7 @@
 			play_reveal_anim = TRUE
 			return TRUE
 
-		// ── Contract details (page 2) ─────────────────────────────────────
+		// Contract details (page 2) can be opened at any time after character creation
 		if("set_first_name")
 			pref = GLOB.preference_entries[/datum/preference/name/real_name]
 			if(!prefs.write_preference(pref, params["value"]))
