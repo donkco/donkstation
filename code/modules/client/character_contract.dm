@@ -7,6 +7,8 @@
 	var/preview_b64
 	/// Guard against concurrent preview generation.
 	var/generating_preview = FALSE
+	/// Set to TRUE when confirm_archetype is performed so the TSX plays the quirk reveal animation exactly once.
+	var/play_reveal_anim = FALSE
 
 /datum/character_contract/New(datum/preferences/prefs)
 	src.prefs = prefs
@@ -86,6 +88,7 @@
 			"bottom_image" = prototype.contract_bottom_image,
 		))
 	data["contract_quirks"] = contract_quirks_data
+	data["play_reveal_anim"] = play_reveal_anim
 	data["preview_icon"] = preview_b64
 	data["first_name"] = prefs.read_preference(/datum/preference/name/real_name)
 	data["last_name"] = prefs.read_preference(/datum/preference/name/last_name)
@@ -145,6 +148,7 @@
 					prefs.all_quirks += prototype.name
 			prefs.mark_character_prefs_dirty()
 			prefs.save_character()
+			play_reveal_anim = TRUE
 			return TRUE
 
 		// ── Contract details (page 2) ─────────────────────────────────────
@@ -174,5 +178,8 @@
 			prefs.current_window = PREFERENCE_TAB_CHARACTER_PREFERENCES
 			prefs.update_static_data(ui.user)
 			prefs.ui_interact(ui.user)
+			return TRUE
+		if("clear_reveal_anim")
+			play_reveal_anim = FALSE
 			return TRUE
 	return FALSE

@@ -156,17 +156,20 @@
     flex-direction: column;
     gap: 8px;
 
-    // Staggered reveal — each column fades in and slides up
-    animation: cc-trait-reveal 0.7s ease-out both;
+    // Animation is only applied on first creation via the --animating modifier.
+    &--animating {
+      opacity: 0; // hidden before the animation starts (avoids relying on backwards fill)
+      animation: cc-trait-reveal 0.7s ease-out forwards;
 
-    &:nth-child(1) {
-      animation-delay: 0.3s;
-    }
-    &:nth-child(2) {
-      animation-delay: 1.2s;
-    }
-    &:nth-child(3) {
-      animation-delay: 2.1s;
+      &:nth-child(1) {
+        animation-delay: 0.3s;
+      }
+      &:nth-child(2) {
+        animation-delay: 1.2s;
+      }
+      &:nth-child(3) {
+        animation-delay: 2.1s;
+      }
     }
 
     &-title {
@@ -186,15 +189,15 @@
       height: 100%;
       object-fit: fill;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
       opacity: 0.9;
       image-rendering: crisp-edges;
-      mix-blend-mode: overlay;
+      mix-blend-mode: multiply;
     }
 
     &-title-text {
       position: relative;
-      z-index: 0;
+      z-index: 1;
     }
 
     &-body {

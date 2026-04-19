@@ -33,6 +33,7 @@ type TraitColumnProps = {
   highlighter?: string;
   top_image?: string | null;
   bottom_image?: string | null;
+  animating?: boolean;
 };
 
 const TraitColumn = ({
@@ -41,8 +42,14 @@ const TraitColumn = ({
   highlighter,
   top_image,
   bottom_image,
+  animating,
 }: TraitColumnProps) => (
-  <div className="CharacterContract__trait">
+  <div
+    className={
+      'CharacterContract__trait' +
+      (animating ? ' CharacterContract__trait--animating' : '')
+    }
+  >
     <div className="CharacterContract__trait-title">
       {highlighter && (
         <img
@@ -98,6 +105,7 @@ type Data = {
   secretary_points?: number;
   // Contract details
   contract_quirks?: ContractQuirk[];
+  play_reveal_anim?: boolean;
   preview_icon?: string;
   first_name?: string;
   last_name?: string;
@@ -310,6 +318,7 @@ const ContractPage = () => {
   const { data, act } = useBackend<Data>();
   const {
     contract_quirks = [],
+    play_reveal_anim,
     preview_icon,
     first_name,
     last_name,
@@ -317,6 +326,15 @@ const ContractPage = () => {
     place_of_birth,
     gender,
   } = data;
+
+  // Fire clear_reveal_anim after the last column's animation finishes so the
+  // reveal only plays once (the session the character is first created).
+  useEffect(() => {
+    if (!play_reveal_anim) return;
+    // Last column: 2.1s delay + 0.7s duration = 2.8s total
+    const timer = setTimeout(() => act('clear_reveal_anim'), 2900);
+    return () => clearTimeout(timer);
+  }, [play_reveal_anim]);
 
   return (
     <div className="CharacterContract CharacterContract__canvas">
@@ -476,6 +494,7 @@ const ContractPage = () => {
             highlighter={highlighterForCategory(quirk.category)}
             top_image={quirk.top_image}
             bottom_image={quirk.bottom_image}
+            animating={!!play_reveal_anim}
           />
         ))}
       </div>
