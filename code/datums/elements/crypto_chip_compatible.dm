@@ -64,7 +64,7 @@
 		return null
 	chip.forceMove(get_turf(source))
 	if(user)
-		source.balloon_alert(user, "crypto chip removed from object!")
+		source.balloon_alert(user, "crypto chip detached from object!")
 	SEND_SIGNAL(source, COMSIG_OBJ_REMOVED_CRYPTO_CHIP, chip, user)
 	return chip
 
@@ -76,11 +76,9 @@
 	SIGNAL_HANDLER
 	if(!istype(tool, /obj/item/crypto_chip))
 		return NONE
-	if(isobj(source))
-		var/obj/obj_source = source
-		if(obj_source.obj_flags & CRYPTO_CHIPPED)
-			source.balloon_alert(user, "already has a chip!")
-			return ITEM_INTERACT_BLOCKING
+	if(LAZYACCESS(host_chips, source))
+		source.balloon_alert(user, "A crypto chip is already attached to [source]!")
+		return ITEM_INTERACT_BLOCKING
 	tool.forceMove(source)
 	insert_chip(source, tool, user)
 	return ITEM_INTERACT_SUCCESS
@@ -91,9 +89,7 @@
  */
 /datum/element/crypto_chip_compatible/proc/on_soldering_iron_act(atom/source, mob/living/user, obj/item/tool)
 	SIGNAL_HANDLER
-	if(isobj(source))
-		var/obj/obj_source = source
-		if(!(obj_source.obj_flags & CRYPTO_CHIPPED))
-			return NONE
+	if(!LAZYACCESS(host_chips, source))
+		return NONE
 	remove_chip(source, user)
 	return ITEM_INTERACT_SUCCESS
