@@ -140,3 +140,9 @@
 #define COMSIG_MOVABLE_CHASM_DROPPED "movable_charm_dropped"
 	/// Stop it from actually dropping into the chasm
 	#define COMPONENT_NO_CHASM_DROP (1<<0)
+
+// /obj/item/sticker signals
+///Called on a sticker item when it is stuck to an atom via [/datum/component/sticker]: (atom/host, datum/component/sticker)
+#define COMSIG_STICKER_STUCK "sticker_stuck"
+///Called on a sticker item when it is peeled from an atom via [/datum/component/sticker]: (atom/host, datum/component/sticker)
+#define COMSIG_STICKER_PEELED "sticker_peeled"

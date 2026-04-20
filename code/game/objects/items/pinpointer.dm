@@ -23,6 +23,8 @@
 	var/alert = FALSE // TRUE to display things more seriously
 	var/process_scan = TRUE // some pinpointers change target every time they scan, which means we can't have it change very process but instead when it turns on.
 	var/icon_suffix = "" // for special pinpointer icons
+	/// If TRUE, a crypto chip will be pre-installed when this pinpointer initializes
+	var/start_crypto_chipped = FALSE
 
 /obj/item/pinpointer/Initialize(mapload)
 	. = ..()
@@ -103,6 +105,21 @@
 	var/has_owner = FALSE
 	var/pinpointer_owner = null
 	var/ignore_suit_sensor_level = FALSE /// Do we find people even if their suit sensors are turned off
+	/// Stable REF string key into GLOB.trackable_atoms for the currently tracked trackable, or null when tracking a human.
+	var/tracking_id
+ha
+/obj/item/pinpointer/crew/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/crypto_chip_compatible, start_crypto_chipped)
+	RegisterSignal(src, COMSIG_OBJ_REMOVED_CRYPTO_CHIP, PROC_REF(on_chip_removed))
+
+/obj/item/pinpointer/crew/proc/on_chip_removed(datum/source, obj/item/crypto_chip/chip, mob/living/user)
+	SIGNAL_HANDLER
+	if(target && !ishuman(target))
+		tracking_id = null
+		target = null
+		STOP_PROCESSING(SSfastprocess, src)
+		update_appearance()
 
 /obj/item/pinpointer/crew/proc/trackable(mob/living/carbon/human/H)
 	var/turf/here = get_turf(src)
@@ -147,6 +164,16 @@
 		names[crewmember_name] = H
 		name_counts[crewmember_name] = 1
 
+	if(obj_flags & CRYPTO_CHIPPED)
+		for(var/key in GLOB.trackable_atoms)
+			var/atom/tracked_atom = GLOB.trackable_atoms[key]
+			var/tracked_name = GLOB.trackable_names[key] || tracked_atom.name || "Unknown Object"
+			while(tracked_name in name_counts)
+				name_counts[tracked_name]++
+				tracked_name = "[tracked_name] ([name_counts[tracked_name]])"
+			names[tracked_name] = key
+			name_counts[tracked_name] = 1
+
 	if(!length(names))
 		user.visible_message(span_notice("[user]'s pinpointer fails to detect a signal."), span_notice("Your pinpointer fails to detect a signal."))
 		return
@@ -157,7 +184,13 @@
 		return
 	if(QDELETED(src) || !user || !user.is_holding(src) || user.incapacitated)
 		return
-	target = names[pinpoint_target]
+	var/selected = names[pinpoint_target]
+	if(istext(selected))
+		tracking_id = selected
+		target = GLOB.trackable_atoms[tracking_id]
+	else
+		tracking_id = null
+		target = selected
 	toggle_on()
 	user.visible_message(span_notice("[user] activates [user.p_their()] pinpointer."), span_notice("You activate your pinpointer."))
 
@@ -167,8 +200,18 @@
 			var/mob/living/carbon/human/H = target
 			if(!trackable(H))
 				target = null
+		else if(tracking_id)
+			target = GLOB.trackable_atoms[tracking_id]
+			if(!target)
+				tracking_id = null
+		else
+			target = null
 	if(!target) //target can be set to null from above code, or elsewhere
 		active = FALSE
+
+///Crew pinpointer with pre-installed crypto chip
+/obj/item/pinpointer/crew/crypto
+	start_crypto_chipped = TRUE
 
 /obj/item/pinpointer/pair
 	name = "pair pinpointer"

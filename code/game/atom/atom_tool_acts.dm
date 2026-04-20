@@ -117,6 +117,8 @@
 			act_result = is_left_clicking ? welder_act(user, tool) : welder_act_secondary(user, tool)
 		if(TOOL_ANALYZER)
 			act_result = is_left_clicking ? analyzer_act(user, tool) : analyzer_act_secondary(user, tool)
+		if(TOOL_SOLDERING_IRON)
+			act_result = is_left_clicking ? soldering_iron_act(user, tool) : soldering_iron_act_secondary(user, tool)
 
 	if(!act_result)
 		return NONE
@@ -322,4 +324,12 @@
 
 /// Called on an object when a tool with analyzer capabilities is used to right click an object
 /atom/proc/analyzer_act_secondary(mob/living/user, obj/item/tool)
+	return
+
+/// Called on an object when a soldering iron is used to left click an object
+/atom/proc/soldering_iron_act(mob/living/user, obj/item/tool)
+	return
+
+/// Called on an object when a soldering iron is used to right click an object
+/atom/proc/soldering_iron_act_secondary(mob/living/user, obj/item/tool)
 	return

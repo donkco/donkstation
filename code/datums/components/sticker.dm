@@ -19,8 +19,12 @@
 	var/datum/callback/peel_callback
 	/// Text added to the atom's examine when stickered.
 	var/examine_text
+	/// If TRUE, examine text and peel link appear in double-examine (examine_more) instead of normal examine.
+	var/use_double_examine = FALSE
+	/// If TRUE, the sticker can only be removed via the examine peel link, not by other methods. (Excluding burning, which nukes the sticker)
+	var/peel_via_examine_only = FALSE
 
-/datum/component/sticker/Initialize(atom/stickering_atom, dir = NORTH, px = 0, py = 0, datum/callback/stick_callback, datum/callback/peel_callback, examine_text)
+/datum/component/sticker/Initialize(atom/stickering_atom, dir = NORTH, px = 0, py = 0, datum/callback/stick_callback, datum/callback/peel_callback, examine_text, use_double_examine = FALSE, peel_via_examine_only = FALSE)
 	if(!isatom(parent))
 		return COMPONENT_INCOMPATIBLE
 
@@ -28,6 +32,8 @@
 	src.stick_callback = stick_callback
 	src.peel_callback = peel_callback
 	src.examine_text = examine_text
+	src.use_double_examine = use_double_examine
+	src.peel_via_examine_only = peel_via_examine_only
 	stick(stickering_atom, px, py)
 	register_turf_signals(dir)
 
@@ -47,11 +53,26 @@
 
 /datum/component/sticker/RegisterWithParent()
 	RegisterSignal(parent, COMSIG_LIVING_IGNITED, PROC_REF(on_ignite))
-	RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(on_clean))
-	RegisterSignal(parent, COMSIG_ATOM_EXAMINE, PROC_REF(on_examine))
+	if(!peel_via_examine_only)
+		RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(on_clean))
+	else
+		RegisterSignal(parent, COMSIG_TOPIC, PROC_REF(on_topic))
+	if(use_double_examine)
+		RegisterSignal(parent, COMSIG_ATOM_EXAMINE_MORE, PROC_REF(on_examine_more))
+	else
+		RegisterSignal(parent, COMSIG_ATOM_EXAMINE, PROC_REF(on_examine))
 
 /datum/component/sticker/UnregisterFromParent()
-	UnregisterSignal(parent, list(COMSIG_LIVING_IGNITED, COMSIG_COMPONENT_CLEAN_ACT, COMSIG_ATOM_EXAMINE))
+	var/list/signals = list(COMSIG_LIVING_IGNITED)
+	if(!peel_via_examine_only)
+		signals += COMSIG_COMPONENT_CLEAN_ACT
+	else
+		signals += COMSIG_TOPIC
+	if(use_double_examine)
+		signals += COMSIG_ATOM_EXAMINE_MORE
+	else
+		signals += COMSIG_ATOM_EXAMINE
+	UnregisterSignal(parent, signals)
 
 /// Subscribes to `COMSIG_TURF_EXPOSE` if parent atom is a turf. If turf is closed - subscribes to signal
 /datum/component/sticker/proc/register_turf_signals(dir)
@@ -88,16 +109,21 @@
 	sticker_overlay.pixel_z = py - ICON_SIZE_Y / 2
 
 	parent_atom.add_overlay(sticker_overlay)
+	SEND_SIGNAL(our_sticker, COMSIG_STICKER_STUCK, parent_atom, src)
 	stick_callback?.Invoke(parent)
 	ADD_TRAIT(parent, TRAIT_STICKERED, REF(src))
 
 /// Moves stickered atom from the nullspace, deletes component.
-/datum/component/sticker/proc/peel()
+/datum/component/sticker/proc/peel(mob/living/user)
 	var/atom/parent_atom = parent
-	var/turf/drop_location = listening_turf || parent_atom.drop_location()
 
 	UnregisterSignal(our_sticker, list(COMSIG_QDELETING, COMSIG_MOVABLE_MOVED))
-	our_sticker.forceMove(drop_location)
+	SEND_SIGNAL(our_sticker, COMSIG_STICKER_PEELED, parent_atom, src)
+	if(isnull(user) || !user.put_in_hands(our_sticker))
+		var/turf/drop_location = listening_turf || parent_atom.drop_location()
+		our_sticker.forceMove(drop_location)
+	if(user)
+		parent_atom.balloon_alert(user, "sticker peeled")
 	our_sticker = null
 	peel_callback?.Invoke(parent)
 
@@ -117,6 +143,22 @@
 
 	return COMPONENT_CLEANED|COMPONENT_CLEANED_GAIN_XP
 
+/datum/component/sticker/proc/on_topic(datum/source, mob/user, list/href_list)
+	SIGNAL_HANDLER
+
+	if(!href_list["peel"] || !isliving(user) || !user.Adjacent(parent))
+		return
+	INVOKE_ASYNC(src, PROC_REF(async_peel), user)
+
+/datum/component/sticker/proc/async_peel(mob/living/user)
+	var/atom/parent_atom = parent
+	parent_atom.balloon_alert(user, "peeling sticker...")
+	if(!do_after(user, 2 SECONDS, target = parent))
+		return
+	if(QDELETED(src))
+		return
+	peel(user)
+
 /datum/component/sticker/proc/on_turf_expose(datum/source, datum/gas_mixture/air, exposed_temperature)
 	SIGNAL_HANDLER
 
@@ -128,3 +170,11 @@
 
 	if(!isnull(examine_text))
 		examine_list += span_warning(examine_text)
+
+/datum/component/sticker/proc/on_examine_more(atom/source, mob/user, list/examine_list)
+	SIGNAL_HANDLER
+
+	if(!isnull(examine_text))
+		examine_list += span_warning(examine_text)
+	if(peel_via_examine_only)
+		examine_list += span_notice("<a href='byond://?src=[REF(parent)];peel=1'>It looks like you could peel it off.</a>")
