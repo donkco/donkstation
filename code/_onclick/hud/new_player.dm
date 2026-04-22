@@ -827,12 +827,15 @@
 	if(!.)
 		return
 	var/datum/preferences/prefs = hud.mymob.canon_client.prefs
-	if(slot_index == prefs.default_slot)
-		// Already the active slot — open the contract directly
-		prefs.character_contract.ui_interact(hud.mymob)
-	else
+	if(slot_index != prefs.default_slot)
 		// Switch to this slot; signals will update all button appearances
 		prefs.switch_to_slot(slot_index)
+		//if the slot is empty just open it too brother
+		if(!preview?.has_character_data)
+			prefs.character_contract.ui_interact(hud.mymob)
+	// Open the contract if this is (or just became) the active slot,
+	else if(slot_index == prefs.default_slot)
+		prefs.character_contract.ui_interact(hud.mymob)
 
 ///Creates a preview for this slot, showing an empty state if there is no save data
 /atom/movable/screen/lobby/button/character_slot/proc/build_preview(client/show_to, datum/hud/hud)
