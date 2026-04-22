@@ -15,6 +15,13 @@
 /datum/character_contract/New(datum/preferences/prefs)
 	src.prefs = prefs
 
+/datum/character_contract/ui_close(mob/user)
+	. = ..()
+	if(prefs?.character_created)
+		prefs.mark_character_prefs_dirty()
+		prefs.save_character()
+		prefs.save_preferences()
+
 /datum/character_contract/ui_interact(mob/user, datum/tgui/ui)
 	var/is_new_open = !SStgui.try_update_ui(user, src, ui)
 	if(is_new_open)
@@ -167,6 +174,7 @@
 				prefs.write_preference(GLOB.preference_entries[/datum/preference/choiced/species], rolled_species_proto.id)
 			prefs.mark_character_prefs_dirty()
 			prefs.save_character()
+			prefs.save_preferences()
 			play_reveal_anim = TRUE
 			return TRUE
 

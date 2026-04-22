@@ -30,11 +30,11 @@
 			lobbyscreen.RegisterSignal(src, COMSIG_HUD_LOBBY_EXPANDED, TYPE_PROC_REF(/atom/movable/screen/lobby, expand_button))
 
 	var/list/slot_screen_locs = list(
-		"BOTTOM:25,CENTER:-140",
-		"BOTTOM:25,CENTER:-70",
-		"BOTTOM:25,CENTER:0",
-		"BOTTOM:25,CENTER:+70",
-		"BOTTOM:25,CENTER:+140",
+		"BOTTOM:40,CENTER:-140",
+		"BOTTOM:40,CENTER:-70",
+		"BOTTOM:40,CENTER:0",
+		"BOTTOM:40,CENTER:+70",
+		"BOTTOM:40,CENTER:+140",
 	)
 	for(var/i in 1 to 5)
 		var/atom/movable/screen/lobby/button/character_slot/slot_button = new(our_hud = src)
@@ -42,6 +42,7 @@
 		slot_button.name = "Character Slot [i]"
 		slot_button.screen_loc = slot_screen_locs[i]
 		slot_button.SlowInit()
+
 		static_inventory += slot_button
 
 	if(SSearly_assets.initialized == INITIALIZATION_INNEW_REGULAR || SSatoms.initialized == INITIALIZATION_INNEW_REGULAR)
@@ -725,6 +726,8 @@
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	always_available = FALSE
 	vis_flags = VIS_INHERIT_PLANE
+	pixel_x = 16
+	pixel_y = 5
 	///The dummy mob used to render the appearance
 	var/mob/living/carbon/human/dummy/body
 	///The owning slot
@@ -751,10 +754,8 @@
 		else
 			body.wipe_state()
 		appearance = prefs.render_new_preview_appearance(body, TRUE )
-		transform = matrix().Scale(1,1)
 		pixel_x = 16
 		pixel_y = 5
-
 	else
 		cut_overlays()
 	plane = SPLASHSCREEN_PLANE
@@ -771,7 +772,8 @@
 	icon_state = "slot_background"
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	always_available = FALSE
-	vis_flags = VIS_INHERIT_PLANE
+	vis_flags = VIS_INHERIT_PLANE | VIS_INHERIT_ID
+	appearance_flags = NO_CLIENT_COLOR | PIXEL_SCALE | RESET_COLOR
 	layer = LOBBY_MENU_LAYER + 0.05
 
 ///Lobby button representing a single character save slot
@@ -781,13 +783,13 @@
 	base_icon_state = "slot"
 	always_available = FALSE
 	layer = LOBBY_MENU_LAYER + 0.2
+	mouse_opacity = 2
 	///Which save slot this button represents
 	var/slot_index = 0
 	///Character preview rendered overtop of this button
 	var/atom/movable/screen/lobby/char_slot_preview/preview
 	///Background icon rendered behind the character preview
 	var/atom/movable/screen/lobby/char_slot_background/background
-
 
 /atom/movable/screen/lobby/button/character_slot/Destroy()
 	if(preview?.prefs)
@@ -797,24 +799,33 @@
 	return ..()
 
 /atom/movable/screen/lobby/button/character_slot/update_icon(updates)
-	. = ..()
+	if(highlighted)
+		animate(src, transform = matrix().Scale(2,2), time = 0.15 SECONDS, easing = CUBIC_EASING|EASE_OUT)
+		if(preview)
+			animate(preview, pixel_y = -4, time = 0.15 SECONDS, easing = CUBIC_EASING|EASE_OUT)
+	else
+		animate(src, transform = matrix(), time = 0.1 SECONDS, easing = CUBIC_EASING|EASE_IN)
+		if(preview)
+			animate(preview, pixel_y = 5, time = 0.1 SECONDS, easing = CUBIC_EASING|EASE_IN)
 	if(!preview?.has_character_data)
-		base_icon_state = "slot_empty"
-	else if(enabled && !highlighted && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
-		base_icon_state = "slot_active"
+		icon_state = "slot_empty"
+	else if(enabled && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
+		icon_state = "slot_active"
 	else
 		base_icon_state = "slot"
-	return ..()
+		return ..()
 
 /atom/movable/screen/lobby/button/character_slot/Click(location, control, params)
 	. = ..()
 	if(!.)
 		return
 	var/datum/preferences/prefs = hud.mymob.canon_client.prefs
-	// Always switch to the slot first so prefs reflects the correct character
-	prefs.switch_to_slot(slot_index)
-	// Open the contract UI whether the slot has data or is empty
-	prefs.character_contract.ui_interact(hud.mymob)
+	if(slot_index == prefs.default_slot)
+		// Already the active slot — open the contract directly
+		prefs.character_contract.ui_interact(hud.mymob)
+	else
+		// Switch to this slot; signals will update all button appearances
+		prefs.switch_to_slot(slot_index)
 
 ///Creates a preview for this slot, showing an empty state if there is no save data
 /atom/movable/screen/lobby/button/character_slot/proc/build_preview(client/show_to, datum/hud/hud)
@@ -834,6 +845,8 @@
 	if(has_data && slot_index != saved_slot)
 		prefs.load_character(saved_slot)
 	vis_contents += preview
+
+	update_appearance(UPDATE_ICON)
 
 	RegisterSignal(prefs, COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, PROC_REF(on_prefs_switched_to_slot))
 	RegisterSignal(prefs, COMSIG_PREFS_CHARACTER_SLOT_SAVED, PROC_REF(on_prefs_slot_saved))
