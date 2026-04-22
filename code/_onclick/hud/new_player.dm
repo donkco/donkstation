@@ -740,7 +740,7 @@
 
 /atom/movable/screen/lobby/char_slot_preview/update_icon_state()
 	. = ..()
-	icon_state = has_character_data ? null : "empty"
+	icon_state = null
 
 ///Updates state vars from prefs and triggers an icon update
 /atom/movable/screen/lobby/char_slot_preview/proc/update_render()
@@ -751,62 +751,60 @@
 		else
 			body.wipe_state()
 		appearance = prefs.render_new_preview_appearance(body, TRUE )
-		add_filter("preview_mask", 1, alpha_mask_filter(0, 8, render_source = "*Test"))
-		transform = matrix().Scale(2,2)
+		transform = matrix().Scale(1,1)
 		pixel_x = 16
-		pixel_y = 0
+		pixel_y = 5
 
 	else
-		icon = initial(icon)
 		cut_overlays()
-		remove_filter("preview_mask")
-		transform = matrix()
-		pixel_x = 0
-		pixel_y = 0
 	plane = SPLASHSCREEN_PLANE
 	layer = LOBBY_MENU_LAYER + 0.1
 	vis_flags = VIS_INHERIT_ID
 
 
 	update_appearance(UPDATE_ICON)
+	owning_slot?.update_appearance(UPDATE_ICON)
 
-/atom/movable/screen/lobby/char_slot_preview_mask
+///Static background icon rendered behind the character preview
+/atom/movable/screen/lobby/char_slot_background
 	icon = 'icons/hud/lobby/character_select.dmi'
-	icon_state = "mask"
-	plane = SPLASHSCREEN_PLANE
-	always_available = FALSE
-	render_target = "*Test"
-	layer = LOBBY_MENU_LAYER + 0.11
+	icon_state = "slot_background"
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-
-/atom/movable/screen/lobby/char_slot_preview_mask/Initialize(mapload, datum/hud/hud_owner)
-	. = ..()
-	transform = matrix().Scale(0.5,0.5)
+	always_available = FALSE
+	vis_flags = VIS_INHERIT_PLANE
+	layer = LOBBY_MENU_LAYER + 0.05
 
 ///Lobby button representing a single character save slot
 /atom/movable/screen/lobby/button/character_slot
 	icon = 'icons/hud/lobby/character_select.dmi'
-	icon_state = "slot"
+	icon_state = "slot_empty"
 	base_icon_state = "slot"
 	always_available = FALSE
+	layer = LOBBY_MENU_LAYER + 0.2
 	///Which save slot this button represents
 	var/slot_index = 0
 	///Character preview rendered overtop of this button
 	var/atom/movable/screen/lobby/char_slot_preview/preview
-	///Mask to prevent character from rendering over the circle
-	var/atom/movable/screen/lobby/char_slot_preview_mask/preview_mask
+	///Background icon rendered behind the character preview
+	var/atom/movable/screen/lobby/char_slot_background/background
+
 
 /atom/movable/screen/lobby/button/character_slot/Destroy()
 	if(preview?.prefs)
 		UnregisterSignal(preview.prefs, list(COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, COMSIG_PREFS_CHARACTER_SLOT_SAVED, COMSIG_PREFS_CHARACTER_SLOT_DELETED))
 	QDEL_NULL(preview)
-	QDEL_NULL(preview_mask)
+	QDEL_NULL(background)
 	return ..()
 
 /atom/movable/screen/lobby/button/character_slot/update_icon(updates)
 	. = ..()
-	if(enabled && !highlighted && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
-		icon_state = "slot_active"
+	if(!preview?.has_character_data)
+		base_icon_state = "slot_empty"
+	else if(enabled && !highlighted && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
+		base_icon_state = "slot_active"
+	else
+		base_icon_state = "slot"
+	return ..()
 
 /atom/movable/screen/lobby/button/character_slot/Click(location, control, params)
 	. = ..()
@@ -825,23 +823,23 @@
 	var/saved_slot = prefs.default_slot
 	if(has_data && slot_index != saved_slot)
 		prefs.load_character(slot_index)
+	background = new /atom/movable/screen/lobby/char_slot_background(our_hud = hud)
+	vis_contents += background
 	preview = new /atom/movable/screen/lobby/char_slot_preview(our_hud = hud)
 	preview.owning_slot = src
 	preview.prefs = prefs
 	preview.update_render()
 
-	preview_mask = new /atom/movable/screen/lobby/char_slot_preview_mask(our_hud = hud)
 
 	if(has_data && slot_index != saved_slot)
 		prefs.load_character(saved_slot)
 	vis_contents += preview
-	vis_contents += preview_mask
 
 	RegisterSignal(prefs, COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, PROC_REF(on_prefs_switched_to_slot))
 	RegisterSignal(prefs, COMSIG_PREFS_CHARACTER_SLOT_SAVED, PROC_REF(on_prefs_slot_saved))
 	RegisterSignal(prefs, COMSIG_PREFS_CHARACTER_SLOT_DELETED, PROC_REF(on_prefs_slot_deleted))
 
-	return preview_mask
+	return
 
 ///Re-renders this slot's preview using the currently loaded slot data
 /atom/movable/screen/lobby/button/character_slot/proc/refresh_preview()
