@@ -1,5 +1,5 @@
 /*!
-This subsystem exists to manages character datum singletons.
+This subsystem exists to manages character archetype datum singletons.
 */
 
 SUBSYSTEM_DEF(characters)

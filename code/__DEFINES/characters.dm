@@ -10,8 +10,7 @@
 /// SP awarded per completed interval
 #define SP_PER_INTERVAL 10
 
-// Quirk category strings — set as defaults on each /datum/quirk subtype.
-// Used by the CharacterContract UI to colour-code rolled quirks.
+// Quirk category defines. Used to determine whether the quirks are bad/whatever/good
 #define QUIRK_CATEGORY_POSITIVE "positive"
 #define QUIRK_CATEGORY_NEGATIVE "negative"
 #define QUIRK_CATEGORY_NEUTRAL  "neutral"

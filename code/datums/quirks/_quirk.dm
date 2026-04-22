@@ -49,7 +49,7 @@
 	var/contract_top_image = null
 	/// Optional asset key for an annotation image placed BELOW the flavor text, anchored to where the text ends.
 	var/contract_bottom_image = null
-	/// Category for CharacterContract display. Set as a default on each subtype.
+	/// Defines whether this quirk is positive, negative, or neutral.
 	var/quirk_category = QUIRK_CATEGORY_NEUTRAL
 
 /datum/quirk/New()
