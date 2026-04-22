@@ -330,7 +330,7 @@
 
 /atom/movable/screen/plane_master/rendering_plate/game_plate/proc/distortion_enabled(datum/source)
 	SIGNAL_HANDLER
-	add_filter("displacer", 1, displacement_map_filter(render_source = OFFSET_RENDER_TARGET(DISPLACEMENT_RENDER_TARGET, offset), size = 10))
+	add_filter("displacer", 1, displacement_map_filter(render_source = OFFSET_RENDER_TARGET(DISPLACEMENT_RENDER_TARGET, offset), size = 100))
 
 /atom/movable/screen/plane_master/rendering_plate/game_plate/proc/distortion_disabled(datum/source)
 	SIGNAL_HANDLER
