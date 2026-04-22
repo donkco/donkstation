@@ -180,6 +180,8 @@
 	var/highlighted = FALSE
 	///Should this button play the select sound?
 	var/select_sound_play = TRUE
+	///Should it flick when pressed?
+	var/should_flick = TRUE
 
 /atom/movable/screen/lobby/button/Click(location, control, params)
 	if(usr != get_mob())
@@ -192,7 +194,8 @@
 
 	if(!enabled)
 		return
-	flick("[base_icon_state]_pressed", src)
+	if(should_flick)
+		flick("[base_icon_state]_pressed", src)
 	if(select_sound_play)
 		var/sound/ui_select_sound = sound('sound/misc/menu/ui_select1.ogg')
 		ui_select_sound.frequency = get_rand_frequency_low_range()
@@ -799,6 +802,7 @@
 	return ..()
 
 /atom/movable/screen/lobby/button/character_slot/update_icon(updates)
+	should_flick = TRUE
 	if(highlighted)
 		animate(src, transform = matrix().Scale(2,2), time = 0.15 SECONDS, easing = CUBIC_EASING|EASE_OUT)
 		if(preview)
@@ -808,9 +812,12 @@
 		if(preview)
 			animate(preview, pixel_y = 5, time = 0.1 SECONDS, easing = CUBIC_EASING|EASE_IN)
 	if(!preview?.has_character_data)
+		base_icon_state = "slot_empty"
 		icon_state = "slot_empty"
 	else if(enabled && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
+		base_icon_state = "slot_active"
 		icon_state = "slot_active"
+		should_flick = FALSE
 	else
 		base_icon_state = "slot"
 		return ..()
