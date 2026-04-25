@@ -17,7 +17,7 @@
 	/// List of /datum/tracks we can play. Set via get_songs().
 	VAR_FINAL/list/songs = list()
 	/// Current song track selected
-	VAR_FINAL/datum/track/selection
+	var/datum/track/selection
 	/// Current song datum playing
 	VAR_FINAL/sound/active_song_sound
 	/// Whether the jukebox requires a connect_range component to check for new listeners
@@ -39,6 +39,11 @@
 	/// Whether the music loops when done.
 	/// If FALSE, you must handle ending music yourself.
 	var/sound_loops = FALSE
+	/// Sound channel to use for playback.
+	VAR_PROTECTED/sound_channel = CHANNEL_JUKEBOX
+
+	/// Whether playback is currently paused (listeners are muted client-side with SOUND_PAUSED).
+	VAR_PROTECTED/is_paused = FALSE
 
 /datum/jukebox/New(atom/new_parent)
 	if(!ismovable(new_parent) && !isturf(new_parent))
@@ -50,9 +55,7 @@
 
 	if(isnull(sound_range))
 		sound_range = world.view
-		var/list/worldviewsize = getviewsize(sound_range)
-		x_cutoff = ceil(worldviewsize[1] * 1.25 / 2) // * 1.25 gives us some extra range to fade out with
-		z_cutoff = ceil(worldviewsize[2] * 1.25 / 2) // and / 2 is because world view is the whole screen, and we want the centre
+	set_sound_range(sound_range, force = TRUE)
 
 	if(requires_range_check)
 		var/static/list/connections = list(COMSIG_ATOM_ENTERED = PROC_REF(check_new_listener))
@@ -90,8 +93,9 @@
 /datum/jukebox/proc/init_songs()
 	return load_songs_from_config()
 
-/// Loads the config sounds once, and returns a copy of them.
-/datum/jukebox/proc/load_songs_from_config()
+/// Returns a shared, cached copy of all tracks loaded from the jukebox config directory.
+/// Safe to call without a jukebox instance.
+/proc/get_jukebox_config_songs()
 	var/static/list/config_songs
 	if(isnull(config_songs))
 		config_songs = list()
@@ -124,6 +128,10 @@
 	// returns a copy so it can mutate if desired.
 	return config_songs.Copy()
 
+/// Loads the config sounds once, and returns a copy of them.
+/datum/jukebox/proc/load_songs_from_config()
+	return get_jukebox_config_songs()
+
 /**
  * Returns a set of general data relating to the jukebox for use in TGUI.
  *
@@ -152,12 +160,12 @@
  * Sets the sound's range to a new value. This can be a number or a view size string "XxY".
  * Then updates any mobs listening to it.
  */
-/datum/jukebox/proc/set_sound_range(new_range)
-	if(sound_range == new_range)
+/datum/jukebox/proc/set_sound_range(new_range, force = FALSE)
+	if(!force && sound_range == new_range)
 		return
 	sound_range = new_range
-	var/list/worldviewsize = getviewsize(sound_range)
-	x_cutoff = ceil(worldviewsize[1] / 2)
+	var/list/worldviewsize = getviewsize(sound_range * 1.25) // * 1.25 gives us some extra range to fade out with
+	x_cutoff = ceil(worldviewsize[1] / 2) // / 2 is because world view is the whole screen, and we want the centre
 	z_cutoff = ceil(worldviewsize[2] / 2)
 	update_all()
 
@@ -194,6 +202,35 @@
 	for(var/mob/listening as anything in listeners)
 		deregister_listener(listening)
 	active_song_sound = null
+	is_paused = FALSE
+
+/// Pauses all listeners using SOUND_PAUSED.
+/datum/jukebox/proc/pause_music()
+	is_paused = TRUE
+	for(var/mob/listening as anything in listeners)
+		listeners[listening] |= SOUND_PAUSED
+	update_all()
+
+/// Queries the first available connected listener for the current client-side playback offset.
+/// Returns 0 if no connected listeners are found.
+/datum/jukebox/proc/query_playback_offset()
+	for(var/mob/listening as anything in listeners)
+		if(!listening.client)
+			continue
+		var/list/query = listening.client.SoundQuery()
+		for(var/sound/queried as anything in query)
+			if(queried.channel == sound_channel)
+				return queried.offset
+		break
+	return 0
+
+/// Resumes all listeners after a SOUND_PAUSED pause.
+/datum/jukebox/proc/resume_music()
+	is_paused = FALSE
+	for(var/mob/listening as anything in listeners)
+		listeners[listening] &= ~SOUND_PAUSED
+	update_all()
+
 
 /// Helper to update all mobs currently listening to the music.
 /datum/jukebox/proc/update_all()
@@ -202,7 +239,7 @@
 
 /// Helper to kickstart the music for all mobs in hearing range of the jukebox.
 /datum/jukebox/proc/start_music()
-	for(var/mob/nearby in hearers(sound_range, parent))
+	for(var/mob/nearby in hearers(sound_range, get_turf(parent)))
 		register_listener(nearby)
 
 /// Helper to get all mobs currently, ACTIVELY listening to the jukebox.
@@ -232,15 +269,21 @@
 		listeners[new_listener] |= SOUND_MUTE
 
 	if(isnull(active_song_sound))
-		var/area/juke_area = get_area(parent)
+		var/area/juke_area = get_area(get_turf(parent))
 		active_song_sound = sound(selection.song_path)
-		active_song_sound.channel = CHANNEL_JUKEBOX
+		active_song_sound.channel = sound_channel
 		active_song_sound.priority = 255
 		active_song_sound.falloff = 2
 		active_song_sound.volume = volume * (pref_volume/100)
 		active_song_sound.y = 1
 		active_song_sound.environment = juke_area.sound_environment || SOUND_ENVIRONMENT_NONE
 		active_song_sound.repeat = sound_loops
+	///This lets new listeners catch up with other listeners, it's not perfect; but it gets us close enough that people can at least be roughly at the same point.
+	active_song_sound.offset = query_playback_offset()
+
+	if(is_paused)
+		listeners[new_listener] |= SOUND_PAUSED
+
 
 	update_listener(new_listener)
 	// if you have a sound with status SOUND_UPDATE,
@@ -264,7 +307,7 @@
 /datum/jukebox/proc/listener_login(mob/source)
 	SIGNAL_HANDLER
 	deregister_listener(source)
-	register_listener(source)
+	INVOKE_ASYNC(src, PROC_REF(register_listener), source)
 
 /// Updates the sound's mute status when the mob's deafness updates.
 /datum/jukebox/proc/listener_deaf(mob/source)
@@ -314,7 +357,7 @@
 	PROTECTED_PROC(TRUE)
 
 	listeners -= no_longer_listening
-	no_longer_listening.stop_sound_channel(CHANNEL_JUKEBOX)
+	no_longer_listening.stop_sound_channel(sound_channel)
 	UnregisterSignal(no_longer_listening, list(
 		COMSIG_MOB_LOGIN,
 		COMSIG_QDELETING,
@@ -361,6 +404,8 @@
 			active_song_sound.volume = volume * (pref_volume/100)
 
 	SEND_SOUND(listener, active_song_sound)
+	active_song_sound.offset = null
+
 
 /// When the jukebox moves, we need to update all listeners.
 /datum/jukebox/proc/on_moved(datum/source, ...)
@@ -382,7 +427,7 @@
 		return
 	if(entered in listeners)
 		return
-	register_listener(entered)
+	INVOKE_ASYNC(src, PROC_REF(register_listener), entered)
 
 /**
  * Subtype which only plays the music to the mob you pass in via start_music().
@@ -418,3 +463,10 @@
 	song_name = "Tintin on the Moon"
 	song_length = 3 MINUTES + 52 SECONDS
 	song_beat_deciseconds = 1 SECONDS
+
+
+/datum/track/title2
+	song_path = 'sound/music/lobby_music/title2.ogg'
+	song_name = "Title Theme 2"
+	song_length = 1 MINUTES + 58 SECONDS
+	song_beat_deciseconds = 9.375
