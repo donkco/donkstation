@@ -39,17 +39,26 @@
 	/// Timer ID for detecting when the current song ends.
 	var/song_timerid
 	/// If TRUE, uses item-mode signals (activate-in-hand) instead of click signals.
+	/// Comms console linking is not available in item mode.
 	var/item_mode = FALSE
 	/// Base icon_state of the parent, cached at init for update_icon_state handling.
 	var/base_icon_state
+	/// The comms console this player is linked to for station-wide broadcast. Currently only supports non-item variants of the vinyl player.
+	var/obj/machinery/computer/communications/linked_console = null
+	///Normal volume
+	var/playing_volume = 50
+	///Volume when on a comms console (since its direct it can sound a bit louder usually)
+	var/comms_playing_volume = 20
 
 /datum/component/vinyl_player/Initialize()
 	. = ..()
-	if(!isatom(parent))
+	if(!ismovable(parent))
 		return COMPONENT_INCOMPATIBLE
+	var/atom/movable/movable_parent = parent
 	item_mode = isitem(parent)
-	base_icon_state = parent.vars["base_icon_state"]
+	base_icon_state = movable_parent.base_icon_state
 	music_player = new /datum/jukebox/vinyl_player(parent)
+	music_player.set_new_volume(playing_volume)
 
 /datum/component/vinyl_player/Destroy()
 	stop_playback()
@@ -74,6 +83,8 @@
 		RegisterSignal(parent, COMSIG_ATOM_ATTACK_HAND, PROC_REF(on_play_pause))
 		RegisterSignal(parent, COMSIG_ATOM_ATTACK_HAND_SECONDARY, PROC_REF(on_eject))
 		RegisterSignal(parent, COMSIG_ATOM_TOOL_ACT(TOOL_WRENCH), PROC_REF(on_wrench_act))
+		RegisterSignal(parent, COMSIG_ATOM_TOOL_ACT(TOOL_MULTITOOL), PROC_REF(on_multitool_act))
+		RegisterSignal(parent, COMSIG_MOVABLE_MOVED, PROC_REF(on_parent_moved))
 
 /datum/component/vinyl_player/UnregisterFromParent()
 	UnregisterSignal(parent, list(
@@ -86,16 +97,21 @@
 		COMSIG_ITEM_ATTACK_SELF_SECONDARY,
 		COMSIG_ATOM_ATTACK_HAND,
 		COMSIG_ATOM_ATTACK_HAND_SECONDARY,
+		COMSIG_ATOM_TOOL_ACT(TOOL_WRENCH),
+		COMSIG_ATOM_TOOL_ACT(TOOL_MULTITOOL),
+		COMSIG_MOVABLE_MOVED,
 	))
 	return ..()
 
-/// Blocks wrenching while the record player is actively playing.
+/// Blocks wrenching while the record player is actively playing. Unlinks console on unwrench.
 /datum/component/vinyl_player/proc/on_wrench_act(atom/source, mob/living/user, obj/item/tool)
 	SIGNAL_HANDLER
-	if(!playing)
-		return ITEM_INTERACT_SUCCESS
-	source.balloon_alert(user, "turning it off first might be safer.")
-	return ITEM_INTERACT_BLOCKING
+	if(playing)
+		source.balloon_alert(user, "turning it off first might be safer.")
+		return ITEM_INTERACT_BLOCKING
+	if(linked_console)
+		unlink_console(user)
+	return ITEM_INTERACT_SUCCESS
 
 /// When the parent is deleted, drop any loaded record to the turf so it isn't lost.
 /datum/component/vinyl_player/proc/on_parent_deleting(atom/source)
@@ -109,6 +125,9 @@
 /// Handles contextual screentip context for both item and machinery parents.
 /datum/component/vinyl_player/proc/on_context(atom/source, list/context, obj/item/held_item, mob/user)
 	SIGNAL_HANDLER
+	if(!item_mode && istype(held_item, /obj/item/multitool))
+		context[SCREENTIP_CONTEXT_LMB] = linked_console ? "Unlink from comms" : "Link to comms"
+		return CONTEXTUAL_SCREENTIP_SET
 	if(loaded_record)
 		context[SCREENTIP_CONTEXT_LMB] = playing ? "Pause" : "Play"
 		context[SCREENTIP_CONTEXT_RMB] = "Take out record"
@@ -127,11 +146,13 @@
 			examine_list += "It's currently playing."
 	else
 		examine_list += item_mode ? "There is no record inside." : "The turntable is empty. Insert a vinyl record to jam."
+	if(linked_console)
+		examine_list += span_notice("It's linked to [linked_console] for station-wide broadcast.")
 
 /// Updates the parent's icon_state to reflect playback status.
 /datum/component/vinyl_player/proc/on_update_icon_state(atom/source)
 	SIGNAL_HANDLER
-	source.icon_state = "[base_icon_state][playing ? "-active" : null]"
+	source.icon_state = "[base_icon_state][playing ? "_active" : null]"
 
 /// Called when an item is used on the parent. Handles record insertion.
 /datum/component/vinyl_player/proc/on_item_interaction(atom/source, mob/living/user, obj/item/tool, list/modifiers)
@@ -194,6 +215,9 @@
 
 /// Starts (or resumes) playback from the current offset.
 /datum/component/vinyl_player/proc/start_playback(mob/user)
+	var/atom/parent_atom = parent
+	if(linked_console && !linked_console.try_music_broadcast(user, parent_atom, music_player.selection.song_name))
+		return
 	if(!isnull(music_player.active_song_sound))
 		// Sound is still alive from a pause — resume in place.
 		music_player.resume_music()
@@ -203,7 +227,6 @@
 	var/remaining = music_player.selection.song_length - playback_offset
 	if(remaining > 0)
 		song_timerid = addtimer(CALLBACK(src, PROC_REF(song_ended)), remaining, TIMER_UNIQUE | TIMER_STOPPABLE | TIMER_DELETE_ME)
-	var/atom/parent_atom = parent
 	parent_atom.update_appearance(UPDATE_ICON_STATE)
 	if(user)
 		parent_atom.balloon_alert(user, "you start the player")
@@ -237,3 +260,61 @@
 	playing = FALSE
 	var/atom/parent_atom = parent
 	parent_atom.update_appearance(UPDATE_ICON_STATE)
+
+//-----------------------------------------------------------------------
+// Comms Console Linking (machinery only)
+//-----------------------------------------------------------------------
+
+/// Called when a multitool is used on the machinery vinyl player. Toggles comms console link.
+/datum/component/vinyl_player/proc/on_multitool_act(atom/source, mob/living/user, obj/item/tool)
+	SIGNAL_HANDLER
+	INVOKE_ASYNC(src, PROC_REF(toggle_comms_link), user)
+	return ITEM_INTERACT_SUCCESS
+
+/// Called when the machinery vinyl player moves. Disconnects any linked console.
+/datum/component/vinyl_player/proc/on_parent_moved(datum/source, ...)
+	SIGNAL_HANDLER
+	if(linked_console)
+		unlink_console()
+
+/// Toggles the comms console link. Checks preconditions before linking or unlinking.
+/datum/component/vinyl_player/proc/toggle_comms_link(mob/living/user)
+	var/atom/movable/parent_atom = parent
+	if(playing)
+		parent_atom.balloon_alert(user, "turn it off first!")
+		return
+	if(!parent_atom.anchored)
+		parent_atom.balloon_alert(user, "secure it first!")
+		return
+	if(linked_console)
+		unlink_console(user)
+		return
+	var/obj/machinery/computer/communications/console = locate(/obj/machinery/computer/communications) in range(3, parent_atom)
+	if(!console)
+		parent_atom.balloon_alert(user, "no comms console nearby!")
+		return
+	link_console(console, user)
+
+/// Links the vinyl player to a comms console for station-wide broadcast.
+/datum/component/vinyl_player/proc/link_console(obj/machinery/computer/communications/console, mob/living/user)
+	linked_console = console
+	RegisterSignal(console, COMSIG_QDELETING, PROC_REF(on_linked_console_deleted))
+	music_player.station_broadcast = TRUE
+	var/atom/parent_atom = parent
+	parent_atom.balloon_alert(user, "linked to comms console!")
+	music_player.set_new_volume(comms_playing_volume)
+
+/// Unlinks the vinyl player from its comms console.
+/datum/component/vinyl_player/proc/unlink_console(mob/living/user = null)
+	UnregisterSignal(linked_console, COMSIG_QDELETING)
+	linked_console = null
+	music_player.station_broadcast = FALSE
+	if(user)
+		var/atom/parent_atom = parent
+		parent_atom.balloon_alert(user, "unlinked from comms console!")
+		music_player.set_new_volume(playing_volume)
+
+/// Called when the linked comms console is deleted. Silently clears the link.
+/datum/component/vinyl_player/proc/on_linked_console_deleted(datum/source)
+	SIGNAL_HANDLER
+	unlink_console()

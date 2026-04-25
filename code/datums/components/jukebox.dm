@@ -44,6 +44,11 @@
 
 	/// Whether playback is currently paused (listeners are muted client-side with SOUND_PAUSED).
 	VAR_PROTECTED/is_paused = FALSE
+	/// When TRUE, start_music() registers all living mobs on station z-levels instead of range-based hearers.
+	/// update_listener() will skip spatial muting and play at x=0, z=0.
+	var/station_broadcast = FALSE
+	/// Mobs on non-station z-levels being watched for z-level entry during a station broadcast.
+	VAR_PRIVATE/list/broadcast_watchers = list()
 
 /datum/jukebox/New(atom/new_parent)
 	if(!ismovable(new_parent) && !isturf(new_parent))
@@ -201,6 +206,9 @@
 /datum/jukebox/proc/unlisten_all()
 	for(var/mob/listening as anything in listeners)
 		deregister_listener(listening)
+	for(var/mob/watcher as anything in broadcast_watchers)
+		UnregisterSignal(watcher, list(COMSIG_MOVABLE_Z_CHANGED, COMSIG_QDELETING))
+	broadcast_watchers.Cut()
 	active_song_sound = null
 	is_paused = FALSE
 
@@ -238,7 +246,20 @@
 		update_listener(listening)
 
 /// Helper to kickstart the music for all mobs in hearing range of the jukebox.
+/// If station_broadcast is TRUE, registers all living mobs on station z-levels instead,
+/// and watches off-station mobs to register them when they enter a station z-level.
 /datum/jukebox/proc/start_music()
+	if(station_broadcast)
+		for(var/mob/living/nearby as anything in GLOB.player_list)
+			if(!isliving(nearby))
+				continue
+			if(is_station_level(nearby.z))
+				register_listener(nearby)
+			else
+				broadcast_watchers += nearby
+				RegisterSignal(nearby, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(on_broadcast_watcher_z_changed))
+				RegisterSignal(nearby, COMSIG_QDELETING, PROC_REF(on_broadcast_watcher_deleted))
+		return
 	for(var/mob/nearby in hearers(sound_range, get_turf(parent)))
 		register_listener(nearby)
 
@@ -263,6 +284,7 @@
 		return
 
 	RegisterSignals(new_listener, list(COMSIG_MOVABLE_MOVED, COMSIG_MOB_JUKEBOX_PREFERENCE_APPLIED), PROC_REF(listener_moved))
+	RegisterSignal(new_listener, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(listener_z_changed))
 	RegisterSignals(new_listener, list(SIGNAL_ADDTRAIT(TRAIT_DEAF), SIGNAL_REMOVETRAIT(TRAIT_DEAF)), PROC_REF(listener_deaf))
 	var/pref_volume = new_listener.client?.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
 	if(HAS_TRAIT(new_listener, TRAIT_DEAF) || !pref_volume)
@@ -299,9 +321,35 @@
 	deregister_listener(source)
 
 /// Updates the sound's position on mob movement.
+/// If station_broadcast is active and the listener leaves a station z-level, deregisters them and starts watching for z-level re-entry.
 /datum/jukebox/proc/listener_moved(mob/source)
 	SIGNAL_HANDLER
 	update_listener(source)
+
+/// Called when a registered listener changes z-level during a station broadcast.
+/// Deregisters them and starts watching for re-entry if they left the station.
+/datum/jukebox/proc/listener_z_changed(mob/source, turf/old_turf, turf/new_turf)
+	SIGNAL_HANDLER
+	if(station_broadcast && !is_station_level(new_turf.z))
+		deregister_listener(source)
+		broadcast_watchers += source
+		RegisterSignal(source, COMSIG_MOVABLE_Z_CHANGED, PROC_REF(on_broadcast_watcher_z_changed))
+		RegisterSignal(source, COMSIG_QDELETING, PROC_REF(on_broadcast_watcher_deleted))
+
+/// When a broadcast watcher changes z-level to a station level mid-broadcast, register them as a listener.
+/datum/jukebox/proc/on_broadcast_watcher_z_changed(mob/source, turf/old_turf, turf/new_turf)
+	SIGNAL_HANDLER
+	if(!is_station_level(new_turf.z))
+		return
+	UnregisterSignal(source, list(COMSIG_MOVABLE_Z_CHANGED, COMSIG_QDELETING))
+	broadcast_watchers -= source
+	INVOKE_ASYNC(src, PROC_REF(register_listener), source)
+
+/// When a broadcast watcher is deleted, clean up their watcher signals.
+/datum/jukebox/proc/on_broadcast_watcher_deleted(mob/source)
+	SIGNAL_HANDLER
+	UnregisterSignal(source, list(COMSIG_MOVABLE_Z_CHANGED, COMSIG_QDELETING))
+	broadcast_watchers -= source
 
 /// Allows mobs who are clientless when the music starts to hear it when they log in.
 /datum/jukebox/proc/listener_login(mob/source)
@@ -362,6 +410,7 @@
 		COMSIG_MOB_LOGIN,
 		COMSIG_QDELETING,
 		COMSIG_MOVABLE_MOVED,
+		COMSIG_MOVABLE_Z_CHANGED,
 		COMSIG_MOB_JUKEBOX_PREFERENCE_APPLIED,
 		SIGNAL_ADDTRAIT(TRAIT_DEAF),
 		SIGNAL_REMOVETRAIT(TRAIT_DEAF),
@@ -372,6 +421,19 @@
 	PROTECTED_PROC(TRUE)
 
 	active_song_sound.status = listeners[listener] || NONE
+
+	if(station_broadcast) // Station-wide: play direct, skip all range/z-level muting. Only deaf and pref checks apply.
+		active_song_sound.x = 0
+		active_song_sound.z = 0
+		var/pref_volume = listener.client?.prefs.read_preference(/datum/preference/numeric/volume/sound_jukebox)
+		if(!pref_volume)
+			listeners[listener] |= SOUND_MUTE
+		else
+			unmute_listener(listener, MUTE_PREF | MUTE_RANGE)
+			active_song_sound.volume = volume * (pref_volume/100)
+		SEND_SOUND(listener, active_song_sound)
+		active_song_sound.offset = null
+		return
 
 	var/turf/sound_turf = get_turf(parent)
 	var/turf/listener_turf = get_turf(listener)

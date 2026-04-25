@@ -7,8 +7,8 @@
 /obj/item/vinyl_disk
 	name = "vinyl record"
 	desc = "A vinyl record. It smells faintly of nostalgia."
-	icon = 'icons/obj/devices/floppy_disks.dmi'
-	icon_state = "datadisk1"
+	icon = 'icons/obj/machines/vinylplayer.dmi'
+	icon_state = "record_vinyl"
 	w_class = WEIGHT_CLASS_TINY
 
 	/// Type path of the A-side track datum.
@@ -104,8 +104,8 @@
 /obj/item/vinyl_sleeve
 	name = "vinyl sleeve"
 	desc = "A protective paper sleeve for a vinyl record."
-	icon = 'icons/obj/devices/floppy_disks.dmi'
-	icon_state = "datadisk1"
+	icon = 'icons/obj/machines/vinylplayer.dmi'
+	icon_state = "sleeve_donk"
 	w_class = WEIGHT_CLASS_SMALL
 
 	/// The disk currently stored in this sleeve, if any.
@@ -124,7 +124,7 @@
 		. += "It is empty."
 
 /obj/item/vinyl_sleeve/update_icon_state()
-	icon_state = stored_disk ? "datadisk1" : "datadisk1"
+	icon_state = stored_disk ? "sleeve_donk" : "sleeve_donk"
 	return ..()
 
 /obj/item/vinyl_sleeve/attack_self(mob/user)

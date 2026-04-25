@@ -2,9 +2,9 @@
 /obj/machinery/vinyl_player
 	name = "vinyl player"
 	desc = "A record player for vinyl discs."
-	icon = 'icons/obj/machines/music.dmi'
-	icon_state = "jukebox"
-	base_icon_state = "jukebox"
+	icon = 'icons/obj/machines/vinylplayer.dmi'
+	icon_state = "vinyl_player"
+	base_icon_state = "vinyl_player"
 	verb_say = "plays"
 	density = TRUE
 	anchored = TRUE
