@@ -34,6 +34,10 @@
 	var/exclude_from_random = FALSE
 	/// Text added to the atom's examine when stickered.
 	var/examine_text
+	/// If TRUE, examine text and peel link appear in double-examine instead of normal examine.
+	var/use_double_examine = FALSE
+	/// If TRUE, the sticker can only be removed via the examine peel link, not by cleaning.
+	var/peel_via_examine_only = FALSE
 
 /obj/item/sticker/Initialize(mapload)
 	. = ..()
@@ -87,7 +91,7 @@
 			user.log_message("stuck [src] to [key_name(victim)]", LOG_ATTACK)
 			victim.log_message("had [src] stuck to them by [key_name(user)]", LOG_ATTACK)
 
-	target.AddComponent(/datum/component/sticker, src, get_dir(target, src), px, py, null, null, examine_text)
+	target.AddComponent(/datum/component/sticker, src, get_dir(target, src), px, py, null, null, examine_text, use_double_examine, peel_via_examine_only)
 	return TRUE
 
 #undef MAX_STICKER_COUNT
@@ -228,4 +232,47 @@
 
 /obj/item/sticker/purity_seal/purity_seal_2
 	icon_state = "purity_seal_2"
+
+/**
+ * # Tracking Sticker
+ *
+ * A sticker with a tiny tracking chip embedded in the adhesive.
+ * When stuck to an object, the object becomes trackable by a crypto-chipped crew pinpointer.
+ * When peeled off, trackability transfers back to the sticker itself.
+ * The sticker itself does not track until its been stuck to something once, so someone could just take it off and drop it in a trash bin if they find it.
+ * Can only be seen and removed via double-examine (Handled in our epic element/component/trackable).
+ */
+/obj/item/sticker/tracking
+	name = "tracking sticker"
+	desc = "A sticker with a tiny tracking chip embedded in the adhesive. It can be tracked by a crypto-chipped crew pinpointer."
+	icon_state = "tider"
+	exclude_from_random = TRUE
+	use_double_examine = TRUE
+	peel_via_examine_only = TRUE
+	examine_text = "There's a sticker attached to the surface, it looks a bit thick..."
+
+/obj/item/sticker/tracking/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_STICKER_STUCK, PROC_REF(on_stuck))
+	RegisterSignal(src, COMSIG_STICKER_PEELED, PROC_REF(on_peeled))
+	RegisterSignal(src, COMSIG_QDELETING, PROC_REF(on_self_deleted))
+
+/// When stuck to a host, transfer trackability from self to the host.
+/obj/item/sticker/tracking/proc/on_stuck(datum/source, atom/host, datum/component/sticker/comp)
+	SIGNAL_HANDLER
+	RemoveElement(/datum/element/trackable, REF(src), name)
+	host.AddElement(/datum/element/trackable, REF(src), name)
+
+/// When peeled off, transfer trackability from host back to self.
+/obj/item/sticker/tracking/proc/on_peeled(datum/source, atom/host, datum/component/sticker/comp)
+	SIGNAL_HANDLER
+	host.RemoveElement(/datum/element/trackable, REF(src), name)
+	AddElement(/datum/element/trackable, REF(src), name)
+
+/// If the sticker is deleted while stuck to a host, remove the trackable element from that host.
+/obj/item/sticker/tracking/proc/on_self_deleted(datum/source)
+	SIGNAL_HANDLER
+	var/atom/current_host = GLOB.trackable_atoms[REF(src)]
+	if(current_host && current_host != src)
+		current_host.RemoveElement(/datum/element/trackable, REF(src), name)
 
