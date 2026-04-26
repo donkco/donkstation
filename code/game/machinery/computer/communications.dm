@@ -904,6 +904,18 @@
 	answer_callback = null
 	return ..()
 
+/// Checks if we can start a music broadcast, use in the vinyl_player component
+/obj/machinery/computer/communications/proc/try_music_broadcast(mob/user, atom/player, song_name)
+	if(!COOLDOWN_FINISHED(src, important_action_cooldown))
+		player.balloon_alert(user, "communications console is on cooldown!")
+		return FALSE
+	if(!authenticated(user))
+		player.balloon_alert(user, "not logged into communications console")
+		return FALSE
+	priority_announce("Now playing station-wide: [song_name]", "Music Broadcast", type = ANNOUNCEMENT_TYPE_CAPTAIN)
+	COOLDOWN_START(src, important_action_cooldown, IMPORTANT_ACTION_COOLDOWN)
+	return TRUE
+
 #undef IMPORTANT_ACTION_COOLDOWN
 #undef EMERGENCY_ACCESS_COOLDOWN
 #undef STATE_BUYING_SHUTTLE
