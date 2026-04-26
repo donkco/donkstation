@@ -177,6 +177,17 @@
 	color_source = NONE
 	feature_key = FEATURE_TAIL_MONKEY
 
+/obj/item/organ/tail/android_monkey
+	name = "robot monkey tail"
+	icon_state = "severedcabletail"
+	dna_block = null
+	bodypart_overlay = /datum/bodypart_overlay/mutant/tail/android_monkey
+
+///Android monkey tail bodypart overlay
+/datum/bodypart_overlay/mutant/tail/android_monkey
+	color_source = NONE
+	feature_key = FEATURE_TAIL_ANDROIDMONKEY
+
 /obj/item/organ/tail/xeno
 	name = "alien tail"
 	desc = "A long and flexible tail slightly resembling a spine, used by its original owner as both weapon and balance aid."

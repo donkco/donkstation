@@ -222,7 +222,7 @@
 				if(HAS_TRAIT(src, TRAIT_DUMB))
 					. += "[t_He] [t_has] a stupid expression on [t_his] face."
 		var/obj/item/organ/brain/brain = get_organ_by_type(/obj/item/organ/brain)
-		if(brain && isnull(ai_controller))
+		if(brain && isnull(ai_controller) && !HAS_TRAIT(src, TRAIT_NO_CATACONIC))
 			var/npc_message = ""
 			if(HAS_TRAIT(brain, TRAIT_GHOSTROLE_ON_REVIVE))
 				npc_message = "Soul is pending..."
