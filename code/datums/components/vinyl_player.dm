@@ -49,8 +49,10 @@
 	var/playing_volume = 50
 	///Volume when on a comms console (since its direct it can sound a bit louder usually)
 	var/comms_playing_volume = 20
+	///Whether we show the record moving with overlays or if we just use an active/off state.
+	var/use_animated_record = FALSE
 
-/datum/component/vinyl_player/Initialize()
+/datum/component/vinyl_player/Initialize(use_animated_record)
 	. = ..()
 	if(!ismovable(parent))
 		return COMPONENT_INCOMPATIBLE
@@ -59,6 +61,7 @@
 	base_icon_state = movable_parent.base_icon_state
 	music_player = new /datum/jukebox/vinyl_player(parent)
 	music_player.set_new_volume(playing_volume)
+	src.use_animated_record = use_animated_record
 
 /datum/component/vinyl_player/Destroy()
 	stop_playback()
@@ -72,6 +75,7 @@
 	RegisterSignal(parent, COMSIG_ATOM_EXAMINE, PROC_REF(on_examine))
 	RegisterSignal(parent, COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM, PROC_REF(on_context))
 	RegisterSignal(parent, COMSIG_ATOM_UPDATE_ICON_STATE, PROC_REF(on_update_icon_state))
+	RegisterSignal(parent, COMSIG_ATOM_UPDATE_OVERLAYS, PROC_REF(on_update_overlays))
 
 	var/atom/parent_atom = parent
 	parent_atom.flags_1 |= HAS_CONTEXTUAL_SCREENTIPS_1
@@ -93,6 +97,7 @@
 		COMSIG_ATOM_EXAMINE,
 		COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM,
 		COMSIG_ATOM_UPDATE_ICON_STATE,
+		COMSIG_ATOM_UPDATE_OVERLAYS,
 		COMSIG_ITEM_ATTACK_SELF,
 		COMSIG_ITEM_ATTACK_SELF_SECONDARY,
 		COMSIG_ATOM_ATTACK_HAND,
@@ -152,7 +157,20 @@
 /// Updates the parent's icon_state to reflect playback status.
 /datum/component/vinyl_player/proc/on_update_icon_state(atom/source)
 	SIGNAL_HANDLER
-	source.icon_state = "[base_icon_state][playing ? "_active" : null]"
+	if(!use_animated_record)
+		source.icon_state = "[base_icon_state][playing ? "_active" : null]"
+
+/// Draws the loaded record as an overlay on the parent, with a _spin suffix while playing.
+/datum/component/vinyl_player/proc/on_update_overlays(atom/parent_atom, list/overlays)
+	SIGNAL_HANDLER
+	if(use_animated_record)
+		if(loaded_record)
+			var/state = loaded_record.playing_b_side && loaded_record.b_side_playing_state ? loaded_record.b_side_playing_state : loaded_record.playing_state
+			if(state)
+				overlays += mutable_appearance(loaded_record.icon, "[state][playing ? "_spin" : null]")
+
+		var/atom/movable/movable_parent = parent
+		overlays += mutable_appearance(movable_parent.icon, "[base_icon_state]_[playing ? "needle_active" : "needle_inactive"]")
 
 /// Called when an item is used on the parent. Handles record insertion.
 /datum/component/vinyl_player/proc/on_item_interaction(atom/source, mob/living/user, obj/item/tool, list/modifiers)
@@ -184,7 +202,7 @@
 	record.forceMove(parent)
 	music_player.set_track(record.get_current_track())
 	var/atom/parent_atom = parent
-	parent_atom.update_appearance(UPDATE_ICON_STATE)
+	parent_atom.update_appearance(UPDATE_ICON_STATE | UPDATE_OVERLAYS)
 	parent_atom.balloon_alert(user, "record loaded")
 
 /// Ejects the record, stopping playback and returning it to the user's hands.
@@ -199,7 +217,7 @@
 	loaded_record = null
 	user.put_in_hands(record)
 	var/atom/parent_atom = parent
-	parent_atom.update_appearance(UPDATE_ICON_STATE)
+	parent_atom.update_appearance(UPDATE_ICON_STATE | UPDATE_OVERLAYS)
 	parent_atom.balloon_alert(user, "record ejected")
 
 /// Toggles between playing and paused states.
@@ -227,7 +245,7 @@
 	var/remaining = music_player.selection.song_length - playback_offset
 	if(remaining > 0)
 		song_timerid = addtimer(CALLBACK(src, PROC_REF(song_ended)), remaining, TIMER_UNIQUE | TIMER_STOPPABLE | TIMER_DELETE_ME)
-	parent_atom.update_appearance(UPDATE_ICON_STATE)
+	parent_atom.update_appearance(UPDATE_ICON_STATE | UPDATE_OVERLAYS)
 	if(user)
 		parent_atom.balloon_alert(user, "you start the player")
 
@@ -238,7 +256,7 @@
 	music_player.pause_music()
 	playing = FALSE
 	var/atom/parent_atom = parent
-	parent_atom.update_appearance(UPDATE_ICON_STATE)
+	parent_atom.update_appearance(UPDATE_ICON_STATE | UPDATE_OVERLAYS)
 	if(user)
 		parent_atom.balloon_alert(user, "you stop the player")
 
@@ -251,6 +269,9 @@
 		music_player.unlisten_all()
 	playback_offset = 0
 	playing = FALSE
+	var/atom/parent_atom = parent
+	if(parent_atom)
+		parent_atom.update_appearance(UPDATE_OVERLAYS)
 
 /// Called by timer when the track finishes naturally.
 /datum/component/vinyl_player/proc/song_ended()
@@ -259,6 +280,8 @@
 	playback_offset = 0
 	playing = FALSE
 	var/atom/parent_atom = parent
+	if(parent_atom)
+		parent_atom.update_appearance(UPDATE_OVERLAYS)
 	parent_atom.update_appearance(UPDATE_ICON_STATE)
 
 //-----------------------------------------------------------------------

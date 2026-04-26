@@ -11,7 +11,7 @@
 
 /obj/machinery/vinyl_player/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/vinyl_player)
+	AddComponent(/datum/component/vinyl_player, TRUE)
 
 /obj/machinery/vinyl_player/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()

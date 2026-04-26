@@ -9,4 +9,4 @@
 
 /obj/item/record_player/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/vinyl_player)
+	AddComponent(/datum/component/vinyl_player, FALSE)

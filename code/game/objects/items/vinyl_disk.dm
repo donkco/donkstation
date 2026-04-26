@@ -8,7 +8,7 @@
 	name = "vinyl record"
 	desc = "A vinyl record. It smells faintly of nostalgia."
 	icon = 'icons/obj/machines/vinylplayer.dmi'
-	icon_state = "record_vinyl"
+	icon_state = "record_vinyl_out"
 	w_class = WEIGHT_CLASS_TINY
 
 	/// Type path of the A-side track datum.
@@ -23,6 +23,15 @@
 
 	/// Whether we are currently presenting the B-side.
 	var/playing_b_side = FALSE
+
+	/// Icon state shown when the A side is active. Falls back to icon_state if null.
+	var/a_side_icon_state = "record_vinyl_out"
+	/// Icon state shown when the B side is active. Falls back to a_side_icon_state then icon_state if null.
+	var/b_side_icon_state = "record_cd_out"
+	/// Icon state used as an overlay on the vinyl player when A side is loaded.
+	var/playing_state = "record"
+	/// Icon state used as an overlay on the vinyl player when B side is loaded. Falls back to playing_state if null.
+	var/b_side_playing_state = "record_cd"
 
 /obj/item/vinyl_disk/Initialize(mapload)
 	. = ..()
@@ -50,11 +59,19 @@
 		return track_b
 	return track_a
 
+/obj/item/vinyl_disk/update_icon_state()
+	if(playing_b_side)
+		icon_state = b_side_icon_state || a_side_icon_state || icon_state
+	else
+		icon_state = a_side_icon_state || icon_state
+	return ..()
+
 /obj/item/vinyl_disk/attack_self(mob/user)
 	if(!track_b)
 		balloon_alert(user, "only one side")
 		return
 	playing_b_side = !playing_b_side
+	update_appearance(UPDATE_ICON_STATE)
 	var/datum/track/current = get_current_track()
 	balloon_alert(user, "flipped to [playing_b_side ? "B" : "A"] side: [current.song_name]")
 
