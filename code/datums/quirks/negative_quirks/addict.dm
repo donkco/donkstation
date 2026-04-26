@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/addict
 	name = "Addict"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are addicted to something that doesn't exist. Suffer."
 	gain_text = span_danger("You suddenly feel the craving for... something? You're not sure what it is.")
 	medical_record_text = "Patient has a history with SOMETHING but he refuses to tell us what it is."

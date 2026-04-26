@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/asthma
 	name = "Asthma"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You suffer from asthma, an inflammatory disorder that causes your airpipe to squeeze shut! Be careful around smoke!"
 	icon = FA_ICON_LUNGS_VIRUS
 	value = -4 // trivialized by NOBREATH but still quite dangerous

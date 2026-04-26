@@ -1,5 +1,6 @@
 /datum/quirk/numb
 	name = "Numb"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You can't feel pain at all."
 	icon = FA_ICON_STAR_OF_LIFE
 	value = -4

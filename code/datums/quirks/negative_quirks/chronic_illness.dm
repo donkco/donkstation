@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/chronic_illness
 	name = "Eradicative Chronic Illness"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have an anomalous chronic illness that requires constant medication to keep under control, or else causes timestream correction."
 	icon = FA_ICON_DISEASE
 	value = -12

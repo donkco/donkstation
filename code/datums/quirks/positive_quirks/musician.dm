@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/musician
 	name = "Musician"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You can tune handheld musical instruments to play melodies that clear certain negative effects and soothe the soul."
 	icon = FA_ICON_GUITAR
 	value = 2

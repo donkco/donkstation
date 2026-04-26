@@ -1,5 +1,6 @@
 /datum/quirk/illiterate
 	name = "Illiterate"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You dropped out of school and are unable to read or write. This affects reading, writing, using computers and other electronics."
 	icon = FA_ICON_GRADUATION_CAP
 	value = -8

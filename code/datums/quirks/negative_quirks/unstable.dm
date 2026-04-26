@@ -1,5 +1,6 @@
 /datum/quirk/unstable
 	name = "Unstable"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Due to past troubles, you are unable to recover your sanity if you lose it. Be very careful managing your mood!"
 	icon = FA_ICON_ANGRY
 	value = -10

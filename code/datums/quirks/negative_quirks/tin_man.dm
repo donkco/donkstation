@@ -1,5 +1,6 @@
 /datum/quirk/tin_man
 	name = "Tin Man"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Oops! All Prosthetics! Due to some truly cruel cosmic punishment, most of your internal organs have been replaced with surplus prosthetics."
 	icon = FA_ICON_USER_GEAR
 	value = -6

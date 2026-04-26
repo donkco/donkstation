@@ -1,5 +1,6 @@
 /datum/quirk/paraplegic
 	name = "Paraplegic"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Your legs do not function. Nothing will ever fix this. But hey, free wheelchair!"
 	icon = FA_ICON_WHEELCHAIR
 	value = -12

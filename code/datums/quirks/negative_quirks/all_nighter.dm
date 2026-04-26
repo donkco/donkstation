@@ -2,6 +2,7 @@
 
 /datum/quirk/all_nighter
 	name = "All Nighter"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You didn't get any sleep last night, and people can tell! You'll constantly be in a bad mood and will have a tendency to sleep longer. Stimulants or a nap might help, though."
 	icon = FA_ICON_MOON
 	value = -4

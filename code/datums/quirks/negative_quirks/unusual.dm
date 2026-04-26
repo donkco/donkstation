@@ -1,5 +1,6 @@
 /datum/quirk/touchy
 	name = "Touchy"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are very touchy and have to physically be able to touch something to examine it."
 	icon = FA_ICON_HAND
 	value = -2

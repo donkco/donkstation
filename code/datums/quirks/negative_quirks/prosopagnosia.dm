@@ -1,5 +1,6 @@
 /datum/quirk/prosopagnosia
 	name = "Prosopagnosia"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have a mental disorder that prevents you from being able to recognize faces at all."
 	icon = FA_ICON_USER_SECRET
 	value = -4

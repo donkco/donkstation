@@ -897,6 +897,8 @@
 /mob/proc/get_status_tab_items()
 	. = list("") //we want to offset unique stuff from standard stuff
 	SEND_SIGNAL(src, COMSIG_MOB_GET_STATUS_TAB_ITEMS, .)
+	if(client?.prefs)
+		. += "Secretary Points: [client.prefs.secretary_points]"
 	return .
 
 /**

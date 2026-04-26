@@ -42,7 +42,6 @@ const CLOTHING_SELECTION_MULTIPLIER = 5.2;
 
 type CharacterControlsProps = {
   handleRotate: () => void;
-  handleOpenSpecies: () => void;
   gender: Gender;
   setGender: (gender: Gender) => void;
   showGender: boolean;
@@ -59,16 +58,6 @@ function CharacterControls(props: CharacterControlsProps) {
           fontSize="22px"
           icon="undo"
           tooltip="Rotate"
-          tooltipPosition="top"
-        />
-      </Stack.Item>
-
-      <Stack.Item>
-        <Button
-          onClick={props.handleOpenSpecies}
-          fontSize="22px"
-          icon="paw"
-          tooltip="Species"
           tooltipPosition="top"
         />
       </Stack.Item>
@@ -445,9 +434,7 @@ export function getRandomization(
   );
 }
 
-type MainPageProps = {
-  openSpecies: () => void;
-};
+type MainPageProps = Record<string, never>;
 
 export function MainPage(props: MainPageProps) {
   const { act, data } = useBackend<PreferencesMenuData>();
@@ -495,24 +482,6 @@ export function MainPage(props: MainPageProps) {
 
   return (
     <>
-      {multiNameInputOpen && (
-        <MultiNameInput
-          handleClose={() => setMultiNameInputOpen(false)}
-          handleRandomizeName={(preference) =>
-            act('randomize_name', {
-              preference,
-            })
-          }
-          handleUpdateName={(nameType, value) =>
-            act('set_preference', {
-              preference: nameType,
-              value,
-            })
-          }
-          names={data.character_preferences.names}
-        />
-      )}
-
       {deleteCharacterPopupOpen && (
         <DeleteCharacterPopup
           close={() => setDeleteCharacterPopupOpen(false)}
@@ -525,14 +494,11 @@ export function MainPage(props: MainPageProps) {
             <Stack.Item>
               <CharacterControls
                 gender={data.character_preferences.misc.gender}
-                handleOpenSpecies={props.openSpecies}
                 handleRotate={() => {
                   act('rotate');
                 }}
                 setGender={createSetPreference(act, 'gender')}
-                showGender={
-                  currentSpeciesData ? !!currentSpeciesData.sexes : true
-                }
+                showGender={false}
                 canDeleteCharacter={
                   Object.values(data.character_profiles).filter(
                     (name) => !!name,
@@ -546,16 +512,6 @@ export function MainPage(props: MainPageProps) {
               <CharacterPreview
                 height="100%"
                 id={data.character_preview_view}
-              />
-            </Stack.Item>
-
-            <Stack.Item position="relative">
-              <NameInput
-                name={data.character_preferences.names[data.name_to_use]}
-                handleUpdateName={createSetPreference(act, data.name_to_use)}
-                openMultiNameInput={() => {
-                  setMultiNameInputOpen(true);
-                }}
               />
             </Stack.Item>
           </Stack>

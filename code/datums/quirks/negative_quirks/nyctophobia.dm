@@ -1,5 +1,6 @@
 /datum/quirk/nyctophobia
 	name = "Nyctophobia"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "As far as you can remember, you've always been afraid of the dark. While in the dark without a light source, you instinctively act careful, and constantly feel a sense of dread."
 	icon = FA_ICON_LIGHTBULB
 	value = -3

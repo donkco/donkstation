@@ -1,5 +1,6 @@
 /datum/quirk/settler
 	name = "Settler"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You are from a lineage of the earliest space settlers! While your family's generational exposure to varying gravity \
 		has resulted in a ... smaller height than is typical for your species, you make up for it by being much better at outdoorsmanship and \
 		carrying heavy equipment. You also get along great with animals. However, you are a bit on the slow side due to your small legs."

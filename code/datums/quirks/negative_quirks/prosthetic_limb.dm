@@ -1,5 +1,6 @@
 /datum/quirk/prosthetic_limb
 	name = "Prosthetic Limb"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "An accident caused you to lose one of your limbs. Because of this, you now have a surplus prosthetic!"
 	icon = "tg-prosthetic-leg"
 	value = -3

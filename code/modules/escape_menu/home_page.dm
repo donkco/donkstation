@@ -188,7 +188,7 @@
 /datum/escape_menu/proc/home_open_character_settings()
 	client?.prefs.current_window = PREFERENCE_TAB_CHARACTER_PREFERENCES
 	client?.prefs.update_static_data(client?.mob)
-	client?.prefs.ui_interact(client?.mob)
+	client?.prefs.character_contract.ui_interact(client?.mob)
 	qdel(src)
 
 /datum/escape_menu/proc/home_open_game_settings()

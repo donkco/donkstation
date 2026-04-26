@@ -1,5 +1,6 @@
 /datum/quirk/insanity
 	name = "Reality Dissociation Syndrome"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You suffer from a severe disorder that causes very vivid hallucinations and trouble expressing your ideas. \
 		Mindbreaker toxin can suppress its effects, and you are immune to mindbreaker's hallucinogenic properties. \
 		THIS IS NOT A LICENSE TO GRIEF."

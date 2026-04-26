@@ -1,5 +1,6 @@
 /datum/quirk/monophobia
 	name = "Monophobia"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have an extreme fear of loneliness, and have always tried to stick to large groups."
 	icon = FA_ICON_PEOPLE_GROUP
 	value = -3

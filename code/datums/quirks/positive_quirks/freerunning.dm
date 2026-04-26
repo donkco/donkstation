@@ -1,5 +1,6 @@
 /datum/quirk/freerunning
 	name = "Freerunning"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You're great at quick moves! You can climb tables more quickly and take no damage from short falls."
 	icon = FA_ICON_RUNNING
 	value = 8

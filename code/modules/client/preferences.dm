@@ -9,7 +9,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// Ensures that we always load the last used save, QOL
 	var/default_slot = 1
 	/// The maximum number of slots we're allowed to contain
-	var/max_save_slots = 3
+	var/max_save_slots = 5
 
 	/// Bitflags for communications that are muted
 	var/muted = NONE
@@ -88,7 +88,19 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// If set to TRUE, will update character_profiles on the next ui_data tick.
 	var/tainted_character_profiles = FALSE
 
+	/// The confirmed archetype ID for this character slot, null if not yet chosen. Matches a CHARACTER_ARCHETYPE_X define.
+	var/archetype_id = null
+	/// Whether this character slot has been formally created via the CharacterContract UI.
+	var/character_created = FALSE
+	/// The CharacterContract TGUI datum, opened from the lobby
+	var/datum/character_contract/character_contract
+	/// Account-level Secretary Points balance. Saved in preferences (not per-character).
+	var/secretary_points = 0
+	/// Transient accumulator for playtime-based SP grants. Resets on relog, never saved.
+	var/sp_minutes_accumulated = 0
+
 /datum/preferences/Destroy(force)
+	QDEL_NULL(character_contract)
 	QDEL_NULL(character_preview_view)
 	QDEL_LIST(middleware)
 	value_cache = null
@@ -96,6 +108,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 /datum/preferences/New(client/parent)
 	src.parent = parent
+	character_contract = new /datum/character_contract(src)
 
 	for (var/middleware_type in subtypesof(/datum/preference_middleware))
 		middleware += new middleware_type(src)
@@ -282,6 +295,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	save_character()
 	save_preferences()
 	QDEL_NULL(character_preview_view)
+	// Refresh the contract preview now that the player may have changed their appearance.
+	if(!QDELETED(character_contract) && character_created)
+		character_contract.preview_b64 = null
+		INVOKE_ASYNC(character_contract, TYPE_PROC_REF(/datum/character_contract, generate_preview_async))
 
 /datum/preferences/Topic(href, list/href_list)
 	. = ..()
@@ -579,6 +596,24 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	if(isnull(byond_member))
 		to_chat(parent, span_warning("There's been a connection failure while trying to check the status of your BYOND membership. Reconnecting may fix the issue, or BYOND could be experiencing downtime."))
 
-	unlock_content = !!byond_member
-	if(unlock_content)
-		max_save_slots = 8
+/**
+ * Adjust this account's Secretary Points by `amount` (can be negative for spending/removing).
+ * Clamps to >= 0 and immediately saves preferences.
+ */
+/datum/preferences/proc/adjust_secretary_points(amount)
+	secretary_points = max(0, secretary_points + amount)
+	save_preferences()
+	if(character_contract)
+		SStgui.update_uis(character_contract)
+
+/**
+ * Called by the blackbox subsystem each fire tick with the number of non-AFK minutes elapsed.
+ * Accumulates minutes and grants SP once per SP_PLAYTIME_INTERVAL minutes completed.
+ */
+/datum/preferences/proc/accumulate_sp_playtime(minutes)
+	sp_minutes_accumulated += minutes
+	var/intervals = round(sp_minutes_accumulated / SP_PLAYTIME_INTERVAL)
+	if(intervals < 1)
+		return
+	sp_minutes_accumulated -= intervals * SP_PLAYTIME_INTERVAL
+	adjust_secretary_points(intervals * SP_PER_INTERVAL)

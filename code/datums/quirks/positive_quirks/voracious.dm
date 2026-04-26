@@ -1,5 +1,6 @@
 /datum/quirk/voracious
 	name = "Voracious"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "Nothing gets between you and your food. You eat faster and can binge on junk food! Being fat suits you just fine."
 	icon = FA_ICON_DRUMSTICK_BITE
 	value = 4
