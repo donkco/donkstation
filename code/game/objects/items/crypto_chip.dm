@@ -2,9 +2,6 @@
 /obj/item/crypto_chip
 	name = "Cryptographic Chip"
 	desc = "A Nanotrasen(tm) Cryptographic Sequencer. Can be installed in compatible devices to subvert normal functions and unlock NT-approved special functionality."
-	icon = 'icons/obj/card.dmi'
-	icon_state = "emag"
+	icon = 'icons/obj/antags/syndicate_tools.dmi'
+	icon_state = "crypto_chip"
 	w_class = WEIGHT_CLASS_SMALL
-	inhand_icon_state = "card-id"
-	lefthand_file = 'icons/mob/inhands/equipment/idcards_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/equipment/idcards_righthand.dmi'
