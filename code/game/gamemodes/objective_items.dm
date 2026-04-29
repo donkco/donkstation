@@ -613,6 +613,19 @@ GLOBAL_DATUM_INIT(steal_item_handler, /datum/objective_item_handler, new())
 /obj/item/blackbox/add_stealing_item_objective()
 	return add_item_to_steal(src, /obj/item/blackbox)
 
+/datum/objective_item/steal/traitor/old_master_painting
+	name = "the Old Masters painting"
+	targetitem = /obj/item/old_master_painting
+	// The painting starts as a wall-mounted structure, not a free item, so map-scanning can't find it.
+	// exists_on_map = FALSE means target_exists() always returns TRUE and the objective is always grantable.
+	exists_on_map = FALSE
+	difficulty = 4
+	steal_hint = "A wide, ornate painting in a gilded frame, hung on a station wall. \
+		Far too large to fit in a bag — you'll need to carry it openly or wrap it to conceal it."
+
+/datum/objective_item/steal/traitor/old_master_painting/check_special_completion(obj/item/thing)
+	return thing.type == /obj/item/old_master_painting // Exact type: excludes the decoy subtype.
+
 
 // A number of special early-game steal objectives intended to be used with the steal-and-destroy objective.
 // They're basically items of utility or emotional value that may be found on many players or lying around the station.
