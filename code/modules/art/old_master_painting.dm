@@ -1,18 +1,3 @@
-/**
- * # Old Masters Painting
- *
- * A large, ornate painting by the old masters — one of the widest surviving works.
- * Hung on the wall as a [/obj/structure/old_master_painting_frame], it can be taken down
- * with some careful effort. Once removed, it becomes a [/obj/item/old_master_painting].
- *
- * Too large to fit in a bag. Must be carried in-hand or wrapped with package wrap.
- * When openly carried, bystanders can only identify the painting if they face the front of it.
- * A [/obj/item/old_master_painting/decoy] looks identical from behind.
- */
-
-/*
- * WALL FRAME
- */
 
 /// Wall-mounted frame housing the Old Masters painting.
 /obj/structure/old_master_painting_frame
