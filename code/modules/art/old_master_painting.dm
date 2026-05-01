@@ -18,8 +18,8 @@
 /obj/structure/old_master_painting_frame
 	name = "Old Masters painting"
 	desc = "A wide, ornate painting in a gilded frame. One of the widest surviving works by the old masters, depicting a sweeping pastoral landscape in oils."
-	icon = 'icons/obj/signs.dmi'
-	icon_state = "frame-empty"
+	icon = 'icons/obj/artheist.dmi'
+	icon_state = "fall_of_man"
 	layer = SIGN_LAYER
 	/// The painting item type this frame produces when taken down.
 	var/painting_type = /obj/item/old_master_painting
@@ -57,8 +57,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/old_master_painting_frame, 32)
 /obj/item/old_master_painting
 	name = "Old Masters painting"
 	desc = "A wide painting in a heavy gilded frame. A sweeping pastoral landscape rendered in oils — one of the widest surviving works by the old masters."
-	icon = 'icons/obj/signs.dmi'
-	icon_state = "frame-empty"
+	icon = 'icons/obj/artheist.dmi'
+	icon_state = "fall_of_man_item"
+	inhand_icon_state = "painting-fall"
 	w_class = WEIGHT_CLASS_HUGE
 	force = 10
 	throwforce = 10
@@ -99,7 +100,15 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/old_master_painting_frame, 32)
 /obj/item/old_master_painting/proc/on_carrier_examined(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
 	var/mob/living/current_carrier = source
-	if(get_dir(current_carrier, user) & turn(current_carrier.dir, -90))
+
+	var/open_direction
+	if(current_carrier.is_holding(src) == RIGHT_HANDS)
+		open_direction = 90
+	else
+		open_direction = -90
+
+
+	if(get_dir(current_carrier, user) & turn(current_carrier.dir, open_direction))
 		examine_list += span_notice(get_examine_front_text())
 	else
 		examine_list += span_notice(get_examine_back_text())
