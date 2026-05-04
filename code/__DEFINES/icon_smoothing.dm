@@ -18,8 +18,10 @@
 #define SMOOTH_BORDER_OBJECT (1<<6)
 /// Atom overrides smoothing_allowed() to on a more granular level filter out connections
 #define SMOOTH_PROC_FILTER (1<<7)
+/// Trismoothing has two smooth states, smooth 1 and smooth 2. Limited to cardinals only to not bloat DMI size too much.
+#define TRISMOOTH_CARDINALS (1<<8)
 
-#define USES_SMOOTHING (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS)
+#define USES_SMOOTHING (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS|TRISMOOTH_CARDINALS)
 
 DEFINE_BITFIELD(smoothing_flags, list(
 	"SMOOTH_BITMASK" = SMOOTH_BITMASK,
@@ -29,6 +31,7 @@ DEFINE_BITFIELD(smoothing_flags, list(
 	"SMOOTH_QUEUED" = SMOOTH_QUEUED,
 	"SMOOTH_OBJ" = SMOOTH_OBJ,
 	"SMOOTH_BORDER_OBJECT" = SMOOTH_BORDER_OBJECT,
+	"TRISMOOTH_CARDINALS" = TRISMOOTH_CARDINALS,
 ))
 
 /// Components of a smoothing junction
@@ -150,8 +153,9 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_SHAFT S_TURF(70) ///turf/open/chasm/shaft
 #define SMOOTH_GROUP_PLASTITANIUM_SCALE S_TURF(71) ///turf/open/floor/plastitanium_tile/scale
 #define SMOOTH_GROUP_SUS_CARPET S_TURF(72) ///turf/open/floor/carpet/sus
+#define SMOOTH_GROUP_VENEER_WALLS S_TURF(73) ///turf/closed/wall/veneer
 
-#define MAX_S_TURF 72 //Always match this value with the one above it.
+#define MAX_S_TURF 73 //Always match this value with the one above it.
 
 #define S_OBJ(num) ("-" + #num + ",")
 /* /obj included */
@@ -240,6 +244,9 @@ DEFINE_BITFIELD(smoothing_junction, list(
 	} \
 	if (canSmoothWith) { \
 		PARSE_CAN_SMOOTH_WITH(canSmoothWith, canSmoothWith, smoothing_flags); \
+	} \
+	if (secondary_smoothing_groups) { \
+		PARSE_SMOOTHING_GROUPS(secondary_smoothing_groups, secondary_smoothing_groups); \
 	}
 
 #define PARSE_SMOOTHING_GROUPS(parse_from, set_into) \

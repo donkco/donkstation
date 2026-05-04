@@ -183,8 +183,9 @@ xxx xxx xxx
 	var/smooth_border = (smoothing_flags & SMOOTH_BORDER)
 	var/smooth_obj = (smoothing_flags & SMOOTH_OBJ)
 	var/border_object_smoothing = (smoothing_flags & SMOOTH_BORDER_OBJECT)
+	var/trismooth = (smoothing_flags & TRISMOOTH_CARDINALS)
 	var/smooth_proc_filter = (smoothing_flags & SMOOTH_PROC_FILTER)
-	var/just_set_junction = !(border_object_smoothing || smooth_proc_filter)
+	var/just_set_junction = !(border_object_smoothing || smooth_proc_filter || trismooth)
 
 	#define SEARCH_ADJ_IN_DIR(direction, direction_flag) \
 		do {  \
@@ -192,33 +193,55 @@ xxx xxx xxx
 			var/turf/neighbor = get_step(src, direction); \
 			if(neighbor && (!area_limited_icon_smoothing || istype(neighbor.loc, area_limited_icon_smoothing))) { \
 				var/neighbor_smoothing_groups = neighbor.smoothing_groups; \
+				var/neighbor_secondary_smoothing_groups = neighbor.secondary_smoothing_groups; \
 				if(neighbor_smoothing_groups) { \
-					SMOOTH_AGAINST(neighbor, direction, direction_flag, neighbor_smoothing_groups); \
+					SMOOTH_AGAINST(neighbor, direction, direction_flag, neighbor_smoothing_groups, neighbor_secondary_smoothing_groups); \
 				} \
 				if(smooth_obj) { \
 					for(var/atom/movable/thing as anything in neighbor) { \
 						var/thing_smoothing_groups = thing.smoothing_groups; \
-						if(!thing.anchored || isnull(thing_smoothing_groups)) { \
+						var/thing_secondary_smoothing_groups = thing.secondary_smoothing_groups; \
+						if(!thing.anchored || isnull(thing_smoothing_groups) || isnull(thing_secondary_smoothing_groups)) { \
 							continue; \
 						}; \
-						SMOOTH_AGAINST(thing, direction, direction_flag, thing_smoothing_groups); \
+						SMOOTH_AGAINST(thing, direction, direction_flag, thing_smoothing_groups, thing_secondary_smoothing_groups); \
 					} \
 				} \
-			} else if (smooth_border) { \
-				JUNCTION_FOUND(null, direction, direction_flag); \
+			 else if (smooth_border) { \
+				JUNCTION_FOUND(null, direction, direction_flag, FALSE); \
+			} \
 			} \
 			} \
 		} while(FALSE)
 
-	#define SMOOTH_AGAINST(thing, direction, direction_flag, their_groups) \
+
+//This shit does not work
+	#define SMOOTH_AGAINST(thing, direction, direction_flag, their_groups, their_secondary_groups) \
 		for(var/target in canSmoothWith) { \
 			if(canSmoothWith[target] & their_groups[target] && \
 				(!(thing.smoothing_flags & SMOOTH_PROC_FILTER) || thing.smoothing_allowed(src, REVERSE_DIR(direction), reverse_junction(direction_flag)))) { \
-				JUNCTION_FOUND(thing, direction, direction_flag); \
+				JUNCTION_FOUND(thing, direction, direction_flag, FALSE); \
+			} \
+			else if(their_secondary_groups && \ //the test windows takes this path instead of the one above when smoothing with itself? big problem
+				(!(thing.smoothing_flags & SMOOTH_PROC_FILTER) || thing.smoothing_allowed(src, REVERSE_DIR(direction), reverse_junction(direction_flag)))) { \
+				if(their_secondary_groups[target] & canSmoothWith[target]) { \
+					JUNCTION_FOUND(thing, direction, direction_flag, TRUE); \
+				} \
 			} \
 		}
 
-	#define JUNCTION_FOUND(target, direction, direction_flag) \
+/obj/structure/trismooth_test_window
+	name = "trismooth window"
+	icon = 'icons/obj/donk_structures/plastitanium_window.dmi'
+	icon_state = "plastitanium-0"
+	base_icon_state = "plastitanium"
+	smoothing_flags = SMOOTH_BITMASK|TRISMOOTH_CARDINALS | SMOOTH_OBJ
+	smoothing_groups = SMOOTH_GROUP_WINDOW_FULLTILE_PLASTITANIUM
+	canSmoothWith = SMOOTH_GROUP_WALLS + SMOOTH_GROUP_WINDOW_FULLTILE_PLASTITANIUM
+	secondary_smoothing_groups = SMOOTH_GROUP_WALLS
+	anchored = TRUE
+
+	#define JUNCTION_FOUND(target, direction, direction_flag, secondary_smoothing) \
 		if (just_set_junction) { \
 			new_junction |= direction_flag; \
 			break set_adj_in_dir; \
@@ -234,7 +257,12 @@ xxx xxx xxx
 				break; \
 			} \
 			break set_adj_in_dir; \
+		} \
+		if (trismooth) { \
+			new_junction  += dir_to_trinary_connection_value(direction_flag, secondary_smoothing); \
+			break set_adj_in_dir; \
 		}
+
 
 	// Let's go over all our cardinals
 	if(border_object_smoothing)
@@ -254,7 +282,7 @@ xxx xxx xxx
 	SEARCH_ADJ_IN_DIR(WEST, WEST)
 
 	// If there's nothing going on already
-	if(smoothing_flags & SMOOTH_BITMASK_CARDINALS || !(new_junction & (NORTH|SOUTH)) || !(new_junction & (EAST|WEST)))
+	if(smoothing_flags & SMOOTH_BITMASK_CARDINALS || !(new_junction & (NORTH|SOUTH)) || !(new_junction & (EAST|WEST)) || smoothing_flags & TRISMOOTH_CARDINALS)
 		set_smoothed_icon_state(new_junction)
 		return
 
@@ -456,6 +484,18 @@ xxx xxx xxx
 		else
 			return NONE
 
+/proc/dir_to_trinary_connection_value(dir, secondary_smoothing = FALSE)
+	var/junction_value = 0
+
+	if(dir & SOUTH)
+		junction_value += secondary_smoothing ? 2 : 1
+	else if(dir & NORTH)
+		junction_value +=  3 ** 1 * (secondary_smoothing ? 2 : 1)
+	if(dir & EAST)
+		junction_value += 3 ** 2 * (secondary_smoothing ? 2 : 1)
+	else if(dir & WEST)
+		junction_value += 3 ** 3 * (secondary_smoothing ? 2 : 1)
+	return junction_value
 
 //Example smooth wall
 /turf/closed/wall/smooth
@@ -466,3 +506,4 @@ xxx xxx xxx
 	smoothing_flags = SMOOTH_BITMASK|SMOOTH_DIAGONAL_CORNERS|SMOOTH_BORDER
 	smoothing_groups = SMOOTH_GROUP_TEST_WALL
 	canSmoothWith = SMOOTH_GROUP_TEST_WALL
+
