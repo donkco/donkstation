@@ -1,5 +1,6 @@
 /datum/quirk/nonviolent
 	name = "Pacifist"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "The thought of violence makes you sick. So much so, in fact, that you can't hurt anyone."
 	icon = FA_ICON_PEACE
 	value = -8

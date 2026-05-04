@@ -5,6 +5,7 @@
 	 */
 /datum/quirk/item_quirk/brainproblems
 	name = "Brain Tumor"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have a little friend in your brain that is slowly destroying it. Better bring some mannitol!"
 	icon = FA_ICON_BRAIN
 	value = -12

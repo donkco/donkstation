@@ -27,10 +27,13 @@
  * * datum/species/species_type - The species to pick from
  * * include_all - Makes the generated name a mix of all the languages the species can speak rather than just one of them
  * Does this on a per-name basis, IE "Lizard first name, uncommon last name".
+ * * name_parts - Bitfield of GENERATE_NAME_FIRST and/or GENERATE_NAME_LAST.
+ * For species with has_last_name = FALSE, the full name is always treated as the first name component.
  */
-/proc/generate_random_name_species_based(gender, unique, datum/species/species_type, include_all = FALSE)
+/proc/generate_random_name_species_based(gender, unique, datum/species/species_type, include_all = FALSE, name_parts = GENERATE_NAME_FIRST | GENERATE_NAME_LAST)
 	ASSERT(ispath(species_type, /datum/species))
 	var/datum/language_holder/holder = GLOB.prototype_language_holders[species_type::species_language_holder]
+	var/species_has_last_name = species_type::has_last_name
 
 	var/list/languages_to_pick_from = list()
 	for(var/language in holder.spoken_languages)
@@ -40,13 +43,38 @@
 		// Basically, if we have alternatives, don't pick common it's boring
 		languages_to_pick_from -= /datum/language/common
 
+	// Helper to generate a name from the species language
+	var/generated
 	if(!include_all || length(languages_to_pick_from) <= 1)
-		return generate_random_name(gender, unique, languages_to_pick_from)
+		generated = generate_random_name(gender, unique, languages_to_pick_from)
+	else
+		var/list/parts = list()
+		for(var/lang_type in shuffle(languages_to_pick_from))
+			parts += GLOB.language_datum_instances[lang_type].get_random_name(gender, name_count = 1, force_use_syllables = TRUE)
+		generated = jointext(parts, " ")
 
-	var/list/name_parts = list()
-	for(var/lang_type in shuffle(languages_to_pick_from))
-		name_parts += GLOB.language_datum_instances[lang_type].get_random_name(gender, name_count = 1, force_use_syllables = TRUE)
-	return jointext(name_parts, " ")
+	// Species with no last name concept: full generated name is always the first name
+	if(!species_has_last_name)
+		if(name_parts & GENERATE_NAME_FIRST)
+			return generated
+		return null // GENERATE_NAME_LAST only for a species without last names
+
+	// Species with a first+last name scheme
+	var/first_name
+	var/last_name
+
+	if(name_parts & GENERATE_NAME_FIRST)
+		// Strip any last name produced by the language to get just the first word
+		var/space_pos = findtext(generated, " ")
+		first_name = space_pos ? copytext(generated, 1, space_pos) : generated
+
+	if(name_parts & GENERATE_NAME_LAST)
+		var/datum/species/instance = GLOB.species_prototypes[species_type]
+		last_name = instance ? instance.get_random_last_name() : pick(GLOB.last_names)
+
+	if(first_name && last_name)
+		return "[first_name] [last_name]"
+	return first_name || last_name
 
 /**
  * Generates a random name for the mob based on their gender or species (for humans)

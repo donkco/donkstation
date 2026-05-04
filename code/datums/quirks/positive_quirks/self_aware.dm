@@ -1,5 +1,6 @@
 /datum/quirk/selfaware
 	name = "Self-Aware"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You know your body well, and can accurately assess the extent of your wounds."
 	icon = FA_ICON_BONE
 	value = 8

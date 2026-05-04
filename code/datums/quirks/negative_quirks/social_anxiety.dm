@@ -1,5 +1,6 @@
 /datum/quirk/social_anxiety
 	name = "Social Anxiety"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Talking to people is very difficult for you, and you often stutter or even lock up."
 	icon = FA_ICON_COMMENT_SLASH
 	value = -3

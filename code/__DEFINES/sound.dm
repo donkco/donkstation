@@ -229,6 +229,7 @@ GLOBAL_LIST_EMPTY(sfx_datum_by_key)
 #define SFX_PORTAL_CLOSE "portal_closed"
 #define SFX_PORTAL_CREATED "portal_created"
 #define SFX_SCREECH "screech"
+#define SFX_ROBOT_SCREECH "robot_screech"
 #define SFX_TOOL_SWITCH "tool_switch"
 #define SFX_KEYBOARD_CLICKS "keyboard_clicks"
 #define SFX_STONE_DROP "stone_drop"

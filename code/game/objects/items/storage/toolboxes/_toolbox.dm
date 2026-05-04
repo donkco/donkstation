@@ -47,6 +47,7 @@
 	update_appearance()
 	AddElement(/datum/element/falling_hazard, damage = force, wound_bonus = wound_bonus, hardhat_safety = TRUE, crushes = FALSE, impact_sound = hitsound)
 	AddElement(/datum/element/cuffable_item)
+	AddElement(/datum/element/examine_hud_image, 'icons/hud/examine_image_192x192.dmi', "test", pixel_x = 16, pixel_y = 32, examine_hint_text = "It looks like something is inscribed on it, Maybe you can take a closer look?", examine_more_text = "You take a closer look at the inscription on the toolbox")
 
 /obj/item/storage/toolbox/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	if (user.combat_mode || !user.has_hand_for_held_index(user.get_inactive_hand_index()))

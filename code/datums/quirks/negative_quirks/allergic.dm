@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/allergic
 	name = "Extreme Medicine Allergy"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Ever since you were a kid, you've been allergic to certain chemicals..."
 	icon = FA_ICON_PRESCRIPTION_BOTTLE
 	value = -6

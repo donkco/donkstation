@@ -13,6 +13,7 @@ GLOBAL_LIST_INIT(possible_food_allergies, list(
 
 /datum/quirk/item_quirk/food_allergic
 	name = "Food Allergy"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Ever since you were a kid, you've been allergic to certain foods."
 	icon = FA_ICON_SHRIMP
 	value = -2

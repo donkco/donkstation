@@ -213,6 +213,10 @@
 #define COMSIG_ITEM_ATTACK_EFFECT "item_effect_attacked"
 /// Called by /obj/item/proc/worn_overlays(list/overlays, mutable_appearance/standing, isinhands, icon_file)
 #define COMSIG_ITEM_GET_WORN_OVERLAYS "item_get_worn_overlays"
+///Called when a crypto chip is inserted into an object via [/datum/element/crypto_chip_compatible]: (obj/item/crypto_chip, mob/living/user)
+#define COMSIG_OBJ_ADDED_CRYPTO_CHIP "obj_added_crypto_chip"
+///Called when a crypto chip is removed from an object via [/datum/element/crypto_chip_compatible]: (obj/item/crypto_chip, mob/living/user)
+#define COMSIG_OBJ_REMOVED_CRYPTO_CHIP "obj_removed_crypto_chip"
 /// Called by /obj/item/proc/separate_worn_overlays(list/overlays, mutable_appearance/standing, mutable_appearance/draw_target, isinhands, icon_file)
 #define COMSIG_ITEM_GET_SEPARATE_WORN_OVERLAYS "item_get_separate_worn_overlays"
 

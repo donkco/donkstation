@@ -2838,7 +2838,6 @@
 #include "code\game\objects\items\storage\basket.dm"
 #include "code\game\objects\items\storage\belt.dm"
 #include "code\game\objects\items\storage\briefcase.dm"
-#include "code\game\objects\items\havana_device.dm"
 #include "code\game\objects\items\storage\dufflebags.dm"
 #include "code\game\objects\items\storage\fancy.dm"
 #include "code\game\objects\items\storage\garment.dm"

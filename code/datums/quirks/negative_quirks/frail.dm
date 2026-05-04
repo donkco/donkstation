@@ -1,5 +1,6 @@
 /datum/quirk/frail
 	name = "Frail"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You have skin of paper and bones of glass! You suffer wounds much more easily than most."
 	icon = FA_ICON_SKULL
 	value = -6

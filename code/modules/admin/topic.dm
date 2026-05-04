@@ -48,6 +48,15 @@
 			return
 		cmd_show_exp_panel(M.client)
 
+	else if(href_list["adjustsp"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/M = locate(href_list["adjustsp"]) in GLOB.mob_list
+		if(!M || !M.client)
+			to_chat(usr, span_danger("ERROR: Mob or client not found."), confidential = TRUE)
+			return
+		cmd_adjust_secretary_points(M.client)
+
 	else if(href_list["editrightsbrowser"])
 		edit_admin_permissions(PERMISSIONS_PAGE_PERMISSIONS)
 

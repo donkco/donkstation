@@ -1,5 +1,6 @@
 /datum/quirk/depression
 	name = "Depression"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You sometimes just hate life."
 	icon = FA_ICON_FROWN
 	value = -3

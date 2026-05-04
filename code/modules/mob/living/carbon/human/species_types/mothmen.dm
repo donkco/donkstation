@@ -2,6 +2,7 @@
 	name = "\improper Mothman"
 	plural_form = "Mothmen"
 	id = SPECIES_MOTH
+	has_last_name = TRUE
 	inherent_biotypes = MOB_ORGANIC|MOB_HUMANOID|MOB_BUG
 	body_markings = list(
 		/datum/bodypart_overlay/simple/body_marking/moth = SPRITE_ACCESSORY_NONE,
@@ -28,6 +29,9 @@
 		BODY_ZONE_L_LEG = /obj/item/bodypart/leg/left/moth,
 		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/moth,
 	)
+
+/datum/species/moth/get_random_last_name()
+	return pick(GLOB.moth_last)
 
 /datum/species/moth/on_species_gain(mob/living/carbon/human/human_who_gained_species, datum/species/old_species, pref_load, regenerate_icons)
 	. = ..()

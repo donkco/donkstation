@@ -1,5 +1,6 @@
 /datum/quirk/jolly
 	name = "Jolly"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You sometimes just feel happy, for no reason at all."
 	icon = FA_ICON_GRIN
 	value = 4

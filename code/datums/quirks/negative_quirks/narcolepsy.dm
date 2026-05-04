@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/narcolepsy
 	name = "Narcolepsy"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You feel drowsy often, and could fall asleep at any moment. Staying caffeinated, walking or even supressing symptoms with stimulants, prescribed or otherwise, can help you get through the shift..."
 	icon = FA_ICON_BED
 	value = -8

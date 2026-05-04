@@ -1,5 +1,6 @@
 /datum/quirk/cursed
 	name = "Cursed"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are cursed with bad luck. You are much more likely to suffer from accidents and mishaps. When it rains, it pours."
 	icon = FA_ICON_CLOUD_SHOWERS_HEAVY
 	value = -8

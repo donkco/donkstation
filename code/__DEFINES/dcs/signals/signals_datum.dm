@@ -29,6 +29,14 @@
 /// fires on the target datum when an element is detached from it (/datum/element)
 #define COMSIG_ELEMENT_DETACH "element_detach"
 
+// /datum/preferences signals
+/// fired on /datum/preferences after successfully switching the active character slot: (new_slot)
+#define COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT "prefs_switched_to_character_slot"
+/// fired on /datum/preferences after the current character slot's data is saved to the savefile: (saved_slot)
+#define COMSIG_PREFS_CHARACTER_SLOT_SAVED "prefs_character_slot_saved"
+/// fired on /datum/preferences before a character slot is deleted and switches away: (deleted_slot)
+#define COMSIG_PREFS_CHARACTER_SLOT_DELETED "prefs_character_slot_deleted"
+
 // Merger datum signals
 /// Called on the object being added to a merger group: (datum/merger/new_merger)
 #define COMSIG_MERGER_ADDING "comsig_merger_adding"

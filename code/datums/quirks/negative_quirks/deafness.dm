@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/deafness
 	name = "Deaf"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are incurably deaf."
 	icon = FA_ICON_DEAF
 	value = -8

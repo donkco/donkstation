@@ -1,6 +1,7 @@
 // Tool types, if you add new ones please add them to /obj/item/debug/omnitool in code/game/objects/items/debug_items.dm
 // and to GLOB.all_tool_behaviours in code/_globalvars/lists/engineering.dm
 #define TOOL_CROWBAR "crowbar"
+#define TOOL_SOLDERING_IRON "soldering_iron"
 #define TOOL_MULTITOOL "multitool"
 #define TOOL_SCREWDRIVER "screwdriver"
 #define TOOL_WIRECUTTER "cutters"

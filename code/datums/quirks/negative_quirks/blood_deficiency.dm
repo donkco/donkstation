@@ -1,5 +1,6 @@
 /datum/quirk/blooddeficiency
 	name = "Blood Deficiency"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Your body can't produce enough blood to sustain itself."
 	icon = FA_ICON_TINT
 	value = -8

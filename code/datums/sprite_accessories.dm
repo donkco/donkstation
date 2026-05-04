@@ -1982,6 +1982,16 @@ GLOBAL_LIST_EMPTY(blended_hair_icons_cache)
 	icon_state = "default"
 	color_src = FALSE
 
+
+/datum/sprite_accessory/tails/android_monkey
+
+/datum/sprite_accessory/tails/android_monkey/default
+	name = "Android Monkey"
+	icon = 'icons/mob/human/species/monkey/android_monkey_tail.dmi'
+	icon_state = "default"
+	color_src = FALSE
+
+
 /datum/sprite_accessory/tails/xeno
 	icon_state = "default"
 	color_src = FALSE

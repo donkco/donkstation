@@ -17,6 +17,7 @@ GLOBAL_LIST_INIT(all_tool_behaviours, list(
 	TOOL_SCALPEL,
 	TOOL_SCREWDRIVER,
 	TOOL_SHOVEL,
+	TOOL_SOLDERING_IRON,
 	TOOL_WELDER,
 	TOOL_WIRECUTTER,
 	TOOL_WRENCH,
@@ -63,4 +64,5 @@ GLOBAL_LIST_INIT(tool_to_image, list(
 	TOOL_BLOODFILTER = image(/obj/item/blood_filter),
 	TOOL_ROLLINGPIN = image(/obj/item/kitchen/rollingpin),
 	TOOL_RUSTSCRAPER = image(/obj/item/wirebrush),
+	TOOL_SOLDERING_IRON = image(/obj/item/soldering_iron),
 ))

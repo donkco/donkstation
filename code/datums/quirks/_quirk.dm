@@ -43,6 +43,14 @@
 	/// A list of traits that should stop this quirk from processing.
 	/// Signals for adding and removing this trait will automatically be added to `process_update_signals`.
 	var/list/no_process_traits
+	///Flavor text used in contracts to describe this quirk
+	var/contract_flavor_text = "Patient demonstrates a quirk. This is quirky!"
+	/// Optional asset key for an annotation image overlaid at the TOP of the flavor text (e.g. "understatement.png").
+	var/contract_top_image = null
+	/// Optional asset key for an annotation image placed BELOW the flavor text, anchored to where the text ends.
+	var/contract_bottom_image = null
+	/// Defines whether this quirk is positive, negative, or neutral.
+	var/quirk_category = QUIRK_CATEGORY_NEUTRAL
 
 /datum/quirk/New()
 	. = ..()

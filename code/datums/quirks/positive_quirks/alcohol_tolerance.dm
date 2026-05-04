@@ -1,5 +1,6 @@
 /datum/quirk/alcohol_tolerance
 	name = "Alcohol Tolerance"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "You become drunk more slowly and suffer fewer drawbacks from alcohol."
 	icon = FA_ICON_BEER
 	value = 4

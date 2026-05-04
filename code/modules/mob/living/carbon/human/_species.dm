@@ -18,6 +18,9 @@ GLOBAL_LIST_EMPTY(features_by_species)
 /datum/species
 	///If the game needs to manually check your race to do something not included in a proc here, it will use this.
 	var/id
+	/// Whether this species uses a separate first and last name scheme.
+	/// If TRUE, generate_random_name_species_based can produce first and last names independently.
+	var/has_last_name = FALSE
 	///This is used for children, it will determine their default limb ID for use of examine. See [/mob/living/carbon/human/proc/examine].
 	var/examine_limb_id
 	///This is the fluff name. They are displayed on health analyzers and in the character setup menu. Leave them generic for other servers to customize.
@@ -1508,6 +1511,15 @@ GLOBAL_LIST_EMPTY(features_by_species)
 
 /datum/species/proc/get_physical_attributes()
 	return "An unremarkable species."
+
+/**
+ * Returns a random last name string for this species.
+ * Only meaningful when has_last_name = TRUE.
+ * Override in subtypes to use species-specific last name lists.
+ */
+/datum/species/proc/get_random_last_name()
+	return pick(GLOB.last_names)
+
 /**
  * Gets a short description for the specices. Should be relatively succinct.
  * Used in the preference menu.

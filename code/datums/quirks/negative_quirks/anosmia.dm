@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/anosmia
 	name = "Anosmia"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "For some reason, you can't smell anything."
 	icon = FA_ICON_HEAD_SIDE_COUGH_SLASH
 	value = -2

@@ -1,5 +1,6 @@
 /datum/quirk/bilingual
 	name = "Bilingual"
+	quirk_category = QUIRK_CATEGORY_POSITIVE
 	desc = "Over the years you've picked up an extra language!"
 	icon = FA_ICON_GLOBE
 	value = 4

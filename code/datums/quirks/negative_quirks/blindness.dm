@@ -1,5 +1,6 @@
 /datum/quirk/item_quirk/blindness
 	name = "Blind"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are completely blind, nothing can counteract this."
 	icon = FA_ICON_BLIND
 	value = -16
@@ -9,6 +10,9 @@
 	hardcore_value = 15
 	quirk_flags = QUIRK_HUMAN_ONLY|QUIRK_CHANGES_APPEARANCE
 	mail_goodies = list(/obj/item/clothing/glasses/sunglasses, /obj/item/cane/white)
+	contract_flavor_text = "This one seems to have trouble seeing. Maybe they should get that checked out?\n\nOh well, at least they won't be distracted by any of the horrors of the station."
+	contract_top_image = "questionmark.png"
+	contract_bottom_image = "understatement.png"
 
 /datum/quirk_constant_data/blindfoldcolor
 	associated_typepath = /datum/quirk/item_quirk/blindness

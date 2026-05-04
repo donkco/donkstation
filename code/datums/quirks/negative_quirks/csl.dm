@@ -1,5 +1,6 @@
 /datum/quirk/csl
 	name = "Common Second Language"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "Common is not your native tongue - it's something you had to pick up along the way. \
 		Some words in common will sound foreign, and you may drift back to your native tongue \
 		when you are anxious or upset."

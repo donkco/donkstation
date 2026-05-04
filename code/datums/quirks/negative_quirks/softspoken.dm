@@ -1,5 +1,6 @@
 /datum/quirk/softspoken
 	name = "Soft-Spoken"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You are soft-spoken, and your voice is hard to hear."
 	icon = FA_ICON_COMMENT
 	value = -2

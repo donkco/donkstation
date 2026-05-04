@@ -4,7 +4,6 @@
 
 	icon_state = "" //Remove the inherent human icon that is visible on the map editor. We're rendering ourselves limb by limb, having it still be there results in a bug where the basic human icon appears below as south in all directions and generally looks nasty.
 
-	setup_mood()
 	// This needs to be called very very early in human init (before organs / species are created at the minimum)
 	setup_organless_effects()
 	// Physiology needs to be created before species, as some species modify physiology
@@ -16,6 +15,8 @@
 
 	create_carbon_reagents()
 	set_species(dna.species.type, icon_update = FALSE) //carbon/Initialize will call update_body()
+
+	setup_mood()
 	//set species enables and disables the flag. Just to be sure, we re-enable it now until it's removed by the parent call.
 	living_flags |= STOP_OVERLAY_UPDATE_BODY_PARTS
 
@@ -43,6 +44,9 @@
 
 /mob/living/carbon/human/proc/setup_mood()
 	if (CONFIG_GET(flag/disable_human_mood))
+		return
+
+	if(HAS_TRAIT(src, TRAIT_NO_MOOD))
 		return
 	mob_mood = new /datum/mood(src)
 

@@ -1,5 +1,6 @@
 /datum/quirk/erratic
 	name = "Erratic"
+	quirk_category = QUIRK_CATEGORY_NEGATIVE
 	desc = "You mood swings like a pendulum, causing your personality to change on a whim every so often."
 	icon = FA_ICON_MASKS_THEATER
 	value = -3
