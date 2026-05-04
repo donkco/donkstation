@@ -52,6 +52,12 @@
 
 	floor_tile = /obj/item/stack/tile/carpet/borderless/mustard
 
+/turf/open/floor/carpet/borderless/red
+	icon_state = "carpet_red"
+	base_icon_state = "carpet_red"
+
+	floor_tile = /obj/item/stack/tile/carpet/borderless/red
+
 /turf/open/floor/carpet/sus
 	name = "really suspicious carpet"
 	desc = "The striking red and black pattern seems familiar... Could this be indicative of syndicate activity?"

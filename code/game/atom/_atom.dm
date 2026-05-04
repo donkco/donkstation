@@ -115,6 +115,8 @@
 	var/smoothing_junction = null
 	///What smoothing groups does this atom belongs to, to match canSmoothWith. If null, nobody can smooth with it. Must be sorted.
 	var/list/smoothing_groups = null
+	/// Seconadry smoothing groups for trismoothing
+	var/list/secondary_smoothing_groups = null
 	///List of smoothing groups this atom can smooth with. If this is null and atom is smooth, it smooths only with itself. Must be sorted.
 	var/list/canSmoothWith = null
 
