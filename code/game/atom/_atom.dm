@@ -117,6 +117,8 @@
 	var/list/smoothing_groups = null
 	///List of smoothing groups this atom can smooth with. If this is null and atom is smooth, it smooths only with itself. Must be sorted.
 	var/list/canSmoothWith = null
+	///Subset of canSmoothWith: groups that produce a "secondary" (type-2) trismooth junction instead of the primary (type-1) one. Must be sorted.
+	var/list/secondary_smoothing_groups = null
 
 	///AI controller that controls this atom. type on init, then turned into an instance during runtime
 	var/datum/ai_controller/ai_controller
