@@ -375,31 +375,6 @@ xxx xxx xxx
 	PARSE_SMOOTHING_GROUPS(new_groups, secondary_smoothing_groups)
 
 /**
- * Helper for trismooth: returns the match level between a neighbor's smoothing groups and our canSmoothWith.
- *
- * Returns:
- * * 1 — primary match (neighbor matches canSmoothWith outside of secondary_smoothing_groups)
- * * 2 — secondary match (neighbor matches canSmoothWith only within secondary_smoothing_groups)
- * * 0 — no match
- *
- * Arguments:
- * * their_groups — the neighbor atom's smoothing_groups (already parsed, associative bitflag list)
- * * can_smooth_with — our canSmoothWith (already parsed)
- * * secondary — our secondary_smoothing_groups (already parsed, may be null)
- */
-/proc/get_tristate_match(list/their_groups, list/can_smooth_with, list/secondary)
-	var/secondary_hit = FALSE
-	for(var/bucket in can_smooth_with)
-		var/hit = their_groups[bucket] & can_smooth_with[bucket]
-		if(!hit)
-			continue
-		// Any bit in hit that is NOT in secondary_smoothing_groups → primary match
-		if(hit & ~(secondary?[bucket] || 0))
-			return 1
-		secondary_hit = TRUE
-	return secondary_hit ? 2 : 0
-
-/**
  * Trismooth proc. Encodes each cardinal direction as 0 (no neighbor), 1 (primary), or 2 (secondary).
  * Final junction = N*27 + S*9 + E*3 + W*1, giving 81 unique states (0–80).
  * Icon states must be named "[base_icon_state]-[0..80]".
@@ -416,6 +391,27 @@ xxx xxx xxx
 	var/east_val  = 0
 	var/west_val  = 0
 
+	// Sets result to 1 (primary match), 2 (secondary-only match), or 0 (no match).
+	// Reads can_smooth_with and secondary from the enclosing proc scope.
+	#define GET_TRISTATE_MATCH(result, their_groups) \
+		do { \
+			tristate_match: { \
+			result = 0; \
+			for(var/bucket in can_smooth_with) { \
+				if(!(their_groups[bucket] & can_smooth_with[bucket])) { \
+					continue; \
+				} \
+				if((their_groups[bucket] & can_smooth_with[bucket]) & ~(secondary?[bucket] || 0)) { \
+					result = 1; \
+					break tristate_match; \
+				} \
+				if(!result) { \
+					result = 2; \
+				} \
+			} \
+			} \
+		} while(FALSE)
+
 	for(var/cardinal in list(NORTH, SOUTH, EAST, WEST))
 		var/turf/neighbor = get_step(src, cardinal)
 		if(!neighbor || (area_limited_icon_smoothing && !istype(neighbor.loc, area_limited_icon_smoothing)))
@@ -423,12 +419,12 @@ xxx xxx xxx
 		var/result = 0
 		var/neighbor_groups = neighbor.smoothing_groups
 		if(neighbor_groups)
-			result = get_tristate_match(neighbor_groups, can_smooth_with, secondary)
+			GET_TRISTATE_MATCH(result, neighbor_groups)
 		if(!result && smooth_obj)
 			for(var/atom/movable/thing as anything in neighbor)
 				if(!thing.anchored || isnull(thing.smoothing_groups))
 					continue
-				result = get_tristate_match(thing.smoothing_groups, can_smooth_with, secondary)
+				GET_TRISTATE_MATCH(result, thing.smoothing_groups)
 				if(result)
 					break
 		switch(cardinal)
@@ -442,6 +438,8 @@ xxx xxx xxx
 				west_val  = result
 
 	set_trismoothed_icon_state(north_val * TRISMOOTH_NORTH_MULT + south_val * TRISMOOTH_SOUTH_MULT + east_val * TRISMOOTH_EAST_MULT + west_val * TRISMOOTH_WEST_MULT)
+
+	#undef GET_TRISTATE_MATCH
 
 ///Sets the icon state for a trismooth atom using its 0–80 junction value
 /atom/proc/set_trismoothed_icon_state(new_junction)
