@@ -10,6 +10,9 @@
 	desc = "You're a proud member of the Donk Co. Club Loyalty Rewards Program! You start with a loyalty card that grants you a 25% discount at vending machines. You must swipe it before each purchase."
 	icon = FA_ICON_ID_CARD
 	value = 3
+	mob_trait = TRAIT_DONK_CLUB
+	gain_text = span_notice("Your wallet feels a little more powerful.")
+	lose_text = span_danger("You feel your exclusive club privileges slipping away.")
 	medical_record_text = "Patient carries a Donk Co. Club Loyalty Rewards Card. Not sure how this is medically relevant...Who put this on here?"
 	contract_flavor_text = "Hire is enrolled in the Donk Co. Club Loyalty Rewards Program — a suspiciously exclusive membership for a snack food brand. \
 		The card in their possession appears to be legitimate. How they obtained it is unclear."
