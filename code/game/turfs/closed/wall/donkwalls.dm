@@ -1,6 +1,11 @@
 /turf/closed/wall/calabash
 	name = "calabash wall"
 	desc = "The wall of the future. The sloped, tightly fitted panels can make some configurations look somewhat gourd-like, hence the name."
+
+	icon = 'icons/turf/walls/donkwalls/calabash_wall.dmi'
+	icon_state = "calabash_wall-0"
+	base_icon_state = "calabash_wall"
+
 	sheet_type = /obj/item/stack/sheet/iron
 	hardness = 40
 	sheet_amount = 2
@@ -9,6 +14,13 @@
 	canSmoothWith = SMOOTH_GROUP_CALABASH_WALLS
 	custom_materials = list(/datum/material/iron =SHEET_MATERIAL_AMOUNT * 2)
 	rust_resistance = RUST_RESISTANCE_BASIC
+
+/turf/closed/wall/calabash/donk
+	desc = "The wall of the future. This section has a soothing, clinical appearance."
+
+	icon = 'icons/turf/walls/donkwalls/calabash_donk_wall.dmi'
+	icon_state = "calabash_donk_wall-0"
+	base_icon_state = "calabash_donk_wall"
 
 /turf/closed/wall/calabash/med
 	desc = "The wall of the future. This section has a soothing, clinical appearance."
@@ -63,3 +75,18 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_PLYWOOD_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
 	canSmoothWith = SMOOTH_GROUP_PLYWOOD_WALLS
+
+/turf/closed/wall/veneer
+	name = "veneer wall"
+	desc = "A layer of luxury, just as thick as it needs to be."
+	icon = 'icons/turf/walls/donkwalls/veneer_wall.dmi'
+	icon_state = "veneer_wall-0"
+	base_icon_state = "veneer_wall"
+	sheet_type = /obj/item/stack/sheet/mineral/wood
+	hardness = 70
+	sheet_amount = 1
+	custom_materials = list(/datum/material/wood =SHEET_MATERIAL_AMOUNT * 2)
+	rust_resistance = RUST_RESISTANCE_ORGANIC
+	smoothing_flags = SMOOTH_BITMASK
+	smoothing_groups = SMOOTH_GROUP_VENEER_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
+	canSmoothWith = SMOOTH_GROUP_VENEER_WALLS

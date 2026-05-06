@@ -82,25 +82,25 @@
 	name = "rusty floor"
 	desc = "Ordinary floor tiles, though these are slowly succumbing to the grinding teeth of entropy."
 
-	icon_state = "iron_rusty_tile"
-	base_icon_state = "iron_rusty_tile"
+	icon_state = "iron_rusted_tile"
+	base_icon_state = "iron_rusted_tile"
 
 	floor_tile = /obj/item/stack/tile/iron/base //replace with rusty variant at some point
 	var/static/list/rusty_variants = list(
-		"iron_rusty_tile",
-		"iron_rusty_tile-2",
-		"iron_rusty_tile-3",
-		"iron_rusty_tile-4",
-		"iron_rusty_tile-5",
-		"iron_rusty_tile-6",
-		"iron_rusty_tile-7",
-		"iron_rusty_tile-8",
-		"iron_rusty_tile-9",
-		"iron_rusty_tile-10",
-		"iron_rusty_tile-11",
-		"iron_rusty_tile-12",
-		"iron_rusty_tile-13",
-		"iron_rusty_tile-14",
+		"iron_rusted_tile",
+		"iron_rusted_tile-2",
+		"iron_rusted_tile-3",
+		"iron_rusted_tile-4",
+		"iron_rusted_tile-5",
+		"iron_rusted_tile-6",
+		"iron_rusted_tile-7",
+		"iron_rusted_tile-8",
+		"iron_rusted_tile-9",
+		"iron_rusted_tile-10",
+		"iron_rusted_tile-11",
+		"iron_rusted_tile-12",
+		"iron_rusted_tile-13",
+		"iron_rusted_tile-14",
 		)
 
 /turf/open/floor/iron_tile/rusty/Initialize(mapload)
@@ -166,6 +166,7 @@
 	icon_state = "bricks"
 
 	floor_tile = /obj/item/stack/tile/brick
+	footstep = FOOTSTEP_CONCRETE
 
 /turf/open/floor/terracotta
 	name = "terracotta floor"
@@ -175,6 +176,7 @@
 	icon_state = "terracotta_tile"
 
 	floor_tile = /obj/item/stack/tile/terracotta
+	footstep = FOOTSTEP_CONCRETE
 
 /turf/open/floor/marble
 	name = "marble floor"
@@ -184,6 +186,8 @@
 	icon_state = "marble"
 
 	floor_tile = /obj/item/stack/tile/marble
+	footstep = FOOTSTEP_CONCRETE
+
 	var/static/list/marble_variants = list(
 		"marble",
 		"marble-2",
@@ -208,6 +212,10 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_SLUDGE_POOL
+
+	footstep = FOOTSTEP_CONCRETE
+
+	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 1)
 
 /turf/open/concrete/sludge_pool
 	name = "sludge pool"

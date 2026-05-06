@@ -150,7 +150,7 @@
 	name = "monstera"
 	desc = "Monstera deliciosa. And beautiful specimen at that!"
 
-	icon_state = "mostera"
+	icon_state = "monstera"
 	base_pixel_z = -10
 
 	force = 15
@@ -180,10 +180,10 @@
 	base_pixel_z = -6
 
 /obj/item/dedeplants/ceramic/bonsai
-	name = "bonsai-cypress"
+	name = "bonsai"
 	desc = "A perculiar tree, it has the appearance on an ancient bethemoth yet it remains the size of a sapling. Could this be the product of the ancient bonsai technique as practiced in the orient?"
 
-	icon_state = "bonsai"
+	icon_state = "bonsai-cypress"
 	base_pixel_z = -4
 
 
@@ -245,7 +245,7 @@
 	name = "prickly pear"
 	desc = "Opuntia ficus-indica: A cactus capable of producing delicious figs, imagine that!"
 
-	icon_state = "opuntia"
+	icon_state = "cactus_opuntia"
 	base_pixel_z = -6
 
 	force = 8

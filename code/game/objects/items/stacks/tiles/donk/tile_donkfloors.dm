@@ -179,6 +179,13 @@
 	turf_type = /turf/open/floor/carpet/borderless/mustard
 	merge_type = /obj/item/stack/tile/carpet/borderless/mustard
 
+/obj/item/stack/tile/carpet/borderless/red
+	name = "red carpet roll"
+	singular_name = "red carpet roll"
+	icon_state = "carpet_roll_red"
+	turf_type = /turf/open/floor/carpet/borderless/red
+	merge_type = /obj/item/stack/tile/carpet/borderless/red
+
 /obj/item/stack/tile/carpet/sus
 	name = "really suspicious carpet roll"
 	singular_name = "really suspicious carpet roll"
