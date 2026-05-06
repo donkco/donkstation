@@ -136,7 +136,9 @@ xxx xxx xxx
 	flags_1 |= HTML_USE_INITAL_ICON_1
 	if (!z)
 		CRASH("[type] called smooth_icon() without being on a z-level")
-	if(smoothing_flags & (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS))
+	if(smoothing_flags & TRISMOOTH_CARDINALS)
+		trismooth_smooth()
+	else if(smoothing_flags & (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS))
 		bitmask_smooth()
 	else
 		CRASH("smooth_icon called for [src] with smoothing_flags == [smoothing_flags]")
@@ -365,6 +367,86 @@ xxx xxx xxx
 		return
 	PARSE_SMOOTHING_GROUPS(smoothing_groups, src.smoothing_groups)
 
+///Runtime setter for secondary_smoothing_groups, mirrors set_smoothing_groups()
+/atom/proc/set_secondary_smoothing_groups(new_groups)
+	if(!new_groups)
+		secondary_smoothing_groups = null
+		return
+	PARSE_SMOOTHING_GROUPS(new_groups, secondary_smoothing_groups)
+
+/**
+ * Trismooth proc. Encodes each cardinal direction as 0 (no neighbor), 1 (primary), or 2 (secondary).
+ * Final junction = N*27 + S*9 + E*3 + W*1, giving 81 unique states (0–80).
+ * Icon states must be named "[base_icon_state]-[0..80]".
+ */
+/atom/proc/trismooth_smooth()
+	var/list/can_smooth_with = canSmoothWith
+	var/list/secondary = secondary_smoothing_groups
+	var/smooth_obj = (smoothing_flags & SMOOTH_OBJ)
+	var/area/home_base = get_area(src)
+	var/area_limited_icon_smoothing = home_base?.area_limited_icon_smoothing
+
+	var/north_val = 0
+	var/south_val = 0
+	var/east_val  = 0
+	var/west_val  = 0
+
+	// Sets result to 1 (primary match), 2 (secondary-only match), or 0 (no match).
+	// Reads can_smooth_with and secondary from the enclosing proc scope.
+	#define GET_TRISTATE_MATCH(result, their_groups) \
+		do { \
+			tristate_match: { \
+			result = 0; \
+			for(var/bucket in can_smooth_with) { \
+				if(!(their_groups[bucket] & can_smooth_with[bucket])) { \
+					continue; \
+				} \
+				if((their_groups[bucket] & can_smooth_with[bucket]) & ~(secondary?[bucket] || 0)) { \
+					result = 1; \
+					break tristate_match; \
+				} \
+				if(!result) { \
+					result = 2; \
+				} \
+			} \
+			} \
+		} while(FALSE)
+
+	for(var/cardinal in list(NORTH, SOUTH, EAST, WEST))
+		var/turf/neighbor = get_step(src, cardinal)
+		if(!neighbor || (area_limited_icon_smoothing && !istype(neighbor.loc, area_limited_icon_smoothing)))
+			continue
+		var/result = 0
+		var/neighbor_groups = neighbor.smoothing_groups
+		if(neighbor_groups)
+			GET_TRISTATE_MATCH(result, neighbor_groups)
+		if(!result && smooth_obj)
+			for(var/atom/movable/thing as anything in neighbor)
+				if(!thing.anchored || isnull(thing.smoothing_groups))
+					continue
+				GET_TRISTATE_MATCH(result, thing.smoothing_groups)
+				if(result)
+					break
+		switch(cardinal)
+			if(NORTH)
+				north_val = result
+			if(SOUTH)
+				south_val = result
+			if(EAST)
+				east_val  = result
+			if(WEST)
+				west_val  = result
+
+	set_trismoothed_icon_state(north_val * TRISMOOTH_NORTH_MULT + south_val * TRISMOOTH_SOUTH_MULT + east_val * TRISMOOTH_EAST_MULT + west_val * TRISMOOTH_WEST_MULT)
+
+	#undef GET_TRISTATE_MATCH
+
+///Sets the icon state for a trismooth atom using its 0–80 junction value
+/atom/proc/set_trismoothed_icon_state(new_junction)
+	. = smoothing_junction
+	smoothing_junction = new_junction
+	icon_state = "[base_icon_state]-[new_junction]"
+
 /// Takes a direction, turns it into all the junctions that contain it
 /proc/dir_to_all_junctions(dir)
 	var/handback = NONE
@@ -466,3 +548,15 @@ xxx xxx xxx
 	smoothing_flags = SMOOTH_BITMASK|SMOOTH_DIAGONAL_CORNERS|SMOOTH_BORDER
 	smoothing_groups = SMOOTH_GROUP_TEST_WALL
 	canSmoothWith = SMOOTH_GROUP_TEST_WALL
+
+///Example tri-smooth wall
+/obj/structure/trismooth_test_window
+	name = "trismooth window"
+	icon = 'icons/obj/donk_structures/plastitanium_window.dmi'
+	icon_state = "plastitanium-0"
+	base_icon_state = "plastitanium"
+	smoothing_flags = TRISMOOTH_CARDINALS|SMOOTH_OBJ
+	smoothing_groups = SMOOTH_GROUP_WINDOW_FULLTILE_PLASTITANIUM
+	canSmoothWith = SMOOTH_GROUP_WALLS + SMOOTH_GROUP_WINDOW_FULLTILE_PLASTITANIUM
+	secondary_smoothing_groups = SMOOTH_GROUP_WALLS
+	anchored = TRUE

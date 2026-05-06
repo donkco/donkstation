@@ -18,8 +18,17 @@
 #define SMOOTH_BORDER_OBJECT (1<<6)
 /// Atom overrides smoothing_allowed() to on a more granular level filter out connections
 #define SMOOTH_PROC_FILTER (1<<7)
+/// Trismoothing has two smooth states, smooth 1 and smooth 2. Limited to cardinals only to not bloat DMI size too much.
+#define TRISMOOTH_CARDINALS (1<<8)
 
-#define USES_SMOOTHING (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS)
+/// Base-3 place values for encoding a trismooth cardinal junction (0 = none, 1 = primary, 2 = secondary per direction)
+/// Ordered to match BYOND direction values (N=1, S=2, E=4, W=8), so single-direction primary states are 1, 3, 9, 27
+#define TRISMOOTH_NORTH_MULT 1
+#define TRISMOOTH_SOUTH_MULT 3
+#define TRISMOOTH_EAST_MULT  9
+#define TRISMOOTH_WEST_MULT  27
+
+#define USES_SMOOTHING (SMOOTH_BITMASK|SMOOTH_BITMASK_CARDINALS|TRISMOOTH_CARDINALS)
 
 DEFINE_BITFIELD(smoothing_flags, list(
 	"SMOOTH_BITMASK" = SMOOTH_BITMASK,
@@ -29,6 +38,7 @@ DEFINE_BITFIELD(smoothing_flags, list(
 	"SMOOTH_QUEUED" = SMOOTH_QUEUED,
 	"SMOOTH_OBJ" = SMOOTH_OBJ,
 	"SMOOTH_BORDER_OBJECT" = SMOOTH_BORDER_OBJECT,
+	"TRISMOOTH_CARDINALS" = TRISMOOTH_CARDINALS,
 ))
 
 /// Components of a smoothing junction
@@ -240,6 +250,9 @@ DEFINE_BITFIELD(smoothing_junction, list(
 	} \
 	if (canSmoothWith) { \
 		PARSE_CAN_SMOOTH_WITH(canSmoothWith, canSmoothWith, smoothing_flags); \
+	} \
+	if (secondary_smoothing_groups) { \
+		PARSE_SMOOTHING_GROUPS(secondary_smoothing_groups, secondary_smoothing_groups); \
 	}
 
 #define PARSE_SMOOTHING_GROUPS(parse_from, set_into) \
