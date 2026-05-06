@@ -158,6 +158,8 @@
 	var/age_restrictions = TRUE
 	/// How many credits does this vending machine have? 20% of all sales go to this pool, and are given freely when the machine is restocked, or successfully tilted. Lost on deconstruction.
 	var/credits_contained = 0
+	/// Whether the next purchase should receive a Donk Co. Club Loyalty Rewards Card discount (25% off).
+	var/loyalty_discount_pending = FALSE
 	/**
 	  * Is this item on station or not
 	  *

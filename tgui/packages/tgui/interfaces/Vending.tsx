@@ -58,6 +58,7 @@ type VendingData = {
   extended_inventory: boolean;
   access: boolean;
   categories: Record<string, Category>;
+  loyalty_discount_pending: boolean;
 };
 
 export const Vending = () => {
@@ -254,17 +255,36 @@ type ProductProps = {
 const Product = (props: ProductProps) => {
   const { act, data } = useBackend<VendingData>();
   const { product, productStock, fluid } = props;
-  const { department, jobDiscount, all_products_free, user } = data;
+  const {
+    department,
+    jobDiscount,
+    all_products_free,
+    user,
+    loyalty_discount_pending,
+  } = data;
 
   const colorable = !!product.colorable;
   const free = all_products_free || productStock.free || product.price === 0;
   const discount = !product.premium && department === user?.department;
   const remaining = productStock.amount;
-  const redPrice = Math.round(product.price * jobDiscount);
+  const jobDiscountedPrice = Math.round(product.price * jobDiscount);
+  const loyaltyDiscountedPrice = Math.round(product.price * 0.75);
+  const redPrice = loyalty_discount_pending
+    ? Math.round((discount ? jobDiscountedPrice : product.price) * 0.75)
+    : jobDiscountedPrice;
+  const effectivePrice = free
+    ? 0
+    : discount
+      ? loyalty_discount_pending
+        ? redPrice
+        : jobDiscountedPrice
+      : loyalty_discount_pending
+        ? loyaltyDiscountedPrice
+        : product.price;
   const disabled =
     remaining === 0 ||
     (!all_products_free && !user) ||
-    (!free && (discount ? redPrice : product.price) > user?.cash);
+    (!free && effectivePrice > user?.cash);
 
   const baseProps = {
     base64: product.image,
@@ -292,6 +312,7 @@ const Product = (props: ProductProps) => {
     free: free,
     product: product,
     redPrice: redPrice,
+    loyaltyActive: loyalty_discount_pending && !product.premium,
   };
 
   return fluid ? (
@@ -383,17 +404,18 @@ type ProductPriceProps = {
   free: boolean;
   product: ProductRecord;
   redPrice: number;
+  loyaltyActive: boolean;
 };
 
 /** The main button to purchase an item. */
 const ProductPrice = (props: ProductPriceProps) => {
   const { data } = useBackend<VendingData>();
   const { displayed_currency_name } = data;
-  const { discount, free, product, redPrice } = props;
+  const { discount, free, product, redPrice, loyaltyActive } = props;
   let standardPrice = `${product.price}`;
   if (free) {
     standardPrice = 'FREE';
-  } else if (discount) {
+  } else if (discount || loyaltyActive) {
     standardPrice = `${redPrice}`;
   }
   return (
