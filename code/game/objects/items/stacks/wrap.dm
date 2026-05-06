@@ -143,18 +143,23 @@
 			return ITEM_INTERACT_BLOCKING
 		if(use(1))
 			var/obj/item/delivery/small/parcel = new(get_turf(item.loc))
+			var/size = round(item.w_class)
+			if(istype(item, /obj/item/disk))
+				parcel.base_icon_state = "deliveryfloppy"
+				parcel.name = "floppy disk parcel"
+			else if(istype(item, /obj/item/old_master_painting))
+				parcel.icon = 'icons/obj/artheist.dmi'
+				parcel.base_icon_state = "package-wide"
+				parcel.name = "comically large parcel"
+				parcel.inhand_icon_state = "package-wide"
+			else
+				parcel.base_icon_state = "deliverypackage[size]"
+				parcel.name = "[weight_class_to_text(size)] parcel"
 			if(user.Adjacent(item))
 				parcel.add_fingerprint(user)
 				item.add_fingerprint(user)
 				user.put_in_hands(parcel)
 			item.forceMove(parcel)
-			var/size = round(item.w_class)
-			if(istype(item, /obj/item/disk))
-				parcel.base_icon_state = "deliveryfloppy"
-				parcel.name = "floppy disk parcel"
-			else
-				parcel.base_icon_state = "deliverypackage[size]"
-				parcel.name = "[weight_class_to_text(size)] parcel"
 			parcel.update_weight_class(size)
 			size = min(size, 5)
 			parcel.update_icon()
