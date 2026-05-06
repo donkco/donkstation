@@ -131,7 +131,7 @@
 	var/possible_wound_bonus = honorable_boxer ? 0 : CANT_WOUND
 
 	// Determines damage dealt on a punch. Against a boxing defender, we apply our skill bonus.
-	var/damage = rand(lower_force, upper_force)
+	var/damage = active_arm.get_unarmed_damage(attacker)
 
 	// Attack verbs for our visible chat messages.
 	var/current_atk_verb = "punches"
