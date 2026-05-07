@@ -13,6 +13,10 @@ export type Objective = {
   explanation: string;
   // Whether or not this objective is completed
   complete: BooleanLike;
+  // An alternate path to completion, if the objective has one
+  secondary_explanation?: string;
+  // Whether completing the secondary objective also counts as a win
+  secondary_also_wins?: BooleanLike;
 };
 
 type ObjectivePrintoutProps = {
@@ -49,6 +53,15 @@ export const ObjectivePrintout = (props: ObjectivePrintoutProps) => {
             <Stack.Item fontSize={objectiveTextSize} key={objective.count}>
               {objectivePrefix || '#'}
               {objective.count}: {objective.explanation}
+              {!!objective.secondary_explanation && (
+                <Stack.Item
+                  ml={2}
+                  mt={0.5}
+                  textColor={objective.secondary_also_wins ? 'good' : 'average'}
+                >
+                  ↳ Or: {objective.secondary_explanation}
+                </Stack.Item>
+              )}
             </Stack.Item>
           ))}
       </Stack.Item>
