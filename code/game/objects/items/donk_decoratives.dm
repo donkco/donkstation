@@ -37,8 +37,10 @@
 		return
 
 	if(vase_remenants?.len)
-		for(var/atom/remenant in vase_remenants)
-			new remenant(loc)
+		for(var/remenant in vase_remenants)
+			var/obj/item/spawned_piece = new remenant(loc)
+			spawned_piece.pixel_x = rand(-8,8)
+			spawned_piece.pixel_y = rand(-8,8)
 	if(break_sound)
 		playsound(src, break_sound, 100, TRUE)
 
@@ -64,10 +66,11 @@
 	icon_state = "ming_vase"
 	max_integrity = 3
 	damage_deflection = 3
+	///These dont seem to work right now, but we dont have the ming shard icons yet so we'll fix it later.
 	vase_remenants = list(
-		/obj/item/pot_shard,
-		/obj/item/pot_shard,
-		/obj/item/pot_shard,
+		/obj/item/pot_shard/ming,
+		/obj/item/pot_shard/ming,
+		/obj/item/pot_shard/ming,
 	)
 	break_sound = 'sound/effects/glass/glassbr1.ogg'
 
@@ -203,6 +206,18 @@
 		span_warning("You smash [src] against [target]!"),
 	)
 	take_damage(max_integrity + 1, BRUTE, sound_effect = FALSE, damage_flag = 0)
+
+/obj/item/pot_shard/ming
+	icon = 'icons/obj/fluff/flora/pot_stuff.dmi'
+	icon_state = "ming_shard_1"
+
+/obj/item/pot_shard/ming/Initialize(mapload)
+	. = ..()
+	update_appearance(UPDATE_ICON_STATE)
+
+/obj/item/pot_shard/ming/update_icon_state()
+	. = ..()
+	icon_state = "ming_shard_[rand(1,16)]"
 
 /obj/item/space_prism
 	name = "space prism"
