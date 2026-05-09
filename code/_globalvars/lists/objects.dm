@@ -4,6 +4,9 @@ GLOBAL_LIST_EMPTY(cable_list)
 /// List of all portals
 GLOBAL_LIST_EMPTY(portals)
 
+/// List of all Ming vases on the station for objective tracking
+GLOBAL_LIST_EMPTY(ming_vases)
+
 /// List of all curtains for button tracking
 GLOBAL_LIST_EMPTY(curtains)
 

@@ -192,6 +192,12 @@
 		kill_objective.find_target()
 		return kill_objective
 
+	///This is kind of shit, but until we know more about what Kryson wants with objective selection I don't want to fuck with this too much. We should refactor objective selection down the line because this stinks.
+	if(prob(50))
+		var/datum/objective/destroy_ming_vase/ming_obj = new()
+		ming_obj.owner = owner
+		return ming_obj
+
 	var/datum/objective/steal/steal_objective = new()
 	steal_objective.owner = owner
 	steal_objective.find_target()
@@ -268,7 +274,8 @@
 	if(objectives.len) //If the traitor had no objectives, don't need to process this.
 		var/count = 1
 		for(var/datum/objective/objective in objectives)
-			if(!objective.check_completion())
+			var/complete = objective.check_completion() || (objective.secondary_also_wins && objective.check_secondary_completion())
+			if(!complete)
 				traitor_won = FALSE
 			objectives_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] [objective.get_roundend_success_suffix()]"
 			count++

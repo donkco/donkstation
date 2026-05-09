@@ -545,12 +545,16 @@ GLOBAL_LIST_EMPTY(antagonists)
 	var/list/objective_data = list()
 	//all obj
 	for(var/datum/objective/objective in objectives)
-		objective_data += list(list(
+		var/list/entry = list(
 			"count" = objective_count,
 			"name" = objective.objective_name,
 			"explanation" = objective.explanation_text,
 			"complete" = objective.completed,
-		))
+		)
+		if(objective.secondary_explanation_text)
+			entry["secondary_explanation"] = objective.secondary_explanation_text
+			entry["secondary_also_wins"] = objective.secondary_also_wins
+		objective_data += list(entry)
 		objective_count++
 	return objective_data
 

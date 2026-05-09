@@ -15,6 +15,19 @@
 	can_weld_shut = FALSE
 	lid_icon_state = "cardboardopen"
 
+/// Filling the box with packing peanuts protects sensitive contents from nearby explosion shockwaves.
+/obj/structure/closet/crate/cardboard/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(!istype(tool, /obj/item/packing_peanuts))
+		return ..()
+	if(flags_1 & PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION)
+		balloon_alert(user, "already padded!")
+		return ITEM_INTERACT_SUCCESS
+	user.transferItemToLoc(tool, null)
+	qdel(tool)
+	flags_1 |= PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION
+	balloon_alert(user, "filled with packing peanuts")
+	return ITEM_INTERACT_SUCCESS
+
 /obj/structure/closet/crate/cardboard/mothic
 	name = "\improper Mothic Fleet box"
 	desc = "For holding moths, presumably."

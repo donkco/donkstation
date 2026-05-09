@@ -33,6 +33,10 @@ SUBSYSTEM_DEF(explosions)
 	/// List of turfs to throw the contents of... AFTER the next explosion processes
 	/// This avoids order of operations errors and shit
 	var/list/held_throwturf = list()
+	/// Associative list of [/atom/movable] -> sensitivity_radius for explosion-sensitive objects.
+	/// Populated by [/datum/element/explosion_sensitive]. After each explosion, any object within
+	/// light_impact_range + sensitivity_radius is destroyed unless a container shields it.
+	var/list/sensitive_objects = list()
 
 	var/list/low_mov_atom = list()
 	var/list/med_mov_atom = list()
@@ -477,6 +481,24 @@ ADMIN_VERB(check_bomb_impacts, R_DEBUG, "Check Bomb Impact", "See what the effec
 	explosion_index += 1
 
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_EXPLOSION, epicenter, devastation_range, heavy_impact_range, light_impact_range, took, orig_dev_range, orig_heavy_range, orig_light_range, explosion_cause, explosion_index)
+
+	// Check explosion-sensitive objects registered via the explosion_sensitive element.
+	for(var/atom/movable/sensitive_obj as anything in sensitive_objects)
+		var/turf/obj_turf = get_turf(sensitive_obj)
+		if(!obj_turf || obj_turf.z != epicenter.z)
+			continue
+		var/radius = sensitive_objects[sensitive_obj]
+		if(get_dist(epicenter, obj_turf) > light_impact_range + radius)
+			continue
+		// Walk up the container chain — if anything shields sensitive object destruction, skip.
+		var/protected = FALSE
+		var/atom/holder = sensitive_obj.loc
+		while(holder && !isturf(holder))
+			if(holder.flags_1 & PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION)
+				protected = TRUE
+				break
+			holder = holder.loc
+		SEND_SIGNAL(sensitive_obj, COMSIG_ATOM_SENSITIVE_NEARBY_EXPLOSION, epicenter, devastation_range, heavy_impact_range, light_impact_range, explosion_cause, protected)
 
 // Explosion SFX defines...
 /// The probability that a quaking explosion will make the station creak per unit. Maths!

@@ -16,6 +16,10 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 	var/martyr_compatible = FALSE //If the objective is compatible with martyr objective, i.e. if you can still do it while dead.
 	///can this be granted by admins?
 	var/admin_grantable = FALSE
+	/// If non-null, this objective has a secondary goal shown inline at roundend.
+	var/secondary_explanation_text = null
+	/// If TRUE, completing the secondary goal alone counts as full completion of this objective.
+	var/secondary_also_wins = FALSE
 
 /datum/objective/New(text)
 	if(text)
@@ -96,11 +100,22 @@ GLOBAL_LIST(admin_objective_list) //Prefilled admin assignable objective list
 /datum/objective/proc/check_completion()
 	return completed
 
-/// Provides a string describing what a good job you did or did not do
+/// Returns TRUE if the secondary goal of this objective has been completed.
+/// Override in subtypes that set secondary_explanation_text.
+/datum/objective/proc/check_secondary_completion()
+	return FALSE
+
+/// Provides a string describing what a good job you did or did not do.
+/// Appends secondary goal result inline if this objective has one.
 /datum/objective/proc/get_roundend_success_suffix()
 	if(no_failure)
-		return "" // Just print the objective with no success/fail evaluation, as it has no mechanical backing
-	return check_completion() ? span_greentext("Success!") : span_redtext("Fail.")
+		return ""
+	var/primary_complete = check_completion()
+	var/secondary_complete = secondary_explanation_text ? check_secondary_completion() : FALSE
+	var/result = (primary_complete || (secondary_complete && secondary_also_wins)) ? span_greentext("Success!") : span_redtext("Fail.")
+	if(secondary_explanation_text)
+		result += "<br>&nbsp;&nbsp;&nbsp;↳ [secondary_explanation_text] [secondary_complete ? span_boldgreentext("Success!") : span_redtext("Fail.")]"
+	return result
 
 /datum/objective/proc/is_unique_objective(possible_target, dupe_search_range)
 	if(!islist(dupe_search_range))
@@ -628,7 +643,8 @@ GLOBAL_LIST_EMPTY(possible_items)
 /datum/objective/steal/get_target()
 	return steal_target
 
-/datum/objective/steal/find_target(dupe_search_range, list/blacklist)
+/// Picks a valid [/datum/objective_item] from the pool for this objective's owner, without applying it.
+/datum/objective/steal/proc/pick_item(dupe_search_range)
 	var/list/datum/mind/owners = get_owners()
 	if(!dupe_search_range)
 		dupe_search_range = get_owners()
@@ -638,12 +654,13 @@ GLOBAL_LIST_EMPTY(possible_items)
 			continue
 		if(possible_item.objective_type != OBJECTIVE_ITEM_TYPE_NORMAL)
 			continue
-		if(!is_unique_objective(possible_item.targetitem,dupe_search_range))
+		if(!is_unique_objective(possible_item.targetitem, dupe_search_range))
 			continue
 		approved_targets += possible_item
-	if (length(approved_targets))
-		return set_target(pick(approved_targets))
-	return set_target(null)
+	return length(approved_targets) ? pick(approved_targets) : null
+
+/datum/objective/steal/find_target(dupe_search_range, list/blacklist)
+	return set_target(pick_item(dupe_search_range))
 
 /datum/objective/steal/proc/set_target(datum/objective_item/item)
 	if(item)

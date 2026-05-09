@@ -76,6 +76,7 @@
 	smoothing_groups = SMOOTH_GROUP_PLYWOOD_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
 	canSmoothWith = SMOOTH_GROUP_PLYWOOD_WALLS
 
+/*
 /turf/closed/wall/veneer
 	name = "veneer wall"
 	desc = "A layer of luxury, just as thick as it needs to be."
@@ -90,3 +91,4 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_VENEER_WALLS + SMOOTH_GROUP_WALLS + SMOOTH_GROUP_CLOSED_TURFS
 	canSmoothWith = SMOOTH_GROUP_VENEER_WALLS
+*/
