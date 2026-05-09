@@ -263,7 +263,7 @@
 	name = "gracile fowl statuette"
 	icon_state = "statuette-goose"
 
-	custom_materials = list(/datum/material/marble = SHEET_MATERIAL_AMOUNT)
+	custom_materials = list(/datum/material/rock/marble = SHEET_MATERIAL_AMOUNT)
 
 /obj/item/typewriter
 	name = "typewriter"

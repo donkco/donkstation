@@ -1,20 +1,22 @@
-/datum/material/marble
+/datum/material/rock/marble
 	name = "marble"
 	desc = "Only the best is good enough."
 
 	color = "#f8f7f4"
 	texture_layer_icon_state = "marble"
-
-	categories = list(
-		MAT_CATEGORY_RIGID = TRUE,
-		MAT_CATEGORY_BASE_RECIPES = TRUE,
-		MAT_CATEGORY_ITEM_MATERIAL = TRUE,
-		MAT_CATEGORY_ITEM_MATERIAL_COMPLEMENTARY = TRUE,
-		)
+	mat_flags = MATERIAL_BASIC_RECIPES | MATERIAL_CLASS_RIGID
+	mat_properties = list(
+		MATERIAL_DENSITY = 3,
+		MATERIAL_HARDNESS = 4,
+		MATERIAL_FLEXIBILITY = 0,
+		MATERIAL_REFLECTIVITY = 6,
+		MATERIAL_ELECTRICAL = 0,
+		MATERIAL_THERMAL = 1,
+		MATERIAL_CHEMICAL = 0,
+		MATERIAL_BEAUTY = 0.8,
+	)
 	sheet_type = /obj/item/stack/sheet/marble
 	value_per_unit = 10 * SPACE_CASH / SHEET_MATERIAL_AMOUNT
-	armor_modifiers = list(MELEE = 0.5, BULLET = 0.5, LASER = 1.15, ENERGY = 0.5, BOMB = 0.5, BIO = 0.25, FIRE = 1.5, ACID = 0.5)
-	beauty_modifier = 0.6
 	item_sound_override = SFX_POTTED_PLANT_DROP
 	turf_sound_override = FOOTSTEP_CONCRETE
 	mat_rust_resistance = RUST_RESISTANCE_BASIC
@@ -26,17 +28,17 @@
 	color = "#959392"
 	texture_layer_icon_state = "concrete"
 
-	categories = list(
-		MAT_CATEGORY_RIGID = TRUE,
-		MAT_CATEGORY_BASE_RECIPES = TRUE,
-		MAT_CATEGORY_ITEM_MATERIAL = TRUE,
-		MAT_CATEGORY_ITEM_MATERIAL_COMPLEMENTARY = TRUE,
-		)
+	mat_flags = MATERIAL_BASIC_RECIPES | MATERIAL_CLASS_RIGID
+	mat_properties = list(
+		MATERIAL_DENSITY = 6,
+		MATERIAL_HARDNESS = 7,
+		MATERIAL_FLEXIBILITY = 0,
+		MATERIAL_REFLECTIVITY = 3,
+		MATERIAL_ELECTRICAL = 0,
+		MATERIAL_THERMAL = 1,
+		MATERIAL_CHEMICAL = 0,
+	)
 	value_per_unit = 0.1 * SPACE_CASH / SHEET_MATERIAL_AMOUNT
-	armor_modifiers = list(MELEE = 1.3, BULLET = 1.5, LASER = 1.15, ENERGY = 0.75, BOMB = 1.5, BIO = 0.25, FIRE = 2, ACID = 0.5)
-	added_slowdown = 0.1
-	integrity_modifier = 3
-	beauty_modifier = -0.03
 	item_sound_override = SFX_POTTED_PLANT_DROP
 	turf_sound_override = FOOTSTEP_CONCRETE
 	mat_rust_resistance = RUST_RESISTANCE_REINFORCED

@@ -4,7 +4,7 @@ This subsystem exists to manages character archetype datum singletons.
 
 SUBSYSTEM_DEF(characters)
 	name = "Characters"
-	flags = SS_NO_FIRE
+	ss_flags = SS_NO_FIRE
 	///Dictionary of archetype.type || archetype ref
 	var/list/all_archetypes = list()
 

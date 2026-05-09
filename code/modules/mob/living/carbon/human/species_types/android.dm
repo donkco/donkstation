@@ -107,7 +107,7 @@
 ///When an android and a monkey love each other very much...
 /datum/species/android/monkey
 	name = "Robot Monkey"
-	id = SPECIES_ANDROID
+	id = SPECIES_ANDROIDMONKEY
 	examine_limb_id = SPECIES_MONKEY
 	inherent_traits = list(
 		TRAIT_GENELESS,

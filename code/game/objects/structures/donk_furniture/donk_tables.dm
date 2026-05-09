@@ -54,7 +54,7 @@
 
 	buildstack = /obj/item/stack/sheet/marble
 
-	custom_materials = list(/datum/material/marble = SHEET_MATERIAL_AMOUNT)
+	custom_materials = list(/datum/material/rock/marble = SHEET_MATERIAL_AMOUNT)
 
 /obj/structure/table/shelves
 	name = "shelves"
