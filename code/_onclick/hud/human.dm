@@ -305,3 +305,19 @@
 	icon_full = "template_small"
 	screen_loc = ui_belt
 	slot_id = ITEM_SLOT_BELT
+
+/datum/inventory_slot/human/l_trinket
+	name = "trinket"
+	icon_state = "belt"
+	icon_full = "template_small"
+	screen_loc = ui_l_trinket
+	slot_id = ITEM_SLOT_L_TRINKET
+	screen_group = HUD_GROUP_TOGGLEABLE_INVENTORY
+
+/datum/inventory_slot/human/r_trinket
+	name = "trinket"
+	icon_state = "belt"
+	icon_full = "template_small"
+	screen_loc = ui_r_trinket
+	slot_id = ITEM_SLOT_R_TRINKET
+	screen_group = HUD_GROUP_TOGGLEABLE_INVENTORY
