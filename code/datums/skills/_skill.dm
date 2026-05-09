@@ -12,6 +12,8 @@ GLOBAL_LIST_INIT(skill_types, subtypesof(/datum/skill))
 	var/list/levelUpMessages = list()
 	///List associating different messages that appear on level up with different levels
 	var/list/levelDownMessages = list()
+	///If true then this skill is abstract, and you shouldnt get it
+	var/is_abstract = FALSE
 
 /datum/skill/proc/get_skill_modifier(modifier, level)
 	return modifiers[modifier][level] //Levels range from 1 (None) to 7 (Legendary)
