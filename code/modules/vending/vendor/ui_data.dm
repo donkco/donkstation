@@ -128,6 +128,7 @@
 		.["ad"] = ad_list[rand(1, ad_list.len)]
 
 	.["extended_inventory"] = extended_inventory
+	.["loyalty_discount_pending"] = loyalty_discount_pending
 
 /obj/machinery/vending/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()

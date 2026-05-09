@@ -239,6 +239,8 @@
 			for(var/behavior in recipe.tool_behaviors)
 				recipe_time += dynamic_recipe_time * found_behaviors[behavior]
 
+		recipe_time *= get_craft_time_multiplier(crafter, recipe)
+
 		if(!do_after(crafter, round(recipe_time, 0.1 SECONDS), target = crafter))
 			return "."
 		contents = get_surroundings(crafter, recipe.blacklist)
@@ -296,6 +298,10 @@
 	if(!PERFORM_ALL_TESTS(crafting))
 		SSblackbox.record_feedback("tally", "object_crafted", 1, result.type)
 	return result //Send the item back to whatever called this proc so it can handle whatever it wants to do with the new item
+
+/// Returns a multiplier applied to the crafting time of a recipe. Override to modify craft speed.
+/datum/component/personal_crafting/proc/get_craft_time_multiplier(atom/crafter, datum/crafting_recipe/recipe)
+	return 1
 
 ///This proc performs all the necessary conditional control statement to ensure that the object is allowed to be crafted by the crafter.
 /datum/component/personal_crafting/proc/perform_all_checks(atom/crafter, datum/crafting_recipe/recipe, list/contents, check_tools_last = FALSE)

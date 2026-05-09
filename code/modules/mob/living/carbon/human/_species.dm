@@ -827,7 +827,7 @@ GLOBAL_LIST_EMPTY(features_by_species)
 	lower_unarmed_damage =  min(lower_unarmed_damage + (user.mind?.get_skill_level(/datum/skill/athletics) || 0), upper_unarmed_damage)
 
 	// The actual damage roll. May still be augmented by further factors.
-	var/damage = rand(lower_unarmed_damage, upper_unarmed_damage)
+	var/damage = rand(lower_unarmed_damage, upper_unarmed_damage) * attacking_bodypart.get_unarmed_damage_multiplier(user)
 	// Limb accuracy is used to determine miss probabilities (higher the value, the less likely you are to miss), armor penetration (if entitled) and the possible result from a stagger combo hit.
 	var/limb_accuracy = attacking_bodypart.unarmed_effectiveness
 	// Limb sharpness determines the type of wounds this unarmed strike could possibly roll. By default, most limbs are blunt and have no sharpness.

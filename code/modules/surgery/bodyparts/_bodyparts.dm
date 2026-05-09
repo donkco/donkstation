@@ -905,6 +905,17 @@
 /obj/item/bodypart/proc/get_damage()
 	return brute_dam + burn_dam
 
+/// Returns the raw unarmed damage roll for this bodypart, scaled by any applicable multipliers.
+/obj/item/bodypart/proc/get_unarmed_damage(mob/owner = null)
+	return rand(unarmed_damage_low, unarmed_damage_high) * get_unarmed_damage_multiplier(owner)
+
+/// Returns a multiplier applied to unarmed damage from this bodypart.
+/// Check traits on the owner here to adjust punch damage.
+/obj/item/bodypart/proc/get_unarmed_damage_multiplier(mob/owner)
+	. = 1
+	if(HAS_TRAIT(owner, TRAIT_STREETFIGHTER))
+		. *= 1.25
+
 //Checks disabled status thresholds
 /obj/item/bodypart/proc/update_disabled(update_limbs = TRUE)
 	SHOULD_CALL_PARENT(TRUE)

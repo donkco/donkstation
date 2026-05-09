@@ -38,6 +38,17 @@
 /obj/machinery/vending/on_set_panel_open(old_value)
 	update_appearance(UPDATE_OVERLAYS)
 
+/obj/machinery/vending/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(istype(tool, /obj/item/card/donk_loyalty))
+		if(loyalty_discount_pending)
+			balloon_alert(user, "discount already pending!")
+			return ITEM_INTERACT_SUCCESS
+		loyalty_discount_pending = TRUE
+		balloon_alert(user, "25% discount applied!")
+		speak("Thank you for being a valued Donk Co. Club member! A 25% discount has been applied to your next purchase.")
+		return ITEM_INTERACT_SUCCESS
+	return ..()
+
 //=======================================RESTOCKING==========================================
 /**
  * Is the passed in user allowed to load this vending machines compartments? This only is ran if we are using a /obj/item/storage/bag to load the vending machine, and not a dedicated restocker.
