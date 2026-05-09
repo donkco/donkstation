@@ -40,7 +40,7 @@
 	/// If FALSE, lore replaces the atom's desc for qualified users via COMSIG_ATOM_EXAMINE_LORE.
 	var/show_only_on_examine_more
 
-/datum/element/lore/Attach(datum/target, list/entries, is_secret = FALSE, show_only_on_examine_more = TRUE)
+/datum/element/lore/Attach(datum/target, list/entries, is_secret = TRUE, show_only_on_examine_more = TRUE)
 	. = ..()
 	if(!isatom(target))
 		return ELEMENT_INCOMPATIBLE
