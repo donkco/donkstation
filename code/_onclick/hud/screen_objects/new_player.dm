@@ -47,6 +47,8 @@
 	var/highlighted = FALSE
 	///Should this button play the select sound?
 	var/select_sound_play = TRUE
+	///Should it flick when pressed?
+	var/should_flick = TRUE
 
 /atom/movable/screen/lobby/button/Click(location, control, params)
 	if(usr != get_mob())
@@ -59,7 +61,8 @@
 
 	if(!enabled)
 		return
-	flick("[base_icon_state]_pressed", src)
+	if(should_flick)
+		flick("[base_icon_state]_pressed", src)
 	if(select_sound_play)
 		var/sound/ui_select_sound = sound('sound/misc/menu/ui_select1.ogg')
 		ui_select_sound.frequency = get_rand_frequency_low_range()
@@ -116,6 +119,7 @@
 	icon_state = "character_setup_disabled"
 	base_icon_state = "character_setup"
 	enabled = FALSE
+	always_available = FALSE
 
 /atom/movable/screen/lobby/button/character_setup/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
@@ -716,6 +720,179 @@
 	if(time_remaining == -10)
 		return "DELAYED"
 	return "SOON"
+
+///A plain screen atom holding a baked character appearance for a slot preview
+/atom/movable/screen/lobby/char_slot_preview
+	icon = 'icons/hud/lobby/character_select.dmi'
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	always_available = FALSE
+	vis_flags = VIS_INHERIT_PLANE
+	pixel_x = 16
+	pixel_y = 5
+	///The dummy mob used to render the appearance
+	var/mob/living/carbon/human/dummy/body
+	///The owning slot
+	var/atom/movable/screen/lobby/button/character_slot/owning_slot
+	///Whether this slot currently has character data to display
+	var/has_character_data = FALSE
+
+	var/datum/preferences/prefs
+
+/atom/movable/screen/lobby/char_slot_preview/Destroy()
+	QDEL_NULL(body)
+	return ..()
+
+/atom/movable/screen/lobby/char_slot_preview/update_icon_state()
+	. = ..()
+	icon_state = null
+
+///Updates state vars from prefs and triggers an icon update
+/atom/movable/screen/lobby/char_slot_preview/proc/update_render()
+	has_character_data = !isnull(prefs.savefile.get_entry("character[owning_slot.slot_index]"))
+	if(has_character_data)
+		if(isnull(body))
+			body = new
+		else
+			body.wipe_state()
+		appearance = prefs.render_new_preview_appearance(body, TRUE )
+		pixel_x = 16
+		pixel_y = 5
+	else
+		cut_overlays()
+	plane = SPLASHSCREEN_PLANE
+	layer = LOBBY_MENU_LAYER + 0.1
+	vis_flags = VIS_INHERIT_ID
+
+
+	update_appearance(UPDATE_ICON)
+	owning_slot?.update_appearance(UPDATE_ICON)
+
+///Static background icon rendered behind the character preview
+/atom/movable/screen/lobby/char_slot_background
+	icon = 'icons/hud/lobby/character_select.dmi'
+	icon_state = "slot_background"
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	always_available = FALSE
+	vis_flags = VIS_INHERIT_PLANE | VIS_INHERIT_ID
+	appearance_flags = NO_CLIENT_COLOR | PIXEL_SCALE | RESET_COLOR
+	layer = LOBBY_MENU_LAYER + 0.05
+
+///Lobby button representing a single character save slot
+/atom/movable/screen/lobby/button/character_slot
+	icon = 'icons/hud/lobby/character_select.dmi'
+	icon_state = "slot_empty"
+	base_icon_state = "slot"
+	always_available = FALSE
+	layer = LOBBY_MENU_LAYER + 0.2
+	mouse_opacity = 2
+	///Which save slot this button represents
+	var/slot_index = 0
+	///Character preview rendered overtop of this button
+	var/atom/movable/screen/lobby/char_slot_preview/preview
+	///Background icon rendered behind the character preview
+	var/atom/movable/screen/lobby/char_slot_background/background
+
+/atom/movable/screen/lobby/button/character_slot/Destroy()
+	if(preview?.prefs)
+		UnregisterSignal(preview.prefs, list(COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, COMSIG_PREFS_CHARACTER_SLOT_SAVED, COMSIG_PREFS_CHARACTER_SLOT_DELETED))
+	QDEL_NULL(preview)
+	QDEL_NULL(background)
+	return ..()
+
+/atom/movable/screen/lobby/button/character_slot/update_icon(updates)
+	should_flick = TRUE
+	if(highlighted)
+		animate(src, transform = matrix().Scale(2,2), time = 0.15 SECONDS, easing = CUBIC_EASING|EASE_OUT)
+		if(preview)
+			animate(preview, pixel_y = -4, time = 0.15 SECONDS, easing = CUBIC_EASING|EASE_OUT)
+	else
+		animate(src, transform = matrix(), time = 0.1 SECONDS, easing = CUBIC_EASING|EASE_IN)
+		if(preview)
+			animate(preview, pixel_y = 5, time = 0.1 SECONDS, easing = CUBIC_EASING|EASE_IN)
+	if(!preview?.has_character_data)
+		base_icon_state = "slot_empty"
+		icon_state = "slot_empty"
+	else if(enabled && slot_index == hud?.mymob?.canon_client?.prefs?.default_slot)
+		base_icon_state = "slot_active"
+		icon_state = "slot_active"
+		should_flick = FALSE
+	else
+		base_icon_state = "slot"
+		return ..()
+
+/atom/movable/screen/lobby/button/character_slot/Click(location, control, params)
+	. = ..()
+	if(!.)
+		return
+	var/datum/preferences/prefs = hud.mymob.canon_client.prefs
+	if(slot_index != prefs.default_slot)
+		// Switch to this slot; signals will update all button appearances
+		prefs.switch_to_slot(slot_index)
+		//if the slot is empty just open it too brother
+		if(!preview?.has_character_data)
+			prefs.character_contract.ui_interact(hud.mymob)
+	// Open the contract if this is (or just became) the active slot,
+	else if(slot_index == prefs.default_slot)
+		prefs.character_contract.ui_interact(hud.mymob)
+
+///Creates a preview for this slot, showing an empty state if there is no save data
+/atom/movable/screen/lobby/button/character_slot/proc/build_preview(client/show_to, datum/hud/hud)
+	var/datum/preferences/prefs = show_to.prefs
+	var/has_data = !isnull(prefs.savefile.get_entry("character[slot_index]"))
+	var/saved_slot = prefs.default_slot
+	if(has_data && slot_index != saved_slot)
+		prefs.load_character(slot_index)
+	background = new /atom/movable/screen/lobby/char_slot_background(our_hud = hud)
+	vis_contents += background
+	preview = new /atom/movable/screen/lobby/char_slot_preview(our_hud = hud)
+	preview.owning_slot = src
+	preview.prefs = prefs
+	preview.update_render()
+
+
+	if(has_data && slot_index != saved_slot)
+		prefs.load_character(saved_slot)
+	vis_contents += preview
+
+	update_appearance(UPDATE_ICON)
+
+	RegisterSignal(prefs, COMSIG_PREFS_SWITCHED_TO_CHARACTER_SLOT, PROC_REF(on_prefs_switched_to_slot))
+	RegisterSignal(prefs, COMSIG_PREFS_CHARACTER_SLOT_SAVED, PROC_REF(on_prefs_slot_saved))
+	RegisterSignal(prefs, COMSIG_PREFS_CHARACTER_SLOT_DELETED, PROC_REF(on_prefs_slot_deleted))
+
+	return
+
+///Re-renders this slot's preview using the currently loaded slot data
+/atom/movable/screen/lobby/button/character_slot/proc/refresh_preview()
+	preview?.update_render()
+
+/// Called when the active slot switches; updates icon state for all buttons, re-renders if this slot became active
+/atom/movable/screen/lobby/button/character_slot/proc/on_prefs_switched_to_slot(datum/preferences/prefs, new_slot)
+	SIGNAL_HANDLER
+	update_appearance(UPDATE_ICON)
+	if(new_slot == slot_index)
+		INVOKE_ASYNC(preview, TYPE_PROC_REF(/atom/movable/screen/lobby/char_slot_preview, update_render))
+
+/// Called when a slot's data is saved; re-renders if it's our slot
+/atom/movable/screen/lobby/button/character_slot/proc/on_prefs_slot_saved(datum/preferences/prefs, saved_slot)
+	SIGNAL_HANDLER
+	if(saved_slot == slot_index)
+		INVOKE_ASYNC(preview, TYPE_PROC_REF(/atom/movable/screen/lobby/char_slot_preview, update_render))
+
+/// Called just before a slot is deleted; shows empty state if it was our slot
+/atom/movable/screen/lobby/button/character_slot/proc/on_prefs_slot_deleted(datum/preferences/prefs, deleted_slot)
+	SIGNAL_HANDLER
+	if(deleted_slot == slot_index)
+		INVOKE_ASYNC(preview, TYPE_PROC_REF(/atom/movable/screen/lobby/char_slot_preview, update_render))
+
+
+
+
+
+
+
+
+
 
 #undef OVERLAY_X_DIFF
 #undef OVERLAY_Y_DIFF

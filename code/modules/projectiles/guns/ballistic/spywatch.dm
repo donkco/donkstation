@@ -20,7 +20,7 @@
 
 /obj/item/spywatch/examine(mob/user)
 	. = ..()
-	. += span_info("Station Time: [station_time_timestamp()]")
+	. += span_info("Station Time: [server_timestamp(ic_time = TRUE, twelve_hour_clock = user.client?.prefs.read_preference(/datum/preference/toggle/twelve_hour))]")
 
 /obj/item/spywatch/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	. = ..()

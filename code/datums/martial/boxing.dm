@@ -110,7 +110,6 @@
 
 	//The values between which damage is rolled for punches
 	var/lower_force = active_arm.unarmed_damage_low
-	var/upper_force = active_arm.unarmed_damage_high
 
 	//Determines knockout potential and armor penetration (if that matters)
 	var/base_unarmed_effectiveness = active_arm.unarmed_effectiveness

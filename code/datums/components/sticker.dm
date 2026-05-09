@@ -140,7 +140,7 @@
 
 	. = NONE
 
-	peel()
+	INVOKE_ASYNC(src, PROC_REF(peel))
 
 	return COMPONENT_CLEANED|COMPONENT_CLEANED_GAIN_XP
 
