@@ -23,17 +23,17 @@ GLOBAL_LIST_INIT(skill_types, subtypesof(/datum/skill))
 /datum/skill/New()
 	. = ..()
 	levelUpMessages = list(span_nicegreen("What the hell is [name]? Tell an admin if you see this message."), //This first index shouldn't ever really be used
-	span_nicegreen("I'm starting to figure out what [name] really is!"),
-	span_nicegreen("I'm getting a little better at [name]!"),
-	span_nicegreen("I'm getting much better at [name]!"),
-	span_nicegreen("I feel like I've become quite proficient at [name]!"),
+	span_nicegreen("I'm still pretty terrible at [name], but at least I'm not completely hopeless anymore."),
+	span_nicegreen("I've finally reached an average level at [name]! No longer embarrassingly bad at this."),
+	span_nicegreen("I'm getting better than average at [name]! Things are starting to click."),
+	span_nicegreen("I feel quite skilled at [name] now. I'm definitely above most people."),
 	span_nicegreen("After lots of practice, I've begun to truly understand the intricacies and surprising depth behind [name]. I now consider myself a master [title]."),
-	span_nicegreen("Through incredible determination and effort, I've reached the peak of my [name] abiltities. I'm finally able to consider myself a legendary [title]!") )
+	span_nicegreen("Through incredible determination and effort, I've reached the peak of my [name] abilities. I'm finally able to consider myself a legendary [title]!") )
 	levelDownMessages = list(span_nicegreen("I have somehow completely lost all understanding of [name]. Please tell an admin if you see this."),
-	span_nicegreen("I'm starting to forget what [name] really even is. I need more practice..."),
-	span_nicegreen("I'm getting a little worse at [name]. I'll need to keep practicing to get better at it..."),
-	span_nicegreen("I'm getting a little worse at [name]..."),
-	span_nicegreen("I'm losing my [name] expertise ...."),
+	span_nicegreen("I'm getting really bad at [name] again. At least I still remember the basics..."),
+	span_nicegreen("I'm slipping back to average at [name]. All that progress is fading away..."),
+	span_nicegreen("I'm losing my edge at [name]. I'm no longer better than average..."),
+	span_nicegreen("I'm losing my skill at [name]. I'll need to practice hard to get back up."),
 	span_nicegreen("I feel like I'm losing my mastery of [name]."),
 	span_nicegreen("I feel as though my legendary [name] skills have deteriorated. I'll need more intense training to recover my lost skills.") )
 

@@ -28,14 +28,14 @@
 
 /datum/skill/athletics/New()
 	. = ..()
-	levelUpMessages[SKILL_LEVEL_NOVICE] = span_nicegreen("I am just getting started on my [name] journey! I think I should be able to identify other people who are working to improve their body by sight.")
+	levelUpMessages[SKILL_LEVEL_BAD] = span_nicegreen("I'm still out of shape, but I'm at least getting the hang of [name]! I think I should be able to identify other people who are working to improve their body by sight.")
 
 /datum/skill/athletics/level_gained(datum/mind/mind, new_level, old_level, silent)
 	. = ..()
-	if(new_level >= SKILL_LEVEL_NOVICE && old_level < SKILL_LEVEL_NOVICE)
+	if(new_level >= SKILL_LEVEL_BAD && old_level < SKILL_LEVEL_BAD)
 		ADD_TRAIT(mind, TRAIT_EXAMINE_FITNESS, SKILL_TRAIT)
 
 /datum/skill/athletics/level_lost(datum/mind/mind, new_level, old_level, silent)
 	. = ..()
-	if(old_level >= SKILL_LEVEL_NOVICE && new_level < SKILL_LEVEL_NOVICE)
+	if(old_level >= SKILL_LEVEL_BAD && new_level < SKILL_LEVEL_BAD)
 		REMOVE_TRAIT(mind, TRAIT_EXAMINE_FITNESS, SKILL_TRAIT)
