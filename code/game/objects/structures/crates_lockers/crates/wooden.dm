@@ -13,7 +13,7 @@
 	paint_jobs = null
 	cutting_tool = /obj/item/crowbar
 	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT * 6)
-	flags_1 = parent_type::flags_1 | PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION
+	flags_1 = parent_type::flags_1 | SEISMIC_SAFEGUARD
 
 /obj/structure/closet/crate/wooden/toy
 	name = "toy box"

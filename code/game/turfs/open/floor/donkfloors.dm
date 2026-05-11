@@ -209,6 +209,7 @@
 
 	icon = 'icons/turf/floors/donkfloors/concrete_slab.dmi'
 	icon_state = "concrete_slab-0"
+	base_icon_state = "concrete_slab"
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_SLUDGE_POOL

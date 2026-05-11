@@ -493,7 +493,7 @@ ADMIN_VERB(check_bomb_impacts, R_DEBUG, "Check Bomb Impact", "See what the effec
 		var/protected = FALSE
 		var/atom/holder = sensitive_obj.loc
 		while(holder && !isturf(holder))
-			if(holder.flags_1 & PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION)
+			if(holder.flags_1 & SEISMIC_SAFEGUARD)
 				protected = TRUE
 				break
 			holder = holder.loc

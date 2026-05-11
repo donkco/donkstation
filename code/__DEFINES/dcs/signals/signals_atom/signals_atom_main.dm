@@ -81,7 +81,7 @@
 /// Sent by [/datum/controller/subsystem/explosions] to each explosion-sensitive atom that is within
 /// (light_impact_range + sensitivity_radius) of an explosion but was not directly destroyed.
 /// Args: (turf/epicenter, devastation_range, heavy_impact_range, light_impact_range, explosion_cause, protected)
-/// `protected` is TRUE if a container in the holder chain has [PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION] set.
+/// `protected` is TRUE if a container in the holder chain has [SEISMIC_SAFEGUARD] set.
 #define COMSIG_ATOM_SENSITIVE_NEARBY_EXPLOSION "atom_sensitive_nearby_explosion"
 ///for when an atom has been created through processing (atom/original_atom, list/chosen_processing_option)
 #define COMSIG_ATOM_CREATEDBY_PROCESSING "atom_createdby_processing"

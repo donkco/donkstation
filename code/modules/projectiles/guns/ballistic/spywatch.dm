@@ -1,10 +1,9 @@
 /obj/item/spywatch
 	name = "Wristwatch"
-	desc = "Time is an illusion, but this watch is pretty."
+	desc = "A luxury wristwatch, packed with all the latest quartz timekeeping and LCD technology."
 	slot_flags = ITEM_SLOT_L_TRINKET | ITEM_SLOT_R_TRINKET
 	icon = 'icons/obj/weapons/guns/ballistic.dmi'
 	icon_state = "watch"
-	worn_icon_state = "dread_ipad"
 	w_class = WEIGHT_CLASS_SMALL
 	actions_types = list(/datum/action/cooldown/mob_cooldown/fire_spywatch)
 
@@ -106,14 +105,6 @@
 	pinless = TRUE
 	internal_magazine = TRUE
 
-	load_sound = null
-	load_empty_sound = null
-	rack_sound = null
-	lock_back_sound = null
-	eject_empty_sound = null
-	bolt_drop_sound = null
-
-
 /obj/item/ammo_box/magazine/internal/spywatch
 	name = "spywatch internal magazine"
 	desc = "Oh god, this shouldn't be here"
@@ -123,8 +114,8 @@
 
 ///Casing thats put inside of the spywatch
 /obj/item/ammo_casing/spywatch
-	name = "'Scylla's Kiss' 2mm mollusk toxin casing"
-	desc = "A 2mm bullet casing, a venomous mollusk is painted on the side. Smells fishy."
+	name = "'Scylla's Kiss' 2mm mollusk toxin round"
+	desc = "A 2mm bullet casing, it has a faint smell of the sea..."
 	icon_state = "2mm_casing"
 	caliber = CALIBER_2MM
 	projectile_type = /obj/projectile/bullet/spywatch
@@ -148,8 +139,8 @@
 	return BULLET_ACT_HIT
 
 /obj/item/storage/fancy/spywatchammobox
-	name = "'Scylla's Kiss' 2mm mollusk toxin rounds box"
-	desc = "A fishy smelling box. The mollusk on the side is particularly smug looking."
+	name = "'Scylla's Kiss' 2mm mollusk toxin box"
+	desc = "A small box containing a handful of tiny bullets. Each one is coated with the venom of the infamous zyn snail."
 	icon = 'icons/obj/storage/box.dmi'
 	icon_state = "box_snailtox"
 	base_icon_state = "box_snailtox"

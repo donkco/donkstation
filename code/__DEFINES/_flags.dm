@@ -34,7 +34,7 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 /// should not get harmed if this gets caught by an explosion?
 #define PREVENT_CONTENTS_EXPLOSION_1 (1<<7)
 /// Contents of this atom will not be destroyed by nearby explosions via the explosion_sensitive element
-#define PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION (1<<19)
+#define SEISMIC_SAFEGUARD (1<<19)
 /// Should this object be paintable with very dark colors?
 #define ALLOW_DARK_PAINTS_1 (1<<8)
 /// Should this object be unpaintable?

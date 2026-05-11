@@ -62,8 +62,15 @@
 /obj/item/vase/ming
 	name = "Priceless Ming Vase"
 	desc = "An ancient Chinese vase of immense cultural and monetary value. The placard reads: 'Han Dynasty, circa 200 BC. On indefinite loan from the Donk Co. Private Collection.' Handle with extreme care."
+
 	icon =  'icons/obj/mingvase.dmi'
 	icon_state = "ming_vase"
+	lefthand_file = 'icons/mob/inhands/donk_inhands/donk_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/donk_inhands/donk_righthand.dmi'
+	inhand_icon_state = "ming_vase"
+
+	w_class = WEIGHT_CLASS_BULKY
+
 	max_integrity = 3
 	damage_deflection = 3
 	///These dont seem to work right now, but we dont have the ming shard icons yet so we'll fix it later.
@@ -88,6 +95,7 @@
 	RegisterSignal(src, COMSIG_ATOM_SENSITIVE_NEARBY_EXPLOSION, PROC_REF(on_nearby_explosion))
 	RegisterSignal(src, COMSIG_ITEM_EQUIPPED, PROC_REF(on_ming_equipped))
 	RegisterSignal(src, COMSIG_ITEM_DROPPED, PROC_REF(on_ming_dropped))
+	AddComponent(/datum/component/two_handed, require_twohands = TRUE)
 
 /obj/item/vase/ming/Destroy()
 	GLOB.ming_vases -= src
@@ -206,18 +214,6 @@
 		span_warning("You smash [src] against [target]!"),
 	)
 	take_damage(max_integrity + 1, BRUTE, sound_effect = FALSE, damage_flag = 0)
-
-/obj/item/pot_shard/ming
-	icon = 'icons/obj/fluff/flora/pot_stuff.dmi'
-	icon_state = "ming_shard_1"
-
-/obj/item/pot_shard/ming/Initialize(mapload)
-	. = ..()
-	update_appearance(UPDATE_ICON_STATE)
-
-/obj/item/pot_shard/ming/update_icon_state()
-	. = ..()
-	icon_state = "ming_shard_[rand(1,16)]"
 
 /obj/item/space_prism
 	name = "space prism"
