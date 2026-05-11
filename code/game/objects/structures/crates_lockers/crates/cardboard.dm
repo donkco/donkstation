@@ -17,14 +17,14 @@
 
 /// Filling the box with packing peanuts protects sensitive contents from nearby explosion shockwaves.
 /obj/structure/closet/crate/cardboard/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
-	if(!istype(tool, /obj/item/packing_peanuts))
+	if(!istype(tool, /obj/item/packing_peanut))
 		return ..()
-	if(flags_1 & PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION)
+	if(flags_1 & SEISMIC_SAFEGUARD)
 		balloon_alert(user, "already padded!")
 		return ITEM_INTERACT_SUCCESS
 	user.transferItemToLoc(tool, null)
 	qdel(tool)
-	flags_1 |= PREVENTS_CONTENTS_SENSITIVE_OBJECT_DESTRUCTION
+	flags_1 |= SEISMIC_SAFEGUARD
 	balloon_alert(user, "filled with packing peanuts")
 	return ITEM_INTERACT_SUCCESS
 
