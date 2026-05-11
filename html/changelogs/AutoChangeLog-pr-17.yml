@@ -1,0 +1,7 @@
+author: "Krysonism"
+delete-after: True
+changes:
+  - rscadd: "solder, cybersun soldering pen."
+  - rscadd: "lead material"
+  - bugfix: "assigned some missing variables."
+  - image: "added missing inhands and sprites"
