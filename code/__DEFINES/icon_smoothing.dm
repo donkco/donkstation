@@ -165,8 +165,9 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_SHAFT S_TURF(75) ///turf/open/chasm/shaft
 #define SMOOTH_GROUP_PLASTITANIUM_SCALE S_TURF(76) ///turf/open/floor/plastitanium_tile/scale
 #define SMOOTH_GROUP_SUS_CARPET S_TURF(77) ///turf/open/floor/carpet/sus
+#define SMOOTH_GROUP_FLOOR_CONCRETE S_TURF(78) ///turf/open/floor/concrete (dry and wet)
 
-#define MAX_S_TURF 77 //Always match this value with the one above it.
+#define MAX_S_TURF 78 //Always match this value with the one above it.
 
 #define S_OBJ(num) ("-" + #num + ",")
 /* /obj included */

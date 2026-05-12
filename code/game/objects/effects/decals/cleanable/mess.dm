@@ -1,3 +1,11 @@
+/// Splattered wet concrete that dried in place. Purely cosmetic.
+/obj/effect/decal/cleanable/concrete_spill
+	name = "concrete splatter"
+	desc = "Concrete that spilled and hardened. Someone should chip this up."
+	icon = 'icons/effects/blood.dmi'
+	icon_state = "floor1" // TODO: add icon state
+	beauty = -30
+
 /obj/effect/decal/cleanable/generic
 	name = "clutter"
 	desc = "Someone should clean that up."

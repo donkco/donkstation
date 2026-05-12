@@ -18,6 +18,8 @@
 #define COMSIG_TURF_RESERVATION_RELEASED "turf_reservation_released"
 ///from /turf/open/temperature_expose(datum/gas_mixture/air, exposed_temperature)
 #define COMSIG_TURF_EXPOSE "turf_expose"
+///fired from /turf/open/floor/concrete/wet when scooped by a shovel; received by concrete_drying component to cancel the timer
+#define COMSIG_CONCRETE_WET_SCOOPED "concrete_wet_scooped"
 ///from /turf/proc/immediate_calculate_adjacent_turfs()
 #define COMSIG_TURF_CALCULATED_ADJACENT_ATMOS "turf_calculated_adjacent_atmos"
 ///called when an elevator enters this turf

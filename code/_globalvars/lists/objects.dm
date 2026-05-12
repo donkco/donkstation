@@ -34,6 +34,9 @@ GLOBAL_LIST_EMPTY(deliverybeacontags)
 /// List of all singularity components that exist
 GLOBAL_LIST_EMPTY_TYPED(singularities, /datum/component/singularity)
 
+/// Typecache of turfs that can have wet concrete poured on them (for the concrete mixer and loaded shovel)
+GLOBAL_LIST_INIT(concrete_valid_turfs, typecacheof(list(/turf/open/floor/plating, /turf/open/misc/asteroid)))
+
 GLOBAL_LIST_EMPTY(item_to_design_list)
 
 /// Global list of all non-cooking related crafting recipes.
