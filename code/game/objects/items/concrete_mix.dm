@@ -6,7 +6,7 @@
 	name = "bag of concrete mix"
 	desc = "A bag of dry concrete mix. Add water and stir."
 	icon = 'icons/obj/donk_structures/cement.dmi'
-	icon_state = "concrete_mix" // TODO: add icon state to materials.dmi
+	icon_state = "cement"
 	w_class = WEIGHT_CLASS_NORMAL
 	throwforce = 5
 	throw_speed = 2

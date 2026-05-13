@@ -1,8 +1,5 @@
 /**
  * Wet concrete — freshly poured, hardens after `harden_time` into dry concrete.
- * - Shovelling it scoops the concrete back onto the shovel (adds shovel_concrete_load component).
- * - Mining/pickaxe instantly reverts it.
- * - A loaded shovel clicking here refreshes the wet concrete (the shovel_concrete_load component handles pouring).
  */
 /turf/open/floor/concrete/wet
 	name = "wet concrete"
@@ -21,13 +18,6 @@
 /turf/open/floor/concrete/wet/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/concrete_drying, /turf/open/floor/concrete, harden_time)
-
-/turf/open/floor/concrete/wet/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
-	if(tool.tool_behaviour == TOOL_MINING)
-		playsound(src, 'sound/effects/shovel_dig.ogg', 50, TRUE)
-		ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
-		return ITEM_INTERACT_SUCCESS
-	return ..()
 
 /**
  * Dry (hardened) concrete — a solid floor. Can be broken up with mining tools.

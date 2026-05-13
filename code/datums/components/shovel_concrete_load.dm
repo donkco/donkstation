@@ -1,11 +1,12 @@
 /**
- * Attached to a shovel when it scoops wet concrete off a turf.
+ * Attached to a shovel when it scoops wet concrete from the mixer.
  *
- * Registers COMSIG_ITEM_INTERACTING_WITH_ATOM on the parent shovel.
  * On left-click with the loaded shovel:
- *   - Valid turf (whitelist or existing wet concrete): pours wet concrete, qdels itself.
- *   - Any other turf: spawns a concrete spill decal and qdels itself.
- *   - Non-turf target: no-op.
+ *   - Open turf in whitelist: pours wet concrete, qdels itself.
+ *   - Open turf not in whitelist: spawns a concrete spill decal, qdels itself.
+ *   - atom/movable: fires COMSIG_CONCRETE_LOAD_DEPOSIT at the target with (source, user).
+ *     If the target returns CONCRETE_DEPOSIT_CONSUMED the load is consumed.
+ *     Otherwise nothing happens.
  */
 /datum/component/shovel_concrete_load
 	dupe_mode = COMPONENT_DUPE_UNIQUE
@@ -26,25 +27,28 @@
 /datum/component/shovel_concrete_load/proc/on_interact(obj/item/source, mob/living/user, atom/interacting_with, list/modifiers)
 	SIGNAL_HANDLER
 
-	if(!isopenturf(interacting_with))
-		return NONE
-
-	var/turf/T = interacting_with
-
-	// Valid target: in the concrete whitelist only (cannot pour onto existing wet concrete)
-	if(is_type_in_typecache(T, GLOB.concrete_valid_turfs))
-		T.ChangeTurf(/turf/open/floor/concrete/wet, null, CHANGETURF_INHERIT_AIR)
-		user.balloon_alert(user, "you pour the concrete")
-		playsound(T, 'sound/effects/slosh.ogg', 50, TRUE)
+	if(isopenturf(interacting_with))
+		var/turf/T = interacting_with
+		if(is_type_in_typecache(T, GLOB.concrete_valid_turfs))
+			T.ChangeTurf(/turf/open/floor/concrete/wet, null, CHANGETURF_INHERIT_AIR)
+			user.balloon_alert(user, "you pour the concrete")
+			playsound(T, 'sound/effects/slosh.ogg', 50, TRUE)
+			qdel(src)
+			return ITEM_INTERACT_SUCCESS
+		// Invalid turf: spill
+		new /obj/effect/decal/cleanable/concrete_spill(T)
+		user.balloon_alert(user, "you spilled the concrete!")
+		playsound(T, 'sound/effects/shovel_dig.ogg', 50, TRUE)
 		qdel(src)
 		return ITEM_INTERACT_SUCCESS
 
-	// Invalid target: spill the concrete and waste the load
-	new /obj/effect/decal/cleanable/concrete_spill(T)
-	user.balloon_alert(user, "you spilled the concrete!")
-	playsound(T, 'sound/effects/shovel_dig.ogg', 50, TRUE)
-	qdel(src)
-	return ITEM_INTERACT_SUCCESS
+	if(ismovable(interacting_with))
+		var/result = SEND_SIGNAL(interacting_with, COMSIG_CONCRETE_LOAD_DEPOSIT, source, user)
+		if(result & CONCRETE_DEPOSIT_CONSUMED)
+			qdel(src)
+			return ITEM_INTERACT_SUCCESS
+
+	return NONE
 
 /datum/component/shovel_concrete_load/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER

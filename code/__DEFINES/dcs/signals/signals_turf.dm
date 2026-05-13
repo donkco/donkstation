@@ -20,6 +20,10 @@
 #define COMSIG_TURF_EXPOSE "turf_expose"
 ///fired from /turf/open/floor/concrete/wet when scooped by a shovel; received by concrete_drying component to cancel the timer
 #define COMSIG_CONCRETE_WET_SCOOPED "concrete_wet_scooped"
+///sent by the shovel_concrete_load component to a clicked atom/movable; args: (atom/source_shovel, mob/living/user); return CONCRETE_DEPOSIT_CONSUMED to accept
+#define COMSIG_CONCRETE_LOAD_DEPOSIT "concrete_load_deposit"
+///return flag for COMSIG_CONCRETE_LOAD_DEPOSIT: target accepted and consumed the concrete load
+#define CONCRETE_DEPOSIT_CONSUMED (1<<0)
 ///from /turf/proc/immediate_calculate_adjacent_turfs()
 #define COMSIG_TURF_CALCULATED_ADJACENT_ATMOS "turf_calculated_adjacent_atmos"
 ///called when an elevator enters this turf
