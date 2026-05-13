@@ -239,21 +239,6 @@
 	smoothing_groups = SMOOTH_GROUP_PLATFORMS_STONE
 	canSmoothWith = SMOOTH_GROUP_PLATFORMS_STONE
 
-// Poured concrete platform — produced by the concrete_mould/platform after curing.
-// Not craftable directly from a material stack; use the mould instead.
-/obj/structure/platform/concrete
-	name = "concrete platform"
-	desc = "A heavy cast concrete platform slab."
-	icon = 'icons/obj/smooth_structures/platform/window_frame_sandstone.dmi' // TODO: dedicated concrete platform icon
-	frame_icon = 'icons/obj/smooth_structures/platform/frame_faces/window_frame_sandstone.dmi'
-	icon_state = "window_frame_sandstone-0"
-	base_icon_state = "window_frame_sandstone"
-	sheet_type = null // Not deconstructable into sheets
-	custom_materials = list()
-	footstep = FOOTSTEP_PLATING
-	smoothing_groups = SMOOTH_GROUP_PLATFORMS_STONE
-	canSmoothWith = SMOOTH_GROUP_PLATFORMS_STONE
-
 /obj/structure/platform/cult
 	name = "runed stone platform"
 	icon = 'icons/obj/smooth_structures/platform/window_frame_cult.dmi'

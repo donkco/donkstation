@@ -2,8 +2,10 @@
  * Portable concrete mixer barrel.
  *
  * FILLING:
- *   - Left-click with a bag of concrete mix → loads the mix (one bag only).
- *   - Left-click with a reagent container holding water → draws up to 10u of water.
+ *   - Left-click with a bag of concrete mix → adds `mix_per_batch` units of dry mix.
+ *     Combined mix + ready concrete can never exceed `max_capacity`.
+ *   - Left-click with a reagent container holding water → draws water into the internal
+ *     tank (up to `max_capacity` units total).
  *
  * MIXING:
  *   - Left-click with empty hands when both mix and water are loaded
@@ -25,14 +27,16 @@
 	density = TRUE
 	anchored = FALSE
 	max_integrity = 150
+	/// Maximum units: caps both the water tank and the total of mix_units + concrete_units
+	var/max_capacity = 50
+	/// Units of dry concrete mix currently loaded (not yet mixed)
+	var/mix_units = 0
 	/// Number of units of pourable concrete currently ready
 	var/concrete_units = 0
-	/// How many units one batch produces
-	var/units_per_mix = 10
-	/// Whether a bag of concrete mix has been loaded
-	var/has_mix = FALSE
-	/// Whether enough water has been loaded
-	var/has_water = FALSE
+	/// Dry mix consumed per mix cycle (one bag = one batch)
+	var/mix_per_batch = 10
+	/// Water consumed per mix cycle
+	var/water_per_batch = 10
 	/// Time between each tile being poured (deciseconds)
 	var/pour_interval = 0.3 SECONDS
 	/// Assoc list (turf → TRUE) of tiles already poured in the current sequence
@@ -40,17 +44,27 @@
 	/// Timer ID for the next pour tick
 	var/pour_timer_id
 
+/obj/structure/concrete_mixer/Initialize(mapload)
+	. = ..()
+	register_context()
+	create_reagents(max_capacity)
+
 /obj/structure/concrete_mixer/examine(mob/user)
 	. = ..()
+	var/water = reagents.get_reagent_amount(/datum/reagent/water)
+	if(mix_units > 0)
+		. += span_notice("It contains [mix_units]u of dry concrete mix.")
+	if(water > 0)
+		. += span_notice("Its water tank holds [water]/[max_capacity]u.")
 	if(concrete_units > 0)
-		. += span_notice("It holds [concrete_units] unit\s of mixed concrete. <b>Click</b> to scoop with a shovel, or <b>right-click</b> to tip and pour.")
-	else if(has_mix && has_water)
-		. += span_notice("The mix and water are loaded. <b>Click or right-click</b> to start mixing.")
+		. += span_notice("It holds [concrete_units]u of mixed concrete ready to pour. <b>Click</b> to scoop with a shovel, or <b>right-click</b> to tip and pour.")
+	else if(mix_units >= mix_per_batch && water >= water_per_batch)
+		. += span_notice("Ready to mix. <b>Click or right-click</b> to start mixing.")
 	else
-		if(!has_mix)
-			. += span_notice("It needs a <b>bag of concrete mix</b> loaded.")
-		if(!has_water)
-			. += span_notice("It needs <b>water</b> from a container.")
+		if(mix_units < mix_per_batch)
+			. += span_notice("Add more <b>bags of concrete mix</b>.")
+		if(water < water_per_batch)
+			. += span_notice("Add more <b>water</b> from a container.")
 
 /obj/structure/concrete_mixer/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
 	. = ..()
@@ -58,25 +72,24 @@
 		context[SCREENTIP_CONTEXT_RMB] = "Tip and pour concrete"
 		if(held_item?.tool_behaviour == TOOL_SHOVEL)
 			context[SCREENTIP_CONTEXT_LMB] = "Scoop concrete"
-	else if(has_mix && has_water)
+	else if(mix_units >= mix_per_batch && reagents.get_reagent_amount(/datum/reagent/water) >= water_per_batch)
 		context[SCREENTIP_CONTEXT_LMB] = "Mix concrete"
-		context[SCREENTIP_CONTEXT_RMB] = "Mix concrete"
 	if(held_item)
-		if(istype(held_item, /obj/item/concrete_mix) && !has_mix)
+		if(istype(held_item, /obj/item/concrete_mix) && (mix_units + concrete_units + mix_per_batch <= max_capacity))
 			context[SCREENTIP_CONTEXT_LMB] = "Load concrete mix"
-		else if(held_item.reagents?.get_reagent_amount(/datum/reagent/water) > 0 && !has_water)
+		else if(held_item.reagents?.get_reagent_amount(/datum/reagent/water) > 0 && reagents.total_volume < max_capacity)
 			context[SCREENTIP_CONTEXT_LMB] = "Pour water in"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/structure/concrete_mixer/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	// Load concrete mix bag
 	if(istype(tool, /obj/item/concrete_mix))
-		if(has_mix)
-			user.balloon_alert(user, "already has mix")
+		if(mix_units + concrete_units + mix_per_batch > max_capacity)
+			user.balloon_alert(user, "can't fit more mix")
 			return ITEM_INTERACT_BLOCKING
-		has_mix = TRUE
+		mix_units += mix_per_batch
 		qdel(tool)
-		user.balloon_alert(user, "mix loaded")
+		user.balloon_alert(user, "mix loaded ([mix_units]u)")
 		return ITEM_INTERACT_SUCCESS
 
 	// Scoop concrete with a shovel
@@ -99,12 +112,14 @@
 	if(tool.reagents)
 		var/water_amount = tool.reagents.get_reagent_amount(/datum/reagent/water)
 		if(water_amount > 0)
-			if(has_water)
-				user.balloon_alert(user, "already has water")
+			var/space = max_capacity - reagents.total_volume
+			if(space <= 0)
+				user.balloon_alert(user, "water tank full")
 				return ITEM_INTERACT_BLOCKING
-			tool.reagents.remove_reagent(/datum/reagent/water, min(water_amount, 10))
-			has_water = TRUE
-			user.balloon_alert(user, "water added")
+			var/to_take = min(water_amount, space)
+			tool.reagents.remove_reagent(/datum/reagent/water, to_take)
+			reagents.add_reagent(/datum/reagent/water, to_take)
+			user.balloon_alert(user, "water added ([reagents.total_volume]/[max_capacity]u)")
 			playsound(src, 'sound/effects/slosh.ogg', 50, TRUE)
 			return ITEM_INTERACT_SUCCESS
 
@@ -125,10 +140,10 @@
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/structure/concrete_mixer/proc/try_mix(mob/living/user)
-	if(!has_mix)
+	if(mix_units < mix_per_batch)
 		user.balloon_alert(user, "needs concrete mix")
 		return
-	if(!has_water)
+	if(reagents.get_reagent_amount(/datum/reagent/water) < water_per_batch)
 		user.balloon_alert(user, "needs water")
 		return
 
@@ -136,8 +151,10 @@
 	if(!do_after(user, 3 SECONDS, target = src))
 		return
 
-	concrete_units += units_per_mix
-	user.balloon_alert(user, "mixed!")
+	mix_units -= mix_per_batch
+	reagents.remove_reagent(/datum/reagent/water, water_per_batch)
+	concrete_units += mix_per_batch
+	user.balloon_alert(user, "mixed! ([concrete_units]u ready)")
 	playsound(src, 'sound/effects/slosh.ogg', 80, TRUE)
 
 /obj/structure/concrete_mixer/proc/try_pour(mob/living/user)
@@ -211,3 +228,7 @@
 		pour_timer_id = null
 	pour_visited = null
 	return ..()
+
+
+/obj/structure/concrete_mixer/full
+	concrete_units = 50

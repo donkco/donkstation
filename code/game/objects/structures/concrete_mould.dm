@@ -22,7 +22,7 @@
 	/// Type to spawn once drying finishes; must be set by each subtype
 	var/dry_result = null
 	/// Time until the filled mould hardens
-	var/mould_harden_time = 5 MINUTES
+	var/mould_harden_time = 1 MINUTES
 
 /obj/structure/concrete_mould/Initialize(mapload)
 	. = ..()
@@ -41,13 +41,15 @@
 		return NONE
 
 	filled_units++
-	user.balloon_alert(user, "[filled_units]/[required_units]")
+
 	playsound(src, 'sound/effects/slosh.ogg', 50, TRUE)
 
 	if(filled_units >= required_units)
 		user.balloon_alert(user, "mould full, leave to cure")
 		AddComponent(/datum/component/concrete_drying, dry_result, mould_harden_time)
 		update_appearance(UPDATE_ICON_STATE)
+	else
+		user.balloon_alert(user, "[filled_units]/[required_units] full")
 
 	return CONCRETE_DEPOSIT_CONSUMED
 
@@ -65,5 +67,42 @@
 /obj/structure/concrete_mould/platform
 	name = "concrete platform mould"
 	desc = "A wooden mould shaped for a platform slab. Fill with three shovel loads of wet concrete."
-	required_units = 3
+	required_units = 2
 	dry_result = /obj/structure/platform/concrete
+
+// RAMP MOULDS — each subtype initialises with a fixed dir so the cast ramp faces the right way.
+
+/obj/structure/concrete_mould/ramp
+	name = "concrete ramp mould (south)"
+	desc = "A wedge-shaped wooden mould for casting a southward concrete ramp. Fill with one shovel load."
+	required_units = 2
+	dry_result = /obj/structure/steps/concrete_ramp/south
+	dir = SOUTH
+
+/obj/structure/concrete_mould/ramp/north
+	name = "concrete ramp mould (north)"
+	desc = "A wedge-shaped wooden mould for casting a northward concrete ramp. Fill with one shovel load."
+	dir = NORTH
+	dry_result = /obj/structure/steps/concrete_ramp/north
+
+/obj/structure/concrete_mould/ramp/east
+	name = "concrete ramp mould (east)"
+	desc = "A wedge-shaped wooden mould for casting an eastward concrete ramp. Fill with one shovel load."
+	dir = EAST
+	dry_result = /obj/structure/steps/concrete_ramp/east
+
+/obj/structure/concrete_mould/ramp/west
+	name = "concrete ramp mould (west)"
+	desc = "A wedge-shaped wooden mould for casting a westward concrete ramp. Fill with one shovel load."
+	dir = WEST
+	dry_result = /obj/structure/steps/concrete_ramp/west
+
+/**
+ * Casts a /obj/item/concrete_sow.
+ * Craft from 3 wood sheets (see sheet_types.dm).
+ */
+/obj/structure/concrete_mould/concrete_sow
+	name = "concrete sow mould"
+	desc = "A simple rectangular mould for casting a concrete sow. Fill with one shovel load."
+	required_units = 1
+	dry_result = /obj/item/concrete_sow

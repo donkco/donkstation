@@ -51,11 +51,27 @@
 /datum/component/concrete_drying/proc/_do_finish()
 	timer_id = null
 	if(ispath(dry_result, /turf))
-		var/turf/T = parent
+		var/turf/open/floor/concrete/wet/T = parent
 		if(istype(T))
+			// Capture footprints before ChangeTurf resets vars, then restore them on the new turf.
+			var/has_footprints = (T.leave_footprints || T.can_have_footprints) && (T.footprint_entrance_dirs || T.footprint_exit_dirs)
+			var/saved_entrance = T.footprint_entrance_dirs
+			var/saved_exit = T.footprint_exit_dirs
+			var/list/saved_shoes = T.footprint_shoe_types ? T.footprint_shoe_types.Copy() : null
+			var/list/saved_species = T.footprint_species_types ? T.footprint_species_types.Copy() : null
 			T.ChangeTurf(dry_result, null, CHANGETURF_INHERIT_AIR)
+			if(has_footprints)
+				var/turf/open/dry = T // same reference, now dry type
+				dry.footprint_entrance_dirs = saved_entrance
+				dry.footprint_exit_dirs = saved_exit
+				dry.footprint_shoe_types = saved_shoes
+				dry.footprint_species_types = saved_species
+				dry.update_appearance()
 	else
 		var/atom/A = parent
 		if(!QDELETED(A))
-			new dry_result(get_turf(A))
+			var/spawn_dir = A.dir
+			var/atom/movable/spawned = new dry_result(get_turf(A))
+			if(spawned)
+				spawned.setDir(spawn_dir)
 			qdel(A)

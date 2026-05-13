@@ -28,14 +28,17 @@
 
 	/// If TRUE, humans walking in and out of this turf will leave behind footprints, applied as a generic overlay
 	var/leave_footprints = FALSE
+	/// If TRUE, footprint overlays are rendered on this turf even if leave_footprints is FALSE.
+	/// Use this for surfaces that receive transferred footprints but don't generate new ones.
+	var/can_have_footprints = FALSE
 	/// Lazylist of all shoe types that have walked over this turf
-	VAR_PRIVATE/list/footprint_shoe_types
+	var/list/footprint_shoe_types
 	/// Lazylist of all species that have walked over this turf
-	VAR_PRIVATE/list/footprint_species_types
+	var/list/footprint_species_types
 	/// All dirs from which footprints have entered this turf
-	VAR_PRIVATE/footprint_entrance_dirs = NONE
+	var/footprint_entrance_dirs = NONE
 	/// All dirs from which footprints have exited this turf
-	VAR_PRIVATE/footprint_exit_dirs = NONE
+	var/footprint_exit_dirs = NONE
 
 /// Returns a list of every turf state considered "broken".
 /// Will be randomly chosen if a turf breaks at runtime.
@@ -100,7 +103,7 @@
 
 			. += burnt_appearance
 
-	if(leave_footprints && (footprint_entrance_dirs || footprint_exit_dirs))
+	if((leave_footprints || can_have_footprints) && (footprint_entrance_dirs || footprint_exit_dirs))
 		var/static/list/footprint_cache = list()
 
 		var/icon_state_to_use = "footprint"
@@ -135,7 +138,7 @@
 
 /turf/open/examine(mob/user)
 	. = ..()
-	if(leave_footprints && (footprint_entrance_dirs || footprint_exit_dirs) && (LAZYLEN(footprint_shoe_types) || LAZYLEN(footprint_species_types)))
+	if((leave_footprints || can_have_footprints) && (footprint_entrance_dirs || footprint_exit_dirs) && (LAZYLEN(footprint_shoe_types) || LAZYLEN(footprint_species_types)))
 		. += "You recognise the footprints as belonging to:"
 		for(var/obj/item/clothing/shoes/sole as anything in footprint_shoe_types)
 			var/article = initial(sole.article) || (initial(sole.gender) == PLURAL ? "Some" : "A")

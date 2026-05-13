@@ -11,6 +11,7 @@
 	barefootstep = FOOTSTEP_MEAT
 	clawfootstep = FOOTSTEP_MEAT
 	heavyfootstep = FOOTSTEP_MEAT
+	leave_footprints = TRUE
 
 	/// How long until this hardens into dry concrete
 	var/harden_time = 1 MINUTES
@@ -18,6 +19,13 @@
 /turf/open/floor/concrete/wet/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/concrete_drying, /turf/open/floor/concrete, harden_time)
+
+/turf/open/floor/concrete/wet/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(tool.tool_behaviour == TOOL_SHOVEL)
+		playsound(src, 'sound/effects/shovel_dig.ogg', 50, TRUE)
+		ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
+		return ITEM_INTERACT_SUCCESS
+	return ..()
 
 /**
  * Dry (hardened) concrete — a solid floor. Can be broken up with mining tools.
@@ -32,6 +40,7 @@
 	barefootstep = FOOTSTEP_CONCRETE
 	clawfootstep = FOOTSTEP_CONCRETE
 	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
+	can_have_footprints = TRUE
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_TURF_OPEN + SMOOTH_GROUP_OPEN_FLOOR + SMOOTH_GROUP_FLOOR_CONCRETE
 	canSmoothWith = SMOOTH_GROUP_FLOOR_CONCRETE
