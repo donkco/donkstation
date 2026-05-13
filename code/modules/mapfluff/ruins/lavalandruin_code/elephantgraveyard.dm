@@ -162,8 +162,10 @@
 		return NONE
 
 	if(held_item.tool_behaviour == TOOL_SHOVEL)
-		context[SCREENTIP_CONTEXT_RMB] = opened ? "Cover up" : "Dig open"
-		return CONTEXTUAL_SCREENTIP_SET
+		if(!opened)
+			context[SCREENTIP_CONTEXT_RMB] = "Dig open"
+			return CONTEXTUAL_SCREENTIP_SET
+		return NONE
 
 	return NONE
 
@@ -174,7 +176,7 @@
 
 /obj/structure/closet/crate/grave/examine(mob/user)
 	. = ..()
-	. += span_notice("It can be [EXAMINE_HINT((opened ? "closed" : "dug open"))] with a shovel.")
+	. += span_notice("It can be [EXAMINE_HINT((opened ? "filled" : "dug open"))] with [opened ? "soil" : "a shovel"].")
 
 /obj/structure/closet/crate/grave/filled
 	affect_mood = TRUE
@@ -228,7 +230,7 @@
 		return FALSE
 
 	if(!dug_closed)
-		to_chat(user, span_notice("You'll need a shovel to cover it up."))
+		to_chat(user, span_notice("You'll need to cover it up with soil."))
 		return FALSE
 
 	dug_closed = FALSE
@@ -239,20 +241,17 @@
 	if(weapon.tool_behaviour != TOOL_SHOVEL)
 		return ..()
 
-	//player is attempting to open/close the grave with a shovel
-	if(!user.combat_mode)
+	// Only allow digging open with a shovel, never closing
+	if(!user.combat_mode && !opened)
 		user.visible_message(
-			span_notice("[user] Is attempting to [opened ? "close" : "dig open"] [src]."),
-			span_notice("You start [opened ? "closing" : "digging open"] [src]."),
+			span_notice("[user] Is attempting to dig open [src]."),
+			span_notice("You start digging open [src]."),
 		)
 		if(!weapon.use_tool(src, user, delay = 15, volume = 40))
 			return TRUE
 
 		var/is_chill_with_robbing = HAS_MIND_TRAIT(user, TRAIT_MORBID) || HAS_PERSONALITY(user, /datum/personality/callous) || HAS_PERSONALITY(user, /datum/personality/misanthropic)
-		if(opened)
-			dug_closed = TRUE
-			close(user)
-		else if(open(user, force = TRUE) && affect_mood)
+		if(open(user, force = TRUE) && affect_mood)
 			user.add_mood_event("graverobbing", is_chill_with_robbing ? /datum/mood_event/morbid_graverobbing : /datum/mood_event/graverobbing)
 			if(lead_tomb && first_open)
 				if(is_chill_with_robbing)
@@ -264,22 +263,7 @@
 
 		return TRUE
 
-	//player is attempting to destroy the open grave with a shovel
-	else
-		if(!opened)
-			return TRUE
-
-		user.visible_message(
-			span_notice("[user] Is attempting to remove [src]."),
-			span_notice("You start removing [src]."),
-		)
-		if(!weapon.use_tool(src, user, delay = 15, volume = 40) || !opened)
-			return TRUE
-
-		to_chat(user, span_notice("You remove \the [src] completely."))
-		user.add_mood_event("graverobbing", /datum/mood_event/graverobbing)
-		deconstruct(TRUE)
-		return TRUE
+	return TRUE
 
 /obj/structure/closet/crate/grave/container_resist_act(mob/living/user, loc_required = TRUE)
 	if(opened)
@@ -307,10 +291,171 @@
 /obj/structure/closet/crate/grave/fresh
 	name = "makeshift grave"
 	desc = "A hastily-dug grave. This is definitely not six feet deep, but it'll hold a body."
-	icon = 'icons/obj/storage/crates.dmi'
-	icon_state = "grave_fresh"
-	base_icon_state = "grave_fresh"
+	icon = 'icons/obj/graves.dmi'
+	icon_state = "grave_open"
+	base_icon_state = "grave"
 	material_drop_amount = 0
+	/// Type of soil item required to close this grave
+	var/soil_type = /obj/item/stack/ore/glass/dirt
+	/// Display name of the required fill material, used in hints
+	var/soil_fill_name = "a dirt pile"
+	/// How long until this grave fades completely
+	var/fade_duration = 15 MINUTES
+	/// How long until this grave is no longer clickable
+	var/click_block_duration = 10 MINUTES
+	/// How long until this grave is no longer climbable
+	var/climbable_duration = 5 MINUTES
+
+	/// world.time when this grave was last closed
+	var/time_closed = 0
+	/// Whether mouse_opacity has been set to transparent already
+	var/click_blocked = FALSE
+	/// Whether climbable has been removed already
+	var/climb_removed = FALSE
+
+/obj/structure/closet/crate/grave/fresh/Initialize(mapload)
+	. = ..()
+	if(!opened)
+		open(null, force = TRUE)
+	RegisterSignal(get_turf(src), COMSIG_ATOM_TOOL_ACT(TOOL_SHOVEL), PROC_REF(on_turf_shoveled))
+
+/obj/structure/closet/crate/grave/fresh/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	var/turf/grave_turf = get_turf(src)
+	if(grave_turf)
+		UnregisterSignal(grave_turf, COMSIG_ATOM_TOOL_ACT(TOOL_SHOVEL))
+	return ..()
+
+/obj/structure/closet/crate/grave/fresh/after_close(mob/living/user)
+	. = ..()
+	time_closed = world.time
+
+	START_PROCESSING(SSobj, src)
+
+/obj/structure/closet/crate/grave/fresh/after_open(mob/living/user, force)
+	. = ..()
+	climb_removed = FALSE //Re-added by parent proc
+	click_blocked = FALSE
+	mouse_opacity = initial(mouse_opacity)
+	alpha = 255
+	STOP_PROCESSING(SSobj, src)
+
+/obj/structure/closet/crate/grave/fresh/process(delta_time)
+	var/elapsed = world.time - time_closed
+	alpha = max(0, round(255 * (1 - (elapsed / fade_duration))))
+	if(!climb_removed && elapsed >= climbable_duration)
+		RemoveElement(/datum/element/climbable, climb_time = crate_climb_time, climb_stun = 0)
+		RemoveElement(/datum/element/elevation, pixel_shift = elevation)
+		climb_removed = TRUE
+	if(!click_blocked && elapsed >= click_block_duration)
+		mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+		click_blocked = TRUE
+	if(alpha <= 0)
+		STOP_PROCESSING(SSobj, src)
+
+/obj/structure/closet/crate/grave/fresh/closet_update_overlays(list/new_overlays)
+	icon_state = "[base_icon_state]_[opened ? "open" : "closed"]"
+
+/obj/structure/closet/crate/grave/fresh/tool_interact(obj/item/weapon, mob/living/carbon/user)
+	// Block shovel-close for fresh graves; they require a soil item to fill
+	if(weapon.tool_behaviour == TOOL_SHOVEL && !user.combat_mode && opened)
+		user.balloon_alert(user, "needs [soil_fill_name]!")
+		return TRUE
+	return ..()
+
+/obj/structure/closet/crate/grave/fresh/examine(mob/user)
+	. = ..()
+	if(opened)
+		. += span_notice("It needs [soil_fill_name] to fill it back in.")
+
+/obj/structure/closet/crate/grave/fresh/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	if(isnull(held_item))
+		return NONE
+	if(opened)
+		if(istype(held_item, soil_type))
+			context[SCREENTIP_CONTEXT_LMB] = "Fill grave"
+			return CONTEXTUAL_SCREENTIP_SET
+		if(held_item.tool_behaviour == TOOL_SHOVEL)
+			context[SCREENTIP_CONTEXT_RMB] = "Needs [soil_fill_name]"
+			return CONTEXTUAL_SCREENTIP_SET
+		return NONE
+	return ..()
+
+/obj/structure/closet/crate/grave/fresh/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(!opened || !istype(tool, soil_type))
+		return NONE
+	// Check if there's anything on the turf we'd take in
+	var/has_fillable
+	if(!has_fillable)
+		var/atom/location = drop_location()
+		for(var/atom/movable/AM in location)
+			if(AM != src && AM != tool && insertion_allowed(AM))
+				has_fillable = TRUE
+				break
+	user.balloon_alert(user, "filling grave...")
+	playsound(src, 'sound/effects/shovel_dig.ogg', 50, TRUE)
+	if(!do_after(user, 3 SECONDS, target = src))
+		return ITEM_INTERACT_BLOCKING
+	if(!opened)
+		return ITEM_INTERACT_BLOCKING
+	if(istype(tool, /obj/item/stack))
+		var/obj/item/stack/stack_tool = tool
+		if(!stack_tool.use(1))
+			user.balloon_alert(user, "not enough!")
+			return ITEM_INTERACT_BLOCKING
+	else
+		qdel(tool)
+	dug_closed = TRUE
+	if(!has_fillable)
+		qdel(src)
+		return ITEM_INTERACT_SUCCESS
+	close(user)
+	return ITEM_INTERACT_SUCCESS
+
+/// Called when the turf beneath us is shoveled; intercepts to unearth the grave
+/obj/structure/closet/crate/grave/fresh/proc/on_turf_shoveled(turf/source, mob/user, obj/item/tool)
+	SIGNAL_HANDLER
+	if(opened)
+		return NONE
+	alpha = 255
+	mouse_opacity = initial(mouse_opacity)
+	click_blocked = FALSE
+	INVOKE_ASYNC(src, PROC_REF(perform_unearth), user, tool)
+	return COMPONENT_CANCEL_ATTACK_CHAIN
+
+/obj/structure/closet/crate/grave/fresh/proc/perform_unearth(mob/user, obj/item/tool)
+	user.balloon_alert(user, "unearthing grave...")
+	playsound(src, 'sound/effects/shovel_dig.ogg', 50, TRUE)
+	if(tool.use_tool(src, user, 5 SECONDS, volume = 50))
+		if(!QDELETED(src) && !opened)
+			open(user, force = TRUE)
+
+/obj/structure/closet/crate/grave/fresh/sand
+	name = "makeshift grave"
+	desc = "A hastily-dug grave. The sandy soil is loose."
+	icon = 'icons/obj/graves.dmi'
+	base_icon_state = "grave-sand"
+	icon_state = "grave-sand_open"
+	soil_type = /obj/item/stack/ore/glass
+	soil_fill_name = "a sand pile"
+
+/obj/structure/closet/crate/grave/fresh/ash
+	name = "makeshift grave"
+	desc = "A hastily-dug grave. The ashen soil crumbles around the edges."
+	icon = 'icons/obj/graves.dmi'
+	base_icon_state = "grave-ash"
+	icon_state = "grave-ash_open"
+	soil_type = /obj/item/stack/ore/glass/basalt
+	soil_fill_name = "volcanic ash"
+
+/obj/structure/closet/crate/grave/fresh/snow
+	name = "makeshift grave"
+	desc = "A hastily-dug grave. The snow around it is piled high."
+	icon = 'icons/obj/graves.dmi'
+	base_icon_state = "grave-snow"
+	icon_state = "grave-snow_open"
+	soil_type = /obj/item/stack/ore/snow
+	soil_fill_name = "snow"
 
 /obj/structure/closet/crate/grave/filled/lead_researcher
 	name = "ominous burial mound"
