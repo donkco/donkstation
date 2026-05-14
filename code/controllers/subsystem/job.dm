@@ -241,7 +241,7 @@ SUBSYSTEM_DEF(job)
  * * latejoin - Set to TRUE if this is a latejoin role assignment.
  * * do_eligibility_checks - Set to TRUE to conduct all job eligibility tests and reject on failure. Set to FALSE if job eligibility has been tested elsewhere and they can be safely skipped.
  */
-/datum/controller/subsystem/job/proc/assign_role(mob/dead/new_player/player, datum/job/job, latejoin = FALSE, do_eligibility_checks = TRUE)
+/datum/controller/subsystem/job/proc/assign_role(mob/dead/new_player/player, datum/job/job, latejoin = FALSE, do_eligibility_checks = TRUE, char_slot = 0)
 	job_debug("AR: Running, Player: [player], Job: [isnull(job) ? "null" : job], LateJoin: [latejoin]")
 	if(!player?.mind || !job)
 		job_debug("AR: Failed, player has no mind or job is null. Player: [player], Rank: [isnull(job) ? "null" : job.type]")
@@ -252,6 +252,9 @@ SUBSYSTEM_DEF(job)
 
 	job_debug("AR: Role now set and assigned - [player] is [job.title], JCP:[job.current_positions], JPL:[latejoin ? job.total_positions : job.spawn_positions]")
 	player.mind.set_assigned_role(job)
+	var/max_char_slots = player.client?.prefs.max_save_slots || 5
+	if(char_slot && isnum(char_slot) && char_slot >= 1 && char_slot <= max_char_slots)
+		player.mind.assigned_character_slot = char_slot
 	unassigned -= player
 	job.current_positions++
 	return TRUE
@@ -442,90 +445,15 @@ SUBSYSTEM_DEF(job)
 	handle_feedback_gathering()
 
 	// Assign any priority positions before all other standard job selections.
+	// This handles dynamic ruleset forced occupations (e.g., guaranteed AI for malf AI).
+	// Head-of-staff and AI slots are handled naturally by the slate rounds below.
 	job_debug("DO: Assigning priority positions")
 	assign_priority_positions()
 	job_debug("DO: Priority assignment complete")
 
-	// The overflow role has limitless slots, plus having the Overflow box ticked in prefs should (with one exception) set the priority to JP_HIGH.
-	// So everyone with overflow enabled will get that job. Thus we can assign it immediately to all players that have it enabled.
-	job_debug("DO: Assigning early overflow roles")
-	assign_all_overflow_positions()
-	job_debug("DO: Early overflow roles assigned.")
-
-	// At this point we can assume the following:
-	// From assign_priority_positions()
-	// 1. If possible, any necessary job roles to allow Dynamic rulesets to execute (such as an AI for malf AI) are satisfied.
-	// 2. All Head of Staff roles with any player pref set to JP_HIGH are filled out.
-	// 3. If any player not selected by the above has any Head of Staff preference enabled at any JP_ level, there is at least one Head of Staff.
-	//
-	// From assign_all_overflow_positions()
-	// 4. Anyone with the overflow role enabled has been given the overflow role.
-
-	// Copy the joinable occupation list and filter out ineligible occupations due to above job assignments.
-	var/list/available_occupations = joinable_occupations.Copy()
-	var/datum/job_department/command_department = get_department_type(/datum/job_department/command)
-
-	for(var/datum/job/job in available_occupations)
-		// Make sure the job isn't filled. If it is, remove it from the list so it doesn't get checked.
-		if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
-			job_debug("DO: Job is now filled, Job: [job], Current: [job.current_positions], Limit: [job.spawn_positions]")
-			available_occupations -= job
-			continue
-
-		// Command jobs are handled via fill_all_head_positions_at_priority(...)
-		// Remove these jobs from the list of available occupations to prevent multiple players being assigned to the same
-		// limited role without constantly having to iterate over the available_occupations list and re-check them.
-		if(job in command_department?.department_jobs)
-			available_occupations -= job
-
-	job_debug("DO: Running standard job assignment")
-
-	for(var/level in level_order)
-		job_debug("JOBS: Filling in head roles, Level: [job_priority_level_to_string(level)]")
-		// Fill the head jobs first each level
-		fill_all_head_positions_at_priority(level)
-
-		// Loop through all unassigned players
-		for(var/mob/dead/new_player/player in unassigned)
-			if(!allow_all)
-				if(popcap_reached())
-					job_debug("JOBS: Popcap reached, trying to reject player: [player]")
-					try_reject_player(player)
-
-			job_debug("JOBS: Finding a job for player: [player], at job priority pref: [job_priority_level_to_string(level)]")
-
-			// Loop through all jobs and build a list of jobs this player could be eligible for.
-			var/list/possible_jobs = list()
-			for(var/datum/job/job in available_occupations)
-				// Filter any job that doesn't fit the current level.
-				var/player_job_level = player.client?.prefs.job_preferences[job.title]
-				if(isnull(player_job_level))
-					job_debug("JOBS: Job not enabled, Job: [job]")
-					continue
-				if(player_job_level != level)
-					job_debug("JOBS: Job enabled at different priority pref, Job: [job], TheirLevel: [job_priority_level_to_string(player_job_level)], ReqLevel: [job_priority_level_to_string(level)]")
-					continue
-
-				if(check_job_eligibility(player, job, "JOBS", add_job_to_log = TRUE) != JOB_AVAILABLE)
-					continue
-
-				possible_jobs += job
-
-			// If there are no possible jobs for them at this priority, skip them.
-			if(!length(possible_jobs))
-				job_debug("JOBS: Player not eligible for any available jobs at this priority level: [player]")
-				continue
-
-			// Otherwise, pick one of those jobs at random.
-			var/datum/job/picked_job = pick(possible_jobs)
-
-			job_debug("JOBS: Now assigning role to player: [player], Job:[picked_job.title]")
-			assign_role(player, picked_job, do_eligibility_checks = FALSE)
-			if((picked_job.current_positions >= picked_job.spawn_positions) && picked_job.spawn_positions != -1)
-				job_debug("JOBS: Job is now full, Job: [picked_job], Positions: [picked_job.current_positions], Limit: [picked_job.spawn_positions]")
-				available_occupations -= picked_job
-
-	job_debug("DO: Ending standard job assignment")
+	job_debug("DO: Running 5-round slate job assignment")
+	slate_divide_occupations(allow_all)
+	job_debug("DO: Slate assignment complete")
 
 	job_debug("DO: Handle unassigned")
 	// For any players that didn't get a job, fall back on their pref setting for what to do.
@@ -882,10 +810,97 @@ SUBSYSTEM_DEF(job)
 	safe_code_timer_id = null
 	safe_code_request_loc = null
 
+/**
+ * Runs the 5-round character slate job assignment lottery.
+ * Each round N processes every unassigned player's Nth slate entry.
+ * When multiple players want the same job, one is selected via weighted random roll using /datum/job/proc/get_job_weight().
+ * Players who lose a contest in round N are NOT eliminated; their remaining slate entries are still tried in later rounds.
+ */
+/datum/controller/subsystem/job/proc/slate_divide_occupations(allow_all = FALSE)
+	for(var/round_index in 1 to 5)
+		job_debug("SLATE: Round [round_index] starting, [length(unassigned)] players unassigned")
+
+		// Build a map of job datum -> list of assoc(player, char_slot) for this round
+		var/list/job_candidates = list() // /datum/job -> list of assoc lists
+
+		for(var/mob/dead/new_player/player in unassigned)
+			if(!player.client?.prefs)
+				continue
+
+			if(!allow_all && popcap_reached())
+				job_debug("SLATE: Popcap reached, trying to reject player: [player]")
+				try_reject_player(player)
+				continue
+
+			var/list/slate = player.client.prefs.job_slate
+			if(!slate || round_index > length(slate))
+				continue
+
+			var/list/entry = slate[round_index]
+			if(!entry)
+				continue
+
+			var/job_title = entry["job"]
+			var/char_slot = entry["char_slot"]
+			if(!job_title || !char_slot)
+				continue
+
+			var/datum/job/job = get_job(job_title)
+			if(!job)
+				job_debug("SLATE: Round [round_index] job not found: [job_title]")
+				continue
+
+			// Skip if already full
+			if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
+				job_debug("SLATE: Round [round_index] job already full: [job_title], Player: [player]")
+				continue
+
+			if(check_job_eligibility(player, job, "SLATE", add_job_to_log = FALSE) != JOB_AVAILABLE)
+				continue
+
+			if(isnull(job_candidates[job]))
+				job_candidates[job] = list()
+			job_candidates[job] += list(list("player" = player, "char_slot" = char_slot))
+
+		// Resolve each contested job for this round
+		for(var/datum/job/job as anything in job_candidates)
+			var/list/candidates = job_candidates[job]
+			var/mob/dead/new_player/winner
+			var/win_char_slot
+
+			if(length(candidates) == 1)
+				winner = candidates[1]["player"]
+				win_char_slot = candidates[1]["char_slot"]
+			else
+				// Weighted lottery among all candidates
+				var/list/weight_table = list()
+				for(var/list/candidate_entry as anything in candidates)
+					var/mob/dead/new_player/candidate = candidate_entry["player"]
+					if(!candidate.client)
+						continue
+					var/weight = job.get_job_weight(candidate.client)
+					if(weight > 0)
+						weight_table[candidate_entry] = weight
+
+				if(!length(weight_table))
+					job_debug("SLATE: Round [round_index] all candidates have zero weight for [job.title], skipping")
+					continue
+
+				var/list/winning_entry = pick_weight(weight_table)
+				winner = winning_entry["player"]
+				win_char_slot = winning_entry["char_slot"]
+
+			if(!winner)
+				continue
+
+			job_debug("SLATE: Round [round_index] assigning [winner] to [job.title] (char_slot [win_char_slot])")
+			assign_role(winner, job, char_slot = win_char_slot, do_eligibility_checks = FALSE)
+
+	job_debug("SLATE: All 5 rounds complete, [length(unassigned)] players still unassigned")
+
 /// Assigns roles that are considered high priority, either due to dynamic needing to force a specific role for a specific ruleset
 /// or making sure roles critical to round progression exist where possible every shift.
 /datum/controller/subsystem/job/proc/assign_priority_positions()
-	job_debug("APP: Assigning Dynamic ruleset forced occupations: [LAZYLEN(forced_occupations)]")
 	for(var/datum/mind/mind as anything in forced_occupations)
 		var/mob/dead/new_player = mind.current
 		// Eligibility checks already carried out as part of the dynamic ruleset trim_candidates proc.

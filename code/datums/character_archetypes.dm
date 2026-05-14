@@ -37,6 +37,13 @@
 		/datum/quirk/heterochromatic = 1,\
 	)
 
+	///List of job typepaths this archetype is allowed to select in the character slate.
+	///Jobs with JOB_ALWAYS_AVAILABLE are always selectable regardless of this list.
+	var/list/available_jobs = list()
+	/// Assoc list of job typepath -> integer bonus weight added to the slate lottery for players with this archetype.
+	/// A value of 0 prevents the lottery win entirely. Values are additive with the base weight of 1.
+	var/list/job_weights = list()
+
 /// Returns an associative list of typepath -> QUIRK_CATEGORY_* string
 /datum/character_archetype/proc/roll_quirks()
 	var/list/rolled_quirks = list()

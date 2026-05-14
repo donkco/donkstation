@@ -247,6 +247,8 @@ DEFINE_BITFIELD(departments_bitflags, list(
 #define JOB_ANTAG_BLACKLISTED (1<<13)
 /// This job will never be selected as an antag role IF config `protect_roles_from_antagonist` is set
 #define JOB_ANTAG_PROTECTED (1<<14)
+/// This job is always available in the character slate job picker regardless of archetype or quirks.
+#define JOB_ALWAYS_AVAILABLE (1<<15)
 
 DEFINE_BITFIELD(job_flags, list(
 	"JOB_ANNOUNCE_ARRIVAL" = JOB_ANNOUNCE_ARRIVAL,
@@ -262,6 +264,7 @@ DEFINE_BITFIELD(job_flags, list(
 	"JOB_HIDE_WHEN_EMPTY" = JOB_HIDE_WHEN_EMPTY,
 	"JOB_LATEJOIN_ONLY" = JOB_LATEJOIN_ONLY,
 	"JOB_HEAD_OF_STAFF" = JOB_HEAD_OF_STAFF,
+	"JOB_ALWAYS_AVAILABLE" = JOB_ALWAYS_AVAILABLE,
 ))
 
 /// Combination flag for jobs which are considered regular crew members of the station.
