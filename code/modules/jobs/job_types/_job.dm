@@ -144,6 +144,35 @@
 	if(isnum(new_total_positions))
 		total_positions = new_total_positions
 
+/**
+ * Returns the lottery weight for this job when a given client is competing for it in the character slate lottery.
+ * Base weight is 1. Archetype and quirk bonuses are additive. Minimum returned value is 0 (prevents winning).
+ * Bonus weights are declared on the archetype/quirk datums as job_weights[job_typepath] = integer.
+ * Override this proc on specific subtypes for custom logic (e.g. checking character gender).
+ */
+/datum/job/proc/get_job_weight(client/C)
+	var/weight = 1
+	if(!C?.prefs)
+		return weight
+
+	// Archetype bonus: look up the player's archetype singleton and read its job_weights for this job.
+	var/arch_id = C.prefs.archetype_id
+	if(arch_id)
+		var/datum/character_archetype/arch = SScharacters.get_archetype_by_id(arch_id)
+		if(arch && (src.type in arch.job_weights))
+			weight += arch.job_weights[src.type]
+
+	// Quirk bonuses: each quirk prototype can declare a bonus for this job typepath.
+	for(var/quirk_name in C.prefs.all_quirks)
+		var/quirk_typepath = SSquirks.quirks[quirk_name]
+		if(!quirk_typepath)
+			continue
+		var/datum/quirk/proto = SSquirks.quirk_prototypes[quirk_typepath]
+		if(proto && (src.type in proto.job_weights))
+			weight += proto.job_weights[src.type]
+
+	return max(weight, 0)
+
 /// Executes after the mob has been spawned in the map. Client might not be yet in the mob, and is thus a separate variable.
 /datum/job/proc/after_spawn(mob/living/spawned, client/player_client)
 	SHOULD_CALL_PARENT(TRUE)

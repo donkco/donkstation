@@ -73,6 +73,11 @@
 
 	///List of skills the user has received a reward for. Should not be used to keep track of currently known skills. Lazy list because it shouldnt be filled often
 	var/list/skills_rewarded
+
+	/// The character slot index used when this mind was assigned its roundstart job via the character slate.
+	/// Set by SSjob.assign_role() and read by create_character() to load the correct character's appearance.
+	/// 0 means "use default_slot" (unset).
+	var/assigned_character_slot = 0
 	///Assoc list of skills. Use SKILL_LVL to access level, and SKILL_EXP to access skill's exp.
 	var/list/known_skills = list()
 	///Weakref to thecharacter we joined in as- either at roundstart or latejoin, so we know for persistent scars if we ended as the same person or not

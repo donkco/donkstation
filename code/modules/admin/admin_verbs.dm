@@ -317,6 +317,49 @@ ADMIN_VERB(set_dynex_scale, R_FUN, "Set DynEx Scale", "Set the scale multiplier 
 ADMIN_VERB(atmos_control, R_DEBUG|R_SERVER, "Atmos Control Panel", "Open the atmospherics control panel.", ADMIN_CATEGORY_DEBUG)
 	SSair.ui_interact(user.mob)
 
+ADMIN_VERB(sim_job_assignment_random, R_DEBUG, "Sim Job Assignment (Random)", "Simulate slate job assignment with randomly generated player slates.", ADMIN_CATEGORY_DEBUG)
+	var/player_count = tgui_input_number(user, "How many simulated players?", "Job Assignment Sim", default = 8, min_value = 1, max_value = 100, round_value = TRUE)
+	if(isnull(player_count))
+		return
+	var/max_picks = tgui_input_number(user, "Max slate picks per player (1-5)?", "Job Assignment Sim", default = 3, min_value = 1, max_value = 5, round_value = TRUE)
+	if(isnull(max_picks))
+		return
+	var/list/results = SSjob.simulate_job_assignment_random(player_count, max_picks)
+	var/datum/browser/popup = new(user.mob, "sim_job_assignment", "Job Assignment Sim Results", 700, 500)
+	popup.set_content("<pre>[results.Join("\n")]</pre>")
+	popup.open()
+	log_admin("[key_name(user)] ran random job assignment sim ([player_count] players, [max_picks] picks).")
+	BLACKBOX_LOG_ADMIN_VERB("Sim Job Assignment Random")
+
+ADMIN_VERB(sim_job_assignment_manual, R_DEBUG, "Sim Job Assignment (Manual)", "Manually enter player slates and simulate slate job assignment.", ADMIN_CATEGORY_DEBUG)
+	var/player_count = tgui_input_number(user, "How many simulated players?", "Job Assignment Sim", default = 3, min_value = 1, max_value = 20, round_value = TRUE)
+	if(isnull(player_count))
+		return
+	var/list/player_slates = list()
+	for(var/p in 1 to player_count)
+		var/list/slate = list()
+		for(var/slot in 1 to 5)
+			var/job_title = tgui_input_text(user, "Player [p] — Slot [slot]: Job title (leave blank to fill remaining slots as empty).", "Job Assignment Sim", max_length = 64)
+			if(isnull(job_title))
+				return
+			if(!length(job_title))
+				for(var/remaining in slot to 5)
+					slate += list(list("char_slot" = 0, "job" = ""))
+				break
+			var/datum/job/found = SSjob.get_job(job_title)
+			if(!found)
+				to_chat(user, span_warning("'[job_title]' is not a recognized job — slot left empty."), confidential = TRUE)
+				slate += list(list("char_slot" = 0, "job" = ""))
+				continue
+			slate += list(list("char_slot" = 1, "job" = found.title))
+		player_slates += list(slate)
+	var/list/results = SSjob.simulate_job_assignment(player_slates)
+	var/datum/browser/popup = new(user.mob, "sim_job_assignment", "Job Assignment Sim Results", 700, 500)
+	popup.set_content("<pre>[results.Join("\n")]</pre>")
+	popup.open()
+	log_admin("[key_name(user)] ran manual job assignment sim ([player_count] players).")
+	BLACKBOX_LOG_ADMIN_VERB("Sim Job Assignment Manual")
+
 ADMIN_VERB(reload_cards, R_DEBUG, "Reload Cards", "Reload all TCG cards.", ADMIN_CATEGORY_DEBUG)
 	if(!SStrading_card_game.loaded)
 		message_admins("The card subsystem is not currently loaded")

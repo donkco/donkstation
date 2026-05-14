@@ -33,7 +33,7 @@
 	. = ..()
 	// set the pixel offsets based on the direction the ramp is facing
 	if((dir in dir_offsets) && !mapload)
-		SET_BASE_PIXEL(dir_offsets[dir]dir_offsets[1], dir_offsets[dir][2])
+		SET_BASE_PIXEL(dir_offsets[dir][1], dir_offsets[dir][2])
 
 /obj/structure/steps/concrete_ramp/setDir(newdir)
 	. = ..()

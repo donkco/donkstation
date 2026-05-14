@@ -50,6 +50,11 @@
 	var/contract_bottom_image = null
 	/// Defines whether this quirk is positive, negative, or neutral.
 	var/quirk_category = QUIRK_CATEGORY_NEUTRAL
+	///List of job typepaths this quirk additionally unlocks in the character slate.
+	var/list/unlocked_jobs = list()
+	/// Assoc list of job typepath -> integer bonus weight added to the slate lottery for players who have this quirk.
+	/// Values are additive with the base weight of 1.
+	var/list/job_weights = list()
 
 /datum/quirk/New()
 	. = ..()
