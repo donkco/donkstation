@@ -94,6 +94,28 @@
 /// Bit shift for the environment channel status of the APC.
 #define UPOVERLAY_ENVIRON_SHIFT (8)
 
+
+// Bitflags:
+/// Bitflag indicating that the APCs operating status overlay should be shown.
+#define UPOVERLAY_OPERATING (1<<2)
+/// Bitflag indicating that the APCs locked status overlay should be shown.
+#define UPOVERLAY_LOCKED (1<<3)
+/// The APC has a power cell.
+#define UPSTATE_CELL_IN (1<<4)
+/// The APC is broken or damaged.
+#define UPSTATE_BROKE (1<<5)
+/// The APC is undergoing maintenance.
+#define UPSTATE_MAINT (1<<6)
+/// The APCs wires are exposed.
+#define UPSTATE_WIREEXP (1<<7)
+/// The APC has a terminal deployed
+#define UPOVERLAY_TERMINAL (1<<8)
+/// The APC has its electronics inserted
+#define UPOVERLAY_ELECTRONICS_INSERT (1<<9)
+/// The APC has its electronics fastened
+#define UPOVERLAY_ELECTRONICS_FASTENED (1<<10)
+
+
 #define APC_AI_NO_MALF 0
 #define APC_AI_NO_HACK 1
 #define APC_AI_HACK_NO_SHUNT 2
