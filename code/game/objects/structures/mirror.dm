@@ -44,6 +44,8 @@
 	for(var/i in mirror_options)
 		mirror_options[i] = icon('icons/hud/radial.dmi', i)
 
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/mirror)
+
 /obj/structure/mirror/Initialize(mapload)
 	. = ..()
 	var/static/list/reflection_filter = alpha_mask_filter(icon = icon('icons/obj/watercloset.dmi', "mirror_mask"))
@@ -68,7 +70,13 @@
 		return FALSE
 	return TRUE
 
+<<<<<<< HEAD
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
+=======
+/obj/structure/mirrr/Initialize(mapload)
+	. = ..()
+	find_and_hang_on_wall()
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/structure/mirror/broken
 	icon_state = "mirror_broke"
@@ -77,7 +85,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror, 28)
 	. = ..()
 	atom_break(null, mapload)
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken, 28)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken)
 
 /obj/structure/mirror/attack_hand(mob/living/carbon/human/user)
 	. = ..()
@@ -353,7 +361,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken, 28)
 	icon_state = "mirror"
 	custom_materials = list(/datum/material/glass = SHEET_MATERIAL_AMOUNT * 5, /datum/material/silver = SHEET_MATERIAL_AMOUNT * 2)
 	result_path = /obj/structure/mirror
-	pixel_shift = 28
 
 /obj/structure/mirror/magic
 	name = "magic mirror"
@@ -361,6 +368,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/mirror/broken, 28)
 	icon_state = "magic_mirror"
 	mirror_options = MAGIC_MIRROR_OPTIONS
 	deconstructable = FALSE
+
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/mirror/magic)
 
 /obj/structure/mirror/magic/Initialize(mapload)
 	. = ..()

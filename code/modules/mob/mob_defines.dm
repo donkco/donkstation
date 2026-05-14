@@ -216,3 +216,10 @@
 
 	/// A ref of the area we're taking our ambient loop from.
 	var/area/ambience_tracked_area
+
+	/// What kind of underlay shadow do we use?
+	var/shadow_type = SHADOW_MEDIUM
+	/// Additional horizontal offset to apply to shadow underlay
+	var/shadow_offset_x = 0
+	/// Additional vertical offset to apply to shadow underlay
+	var/shadow_offset_y = 0

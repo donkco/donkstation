@@ -6,12 +6,23 @@
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
 	w_class = WEIGHT_CLASS_SMALL
+<<<<<<< HEAD
 	///The final object to construct after mount
 	var/result_path
 	/// For frames that are external to the wall they are placed on, like light fixtures and cameras.
 	var/wall_external = FALSE
 	//The amount of pixels to shift when mounted
 	var/pixel_shift
+=======
+	/// What do we create?
+	var/result_path
+	/// For frames that are external to the wall they are placed on, like light fixtures and cameras.
+	var/wall_external = FALSE
+	/// Do we used inverse directionals?
+	var/inverse_dir = TRUE
+	/// Can we only hang this on walls North of us? Preferably don't enable unless you absolutely have to
+	var/north_only = FALSE
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/item/wallframe/Initialize(mapload)
 	. = ..()
@@ -90,7 +101,16 @@
 	var/floor_to_support = get_dir(user, support)
 	if(!(floor_to_support in GLOB.cardinals))
 		balloon_alert(user, "stand in line with wall!")
+<<<<<<< HEAD
 		return FALSE
+=======
+		return
+
+	if (north_only && floor_to_wall != NORTH)
+		balloon_alert(user, "cannot place here!")
+		return
+
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	var/turf/T = get_turf(user)
 	if(!isfloorturf(T))
 		balloon_alert(user, "cannot place here!")
@@ -101,12 +121,32 @@
 
 	return TRUE
 
+<<<<<<< HEAD
 /**
  * Stuff to do after wallframe attached to support atom
  *
  * Arguments
  * * obj/attached_to - the object that has been created on the atom
 */
+=======
+/obj/item/wallframe/proc/attach(turf/on_wall, mob/user)
+	if(result_path)
+		playsound(src.loc, 'sound/machines/click.ogg', 75, TRUE)
+		user.visible_message(span_notice("[user.name] attaches [src] to the wall."),
+			span_notice("You attach [src] to the wall."),
+			span_hear("You hear clicking."))
+		var/facing_dir = get_dir(user, on_wall)
+
+		if(inverse_dir) // I'm sorry about this switch, O.turn wouldn't work for whatever reason.
+			facing_dir = REVERSE_DIR(facing_dir)
+		var/obj/hanging_object = new result_path(get_turf(user), facing_dir, TRUE)
+		hanging_object.setDir(facing_dir)
+
+		after_attach(hanging_object)
+
+	qdel(src)
+
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 /obj/item/wallframe/proc/after_attach(obj/attached_to)
 	transfer_fingerprints_to(attached_to)
 

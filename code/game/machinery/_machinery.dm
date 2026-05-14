@@ -195,9 +195,9 @@
 
 	return INITIALIZE_HINT_LATELOAD
 
-/obj/machinery/LateInitialize()
+/obj/machinery/LateInitialize(mapload)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	post_machine_initialize()
+	post_machine_initialize(/* mapload = */ mapload)
 
 /**
  * Called in LateInitialize meant to be the machine replacement to it
@@ -205,8 +205,12 @@
  * ensuring power works on all machines unless exempted with NO_POWER_USE.
  * This is the proc to override if you want to do anything in LateInitialize.
  */
+<<<<<<< HEAD
 /obj/machinery/proc/post_machine_initialize()
 	PROTECTED_PROC(TRUE)
+=======
+/obj/machinery/proc/post_machine_initialize(mapload)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	SHOULD_CALL_PARENT(TRUE)
 
 	find_and_mount_on_atom(late_init = TRUE)

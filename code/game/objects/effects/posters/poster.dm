@@ -315,7 +315,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/ripped, 32)
 		/obj/structure/sign/poster/abductor,
 	)
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/random, 32)
+INVERT_MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/random, 32)
 
 /obj/structure/sign/poster/greenscreen
 	name = "greenscreen"

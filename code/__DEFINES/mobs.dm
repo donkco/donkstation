@@ -1097,6 +1097,7 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define BUTT_SPRITE_FUZZY "fuzzy"
 #define BUTT_SPRITE_SLIME "slime"
 
+<<<<<<< HEAD
 /// Distance which you can see someone's ID card
 /// Short enough that you can inspect over tables (bartender checking age)
 #define ID_EXAMINE_DISTANCE 3
@@ -1108,3 +1109,11 @@ GLOBAL_LIST_INIT(regal_rat_minion_commands, list(
 	/datum/pet_command/follow,
 	/datum/pet_command/attack/mouse
 ))
+=======
+// Type of shadow used for drop shadows, really they're mostly just an icon state
+/// Don't bother applying the drop shadow component at all if this is provided as the shadow type
+#define SHADOW_NONE "none"
+#define SHADOW_SMALL "small"
+#define SHADOW_MEDIUM "medium"
+#define SHADOW_LARGE "large"
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d

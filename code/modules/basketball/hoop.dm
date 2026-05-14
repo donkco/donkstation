@@ -17,6 +17,9 @@
 	anchored = TRUE
 	density = TRUE
 	layer = ABOVE_MOB_LAYER
+	//physically offset ourself so we render right as a big icon (I think? that's what's goin on here)
+	pixel_y = 16
+	pixel_z = -16
 	interaction_flags_click = NEED_DEXTERITY | NEED_HANDS | FORBID_TELEKINESIS_REACH
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 3.5)
 	/// Keeps track of the total points scored
@@ -54,9 +57,14 @@
 
 /obj/structure/hoop/update_overlays()
 	. = ..()
+<<<<<<< HEAD
 
 	var/dir_offset_w = 0
 	var/dir_offset_z = 0
+=======
+	var/dir_offset_x = 0
+	var/dir_offset_y = 0
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	switch(dir)
 		if(NORTH)
@@ -69,8 +77,13 @@
 			dir_offset_w = 32
 
 	var/mutable_appearance/scoreboard = mutable_appearance('icons/obj/signs.dmi', "basketball_scorecard")
+<<<<<<< HEAD
 	scoreboard.pixel_w = dir_offset_w
 	scoreboard.pixel_z = dir_offset_z
+=======
+	scoreboard.pixel_w = dir_offset_x
+	scoreboard.pixel_z = dir_offset_y
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	. += scoreboard
 
 	var/ones = total_score % 10

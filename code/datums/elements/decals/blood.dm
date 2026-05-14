@@ -4,8 +4,13 @@
 	/// Emissive alpha of our parent
 	var/emissive_alpha = null
 
+<<<<<<< HEAD
 /datum/element/decal/blood/Attach(datum/target, _icon, _icon_state, _dir, _plane, _layer, _alpha, _color, _smoothing, _cleanable = CLEAN_TYPE_BLOOD, _description, mutable_appearance/_pic, _uses_filter, _emissive)
 	if (!isitem(target))
+=======
+/datum/element/decal/blood/Attach(datum/target, _icon, _icon_state, _dir, _plane, _layer, _alpha, _color,_pixel_w, _pixel_z, _smoothing, _cleanable=CLEAN_TYPE_BLOOD, _description, mutable_appearance/_pic)
+	if(!isitem(target))
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 		return ELEMENT_INCOMPATIBLE
 
 	var/obj/item/as_item = target
@@ -26,15 +31,31 @@
 		REMOVE_KEEP_TOGETHER(source_item, type)
 	return ..()
 
+<<<<<<< HEAD
 /datum/element/decal/blood/generate_appearance(_icon, _icon_state, _dir, _plane, _layer, _color = BLOOD_COLOR_RED, _alpha, _smoothing, source)
 	var/obj/item/as_item = source
 	ADD_KEEP_TOGETHER(as_item, type)
 	var/scale_factor_x = as_item.get_cached_width() / ICON_SIZE_X
 	var/scale_factor_y = as_item.get_cached_height() / ICON_SIZE_Y
+=======
+/datum/element/decal/blood/generate_appearance(_icon, _icon_state, _dir, _plane, _layer, _color, _alpha, _pixel_w, _pixel_z, _smoothing, source)
+	var/obj/item/I = source
+	ADD_KEEP_TOGETHER(I, type)
+	var/icon = I.icon
+	var/icon_state = I.icon_state
+	if(!icon || !icon_state)
+		// It's something which takes on the look of other items, probably
+		icon = I.icon
+		icon_state = I.icon_state
+	var/icon/icon_for_size = icon(icon, icon_state)
+	var/scale_factor_x = icon_for_size.Width()/world.icon_size
+	var/scale_factor_y = icon_for_size.Height()/world.icon_size
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	var/mutable_appearance/blood_splatter = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR) //MA of the blood that we apply
 	blood_splatter.transform = blood_splatter.transform.Scale(scale_factor_x, scale_factor_y)
 	blood_splatter.blend_mode = BLEND_INSET_OVERLAY
 	blood_splatter.color = _color
+<<<<<<< HEAD
 	var/mutable_appearance/emissive_splatter = null
 	if (emissive_alpha)
 		emissive_splatter = emissive_appearance('icons/effects/blood.dmi', "itemblood", as_item, alpha = emissive_alpha, effect_type = EMISSIVE_NO_BLOOM)
@@ -48,6 +69,10 @@
 			emissive_splatter.add_filter("blood_cutout", -1, alpha_mask_filter(render_source = as_item.render_target))
 	if (emissive_splatter)
 		blood_splatter.overlays += emissive_splatter
+=======
+	blood_splatter.pixel_w = _pixel_w
+	blood_splatter.pixel_z = _pixel_z
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	pic = blood_splatter
 	return TRUE
 

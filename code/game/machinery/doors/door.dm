@@ -73,6 +73,13 @@
 	var/elevator_status
 	/// What specific lift ID do we link with?
 	var/transport_linked_id
+	/// Icon state prefix to use for masks from vis_mask.dmi
+	var/dir_mask = "standard"
+	/// Similar to the above but used for cases where walls are adjacent
+	var/edge_dir_mask = "standard"
+	/// What directions in which we do not fully cover our darkness with masks
+	/// Allows for full directional visibility
+	var/inner_transparent_dirs = NONE
 
 	/// Checks to see if this airlock has an unrestricted "latch" within (will set to TRUE if present).
 	var/unres_latch = FALSE
@@ -138,7 +145,16 @@
 	)
 	AddElement(/datum/element/connect_loc, loc_connections)
 	AddElement(/datum/element/can_barricade)
+<<<<<<< HEAD
 	update_appearance()
+=======
+	make_dir_opaque()
+
+/obj/machinery/door/proc/make_dir_opaque()
+	if(!dir_mask || !edge_dir_mask)
+		return
+	AddComponent(/datum/component/vis_block, dir_mask, edge_dir_mask, inner_transparent_dirs)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/machinery/door/examine(mob/user)
 	. = ..()
@@ -509,6 +525,7 @@
 	switch(animation)
 		if(DOOR_OPENING_ANIMATION)
 			if(panel_open)
+<<<<<<< HEAD
 				icon_state = "o_[base_icon_state]_opening"
 			else
 				icon_state = "[base_icon_state]_opening"
@@ -517,16 +534,22 @@
 				icon_state = "o_[base_icon_state]_closing"
 			else
 				icon_state = "[base_icon_state]_closing"
+=======
+				icon_state = "o_doorc0"
+			else
+				icon_state = "doorc0"
+		if(DOOR_CLOSING_ANIMATION)
+			if(panel_open)
+				icon_state = "o_doorc1"
+			else
+				icon_state = "doorc1"
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 		if(DOOR_DENY_ANIMATION)
 			if(!machine_stat)
 				icon_state = "[base_icon_state]_deny"
 		else
-			icon_state = "[base_icon_state]_[density ? "closed" : "open"]"
-
-/obj/machinery/door/update_overlays()
-	. = ..()
-	if(panel_open)
-		. += mutable_appearance(icon, "panel_open")
+			icon_state = "[base_icon_state][density]"
+	return ..()
 
 /// Returns the delay to use for the passed in animation
 /// We'll do our cleanup once the delay runs out
@@ -576,6 +599,7 @@
 	if(operating)
 		return FALSE
 	operating = TRUE
+	SEND_SIGNAL(src, COSMIG_DOOR_OPENING)
 	use_energy(active_power_usage)
 	run_animation(DOOR_OPENING_ANIMATION)
 	set_opacity(FALSE)
@@ -614,6 +638,7 @@
 				return FALSE
 
 	operating = TRUE
+	SEND_SIGNAL(src, COSMIG_DOOR_CLOSING)
 
 	run_animation(DOOR_CLOSING_ANIMATION)
 	layer = closingLayer
@@ -693,6 +718,21 @@
 
 /obj/machinery/door/morgue
 	icon = 'icons/obj/doors/doormorgue.dmi'
+	icon_state = "closed"
+
+/obj/machinery/door/morgue/update_icon_state()
+	. = ..()
+	if(animation && animation != "deny")
+		icon_state = animation
+	else
+		icon_state = density ? "closed" : "open_top"
+
+/obj/machinery/door/morgue/update_overlays()
+	. = ..()
+	if(!density)
+		// If we're open we layer the bit below us "above" any mobs so they can walk through
+		. += mutable_appearance(icon, "open_bottom", ABOVE_MOB_LAYER, appearance_flags = KEEP_APART)
+		. += emissive_blocker(icon, "open_bottom", src, ABOVE_MOB_LAYER)
 
 /obj/machinery/door/morgue/Initialize(mapload)
 	. = ..()
@@ -710,9 +750,9 @@
 /obj/machinery/door/morgue/animation_length(animation)
 	switch(animation)
 		if(DOOR_OPENING_ANIMATION)
-			return 1.5 SECONDS
+			return 2.04 SECONDS
 		if(DOOR_CLOSING_ANIMATION)
-			return 1.5 SECONDS
+			return 1.64 SECONDS
 		if(DOOR_DENY_ANIMATION)
 			return 0.1 SECONDS
 
@@ -721,11 +761,11 @@
 		if(DOOR_OPENING_PASSABLE)
 			return 1.4 SECONDS
 		if(DOOR_OPENING_FINISHED)
-			return 1.5 SECONDS
+			return 2.04 SECONDS
 		if(DOOR_CLOSING_UNPASSABLE)
-			return 0.2 SECONDS
+			return 0.54 SECONDS
 		if(DOOR_CLOSING_FINISHED)
-			return 1.5 SECONDS
+			return 1.64 SECONDS
 
 /obj/machinery/door/proc/lock()
 	return

@@ -3,8 +3,8 @@
 /obj/machinery/airalarm
 	name = "air alarm"
 	desc = "A machine that monitors atmosphere levels. Goes off if the area is dangerous."
-	icon = 'icons/obj/machines/wallmounts.dmi'
-	icon_state = "alarmp"
+	icon = 'icons/obj/machines/air_alarm.dmi'
+	icon_state = "alarm"
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.05
 	active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION * 0.02
 	power_channel = AREA_USAGE_ENVIRON
@@ -87,12 +87,23 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	fire = 90
 	acid = 30
 
+<<<<<<< HEAD
 /obj/machinery/airalarm/get_save_vars()
 	return ..() - NAMEOF(src, name)
 
 /obj/machinery/airalarm/Initialize(mapload)
 	. = ..()
 	set_wires(new /datum/wires/airalarm(src))
+=======
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/machinery/airalarm)
+
+/obj/machinery/airalarm/Initialize(mapload, ndir, nbuild)
+	. = ..()
+	set_wires(new /datum/wires/airalarm(src))
+
+	if(ndir)
+		setDir(ndir)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	if(!mapload)
 		buildstage = AIR_ALARM_BUILD_NO_CIRCUIT
@@ -121,6 +132,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	select_mode(src, /datum/air_alarm_mode/filtering, should_apply = FALSE)
 
 	AddElement(/datum/element/connect_loc, atmos_connections)
+<<<<<<< HEAD
 	AddComponent(/datum/component/usb_port, \
 		typecacheof(list(
 			/obj/item/circuit_component/air_alarm_general,
@@ -129,6 +141,15 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 			/obj/item/circuit_component/air_alarm_vents
 		), only_root_path = TRUE) \
 	)
+=======
+	AddComponent(/datum/component/usb_port, list(
+		/obj/item/circuit_component/air_alarm_general,
+		/obj/item/circuit_component/air_alarm,
+		/obj/item/circuit_component/air_alarm_scrubbers,
+		/obj/item/circuit_component/air_alarm_vents
+	))
+	AddComponent(/datum/component/examine_balloon)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	GLOB.air_alarms += src
 	if(mapload)
@@ -549,15 +570,18 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 				icon_state = "alarm_b1"
 		return ..()
 
-	icon_state = isnull(connected_sensor) ? "alarmp" : "alarmp_remote"
+	icon_state = isnull(connected_sensor) ? "alarm" : "alarm_remote"
 	return ..()
 
 /obj/machinery/airalarm/update_overlays()
 	. = ..()
-
-	if(panel_open || (machine_stat & (NOPOWER|BROKEN)) || shorted)
+	// Open panels will only display a light on the final buildstage
+	if(panel_open)
+		if(buildstage == AIR_ALARM_BUILD_COMPLETE)
+			. += mutable_appearance(icon, "light-out", layer, src, plane)
 		return
 
+<<<<<<< HEAD
 	var/state
 	if(danger_level == AIR_ALARM_ALERT_HAZARD)
 		state = "alarm1"
@@ -565,9 +589,18 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 		state = "alarm2"
 	else
 		state = "alarm0"
+=======
+	if((machine_stat & (NOPOWER|BROKEN)) || shorted)
+		. += mutable_appearance(icon, "light-out", layer, src, plane)
+		return ..()
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
-	. += mutable_appearance(icon, state)
-	. += emissive_appearance(icon, state, src, alpha = src.alpha)
+	var/alert_level = danger_level
+	var/area/our_area = get_area(src)
+	if(our_area.active_alarms[ALARM_ATMOS])
+		alert_level = 2
+	. += mutable_appearance(icon, "light-[alert_level]")
+	. += emissive_appearance(icon, "light-[alert_level]", src, alpha)
 
 /// Check the current air and update our danger level.
 /// [/obj/machinery/airalarm/var/danger_level]
@@ -649,8 +682,6 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	if(should_apply)
 		selected_mode.apply(my_area)
 	SEND_SIGNAL(src, COMSIG_AIRALARM_UPDATE_MODE, source)
-
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/airalarm, 27)
 
 /obj/machinery/airalarm/proc/speak(warning_message)
 	if(machine_stat & (BROKEN|NOPOWER))

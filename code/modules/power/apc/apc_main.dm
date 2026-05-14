@@ -17,8 +17,9 @@
 /obj/machinery/power/apc
 	name = "area power controller"
 	desc = "A control terminal for the area's electrical systems."
-	icon = 'icons/obj/machines/wallmounts.dmi'
-	icon_state = "apc0"
+
+	icon = 'icons/obj/APC.dmi'
+	icon_state = "frame"
 	use_power = NO_POWER_USE
 	req_access = null
 	max_integrity = 200
@@ -42,6 +43,7 @@
 	///Type of cell we start with
 	var/cell_type = /obj/item/stock_parts/power_store/battery/upgraded //Base cell has 2500 capacity. Enter the path of a different cell you want to use. cell determines charge rates, max capacity, ect. These can also be changed with other APC vars, but isn't recommended to minimize the risk of accidental usage of dirty editted APCs
 	///State of the cover (closed, opened, removed)
+	///Opens the upper hatch, exposes the cell, and the first part of the terminal
 	var/opened = APC_COVER_CLOSED
 	///Is the APC shorted and not working?
 	var/shorted = FALSE
@@ -112,8 +114,6 @@
 	var/low_power_nightshift_lights = FALSE
 	///Time when the nightshift where turned on last, to prevent spamming
 	var/last_nightshift_switch = 0
-	///Stores the flags for the icon state
-	var/update_state = -1
 	///Stores the flag for the overlays
 	var/update_overlay = -1
 	///Used to stop process from updating the icons too much
@@ -122,8 +122,6 @@
 	var/mob/remote_control_user = null
 	///Represents a signel source of power alarms for this apc
 	var/datum/alarm_handler/alarm_manager
-	/// Offsets the object by APC_PIXEL_OFFSET (defined in apc_defines.dm) pixels in the direction we want it placed in. This allows the APC to be embedded in a wall, yet still inside an area (like mapping).
-	var/offset_old
 	/// Used for apc helper called cut_AI_wire to make apc's wore responsible for ai connectione mended.
 	var/cut_AI_wire = FALSE
 	/// Used for apc helper called unlocked to make apc unlocked.
@@ -181,6 +179,16 @@
 		datum_flags |= DF_ISPROCESSING
 		SSmachines.processing_apcs += src
 
+<<<<<<< HEAD
+=======
+	//Pixel offset its appearance based on its direction
+	setDir(ndir)
+
+	hud_list = list(
+		MALF_APC_HUD = image(icon = 'icons/mob/huds/hud.dmi', icon_state = "apc_hacked", pixel_x = src.pixel_x, pixel_y = src.pixel_y)
+	)
+
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	//Assign it to its area. If mappers already assigned an area string fast load the area from it else get the current area
 	var/area/our_area = get_area(loc)
 	if(areastring)
@@ -213,16 +221,20 @@
 			cell = new cell_type(src)
 			cell.charge = start_charge * cell.maxcharge / 100 // (convert percentage to actual value)
 		make_terminal()
+<<<<<<< HEAD
 		///This is how we test to ensure that mappers use the directional subtypes of APCs, rather than use the parent and pixel-shift it themselves.
 		setDir(dir)
 		if(abs(offset_old) != APC_PIXEL_OFFSET)
 			log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([dir] | [uppertext(dir2text(dir))]) has pixel_[dir & (WEST|EAST) ? "x" : "y"] value [offset_old] - should be [dir & (SOUTH|EAST) ? "-" : ""][APC_PIXEL_OFFSET]. Use the directional/ helpers!")
 		find_and_mount_on_atom()
+=======
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	// For apcs created during the round players need to configure them from scratch
 	else
 		opened = APC_COVER_OPENED
 		operating = FALSE
 		set_machine_stat(machine_stat | MAINT)
+		setDir(REVERSE_DIR(ndir))
 
 	//Make the apc visually interactive
 	register_context()
@@ -241,6 +253,11 @@
 
 	AddElement(/datum/element/contextual_screentip_bare_hands, rmb_text = "Toggle interface lock")
 	AddElement(/datum/element/contextual_screentip_mob_typechecks, hovering_mob_typechecks)
+<<<<<<< HEAD
+=======
+	find_and_hang_on_wall()
+	AddComponent(/datum/component/examine_balloon)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/machinery/power/apc/Destroy()
 	if(malfai)
@@ -293,6 +310,7 @@
 	. = ..()
 	if(auto_name)
 		name = "\improper [get_area_name(area, TRUE)] APC"
+
 
 /obj/machinery/power/apc/proc/assign_to_area(area/target_area = get_area(src))
 	if(area == target_area)

@@ -26,6 +26,7 @@
 	icon = 'icons/obj/machines/barsigns.dmi'
 	desc = "85cr for a iced lactose-free caramel frappe?! Who buys that?!"
 
+<<<<<<< HEAD
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/xenobio_guide, 32)
 
 // Tram-mounted statistics plate
@@ -124,3 +125,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/nanotrasen, 32)
 	desc = "The Nanotrasen corporate logo."
 	icon_state = "nanotrasen_sign1"
 	buildable_sign = FALSE
+=======
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/xenobio_guide)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d

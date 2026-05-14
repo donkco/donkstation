@@ -44,10 +44,17 @@
 /datum/antagonist/blob/get_preview_icon()
 	var/datum/blobstrain/reagent/reactive_spines/reactive_spines = /datum/blobstrain/reagent/reactive_spines
 
+<<<<<<< HEAD
 	var/datum/universal_icon/icon = uni_icon('icons/mob/nonhuman-player/blob.dmi', "blob_core")
 	icon.blend_color(initial(reactive_spines.color), ICON_MULTIPLY)
 	icon.blend_icon(uni_icon('icons/mob/nonhuman-player/blob.dmi', "blob_core_overlay"), ICON_OVERLAY)
 	icon.scale(ANTAGONIST_PREVIEW_ICON_SIZE, ANTAGONIST_PREVIEW_ICON_SIZE)
+=======
+	var/icon/icon = icon('icons/mob/nonhuman-player/blob_tall.dmi', "blob_core")
+	icon.Blend(initial(reactive_spines.color), ICON_MULTIPLY)
+	icon.Blend(icon('icons/mob/nonhuman-player/blob_tall.dmi', "blob_core_overlay"), ICON_OVERLAY)
+	icon.Scale(ANTAGONIST_PREVIEW_ICON_SIZE, ANTAGONIST_PREVIEW_ICON_SIZE)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	return icon
 

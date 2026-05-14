@@ -84,6 +84,10 @@ GLOBAL_LIST_EMPTY(blob_nodes)
 	. = ..()
 	START_PROCESSING(SSobj, src)
 	GLOB.blob_telepathy_mobs |= src
+	var/mutable_appearance/high_marker = mutable_appearance('icons/mob/silicon/cameramob.dmi', "marker", ABOVE_MOB_LAYER, src, ABOVE_GAME_PLANE)
+	high_marker.pixel_y -= 12
+	add_overlay(high_marker)
+	AddElement(/datum/element/elevation, pixel_shift = 10)
 
 /mob/eye/blob/proc/validate_location()
 	var/turf/T = get_turf(src)
@@ -257,6 +261,7 @@ GLOBAL_LIST_EMPTY(blob_nodes)
 		else
 			live_guy.fully_heal()
 
+<<<<<<< HEAD
 	for(var/area_type in GLOB.the_station_areas)
 		var/area/check_area = GLOB.areas_by_type[area_type]
 		if(!(check_area.area_flags & BLOBS_ALLOWED))
@@ -270,6 +275,31 @@ GLOBAL_LIST_EMPTY(blob_nodes)
 		check_area.blend_mode = 0
 
 /mob/eye/blob/Destroy()
+=======
+		for(var/area/check_area in GLOB.areas)
+			if(!is_type_in_list(check_area, GLOB.the_station_areas))
+				continue
+			if(!(check_area.area_flags & BLOBS_ALLOWED))
+				continue
+			check_area.color = blobstrain.color
+			check_area.name = "blob"
+			check_area.icon = 'icons/mob/nonhuman-player/blob_tall.dmi'
+			check_area.icon_state = "blob_shield"
+			check_area.layer = BELOW_MOB_LAYER
+			check_area.SetInvisibility(INVISIBILITY_NONE)
+			check_area.blend_mode = 0
+
+	var/datum/antagonist/blob/B = mind.has_antag_datum(/datum/antagonist/blob)
+	if(B)
+		var/datum/objective/blob_takeover/main_objective = locate() in B.objectives
+		if(main_objective)
+			main_objective.completed = TRUE
+	to_chat(world, span_blobannounce("[real_name] consumed the station in an unstoppable tide!"))
+	SSticker.news_report = BLOB_WIN
+	SSticker.force_ending = FORCE_END_ROUND
+
+/mob/camera/blob/Destroy()
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	QDEL_NULL(blobstrain)
 
 	// Clear references immediately without iterating to avoid blocking

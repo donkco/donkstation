@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 /// Amount of travel distance to force open tram doors while moving
 #define TRAM_DOOR_RELEASE_THRESHOLD 17
+=======
+#define TRAM_DOOR_RECYCLE_TIME (2.7 SECONDS)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/machinery/door/airlock/tram
 	name = "tram door"
 	icon = 'icons/obj/doors/airlocks/tram/tram.dmi'
 	overlays_file = 'icons/obj/doors/airlocks/tram/tram-overlays.dmi'
+	// YET TO BE UPDATED TO 3/4ths
+	short_rendering = TRUE
 	multi_tile = TRUE
 	opacity = FALSE
 	assemblytype = /obj/structure/door_assembly/multi_tile/door_assembly_tram
@@ -16,6 +22,8 @@
 	doorOpen = 'sound/machines/tram/tramopen.ogg'
 	doorClose = 'sound/machines/tram/tramclose.ogg'
 	autoclose = FALSE
+	greyscale_config = null
+	greyscale_colors = null
 	/// Weakref to the tram we're attached
 	var/datum/weakref/transport_ref
 	var/retry_counter
@@ -28,6 +36,28 @@
 	if(!id_tag)
 		id_tag = assign_random_name()
 
+/obj/machinery/door/airlock/tram/animation_length(animation)
+	switch(animation)
+		if(DOOR_OPENING_ANIMATION)
+			return 1.3 SECONDS
+		if(DOOR_CLOSING_ANIMATION)
+			return 2 SECONDS
+
+/obj/machinery/door/airlock/tram/animation_segment_delay(animation)
+	switch(animation)
+		if(AIRLOCK_OPENING_TRANSPARENT)
+			return 0.6 SECONDS
+		if(AIRLOCK_OPENING_PASSABLE)
+			return 0.9 SECONDS
+		if(AIRLOCK_OPENING_FINISHED)
+			return 0.9 SECONDS
+		if(AIRLOCK_CLOSING_UNPASSABLE)
+			return 0.9 SECONDS
+		if(AIRLOCK_CLOSING_OPAQUE)
+			return 0.7 SECONDS
+		if(AIRLOCK_CLOSING_FINISHED)
+			return 0.9 SECONDS
+
 /obj/machinery/door/airlock/tram/open(forced = DEFAULT_DOOR_CHECKS)
 	if(welded || locked || seal)
 		return FALSE
@@ -38,13 +68,27 @@
 	if(forced == DEFAULT_DOOR_CHECKS && (operating || !hasPower() || wires.is_cut(WIRE_OPEN)))
 		return FALSE
 
+<<<<<<< HEAD
 	SEND_SIGNAL(src, COMSIG_AIRLOCK_OPEN, FALSE)
 	var/animate_open = forced == BYPASS_DOOR_CHECKS ? FALSE : TRUE
 	set_airlock_state(AIRLOCK_OPENING, animate_open, force_type = forced)
+=======
+	SEND_SIGNAL(src, COMSIG_AIRLOCK_OPEN, forced)
+	operating = TRUE
+	update_icon(ALL, AIRLOCK_OPENING)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	var/passable_delay = animation_segment_delay(AIRLOCK_OPENING_PASSABLE)
 	if(forced >= BYPASS_DOOR_CHECKS)
+<<<<<<< HEAD
 		passable_delay = 0
+=======
+		playsound(src, 'sound/machines/airlockforced.ogg', vol = 40, vary = FALSE)
+		sleep(animation_segment_delay(AIRLOCK_OPENING_TRANSPARENT))
+	else
+		playsound(src, doorOpen, vol = 40, vary = FALSE)
+		sleep(animation_segment_delay(AIRLOCK_OPENING_PASSABLE))
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	sleep(passable_delay)
 	set_density(FALSE)
@@ -52,10 +96,17 @@
 		filler.set_density(FALSE)
 	flags_1 &= ~PREVENT_CLICK_UNDER_1
 	air_update_turf(TRUE, FALSE)
+<<<<<<< HEAD
 	var/open_delay = forced == BYPASS_DOOR_CHECKS ? (0.2 SECONDS) : (animation_segment_delay(AIRLOCK_OPENING_FINISHED) - passable_delay)
 	sleep(open_delay)
 	layer = OPEN_DOOR_LAYER
 	set_airlock_state(AIRLOCK_OPEN, animated = FALSE)
+=======
+	sleep(animation_segment_delay(AIRLOCK_OPENING_FINISHED))
+	layer = OPEN_DOOR_LAYER
+	operating = FALSE
+	update_icon(ALL, AIRLOCK_OPEN)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 	return TRUE
 
@@ -89,9 +140,14 @@
 		playsound(src, SFX_SPARKS, vol = 75, vary = FALSE, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 	use_energy(50 JOULES)
 	layer = CLOSED_DOOR_LAYER
+<<<<<<< HEAD
 	set_airlock_state(AIRLOCK_CLOSING, animated = TRUE, force_type = forced)
 	var/unpassable_delay = animation_segment_delay(AIRLOCK_CLOSING_UNPASSABLE)
 	sleep(unpassable_delay)
+=======
+	update_icon(ALL, AIRLOCK_CLOSING)
+	sleep(animation_segment_delay(AIRLOCK_CLOSING_UNPASSABLE))
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	if(!hungry_door)
 		for(var/turf/checked_turf in locs)
 			for(var/atom/movable/blocker in checked_turf)
@@ -99,11 +155,19 @@
 					say("Please stand clear of the doors!")
 					playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 60, vary = FALSE, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 					layer = OPEN_DOOR_LAYER
+<<<<<<< HEAD
 					set_airlock_state(AIRLOCK_OPEN, animated = FALSE, force_type = forced)
 					return FALSE
 	SEND_SIGNAL(src, COMSIG_AIRLOCK_CLOSE)
 	var/opaque_delay = animation_segment_delay(AIRLOCK_CLOSING_OPAQUE) - unpassable_delay
 	sleep(opaque_delay)
+=======
+					operating = FALSE
+					update_icon(ALL, AIRLOCK_OPEN)
+					return FALSE
+	SEND_SIGNAL(src, COMSIG_AIRLOCK_CLOSE)
+	sleep(animation_segment_delay(AIRLOCK_CLOSING_OPAQUE))
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	set_density(TRUE)
 	if(!isnull(filler))
 		filler.set_density(TRUE)
@@ -111,9 +175,15 @@
 	air_update_turf(TRUE, TRUE)
 	crush()
 	crushing_in_progress = FALSE
+<<<<<<< HEAD
 	var/close_delay = animation_segment_delay(AIRLOCK_CLOSING_FINISHED) - unpassable_delay - opaque_delay
 	sleep(close_delay)
 	set_airlock_state(AIRLOCK_CLOSED, animated = FALSE, force_type = forced)
+=======
+	sleep(animation_segment_delay(AIRLOCK_CLOSING_FINISHED))
+	operating = FALSE
+	update_icon(ALL, AIRLOCK_CLOSED)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	retry_counter = 0
 	return TRUE
 
@@ -257,6 +327,7 @@
 	if(force_type == BYPASS_DOOR_CHECKS)
 		return
 
+<<<<<<< HEAD
 	switch(animation)
 		if(DOOR_OPENING_ANIMATION)
 			use_energy(50 JOULES)
@@ -268,3 +339,6 @@
 			addtimer(CALLBACK(src, PROC_REF(handle_deny_end)), 0.6 SECONDS)
 
 #undef TRAM_DOOR_RELEASE_THRESHOLD
+=======
+#undef TRAM_DOOR_RECYCLE_TIME
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d

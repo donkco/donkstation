@@ -49,6 +49,7 @@
 		ADD_TRAIT(src, TRAIT_NO_FLOATING_ANIM, UPDATE_TRANSFORM_TRAIT)
 		addtimer(TRAIT_CALLBACK_REMOVE(src, TRAIT_NO_FLOATING_ANIM, UPDATE_TRANSFORM_TRAIT), 0.3 SECONDS, TIMER_UNIQUE|TIMER_OVERRIDE)
 	//if true, we want to avoid any animation time, it'll tween and not rotate at all otherwise.
+<<<<<<< HEAD
 	var/is_opposite_angle = REVERSE_ANGLE(lying_angle) == lying_prev
 	var/animate_time = is_opposite_angle ? 0 : UPDATE_TRANSFORM_ANIMATION_TIME
 	animate(src, transform = ntransform, time = animate_time, dir = final_dir, easing = SINE_EASING)
@@ -191,3 +192,10 @@
 /mob/living/set_base_pixel_y(new_value)
 	. = ..()
 	update_offsets()
+=======
+	var/is_opposite_angle = SIMPLIFY_DEGREES(lying_angle+180) == lying_prev
+	var/animate_time = is_opposite_angle ? 0 : UPDATE_TRANSFORM_ANIMATION_TIME
+	animate(src, transform = ntransform, time = animate_time, pixel_y = final_pixel_y, dir = final_dir, easing = (EASE_IN|EASE_OUT))
+
+	SEND_SIGNAL(src, COMSIG_LIVING_POST_UPDATE_TRANSFORM, resize, lying_angle, is_opposite_angle, final_pixel_y, animate_time)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d

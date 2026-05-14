@@ -10,23 +10,31 @@
 	icon_state = "securearea"
 	is_editable = TRUE
 
+<<<<<<< HEAD
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning, 32)
 MAPPING_DIAGONAL_HELPERS(/obj/structure/sign/warning, 32)
+=======
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/structure/sign/warning/secure_area
 	name = "\improper SECURE AREA sign"
 	sign_change_name = "Warning - Secure Area"
 	desc = "A warning sign which reads 'SECURE AREA'."
 
+<<<<<<< HEAD
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/secure_area, 32)
 MAPPING_DIAGONAL_HELPERS(/obj/structure/sign/warning/secure_area, 32)
+=======
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/secure_area)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/structure/sign/warning/docking
 	name = "\improper KEEP CLEAR: DOCKING AREA sign"
 	sign_change_name = "Warning - Docking Area"
 	desc = "A warning sign which reads 'KEEP CLEAR OF DOCKING AREA'."
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/docking, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/docking)
 
 /obj/structure/sign/warning/biohazard
 	name = "\improper BIOHAZARD sign"
@@ -34,7 +42,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/docking, 32)
 	desc = "A warning sign which reads 'BIOHAZARD'."
 	icon_state = "bio"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/biohazard, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/biohazard)
 
 /obj/structure/sign/warning/electric_shock
 	name = "\improper HIGH VOLTAGE sign"
@@ -42,7 +50,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/biohazard, 32)
 	desc = "A warning sign which reads 'HIGH VOLTAGE'."
 	icon_state = "shock"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/electric_shock, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/electric_shock)
 
 /obj/structure/sign/warning/vacuum
 	name = "\improper HARD VACUUM AHEAD sign"
@@ -50,7 +58,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/electric_shock, 32)
 	desc = "A warning sign which reads 'HARD VACUUM AHEAD'."
 	icon_state = "space"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum)
 
 /obj/structure/sign/warning/vacuum/external
 	name = "\improper EXTERNAL AIRLOCK sign"
@@ -58,7 +66,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum, 32)
 	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'."
 	layer = MOB_LAYER
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum/external, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum/external)
 
 /obj/structure/sign/warning/deathsposal
 	name = "\improper DISPOSAL: LEADS TO SPACE sign"
@@ -66,7 +74,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/vacuum/external, 32)
 	desc = "A warning sign which reads 'DISPOSAL: LEADS TO SPACE'."
 	icon_state = "deathsposal"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/deathsposal, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/deathsposal)
 
 /obj/structure/sign/warning/bodysposal
 	name = "\improper DISPOSAL: LEADS TO MORGUE sign"
@@ -74,7 +82,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/deathsposal, 32)
 	desc = "A warning sign which reads 'DISPOSAL: LEADS TO MORGUE'."
 	icon_state = "bodysposal"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/bodysposal, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/bodysposal)
 
 /obj/structure/sign/warning/fire
 	name = "\improper DANGER: FIRE sign"
@@ -83,7 +91,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/bodysposal, 32)
 	icon_state = "fire"
 	resistance_flags = FIRE_PROOF
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/fire, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/fire)
 
 /obj/structure/sign/warning/no_smoking
 	name = "\improper NO SMOKING sign"
@@ -92,7 +100,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/fire, 32)
 	icon_state = "nosmoking2"
 	resistance_flags = FLAMMABLE
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking)
 
 /obj/structure/sign/warning/no_smoking/circle
 	name = "\improper NO SMOKING sign"
@@ -100,7 +108,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking, 32)
 	desc = "A warning sign which reads 'NO SMOKING'."
 	icon_state = "nosmoking"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking/circle, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking/circle)
 
 /obj/structure/sign/warning/yes_smoking/circle
 	name = "\improper YES SMOKING sign"
@@ -108,7 +116,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/no_smoking/circle, 32)
 	desc = "A warning sign which reads 'YES SMOKING'."
 	icon_state = "yessmoking"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/yes_smoking/circle, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/yes_smoking/circle)
 
 /obj/structure/sign/warning/radiation
 	name = "\improper HAZARDOUS RADIATION sign"
@@ -116,14 +124,14 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/yes_smoking/circle, 32)
 	desc = "A warning sign alerting the user of potential radiation hazards."
 	icon_state = "radiation"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/radiation, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/radiation)
 
 /obj/structure/sign/warning/radiation/rad_area
 	name = "\improper RADIOACTIVE AREA sign"
 	sign_change_name = "Warning - Radioactive Area"
 	desc = "A warning sign which reads 'RADIOACTIVE AREA'."
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/radiation/rad_area, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/radiation/rad_area)
 
 /obj/structure/sign/warning/xeno_mining
 	name = "\improper DANGEROUS ALIEN LIFE sign"
@@ -132,7 +140,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/radiation/rad_area, 32)
 	icon = 'icons/obj/signs.dmi'
 	icon_state = "xeno_warning"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/xeno_mining, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/xeno_mining)
 
 /obj/structure/sign/warning/engine_safety
 	name = "\improper ENGINEERING SAFETY sign"
@@ -140,7 +148,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/xeno_mining, 32)
 	desc = "A sign detailing the various safety protocols when working on-site to ensure a safe shift."
 	icon_state = "safety"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/engine_safety, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/engine_safety)
 
 /obj/structure/sign/warning/explosives
 	name = "\improper HIGH EXPLOSIVES sign"
@@ -148,7 +156,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/engine_safety, 32)
 	desc = "A warning sign which reads 'HIGH EXPLOSIVES'."
 	icon_state = "explosives"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives)
 
 /obj/structure/sign/warning/explosives/alt
 	name = "\improper HIGH EXPLOSIVES sign"
@@ -156,7 +164,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives, 32)
 	desc = "A warning sign which reads 'HIGH EXPLOSIVES'."
 	icon_state = "explosives2"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives/alt, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives/alt)
 
 /obj/structure/sign/warning/test_chamber
 	name = "\improper TESTING AREA sign"
@@ -164,7 +172,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/explosives/alt, 32)
 	desc = "A sign that warns of high-power testing equipment in the area."
 	icon_state = "testchamber"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/test_chamber, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/test_chamber)
 
 /obj/structure/sign/warning/firing_range
 	name = "\improper FIRING RANGE sign"
@@ -172,7 +180,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/test_chamber, 32)
 	desc = "A sign reminding you to remain behind the firing line, and to wear ear protection."
 	icon_state = "firingrange"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/firing_range, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/firing_range)
 
 /obj/structure/sign/warning/cold_temp
 	name = "\improper FREEZING AIR sign"
@@ -180,7 +188,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/firing_range, 32)
 	desc = "A sign that warns of extremely cold air in the vicinity."
 	icon_state = "cold"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/cold_temp, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/cold_temp)
 
 /obj/structure/sign/warning/hot_temp
 	name = "\improper SUPERHEATED AIR sign"
@@ -188,7 +196,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/cold_temp, 32)
 	desc = "A sign that warns of extremely hot air in the vicinity."
 	icon_state = "heat"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/hot_temp, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/hot_temp)
 
 /obj/structure/sign/warning/gas_mask
 	name = "\improper CONTAMINATED AIR sign"
@@ -196,7 +204,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/hot_temp, 32)
 	desc = "A sign that warns of dangerous particulates or gasses in the air, instructing you to wear internals."
 	icon_state = "gasmask"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/gas_mask, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/gas_mask)
 
 /obj/structure/sign/warning/chem_diamond
 	name = "\improper REACTIVE CHEMICALS sign"
@@ -204,7 +212,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/gas_mask, 32)
 	desc = "A sign that warns of potentially reactive chemicals nearby, be they explosive, flammable, or acidic."
 	icon_state = "chemdiamond"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/chem_diamond, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/chem_diamond)
 
 /obj/structure/sign/warning/doors
 	name = "\improper BLAST DOORS sign"
@@ -222,7 +230,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/doors, 32)
 	desc = "A warning sign which reads 'ESCAPE PODS'."
 	icon_state = "pods"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/pods, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/pods)
 
 /obj/structure/sign/warning/rad_shelter
 	name = "\improper RADSTORM SHELTER sign"
@@ -230,4 +238,4 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/pods, 32)
 	desc = "A warning sign which reads 'RADSTORM SHELTER'."
 	icon_state = "radshelter"
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/rad_shelter, 32)
+WALL_MOUNT_DIRECTIONAL_HELPERS(/obj/structure/sign/warning/rad_shelter)

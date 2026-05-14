@@ -73,7 +73,16 @@
 	)
 	AddElement(/datum/element/contextual_screentip_tools, tool_behaviors)
 
+<<<<<<< HEAD
 	AddElement(/datum/element/simple_rotation, ROTATION_NEEDS_ROOM)
+=======
+	AddComponent(/datum/component/simple_rotation, ROTATION_NEEDS_ROOM)
+	update_appearance()
+
+/obj/structure/railing/update_appearance(updates)
+	. = ..()
+	update_layering()
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/structure/railing/examine(mob/user)
 	. = ..()
@@ -135,6 +144,15 @@
 	if(!(to_dir & dir))
 		return TRUE
 	return ..()
+
+/obj/structure/railing/proc/update_layering()
+	// If we're on a north edge, render as if we were "higher" then we are
+	if(dir & NORTH)
+		pixel_y = 32
+		pixel_z = -32
+	else
+		pixel_y = 0
+		pixel_z = 0
 
 /obj/structure/railing/proc/on_exit(datum/source, atom/movable/leaving, direction)
 	SIGNAL_HANDLER

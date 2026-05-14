@@ -38,6 +38,8 @@
 	max_integrity = 100
 	integrity_failure = 0.5
 
+	/// Does this camera try to attach to the wall?
+	var/should_wallmount = TRUE
 	///An analyzer in the camera being used for x-ray upgrade.
 	var/obj/item/analyzer/xray_module
 	///used to keep from revealing malf AI upgrades for user facing isXRay() checks when they use Upgrade Camera Network ability
@@ -97,12 +99,12 @@
 	var/datum/motion_group/area_motion = null
 	var/alarm_delay = 30 // Don't forget, there's another 3 seconds in queueAlarm()
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera, 0)
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/autoname, 0)
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/autoname/motion, 0)
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/emp_proof, 0)
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/motion, 0)
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray, 0)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera/autoname)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera/autoname/motion)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera/emp_proof)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera/motion)
+CAMERA_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray)
 
 /datum/armor/machinery_camera
 	melee = 50
@@ -135,8 +137,14 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray, 0)
 			update_appearance()
 #endif
 	alarm_manager = new(src)
+<<<<<<< HEAD
 	if(mapload)
 		find_and_mount_on_atom(mark_for_late_init = TRUE)
+=======
+	if(should_wallmount)
+		find_and_hang_on_wall(directional = TRUE, \
+			custom_drop_callback = CALLBACK(src, PROC_REF(deconstruct), FALSE))
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/machinery/camera/get_turfs_to_mount_on()
 	return list(get_step(src, dir))
@@ -347,6 +355,11 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray, 0)
 		return ..()
 	icon_state = "[xray_module][base_icon_state][in_use_lights ? "_in_use" : ""]"
 	return ..()
+
+/obj/machinery/camera/wall_mount_common_plane(direction)
+	if(direction == SOUTH || direction == NORTHEAST)
+		return TRUE
+	return FALSE
 
 /obj/machinery/camera/proc/toggle_cam(mob/user, displaymessage = TRUE)
 	camera_enabled = !camera_enabled

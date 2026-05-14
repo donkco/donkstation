@@ -4,8 +4,8 @@
 /obj/structure/grille
 	desc = "A flimsy framework of iron rods."
 	name = "grille"
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "grille"
+	icon = 'icons/obj/smooth_structures/grille.dmi'
+	icon_state = "grille-0"
 	base_icon_state = "grille"
 	density = TRUE
 	anchored = TRUE
@@ -15,7 +15,13 @@
 	armor_type = /datum/armor/structure_grille
 	max_integrity = 50
 	integrity_failure = 0.4
+<<<<<<< HEAD
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT)
+=======
+	smoothing_flags = SMOOTH_BITMASK
+	smoothing_groups = SMOOTH_GROUP_GRILLE
+	canSmoothWith = SMOOTH_GROUP_GRILLE
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 	var/rods_type = /obj/item/stack/rods
 	var/rods_amount = 2
 	/// Whether or not we're disappearing but dramatically
@@ -43,16 +49,55 @@
 /obj/structure/grille/update_appearance(updates)
 	if(QDELETED(src))
 		return
-	. = ..()
-	if((updates & UPDATE_SMOOTHING) && (smoothing_flags & USES_SMOOTHING))
-		QUEUE_SMOOTH(src)
+=======
+/obj/structure/grille/update_icon(updates=ALL)
+	if(QDELETED(src))
+		return
 
+	var/old_base_state = base_icon_state
+	var/ratio = atom_integrity / max_integrity
+	if(ratio <= 0.7)
+		icon = 'icons/obj/smooth_structures/grille_damaged.dmi'
+		base_icon_state = "grille_damaged"
+	else
+		icon = 'icons/obj/smooth_structures/grille.dmi'
+		base_icon_state = "grille"
+
+	if(old_base_state != base_icon_state)
+		icon_state = "[base_icon_state]-[smoothing_junction]"
+
+	var/old_smoothing_flags = smoothing_flags
+	if(broken)
+		icon = 'icons/obj/smooth_structures/tall_structure_variations.dmi'
+		icon_state = "grille-broken"
+		base_icon_state = "grille-broken"
+		smoothing_flags = NONE
+		smoothing_groups = null
+		canSmoothWith = null
+	else
+		smoothing_flags = initial(smoothing_flags)
+		smoothing_groups = initial(smoothing_groups)
+		canSmoothWith = initial(canSmoothWith)
+		SETUP_SMOOTHING()
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
+	. = ..()
+
+<<<<<<< HEAD
 /obj/structure/grille/update_icon_state()
 	if (broken)
 		icon_state = "broken[base_icon_state]"
 	else
 		icon_state = "[base_icon_state][((atom_integrity / max_integrity) <= 0.5) ? "50_[rand(0, 3)]" : null]"
 	return ..()
+=======
+	if(!(updates & UPDATE_SMOOTHING))
+		return
+	if(old_smoothing_flags == smoothing_flags && (smoothing_flags & USES_SMOOTHING))
+		return
+	// If our flags changed, update EVERYBODY
+	QUEUE_SMOOTH(src)
+	QUEUE_SMOOTH_NEIGHBORS(src)
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 
 /obj/structure/grille/examine(mob/user)
 	. = ..()
@@ -388,11 +433,17 @@
 	var/datum/powernet/powernet = powernet_info["powernet"]
 	return !!powernet.get_electrocute_damage()
 
+=======
+>>>>>>> 9cc72b5b68aba36399b6e74b23aab10d6d031a9d
 /obj/structure/grille/broken // Pre-broken grilles for map placement
-	icon_state = "brokengrille"
+	icon = 'icons/obj/smooth_structures/tall_structure_variations.dmi'
+	icon_state = "grille-broken"
 	density = FALSE
 	broken = TRUE
 	rods_amount = 1
+	smoothing_flags = null
+	smoothing_groups = null
+	canSmoothWith = null
 
 /obj/structure/grille/broken/Initialize(mapload)
 	. = ..()
