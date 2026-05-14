@@ -824,7 +824,8 @@ SUBSYSTEM_DEF(job)
 		var/list/job_candidates = list() // /datum/job -> list of assoc lists
 
 		for(var/mob/dead/new_player/player in unassigned)
-			if(!player.client?.prefs)
+			var/datum/client_interface/player_ci = GET_CLIENT(player)
+			if(!player_ci?.prefs)
 				continue
 
 			if(!allow_all && popcap_reached())
@@ -832,7 +833,7 @@ SUBSYSTEM_DEF(job)
 				try_reject_player(player)
 				continue
 
-			var/list/slate = player.client.prefs.job_slate
+			var/list/slate = player_ci.prefs.job_slate
 			if(!slate || round_index > length(slate))
 				continue
 
@@ -862,39 +863,43 @@ SUBSYSTEM_DEF(job)
 				job_candidates[job] = list()
 			job_candidates[job] += list(list("player" = player, "char_slot" = char_slot))
 
-		// Resolve each contested job for this round
+		// Resolve each contested job for this round — assign candidates up to slot cap
 		for(var/datum/job/job as anything in job_candidates)
-			var/list/candidates = job_candidates[job]
-			var/mob/dead/new_player/winner
-			var/win_char_slot
+			var/list/remaining = job_candidates[job]
+			var/available_slots = (job.spawn_positions == -1) ? length(remaining) : max(0, job.spawn_positions - job.current_positions)
 
-			if(length(candidates) == 1)
-				winner = candidates[1]["player"]
-				win_char_slot = candidates[1]["char_slot"]
-			else
-				// Weighted lottery among all candidates
-				var/list/weight_table = list()
-				for(var/list/candidate_entry as anything in candidates)
-					var/mob/dead/new_player/candidate = candidate_entry["player"]
-					if(!candidate.client)
-						continue
-					var/weight = job.get_job_weight(candidate.client)
-					if(weight > 0)
-						weight_table[candidate_entry] = weight
+			for(var/slot_num in 1 to available_slots)
+				if(!length(remaining))
+					break
 
-				if(!length(weight_table))
-					job_debug("SLATE: Round [round_index] all candidates have zero weight for [job.title], skipping")
-					continue
+				var/list/winner_entry
 
-				var/list/winning_entry = pick_weight(weight_table)
-				winner = winning_entry["player"]
-				win_char_slot = winning_entry["char_slot"]
+				if(length(remaining) == 1)
+					winner_entry = remaining[1]
+				else
+					// Weighted lottery among remaining candidates
+					var/list/weight_table = list()
+					for(var/list/candidate_entry as anything in remaining)
+						var/mob/dead/new_player/candidate = candidate_entry["player"]
+						var/datum/client_interface/candidate_ci = GET_CLIENT(candidate)
+						if(!candidate_ci)
+							continue
+						var/weight = job.get_job_weight(candidate_ci)
+						if(weight > 0)
+							weight_table[candidate_entry] = weight
 
-			if(!winner)
-				continue
+					if(!length(weight_table))
+						job_debug("SLATE: Round [round_index] all remaining candidates have zero weight for [job.title], skipping")
+						break
 
-			job_debug("SLATE: Round [round_index] assigning [winner] to [job.title] (char_slot [win_char_slot])")
-			assign_role(winner, job, char_slot = win_char_slot, do_eligibility_checks = FALSE)
+					winner_entry = pick_weight(weight_table)
+
+				var/mob/dead/new_player/winner = winner_entry["player"]
+				var/win_char_slot = winner_entry["char_slot"]
+				remaining -= winner_entry
+
+				job_debug("SLATE: Round [round_index] assigning [winner] to [job.title] (char_slot [win_char_slot])")
+				assign_role(winner, job, char_slot = win_char_slot, do_eligibility_checks = FALSE)
 
 	job_debug("SLATE: All 5 rounds complete, [length(unassigned)] players still unassigned")
 
@@ -984,13 +989,15 @@ SUBSYSTEM_DEF(job)
 		return JOB_UNAVAILABLE_PLAYTIME
 
 	// Run the banned check last since it should be the rarest check to fail and can access the database.
-	if(is_banned_from(player.ckey, possible_job.title))
+	var/datum/client_interface/candidate_ci = GET_CLIENT(player)
+	var/ban_ckey = player.ckey || candidate_ci?.ckey
+	// Skip the DB query for mock/simulated clients — istype returns FALSE for real /client instances.
+	if(ban_ckey && !istype(candidate_ci, /datum/client_interface) && is_banned_from(ban_ckey, possible_job.title))
 		job_debug("[debug_prefix] Error: [get_job_unavailable_error_message(JOB_UNAVAILABLE_BANNED, possible_job.title)], Player: [player][add_job_to_log ? ", Job: [possible_job]" : ""]")
 		return JOB_UNAVAILABLE_BANNED
 
 	// Check for character age
-	var/client/player_client = GET_CLIENT(player)
-	if(isnum(possible_job.required_character_age) && possible_job.required_character_age > player_client.prefs.read_preference(/datum/preference/numeric/age))
+	if(isnum(possible_job.required_character_age) && possible_job.required_character_age > candidate_ci?.prefs.read_preference(/datum/preference/numeric/age))
 		job_debug("[debug_prefix] Error: [get_job_unavailable_error_message(JOB_UNAVAILABLE_AGE)], Player: [player][add_job_to_log ? ", Job: [possible_job]" : ""]")
 		return JOB_UNAVAILABLE_AGE
 

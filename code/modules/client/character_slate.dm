@@ -42,17 +42,21 @@
 		if(!islist(entry))
 			entry = list("char_slot" = 0, "job" = "")
 		var/char_slot = entry["char_slot"]
-		var/char_name = ""
+		var/char_first_name = ""
+		var/char_last_name = ""
+
 		if(char_slot > 0)
 			if(char_slot == prefs.default_slot)
-				char_name = prefs.read_preference(/datum/preference/name/real_name) || "Unnamed"
+				char_first_name = prefs.read_preference(/datum/preference/name/real_name) || "Unnamed"
+				char_last_name = prefs.read_preference(/datum/preference/name/last_name) || "Unnamed"
 			else
 				var/save_data = prefs.savefile?.get_entry("character[char_slot]")
-				char_name = save_data?["real_name"] || "Unnamed"
+				char_first_name = save_data?["real_name"] || "Unnamed"
+				char_last_name = save_data?["last_name"] || ""
 		slots_out += list(list(
 			"index"     = i,
 			"char_slot" = char_slot,
-			"char_name" = char_name,
+			"char_name" = "[char_first_name] [char_last_name]",
 			"job"       = entry["job"],
 		))
 	data["slate_slots"] = slots_out
@@ -72,17 +76,20 @@
 	var/list/characters_out = list()
 	for(var/slot_i in 1 to prefs.max_save_slots)
 		var/created = FALSE
-		var/c_name = ""
+		var/first_name = ""
+		var/last_name = ""
 		if(slot_i == prefs.default_slot)
 			created = prefs.character_created
-			c_name = created ? (prefs.read_preference(/datum/preference/name/real_name) || "Unnamed") : ""
+			first_name = created ? (prefs.read_preference(/datum/preference/name/real_name) || "Unnamed") : ""
+			last_name = created ? (prefs.read_preference(/datum/preference/name/last_name) || "Unnamed") : ""
 		else
 			var/save_data = prefs.savefile?.get_entry("character[slot_i]")
 			created = !!(save_data?["character_created"])
 			if(created)
-				c_name = save_data?["real_name"] || "Unnamed"
+				first_name = save_data?["real_name"] || "Unnamed"
+				last_name = save_data?["last_name"] || "Unnamed"
 		if(created)
-			characters_out += list(list("slot" = slot_i, "name" = c_name))
+			characters_out += list(list("slot" = slot_i, "name" = "[first_name] [last_name]"))
 	data["slate_characters"] = characters_out
 
 	var/list/available_jobs_out = list()
@@ -140,7 +147,7 @@
 					slot_entry["job"] = ""
 			else
 				slot_entry["job"] = ""
-			prefs.save_character()
+			prefs.save_preferences()
 			return TRUE
 
 		if("slate_set_job")
@@ -174,7 +181,7 @@
 					other["job"] = ""
 					break
 			set_entry["job"] = job_title
-			prefs.save_character()
+			prefs.save_preferences()
 			return TRUE
 
 		if("slate_clear_slot")
@@ -186,7 +193,7 @@
 				return FALSE
 			clear_entry["char_slot"] = 0
 			clear_entry["job"] = ""
-			prefs.save_character()
+			prefs.save_preferences()
 			return TRUE
 
 		if("slate_reorder_slots")
@@ -204,7 +211,7 @@
 			// contents rather than inserting the list object, which corrupts the slate.
 			prefs.job_slate.Insert(towards, null)
 			prefs.job_slate[towards] = moved
-			prefs.save_character()
+			prefs.save_preferences()
 			return TRUE
 
 		if("slate_set_overflow")
@@ -221,5 +228,5 @@
 				if(!exists)
 					return FALSE
 			prefs.overflow_char_slot = char_slot
-			prefs.save_character()
+			prefs.save_preferences()
 			return TRUE

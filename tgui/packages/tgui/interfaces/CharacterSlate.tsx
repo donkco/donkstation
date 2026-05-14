@@ -80,6 +80,196 @@ const DROPDOWN_EMPTY: React.CSSProperties = {
   fontStyle: 'italic',
 };
 
+// ── PickerBackdrop ────────────────────────────────────────────────────────────
+// Transparent fixed overlay — clicking it closes any open picker.
+function PickerBackdrop({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 199,
+        background: 'transparent',
+      }}
+      onClick={onClose}
+    />
+  );
+}
+
+// ── SlateDropdown ─────────────────────────────────────────────────────────────
+// Styled dropdown container. Pass `style` overrides for per-instance tweaks.
+function SlateDropdown({
+  upward,
+  style,
+  children,
+}: {
+  upward: boolean;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        ...(upward ? DROPDOWN_STYLE_UPWARD : DROPDOWN_STYLE_DOWN),
+        minWidth: '240px',
+        zIndex: 200,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ── DropdownLabel ─────────────────────────────────────────────────────────────
+function DropdownLabel({ children }: { children: React.ReactNode }) {
+  return <div style={DROPDOWN_SECTION_LABEL}>{children}</div>;
+}
+
+// ── DropdownEmpty ─────────────────────────────────────────────────────────────
+function DropdownEmpty({ children }: { children: React.ReactNode }) {
+  return <div style={DROPDOWN_EMPTY}>{children}</div>;
+}
+
+// ── DropdownItem ──────────────────────────────────────────────────────────────
+// A single row in a picker. Set `danger` for destructive actions.
+function DropdownItem({
+  label,
+  selected,
+  muted,
+  danger,
+  hint,
+  title,
+  onClick,
+}: {
+  label: string;
+  selected?: boolean;
+  muted?: boolean;
+  danger?: boolean;
+  hint?: string;
+  title?: string;
+  onClick: () => void;
+}) {
+  const color = danger
+    ? '#c05050'
+    : muted
+      ? '#806040'
+      : selected
+        ? '#f0d080'
+        : '#e8c090';
+  const activeBg = !danger && selected ? '#5a2a0a' : undefined;
+  const hoverBg = danger ? '#3a0a0a' : '#3a1800';
+
+  return (
+    <div
+      title={title}
+      style={{
+        ...DROPDOWN_ITEM_STYLE,
+        color,
+        background: activeBg,
+        ...(danger ? { borderTop: '1px solid #3a1a08' } : undefined),
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = hoverBg;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = activeBg ?? 'transparent';
+      }}
+      onClick={onClick}
+    >
+      {label}
+      {hint && (
+        <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.6 }}>
+          {hint}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// ── CharacterPickerDropdown ───────────────────────────────────────────────────
+function CharacterPickerDropdown({
+  characters,
+  currentSlot,
+  upward,
+  onSelect,
+  onClear,
+}: {
+  characters: CharacterEntry[];
+  currentSlot: number;
+  upward: boolean;
+  onSelect: (slot: number) => void;
+  onClear: () => void;
+}) {
+  return (
+    <SlateDropdown upward={upward}>
+      <DropdownLabel>Select character</DropdownLabel>
+      {characters.length === 0 ? (
+        <DropdownEmpty>No characters created yet.</DropdownEmpty>
+      ) : (
+        characters.map((c) => (
+          <DropdownItem
+            key={c.slot}
+            label={c.name}
+            selected={c.slot === currentSlot}
+            onClick={() => onSelect(c.slot)}
+          />
+        ))
+      )}
+      <DropdownItem label="Clear slot" danger onClick={onClear} />
+    </SlateDropdown>
+  );
+}
+
+// ── JobPickerDropdown ─────────────────────────────────────────────────────────
+function JobPickerDropdown({
+  jobs,
+  currentJob,
+  occupiedJobs,
+  upward,
+  onSelect,
+}: {
+  jobs: JobEntry[];
+  currentJob: string;
+  occupiedJobs: string[];
+  upward: boolean;
+  onSelect: (job: string) => void;
+}) {
+  return (
+    <SlateDropdown upward={upward}>
+      <DropdownLabel>Select job</DropdownLabel>
+      {jobs.length === 0 ? (
+        <DropdownEmpty>No jobs available for this character.</DropdownEmpty>
+      ) : (
+        jobs.map((j) => {
+          const inOtherSlot =
+            j.title !== currentJob && occupiedJobs.includes(j.title);
+          return (
+            <DropdownItem
+              key={j.title}
+              label={j.title}
+              selected={j.title === currentJob}
+              muted={inOtherSlot}
+              hint={inOtherSlot ? '(in use)' : undefined}
+              title={
+                j.department
+                  ? `${j.department} — ${
+                      j.total_positions < 0 ? '∞' : j.total_positions
+                    } positions`
+                  : undefined
+              }
+              onClick={() => onSelect(j.title)}
+            />
+          );
+        })
+      )}
+    </SlateDropdown>
+  );
+}
+
 // ── ImageButton ───────────────────────────────────────────────────────────────
 // Fixed 240×52px button styled with button.png.
 function ImageButton(props: {
@@ -111,7 +301,7 @@ function ImageButton(props: {
         textOverflow: 'ellipsis',
         display: 'flex',
         alignItems: 'center',
-        fontSize: '13px',
+        fontSize: '16px',
         fontWeight: 'bold',
         letterSpacing: '0.3px',
         boxSizing: 'border-box',
@@ -144,8 +334,8 @@ export const CharacterSlate = () => {
   const CANVAS_W = 572;
   const CANVAS_H = 764;
   // Row layout inside the inner section of the background image
-  const ROW_TOP = 90; // Y offset of first row (inner section starts at ~84px)
-  const ROW_STRIDE = 100; // 96px height + 4px gap
+  const ROW_TOP = 96; // Y offset of first row (inner section starts at ~84px)
+  const ROW_STRIDE = 96; // 96px height, no gap
 
   return (
     <Window width={580} height={798} title="Character Slate">
@@ -281,67 +471,43 @@ export const CharacterSlate = () => {
                     onClick={() => setOverflowPickerOpen((v) => !v)}
                   />
                   {overflowPickerOpen && (
-                    <div style={DROPDOWN_STYLE_UPWARD}>
-                      <div style={DROPDOWN_SECTION_LABEL}>
-                        Overflow character
-                      </div>
-                      {slate_characters.length === 0 ? (
-                        <div style={DROPDOWN_EMPTY}>
-                          No characters created yet.
-                        </div>
-                      ) : (
-                        slate_characters.map((c) => (
-                          <div
-                            key={c.slot}
-                            style={{
-                              ...DROPDOWN_ITEM_STYLE,
-                              background:
-                                c.slot === overflow_char_slot
-                                  ? '#5a2a0a'
-                                  : undefined,
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = '#3a1800';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background =
-                                c.slot === overflow_char_slot
-                                  ? '#5a2a0a'
-                                  : 'transparent';
-                            }}
+                    <>
+                      <PickerBackdrop
+                        onClose={() => setOverflowPickerOpen(false)}
+                      />
+                      <SlateDropdown upward>
+                        <DropdownLabel>Overflow character</DropdownLabel>
+                        {slate_characters.length === 0 ? (
+                          <DropdownEmpty>
+                            No characters created yet.
+                          </DropdownEmpty>
+                        ) : (
+                          slate_characters.map((c) => (
+                            <DropdownItem
+                              key={c.slot}
+                              label={c.name}
+                              selected={c.slot === overflow_char_slot}
+                              onClick={() => {
+                                act('slate_set_overflow', {
+                                  char_slot: c.slot,
+                                });
+                                setOverflowPickerOpen(false);
+                              }}
+                            />
+                          ))
+                        )}
+                        {overflow_char_slot !== 0 && (
+                          <DropdownItem
+                            label="Clear"
+                            danger
                             onClick={() => {
-                              act('slate_set_overflow', {
-                                char_slot: c.slot,
-                              });
+                              act('slate_set_overflow', { char_slot: 0 });
                               setOverflowPickerOpen(false);
                             }}
-                          >
-                            {c.name}
-                          </div>
-                        ))
-                      )}
-                      {overflow_char_slot !== 0 && (
-                        <div
-                          style={{
-                            ...DROPDOWN_ITEM_STYLE,
-                            color: '#c05050',
-                            borderTop: '1px solid #3a1a08',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#3a0a0a';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'transparent';
-                          }}
-                          onClick={() => {
-                            act('slate_set_overflow', { char_slot: 0 });
-                            setOverflowPickerOpen(false);
-                          }}
-                        >
-                          Clear
-                        </div>
-                      )}
-                    </div>
+                          />
+                        )}
+                      </SlateDropdown>
+                    </>
                   )}
                 </div>
               </div>
@@ -433,62 +599,22 @@ function SlateRow(props: SlateRowProps) {
           }}
         />
         {charPickerOpen && (
-          <div
-            style={{
-              ...(openPickerUpward
-                ? DROPDOWN_STYLE_UPWARD
-                : DROPDOWN_STYLE_DOWN),
-              minWidth: '240px',
-            }}
-          >
-            <div style={DROPDOWN_SECTION_LABEL}>Select character</div>
-            {characters.length === 0 ? (
-              <div style={DROPDOWN_EMPTY}>No characters created yet.</div>
-            ) : (
-              characters.map((c) => (
-                <div
-                  key={c.slot}
-                  style={{
-                    ...DROPDOWN_ITEM_STYLE,
-                    background:
-                      c.slot === entry.char_slot ? '#5a2a0a' : undefined,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#3a1800';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background =
-                      c.slot === entry.char_slot ? '#5a2a0a' : 'transparent';
-                  }}
-                  onClick={() => {
-                    onSetCharacter(c.slot);
-                    setCharPickerOpen(false);
-                  }}
-                >
-                  {c.name}
-                </div>
-              ))
-            )}
-            <div
-              style={{
-                ...DROPDOWN_ITEM_STYLE,
-                color: '#c05050',
-                borderTop: '1px solid #3a1a08',
+          <>
+            <PickerBackdrop onClose={() => setCharPickerOpen(false)} />
+            <CharacterPickerDropdown
+              characters={characters}
+              currentSlot={entry.char_slot}
+              upward={openPickerUpward}
+              onSelect={(slot) => {
+                onSetCharacter(slot);
+                setCharPickerOpen(false);
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#3a0a0a';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-              }}
-              onClick={() => {
+              onClear={() => {
                 onClear();
                 setCharPickerOpen(false);
               }}
-            >
-              Clear slot
-            </div>
-          </div>
+            />
+          </>
         )}
       </div>
 
@@ -505,71 +631,19 @@ function SlateRow(props: SlateRowProps) {
           }}
         />
         {jobPickerOpen && (
-          <div
-            style={{
-              ...(openPickerUpward
-                ? DROPDOWN_STYLE_UPWARD
-                : DROPDOWN_STYLE_DOWN),
-              minWidth: '240px',
-            }}
-          >
-            <div style={DROPDOWN_SECTION_LABEL}>Select job</div>
-            {availableJobs.length === 0 ? (
-              <div style={DROPDOWN_EMPTY}>
-                No jobs available for this character.
-              </div>
-            ) : (
-              availableJobs.map((j) => {
-                const inOtherSlot =
-                  j.title !== entry.job && occupiedJobs.includes(j.title);
-                const isSelected = j.title === entry.job;
-                return (
-                  <div
-                    key={j.title}
-                    style={{
-                      ...DROPDOWN_ITEM_STYLE,
-                      color: inOtherSlot
-                        ? '#806040'
-                        : isSelected
-                          ? '#f0d080'
-                          : '#e8c090',
-                      background: isSelected ? '#5a2a0a' : undefined,
-                    }}
-                    title={
-                      j.department
-                        ? `${j.department} — ${j.total_positions < 0 ? '∞' : j.total_positions} positions`
-                        : undefined
-                    }
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#3a1800';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = isSelected
-                        ? '#5a2a0a'
-                        : 'transparent';
-                    }}
-                    onClick={() => {
-                      onSetJob(j.title);
-                      setJobPickerOpen(false);
-                    }}
-                  >
-                    {j.title}
-                    {inOtherSlot && (
-                      <span
-                        style={{
-                          marginLeft: '6px',
-                          fontSize: '11px',
-                          opacity: 0.6,
-                        }}
-                      >
-                        (in use)
-                      </span>
-                    )}
-                  </div>
-                );
-              })
-            )}
-          </div>
+          <>
+            <PickerBackdrop onClose={() => setJobPickerOpen(false)} />
+            <JobPickerDropdown
+              jobs={availableJobs}
+              currentJob={entry.job}
+              occupiedJobs={occupiedJobs}
+              upward={openPickerUpward}
+              onSelect={(job) => {
+                onSetJob(job);
+                setJobPickerOpen(false);
+              }}
+            />
+          </>
         )}
       </div>
     </div>

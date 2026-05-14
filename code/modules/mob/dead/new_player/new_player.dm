@@ -153,6 +153,12 @@
 	if(eligibility_check != JOB_AVAILABLE)
 		return eligibility_check
 
+	// Check archetype/quirk job availability — jobs not in the character's unlock list are unavailable.
+	if(client?.prefs)
+		var/list/avail = client.prefs.get_available_jobs_for_character(client.prefs.default_slot)
+		if(length(avail) && !(job.type in avail))
+			return JOB_UNAVAILABLE_GENERIC
+
 	if(latejoin && !job.special_check_latejoin(client))
 		return JOB_UNAVAILABLE_GENERIC
 	return JOB_AVAILABLE
