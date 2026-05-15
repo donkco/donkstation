@@ -203,7 +203,7 @@
 // -------------------- CONCRETE AND INDUSTRIAL TILES --------------------
 
 
-/turf/open/concrete/sludge_pool
+/turf/open/floor/concrete/sludge_pool
 	name = "sludge pool"
 	desc = "A basin filled with industrial waste from the telecrystal manufacturing process.\n\nThe sludge is thought to be composed of a complex mixture of acids, solvents and heavy metals."
 

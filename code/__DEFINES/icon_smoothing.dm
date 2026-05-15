@@ -159,7 +159,7 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_TILE_WALLS S_TURF(69) ///turf/closed/wall/tile
 #define SMOOTH_GROUP_PLYWOOD_WALLS S_TURF(70) ///turf/closed/wall/plywood
 #define SMOOTH_GROUP_DECAYING_TILE_WALLS S_TURF(71) ///turf/closed/wall/tile/decaying
-#define SMOOTH_GROUP_SLUDGE_POOL S_TURF(72) ///turf/open/concrete/sludge_pool
+#define SMOOTH_GROUP_SLUDGE_POOL S_TURF(72) ///turf/open/floor/concrete/sludge_pool
 #define SMOOTH_GROUP_SHAFT_GRATING S_TURF(73) ///turf/open/shaft_grating
 #define SMOOTH_GROUP_SHAFT S_TURF(74) ///turf/open/chasm/shaft
 #define SMOOTH_GROUP_PLASTITANIUM_SCALE S_TURF(75) ///turf/open/floor/plastitanium_tile/scale
