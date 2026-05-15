@@ -203,21 +203,6 @@
 // -------------------- CONCRETE AND INDUSTRIAL TILES --------------------
 
 
-/turf/open/concrete
-	name = "concrete slab"
-	desc = "Concrete flooring. Pourable stone!"
-
-	icon = 'icons/turf/floors/donkfloors/concrete_slab.dmi'
-	icon_state = "concrete_slab-0"
-	base_icon_state = "concrete_slab"
-	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
-	canSmoothWith = SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_SLUDGE_POOL
-
-	footstep = FOOTSTEP_CONCRETE
-
-	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 1)
-
 /turf/open/concrete/sludge_pool
 	name = "sludge pool"
 	desc = "A basin filled with industrial waste from the telecrystal manufacturing process.\n\nThe sludge is thought to be composed of a complex mixture of acids, solvents and heavy metals."
@@ -226,7 +211,7 @@
 	icon_state = "sludge_pool-0"
 	base_icon_state = "sludge_pool"
 	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_SLUDGE_POOL + SMOOTH_GROUP_CONCRETE + SMOOTH_GROUP_TURF_OPEN
+	smoothing_groups = SMOOTH_GROUP_SLUDGE_POOL + SMOOTH_GROUP_FLOOR_CONCRETE + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_SLUDGE_POOL
 
 	overfloor_placed = FALSE
