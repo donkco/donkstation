@@ -25,6 +25,8 @@
 	var/floor_tile = null
 	/// Determines if you can deconstruct this with a RCD
 	var/rcd_proof = FALSE
+	///Whether this can be detiled (e.g. with floor tiles or crowbar)
+	var/can_be_detiled = TRUE
 
 /turf/open/floor/Initialize(mapload)
 	. = ..()
@@ -131,6 +133,8 @@
 	. = ..()
 	if(.)
 		return .
+	if(!can_be_detiled)
+		return FALSE
 	if(overfloor_placed && istype(object, /obj/item/stack/tile))
 		try_replace_tile(object, user, modifiers)
 		return TRUE
@@ -140,10 +144,14 @@
 	return FALSE
 
 /turf/open/floor/crowbar_act(mob/living/user, obj/item/I)
+	if(!can_be_detiled)
+		return FALSE
 	if(overfloor_placed && pry_tile(I, user))
 		return TRUE
 
 /turf/open/floor/proc/try_replace_tile(obj/item/stack/tile/T, mob/user, list/modifiers)
+	if(!can_be_detiled)
+		return FALSE
 	if(T.turf_type == type && T.turf_dir == dir)
 		return
 	var/obj/item/crowbar/CB = user.is_holding_tool_quality(TOOL_CROWBAR)

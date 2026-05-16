@@ -12,8 +12,10 @@
 	var/action_text_third_person
 	/// Percentage chance of receiving a bonus worm
 	var/worm_chance
+	/// Soil sample text added to the shovel's forensics when dug. Null to disable.
+	var/soil_sample_text
 
-/datum/element/diggable/Attach(datum/target, to_spawn, amount = 1, worm_chance = 30, action_text = "dig up", action_text_third_person = "digs up")
+/datum/element/diggable/Attach(datum/target, to_spawn, amount = 1, worm_chance = 30, action_text = "dig up", action_text_third_person = "digs up", soil_sample_text = null)
 	. = ..()
 	if(!isturf(target))
 		return ELEMENT_INCOMPATIBLE
@@ -26,6 +28,7 @@
 	src.worm_chance = worm_chance
 	src.action_text = action_text
 	src.action_text_third_person = action_text_third_person
+	src.soil_sample_text = soil_sample_text
 
 	RegisterSignal(target, COMSIG_ATOM_TOOL_ACT(TOOL_SHOVEL), PROC_REF(on_shovel))
 
@@ -37,6 +40,11 @@
 /datum/element/diggable/proc/on_shovel(turf/source, mob/user, obj/item/tool)
 	SIGNAL_HANDLER
 
+	// Defer to a closed fresh grave if one is present, this kinda sucks but fuck man i dont know.
+	var/obj/structure/closet/crate/grave/fresh/grave = locate() in source
+	if(!isnull(grave) && !grave.opened)
+		return NONE
+
 	for(var/i in 1 to amount)
 		new to_spawn(source)
 	if (prob(worm_chance))
@@ -46,6 +54,9 @@
 		span_notice("[user] [action_text_third_person] [source]."),
 		span_notice("You [action_text] [source]."),
 	)
+
+	if(soil_sample_text)
+		tool.add_soil_sample(soil_sample_text)
 
 	playsound(source, 'sound/effects/shovel_dig.ogg', 50, TRUE)
 	source.ScrapeAway(flags = CHANGETURF_INHERIT_AIR)

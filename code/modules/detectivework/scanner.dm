@@ -123,6 +123,10 @@
 	if(length(atom_fibers))
 		log_entry.add_data_entry(DETSCAN_CATEGORY_FIBER, atom_fibers.Copy())
 
+	var/list/atom_soil_samples = GET_ATOM_SOIL_SAMPLES(scanned_atom)
+	if(length(atom_soil_samples))
+		log_entry.add_data_entry(DETSCAN_CATEGORY_SOIL, atom_soil_samples.Copy())
+
 	var/list/blood = GET_ATOM_BLOOD_DNA(scanned_atom)
 	if(length(blood))
 		log_entry.add_data_entry(DETSCAN_CATEGORY_BLOOD, blood.Copy())

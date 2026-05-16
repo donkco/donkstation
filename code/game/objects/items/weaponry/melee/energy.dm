@@ -419,8 +419,8 @@
 /obj/item/melee/energy/sword/surplus/Initialize(mapload)
 	. = ..()
 	RegisterSignal(src, COMSIG_TRANSFORMING_PRE_TRANSFORM, PROC_REF(check_power))
-	AddElement(/datum/element/examine_lore, \
-		lore = "This early iteration of the now infamous energy sword was, supposedly, a Waffle Corp prototype first trialed in a variety of armed conflicts \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "This early iteration of the now infamous energy sword was, supposedly, a Waffle Corp prototype first trialed in a variety of armed conflicts \
 		around the interstellar frontier.<br>\
 		<br>\
 		Unfortunately, the success rate of the platform, along with the survival rate of its users, was abysmally low. \
@@ -429,8 +429,8 @@
 		than if they started offloading them onto markets of various legitimacy to try and recoup costs. Thus, the Iaito was 'born'.<br><br>\
 		As a consequence of its haphazard proliferation and its low market price compared to later, improved energy sword models, examples of the Iaito are \
 		typically found in the hands of various grunts, mooks, goons, criminals, wannabe assassins, lunatics, or those otherwise embroiled in \
-		a desperate struggle. If you're actually trying to kill someone with this sword, you may or may not fit into one or more of those categories." \
-	)
+		a desperate struggle. If you're actually trying to kill someone with this sword, you may or may not fit into one or more of those categories.")
+	)))
 
 /obj/item/melee/energy/sword/surplus/examine(mob/user)
 	. = ..()

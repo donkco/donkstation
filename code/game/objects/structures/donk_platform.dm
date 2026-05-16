@@ -4,6 +4,7 @@
 	desc = "A concrete slab raised above the rest."
 
 	icon = 'icons/obj/smooth_structures/donk_platforms/platform_concrete.dmi'
+	base_icon_state = "platform_concrete"
 	icon_state = "platform_concrete"
 
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 2)
@@ -17,7 +18,7 @@
 	name = "concrete ramp"
 	desc = "A steep but sturdy ramp."
 	icon = 'icons/obj/donk_structures/donk_stairs.dmi'
-	icon_state = "concrete_ramp"
+	icon_state = "ramp-concrete"
 	anchored = TRUE
 	move_resist = INFINITY
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT)
@@ -32,13 +33,15 @@
 /obj/structure/steps/concrete_ramp/Initialize(mapload)
 	. = ..()
 	// set the pixel offsets based on the direction the ramp is facing
-	if((dir in dir_offsets) && !mapload)
-		SET_BASE_PIXEL(dir_offsets[dir][1], dir_offsets[dir][2])
+	if((dir_offsets["[dir]"]) && !mapload)
+		var/dir_list = dir_offsets["[dir]"]
+		SET_BASE_PIXEL(dir_list[1], dir_list[2])
 
 /obj/structure/steps/concrete_ramp/setDir(newdir)
 	. = ..()
-	if(newdir in dir_offsets)
-		SET_BASE_PIXEL(dir_offsets[newdir][1], dir_offsets[newdir][2])
+	if((dir_offsets["[newdir]"]))
+		var/dir_list = dir_offsets["[newdir]"]
+		SET_BASE_PIXEL(dir_list[1], dir_list[2])
 
 /obj/structure/steps/concrete_ramp/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	return NONE
@@ -51,3 +54,16 @@
 
 /obj/structure/steps/concrete_ramp/atom_deconstruct(disassembled = TRUE)
 	return
+
+
+/obj/structure/steps/concrete_ramp/south
+	dir = SOUTH
+
+/obj/structure/steps/concrete_ramp/east
+	dir = EAST
+
+/obj/structure/steps/concrete_ramp/north
+	dir = NORTH
+
+/obj/structure/steps/concrete_ramp/west
+	dir = WEST

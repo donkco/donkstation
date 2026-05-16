@@ -8,6 +8,8 @@
 #define GET_ATOM_BLOOD_DECALS(atom) atom.forensics?.get_visible_blood()
 /// Returns the fibers on this atom
 #define GET_ATOM_FIBRES(atom) atom.forensics?.fibers
+/// Returns the soil samples on this atom
+#define GET_ATOM_SOIL_SAMPLES(atom) atom.forensics?.soil_samples
 /// Returns the number of unique blood dna sources on this atom
 #define GET_ATOM_BLOOD_DNA_LENGTH(atom) (isnull(atom.forensics) ? 0 : length(atom.forensics.blood_DNA))
 /// Returns the number of *visible* blood dna on this atom

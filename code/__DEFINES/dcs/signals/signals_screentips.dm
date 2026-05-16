@@ -33,3 +33,11 @@
 
 /// Tells the screentips system that the list names was mutated.
 #define SCREENTIP_NAME_SET (1 << 0)
+
+/// An atom screentip name override.
+/// These are used for atoms that can override what name appears in the screentip when a user hovers over them.
+/// Examples include the lore element overriding a name when the user has sufficient lore skill.
+/// Called on /atom with a mutable screentip name list, the item being held, and the mob hovering.
+/// A screentip name override list is a list used for returning a string value from the signal. Only the first value matters.
+/// If you mutate the list in this signal, you must return SCREENTIP_NAME_SET.
+#define COMSIG_ATOM_SCREENTIP_NAME_REQUESTED "atom_screentip_name_requested"

@@ -74,8 +74,8 @@
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher/Initialize(mapload)
 	. = ..()
 	underbarrel = new /obj/item/gun/energy/recharge/fisher(src)
-	AddElement(/datum/element/examine_lore, \
-		lore = "The Ansem/SC is a Scarborough Arms overhaul suite for their own Ansem handgun, designed for special operators who operate operationally, \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The Ansem/SC is a Scarborough Arms overhaul suite for their own Ansem handgun, designed for special operators who operate operationally, \
 		especially against people who like using lightbulbs.<br>\
 		<br>\
 		The slide is chopped down, with the front half of the handgun featuring a monolithic integral suppressor built around the barrel, \
@@ -85,8 +85,8 @@
 		Scarborough Arms has never actually addressed allegations of their involvement with the modification and/or manufacture \
 		of the SC/FISHER or similar disruptor weapons. Prospective operators are reminded that kinetic light disruptors do not actually physically harm targets.<br>\
 		<br>\
-		Caveat emptor." \
-	)
+		Caveat emptor.")
+	)))
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher/Destroy()
 	QDEL_NULL(underbarrel)
