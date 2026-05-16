@@ -52,7 +52,7 @@
 	///Alpha of the nightshift light
 	var/nightshift_light_power = 0.45
 	///Basecolor of the nightshift light
-	var/nightshift_light_color = "#FFDDCC"
+	var/nightshift_light_color = "#f0d7b7"
 	///If true, the light is in low power mode
 	var/low_power_mode = FALSE
 	///If true, this light cannot ever be in low power mode
@@ -115,6 +115,7 @@
 	AddElement(/datum/element/contextual_screentip_bare_hands, rmb_text = "Remove bulb")
 	if(mapload)
 		find_and_mount_on_atom(mark_for_late_init = TRUE)
+
 
 /obj/machinery/light/get_turfs_to_mount_on()
 	return list(get_step(src, dir))

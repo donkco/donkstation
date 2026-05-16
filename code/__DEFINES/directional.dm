@@ -70,3 +70,28 @@
 	pixel_x = -offset; \
 	pixel_y = -offset; \
 }
+
+#define _WALL_MOUNT_DIRECTIONAL_HELPERS(path, north_offset, physical_north_offset, south_offset, east_offset, west_offset, horizontal_up_offset) \
+##path/directional/north {\
+	dir = NORTH; \
+	pixel_y = north_offset; \
+	pixel_z = physical_north_offset; \
+} \
+##path/directional/south {\
+	dir = SOUTH; \
+	pixel_z = south_offset; \
+} \
+##path/directional/east {\
+	dir = EAST; \
+	pixel_x = east_offset; \
+	pixel_z = horizontal_up_offset; \
+} \
+##path/directional/west {\
+	dir = WEST; \
+	pixel_x = west_offset; \
+	pixel_z = horizontal_up_offset; \
+}
+//_INVERTED_WALL_MOUNT_OFFSET(path, north_offset, physical_north_offset, south_offset, east_offset, west_offset, horizontal_up_offset)
+
+/// Directional helpers for things that use the wall_mount element
+#define WALL_MOUNT_DIRECTIONAL_HELPERS(path) _WALL_MOUNT_DIRECTIONAL_HELPERS(path, 13, 13, -1, 2, -2, 0)

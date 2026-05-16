@@ -99,7 +99,7 @@
 	desc = "Capsicum annuum. Spicy!"
 
 	icon_state = "pepper"
-	base_pixel_z = -8
+	SET_BASE_VISUAL_PIXEL(0, 8)
 
 	pot_remnants = list(/obj/effect/decal/cleanable/soil_spill, /obj/item/food/grown/chili)
 
@@ -120,7 +120,7 @@
 	desc = "Myrmecodia beccarii: This plant is a vertiable fortress, fiercely defended by its little six legged soldiers."
 
 	icon_state = "myrmeco"
-	base_pixel_z = -5
+	SET_BASE_VISUAL_PIXEL(0, 5)
 
 	force = 10
 	throwforce = 15
@@ -143,7 +143,7 @@
 	desc = "Arabidopsis thaliana: The most well studied plant in the universe! Other than that fact it is quite unremarkable..."
 
 	icon_state = "arabidopsis"
-	base_pixel_z = -4
+	SET_BASE_VISUAL_PIXEL(0, 4)
 
 //---- CERAMIC
 /obj/item/dedeplants/ceramic/monstera
@@ -151,7 +151,7 @@
 	desc = "Monstera deliciosa. And beautiful specimen at that!"
 
 	icon_state = "monstera"
-	base_pixel_z = -10
+	SET_BASE_VISUAL_PIXEL(0, 10)
 
 	force = 15
 	throwforce = 20
@@ -163,28 +163,28 @@
 	desc = "Dracaena trifasciata. How fitting!"
 
 	icon_state = "snake"
-	base_pixel_z = -6
+	SET_BASE_VISUAL_PIXEL(0, 6)
 
 /obj/item/dedeplants/ceramic/jade_plant
 	name = "jade plant"
 	desc = "Crassula ovata: A nice little succulent with glassy fat leaves. Also known as the money plant.\n\nYou sometimes dream about owning a literal money plant, however, once you start thinking about the inflationary implications of such a senario, reality comes quickly crashing back in."
 
 	icon_state = "jade"
-	base_pixel_z = -4
+	SET_BASE_VISUAL_PIXEL(0, 4)
 
 /obj/item/dedeplants/ceramic/sus_orchid
 	name = "syndicate orchid"
 	desc = "Astraenopsis suspectus: The first houseplant product with genetics expertly engineered for a life in space."
 
 	icon_state = "sus_orchid"
-	base_pixel_z = -6
+	SET_BASE_VISUAL_PIXEL(0, 6)
 
 /obj/item/dedeplants/ceramic/bonsai
 	name = "bonsai"
 	desc = "A perculiar tree, it has the appearance on an ancient bethemoth yet it remains the size of a sapling. Could this be the product of the ancient bonsai technique as practiced in the orient?"
 
 	icon_state = "bonsai-cypress"
-	base_pixel_z = -4
+	SET_BASE_VISUAL_PIXEL(0, 4)
 
 
 // --------------- CACTI --------------------------
@@ -211,7 +211,7 @@
 	name = "fluffy cactus"
 	desc = "A spiny succulent. This one has a nice head of white hair."
 
-	icon_state = "cactus"
+	icon_state = "cactus_topfluff"
 
 	force = 8
 	throwforce = 12
@@ -246,12 +246,13 @@
 	desc = "Opuntia ficus-indica: A cactus capable of producing delicious figs, imagine that!"
 
 	icon_state = "cactus_opuntia"
-	base_pixel_z = -6
 
 	force = 8
 	throwforce = 12
 	pot_hammer_sharpness = SHARP_EDGED
 	pot_hammer_wound_bonus = 5
+	SET_BASE_VISUAL_PIXEL(0, 6)
+
 
 #undef POT_KNOCKDOWN_THRESHOLD
 #undef POT_THROW_SPEED_MOD
