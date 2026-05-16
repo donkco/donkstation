@@ -4,8 +4,8 @@
 	desc = "A concrete slab raised above the rest."
 
 	icon = 'icons/obj/smooth_structures/donk_platforms/platform_concrete.dmi'
-	icon_state = "platform_concrete"
-
+	icon_state = "platform_concrete-0"
+	base_icon_state = "platform_concrete"
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 2)
 	max_integrity = 250
 	resistance_flags = FIRE_PROOF | FREEZE_PROOF

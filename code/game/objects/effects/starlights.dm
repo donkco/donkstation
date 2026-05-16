@@ -3,6 +3,7 @@
 	icon = 'icons/effects/starlights.dmi'
 	icon_state = "starlight-1"
 	layer = LIGHTING_PRIMARY_LAYER
+	plane = O_LIGHTING_VISUAL_PLANE
 	blend_mode = BLEND_ADD
 	color = COLOR_BLUE_GRAY
 	blocks_emissive = EMISSIVE_BLOCK_NONE
