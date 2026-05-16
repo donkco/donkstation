@@ -1434,6 +1434,9 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 ///Trait given when a mob has been tipped
 #define TRAIT_MOB_TIPPED "mob_tipped"
 
+/// Trait given to a shovel that is carrying a load of wet concrete
+#define TRAIT_SHOVEL_HAS_CONCRETE_LOAD "shovel_has_concrete_load"
+
 /// Trait which self-identifies as an enemy of the law
 #define TRAIT_ALWAYS_WANTED "always_wanted"
 
