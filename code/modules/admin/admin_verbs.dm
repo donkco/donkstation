@@ -318,7 +318,7 @@ ADMIN_VERB(atmos_control, R_DEBUG|R_SERVER, "Atmos Control Panel", "Open the atm
 	SSair.ui_interact(user.mob)
 
 ADMIN_VERB(sim_job_assignment_random, R_DEBUG, "Sim Job Assignment (Random)", "Simulate slate job assignment with randomly generated player slates.", ADMIN_CATEGORY_DEBUG)
-	var/player_count = tgui_input_number(user, "How many simulated players?", "Job Assignment Sim", default = 8, min_value = 1, max_value = 50, round_value = TRUE)
+	var/player_count = tgui_input_number(user, "How many simulated players?", "Job Assignment Sim", default = 8, min_value = 1, max_value = 100, round_value = TRUE)
 	if(isnull(player_count))
 		return
 	var/max_picks = tgui_input_number(user, "Max slate picks per player (1-5)?", "Job Assignment Sim", default = 3, min_value = 1, max_value = 5, round_value = TRUE)
