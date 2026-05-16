@@ -1006,9 +1006,8 @@
 // Deep Lore //
 
 /obj/item/melee/baton/security/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The Secure Apprehension Device (sometimes referred to as the SAD in the officer training manuals) is \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The Secure Apprehension Device (sometimes referred to as the SAD in the officer training manuals) is \
 		the unholy union of a mace and a cattleprod. This nonlethal device was designed to put a stop to ruffians, \
 		scoundrels, ne'er-do-wells and criminals wherever they may rear their ugly heads.<br>\
 		<br>\
@@ -1024,15 +1023,14 @@
 		Citizens' rights advocacy groups protest against the proliferation of stun batons as a policing tool, \
 		arguing that they are 'inhumane' and 'authoritarian'. Nanotrasen, on the other hand, has had no such qualms \
 		when deploying stun batons as a compliance measure across all of their existing stations and facilities against \
-		unruly members of staff." \
-	)
+		unruly members of staff.")
+	)))
 
 // Contractor Baton
 
 /obj/item/melee/baton/telescopic/contractor_baton/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The Contract Acquisition Device (sometimes referred to as the CAD in encrypted correspondence) is \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The Contract Acquisition Device (sometimes referred to as the CAD in encrypted correspondence) is \
 		one of the more frequently encountered examples of Cybersun Industries weaponry. Extremely similar to Nanotrasen's \
 		own Secure Apprehension Device (also simply known as the stun baton), the contractor baton is able to induce \
 		CNS disruption in a target to render them helpless. It is also capable of devastating blunt force trauma if \
@@ -1053,5 +1051,5 @@
 		or falsified memory injection, the establishment of 'dummy' command staff through the artificial acceleration \
 		of otherwise incompetent but useful crewmembers (whose incompetence will often result in an acceptable degree \
 		of operational disruption), which provides convenient scapegoats in the event of a security breach as well as \
-		frequent staff turnover and reassignment." \
-	)
+		frequent staff turnover and reassignment.")
+	)))

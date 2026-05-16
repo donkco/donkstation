@@ -109,8 +109,8 @@
 
 /mob/living/basic/space_dragon/mind_initialize()
 	. = ..()
-	if(shark_form && mind.get_skill_level(/datum/skill/fishing) < SKILL_LEVEL_APPRENTICE)
-		mind.set_level(/datum/skill/fishing, SKILL_LEVEL_APPRENTICE, TRUE)
+	if(shark_form && mind.get_skill_level(/datum/skill/fishing) < SKILL_LEVEL_NORMAL)
+		mind.set_level(/datum/skill/fishing, SKILL_LEVEL_NORMAL, TRUE)
 
 /mob/living/basic/space_dragon/proc/sharkify()
 	if(shark_form)
@@ -123,8 +123,8 @@
 	icon_state = icon_state == icon_living ? "sharkdragon" : "sharkdragon_dead"
 	icon_living = "sharkdragon"
 	icon_dead = "sharkdragon_dead"
-	if(mind && mind.get_skill_level(/datum/skill/fishing) < SKILL_LEVEL_APPRENTICE)
-		mind.set_level(/datum/skill/fishing, SKILL_LEVEL_APPRENTICE, TRUE)
+	if(mind && mind.get_skill_level(/datum/skill/fishing) < SKILL_LEVEL_NORMAL)
+		mind.set_level(/datum/skill/fishing, SKILL_LEVEL_NORMAL, TRUE)
 	client?.give_award(/datum/award/achievement/misc/sharkdragon, src)
 	update_appearance()
 

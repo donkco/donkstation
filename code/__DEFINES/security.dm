@@ -14,6 +14,8 @@
 #define DETSCAN_CATEGORY_REAGENTS "Reagents"
 /// ID Access
 #define DETSCAN_CATEGORY_ACCESS "ID Access"
+/// Soil particles found on tools or surfaces
+#define DETSCAN_CATEGORY_SOIL "Soil Samples"
 
 // The categories below do not have hard rules on what info is displayed, and are for categorizing info thematically.
 

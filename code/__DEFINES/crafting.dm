@@ -108,3 +108,4 @@
 #define CAT_ENTERTAINMENT "Entertainment"
 #define CAT_TOOLS "Tools"
 #define CAT_CULT "Blood Cult"
+#define CAT_CONCRETE_MOULDS "Concrete Moulds"

@@ -35,12 +35,12 @@
 
 /obj/item/disk/surgery/advanced_plastic_surgery/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/examine_lore, \
-		lore = "Most forms of plastic surgery became obsolete due in no small part to advances in genetics technology. \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "Most forms of plastic surgery became obsolete due in no small part to advances in genetics technology. \
 			Very basic methods still remain in use, but scarcely, and primarily to reverse a patient's disfigurements. \
 			As a consequence, this item became an antique to many collectors - \
-			though some back alley surgeons still seek one out for its now uncommon knowledge." \
-	)
+			though some back alley surgeons still seek one out for its now uncommon knowledge.")
+	)))
 
 /obj/item/disk/surgery/brainwashing
 	name = "brainwashing surgery disk"

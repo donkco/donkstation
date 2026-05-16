@@ -312,9 +312,8 @@
 
 /obj/item/gun/ballistic/rifle/boltaction/pipegun/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to recall a tale about [src]."), \
-		lore = "<b>You were told this story, in hushed tones, from a wizened man in a grey jumpsuit...</b><br><br>\
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "<b>You were told this story, in hushed tones, from a wizened man in a grey jumpsuit...</b><br><br>\
 		It is said that the first slaying committed on a Nanotrasen space station was by an assistant.<br><br>\
 		That this act, done by toolbox, maybe spear, was what consigned their kind to a life of destitution, rejection and violence.<br><br>\
 		They carry the weight of this act visibly; the grey jumpsuit. Breathing deeply filtered air. And with bloodsoaked yellow hands clenched into fists.<br><br>\
@@ -322,8 +321,8 @@
 		Eventually, these killing spirits sought to stake a claim on the metal tombs they were trapped within. Rejecting their status. Determined to be something more.<br><br>\
 		This weapon is one such tool. And it is a grim one indeed. Wrought from scrap, pulled from the station's walls and floors and the very nails holding it together.<br>\
 		<br>\
-		It is a symbol that the true masters of this place are not those who merely inhabit it. But the one willing to twist it towards a killing intent." \
-	)
+		It is a symbol that the true masters of this place are not those who merely inhabit it. But the one willing to twist it towards a killing intent.")
+	)))
 
 /obj/item/gun/ballistic/rifle/boltaction/pipegun/add_bayonet_point()
 	AddComponent(/datum/component/bayonet_attachable, offset_x = 35, offset_y = 10)

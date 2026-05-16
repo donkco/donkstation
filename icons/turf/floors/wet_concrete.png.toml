@@ -1,0 +1,42 @@
+output_name = "wet_concrete"
+template = "bitmask/diagonal_32x32.toml"
+
+[cut_pos]
+x = 16
+y = 18
+
+
+[positions]
+convex = 24
+vertical = 10
+horizontal = 22
+concave = 12
+flat = 8
+
+
+[prefabs]
+38 = 0
+110 = 1
+74 = 2
+2 = 3
+6 = 4
+14 = 5
+10 = 6
+55 = 7
+# 255 = 8
+203 = 9
+# 3 = 10
+7 = 11
+# 15 = 12
+11 = 13
+21 = 14
+157 = 15
+137 = 16
+1 = 17
+5 = 18
+13 = 19
+9 = 20
+4 = 21
+# 12 = 22
+8 = 23
+# 0 = 24

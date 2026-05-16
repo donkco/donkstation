@@ -17,7 +17,7 @@
 
 /turf/open/misc/snow/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/diggable, /obj/item/stack/sheet/mineral/snow, 2)
+	AddElement(/datum/element/diggable, /obj/item/stack/ore/snow, 2, soil_sample_text = "Traces of snow")
 
 /turf/open/misc/snow/broken_states()
 	return list("snow_dug")

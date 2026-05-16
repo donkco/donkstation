@@ -391,8 +391,8 @@
 /obj/item/gun/ballistic/automatic/battle_rifle/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/scope, range_modifier = 2)
-	AddElement(/datum/element/examine_lore, \
-		lore = "The BR-38 is Nanotrasen's latest foray into entirely in-house, standard-issue-ready, accelerator-assisted ballistic firearms.<br>\
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The BR-38 is Nanotrasen's latest foray into entirely in-house, standard-issue-ready, accelerator-assisted ballistic firearms.<br>\
 		<br>\
 		The acceleration rail built into the barrel assembly boosts fired projectiles to higher velocities than unassisted bullets, \
 		allowing even less powerful cartridges, such as the venerable .38 Special, to have improved ballistic performance and stopping power. \
@@ -404,8 +404,8 @@
 		In a sour twist of irony for Nanotrasen's historical issues with ballistics-based security weapons, the BR-38 has one significant flaw. \
 		It is possible for the weapons system to suffer from unintended discombulations due to closed heat distribution systems, should the weapon be tampered with. \
 		Nanotrasen's weapons R&D teams are still working on this issue, while also trying to work out why the weapon's onboard computation systems \
-		suffer from so many calculation errors, before moving onto a full commercial rollout." \
-	)
+		suffer from so many calculation errors, before moving onto a full commercial rollout.")
+	)))
 	register_context()
 
 /obj/item/gun/ballistic/automatic/battle_rifle/add_context(atom/source, list/context, obj/item/held_item, mob/user)

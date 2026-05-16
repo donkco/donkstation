@@ -8,6 +8,6 @@
 
 /datum/skill/gaming/New()
 	. = ..()
-	levelUpMessages[1] = span_nicegreen("I'm starting to get a hang of the controls of these games...")
-	levelUpMessages[4] = span_nicegreen("I'm starting to pick up the meta of these arcade games. If I were to minmax the optimal strat and accentuate my playstyle around well-refined tech...")
-	levelUpMessages[6] = span_nicegreen("Through incredible determination and effort, I've reached the peak of my [name] abilities. I wonder how I can become any more powerful... Maybe gamer fuel would actually help me play better..?")
+	levelUpMessages[SKILL_LEVEL_HORRIBLE] = span_nicegreen("I'm starting to get a hang of the controls of these games... I suppose I can't completely botch everything anymore.")
+	levelUpMessages[SKILL_LEVEL_JOURNEYMAN] = span_nicegreen("I'm starting to pick up the meta of these arcade games. If I were to minmax the optimal strat and accentuate my playstyle around well-refined tech...")
+	levelUpMessages[SKILL_LEVEL_MASTER] = span_nicegreen("Through incredible determination and effort, I've reached the peak of my [name] abilities. I wonder how I can become any more powerful... Maybe gamer fuel would actually help me play better..?")

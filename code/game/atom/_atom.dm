@@ -892,6 +892,11 @@
 			if (name_override_returns & SCREENTIP_NAME_SET)
 				used_name = returned_name[1]
 
+		var/list/atom_returned_name = list(used_name)
+		var/atom_name_override_returns = SEND_SIGNAL(src, COMSIG_ATOM_SCREENTIP_NAME_REQUESTED, atom_returned_name, held_item, user)
+		if (atom_name_override_returns & SCREENTIP_NAME_SET)
+			used_name = atom_returned_name[1]
+
 		if (flags_1 & HAS_CONTEXTUAL_SCREENTIPS_1 || held_item?.item_flags & ITEM_HAS_CONTEXTUAL_SCREENTIPS)
 			var/list/context = list()
 

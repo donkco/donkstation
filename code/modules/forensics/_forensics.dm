@@ -38,8 +38,15 @@
 	 * * fiber = fiber
 	 */
 	var/list/fibers
+	/**
+	 * List of soil samples on this atom
+	 *
+	 * Formatting:
+	 * * sample_text = sample_text
+	 */
+	var/list/soil_samples
 
-/datum/forensics/New(atom/parent, list/fingerprints, list/hiddenprints, list/blood_DNA, list/fibers)
+/datum/forensics/New(atom/parent, list/fingerprints, list/hiddenprints, list/blood_DNA, list/fibers, list/soil_samples)
 	if(!isatom(parent))
 		stack_trace("We tried adding a forensics datum to something that isnt an atom. What the hell are you doing?")
 		qdel(src)
@@ -52,10 +59,11 @@
 	src.hiddenprints = hiddenprints
 	src.blood_DNA = blood_DNA
 	src.fibers = fibers
+	src.soil_samples = soil_samples
 	check_blood()
 
 /// Merges the given lists into the preexisting values
-/datum/forensics/proc/inherit_new(list/fingerprints, list/hiddenprints, list/blood_DNA, list/fibers) //Use of | and |= being different here is INTENTIONAL.
+/datum/forensics/proc/inherit_new(list/fingerprints, list/hiddenprints, list/blood_DNA, list/fibers, list/soil_samples) //Use of | and |= being different here is INTENTIONAL.
 	if (fingerprints)
 		src.fingerprints = LAZY_LISTS_OR(src.fingerprints, fingerprints)
 	if (hiddenprints)
@@ -64,6 +72,8 @@
 		src.blood_DNA = LAZY_LISTS_OR(src.blood_DNA, blood_DNA)
 	if (fibers)
 		src.fibers = LAZY_LISTS_OR(src.fibers, fibers)
+	if (soil_samples)
+		src.soil_samples = LAZY_LISTS_OR(src.soil_samples, soil_samples)
 	check_blood()
 
 /datum/forensics/Destroy(force)
@@ -95,6 +105,14 @@
 	fibers = null
 	return COMPONENT_CLEANED
 
+/// Empties the soil_samples list
+/datum/forensics/proc/wipe_soil_samples()
+	if(isnull(soil_samples))
+		return NONE
+
+	soil_samples = null
+	return COMPONENT_CLEANED
+
 /// Handles cleaning up the various forensic types
 /datum/forensics/proc/clean_act(datum/source, clean_types)
 	SIGNAL_HANDLER
@@ -106,6 +124,25 @@
 		. |= wipe_blood_DNA()
 	if(clean_types & CLEAN_TYPE_FIBERS)
 		. |= wipe_fibers()
+	if(clean_types & CLEAN_TYPE_SOIL)
+		. |= wipe_soil_samples()
+
+/// Adds a single soil sample
+/datum/forensics/proc/add_soil_sample(sample)
+	if(!sample)
+		return
+	LAZYINITLIST(src.soil_samples)
+	src.soil_samples[sample] = sample
+	return TRUE
+
+/// Adds the given list into soil_samples
+/datum/forensics/proc/add_soil_sample_list(list/samples)
+	if(!length(samples))
+		return
+	LAZYINITLIST(src.soil_samples)
+	for(var/sample in samples)
+		src.soil_samples[sample] = sample
+	return TRUE
 
 /// Adds the given list into fingerprints
 /datum/forensics/proc/add_fingerprint_list(list/fingerprints)

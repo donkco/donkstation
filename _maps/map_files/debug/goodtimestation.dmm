@@ -1,7 +1,7 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "az" = (
 /obj/machinery/computer/arcade,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "aY" = (
 /obj/structure/table/rolling/tool_cart,
@@ -152,7 +152,7 @@
 /area/space)
 "nx" = (
 /obj/structure/platform/plastitanium,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "nK" = (
 /turf/open/floor/carpet/borderless,
@@ -166,14 +166,14 @@
 /obj/structure/table/shelves{
 	pixel_y = 4
 	},
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "pV" = (
 /turf/closed/wall/plywood,
 /area/space)
 "qy" = (
 /obj/effect/decal/cleanable/blood/splatter/oil,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "rg" = (
 /obj/structure/chair/sofa/bench/left,
@@ -227,7 +227,7 @@
 /area/space)
 "uj" = (
 /obj/effect/decal/cleanable/blood/gibs/robot_debris/down,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "vh" = (
 /obj/structure/chair/sofa/bench/right,
@@ -246,7 +246,7 @@
 /area/space)
 "Al" = (
 /obj/effect/decal/cleanable/blood/gibs/robot_debris,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "Au" = (
 /obj/structure/table/credenza{
@@ -271,7 +271,7 @@
 /area/space)
 "DD" = (
 /obj/effect/decal/remains/robot,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "Ec" = (
 /obj/effect/spawner/structure/window,
@@ -282,7 +282,7 @@
 	dir = 1
 	},
 /obj/structure/bed/double,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "Fh" = (
 /obj/item/storage/fancy/cigarettes/cigpack_syndicate/empty,
@@ -314,11 +314,11 @@
 /area/space)
 "Ld" = (
 /obj/structure/closet/crate/secure/syndicate/cybersun/dawn,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "LG" = (
 /obj/effect/decal/cleanable/blood/oil,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "LP" = (
 /turf/open/floor/carpet/borderless/teal,
@@ -326,15 +326,15 @@
 /area/space)
 "Mb" = (
 /obj/structure/closet/abductor,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "MD" = (
 /obj/structure/table/reinforced/plastitaniumglass,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "ME" = (
 /obj/structure/closet/crate/secure/syndicate/cybersun/noon,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "Nc" = (
 /obj/item/kirbyplants/fern,
@@ -345,7 +345,7 @@
 /turf/open/floor/carpet/borderless/cream,
 /area/space)
 "Ou" = (
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "OE" = (
 /obj/structure/chair/sofa/bench/left{
@@ -355,7 +355,7 @@
 /area/space)
 "Qa" = (
 /obj/effect/turf_decal/delivery,
-/turf/open/concrete,
+/turf/open/floor/concrete,
 /area/space)
 "QX" = (
 /obj/item/clothing/head/cone,

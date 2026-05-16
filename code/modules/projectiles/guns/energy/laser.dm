@@ -306,9 +306,8 @@
 // Laser Gun
 
 /obj/item/gun/energy/laser/proc/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 5 Heat Delivery System (sometimes referred to as the HDS-5 in promotional material) is what truly put Nanotrasen \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 5 Heat Delivery System (sometimes referred to as the HDS-5 in promotional material) is what truly put Nanotrasen \
 		head and shoulders above most weapon manufacturers in the modern era. All modern energy weaponry offered by the company have \
 		the success of the Type 5 to thank for setting the standard for energy-based weapon platforms.<br>\
 		<br>\
@@ -320,15 +319,14 @@
 		also severely jeopardizing thermal distribution into the weapon's heatsink. The Type 4, which never saw wider adoption, remains a \
 		haunting example to Nanotrasen's weapons division as to the consequences when a HDS is unable to expel thermal buildup safely.<br>\
 		<br>\
-		Certainly, the Melted Veterans of Galpha 5 advocacy group will never let them forget it." \
-	)
+		Certainly, the Melted Veterans of Galpha 5 advocacy group will never let them forget it.")
+	)))
 
 // Retro Laser Gun
 
 /obj/item/gun/energy/laser/retro/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 1 Heat Delivery System (sometimes referred to as the HDS-1 in older weapon catalogs) was a weapon that \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 1 Heat Delivery System (sometimes referred to as the HDS-1 in older weapon catalogs) was a weapon that \
 		marked the beginning of a new era of firearm development.<br>\
 		<br>\
 		Invented in the think-tank laboratories of Nanotrasen's weapon development team towards the end of the 24th century, the Type 1 found \
@@ -340,15 +338,14 @@
 		<br>\
 		So many of these weapons exist today that even modern conflicts may see more usage of the HDS-1 than the updated and equally \
 		reliable HDS5 employed by Nanotrasen's modern combat forces. Nanotrasen, despite their best efforts, still have not managed \
-		to encourage potential customers to swap for the new model despite a generous exchange discount." \
-	)
+		to encourage potential customers to swap for the new model despite a generous exchange discount.")
+	)))
 
 // Soulful Laser Gun
 
 /obj/item/gun/energy/laser/soul/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 3 Heat Delivery System (sometimes referred to as the HDS-3 in the memories of security officers) is quite possibly \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 3 Heat Delivery System (sometimes referred to as the HDS-3 in the memories of security officers) is quite possibly \
 		the most common type of HDS still available on the market. Fondly regarded, with quite a few diehard fans still clinging to their \
 		Type 3s like their lives depended on it, the weapon has its own place in history as the 'gun that could do it all'.<br>\
 		<br>\
@@ -362,15 +359,14 @@
 		<br>\
 		Nanotrasen still services Type 3s, with many of the parts used in the weapon sharing compatible cousins in the Type 5. Most \
 		examples of the Type 3 today may actually be closer in function and form to the Type 5 than they were during their original \
-		construction, depending on how often it is serviced." \
-	)
+		construction, depending on how often it is serviced.")
+	)))
 
 // hellfire laser gun
 
 /obj/item/gun/energy/laser/hellgun/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 4 Heat Delivery System (sometimes referred to as the HDS-4 in legal documentation) is considered a notable \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 4 Heat Delivery System (sometimes referred to as the HDS-4 in legal documentation) is considered a notable \
 		example of Nanotrasen's weapons development teams flying too close to the sun.<br>\
 		<br>\
 		The success of the Type 3 resulted in shareholders urging marketing to bring out the 'next best thing' in energy-based weaponry. \
@@ -390,15 +386,14 @@
 		discontinued the Type 4 in response, and it never saw production from that day forth. However, retrofit kits still exist \
 		on the black market and in some of Nanotrasen's own warehouses. While, legally, it is unlawful to sell and possess a Type 4, Nanotrasen itself \
 		does not regulate possession of the firearm aboard its own stations, nor does any legal body intend on preventing them from utilizing it in defense \
-		of its own assets." \
-	)
+		of its own assets.")
+	)))
 
 // Antique Laser Gun
 
 /obj/item/gun/energy/laser/captain/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "For a brief period, Nanotrasen produced a series of custom-made Type 4 laser guns for a select group of \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "For a brief period, Nanotrasen produced a series of custom-made Type 4 laser guns for a select group of \
 		clients, primarily composed of wealthy starship captains, politicians, and military leaders looking to demonstrate prestige before \
 		the common folk.<br>\
 		<br>\
@@ -417,15 +412,14 @@
 		to reverse engineer the devices exact means of functionality.<br>\
 		<br>\
 		The Syndicate are obviously just as interested in exactly how this weapon is capable of self-perpetuation, hence why the collective \
-		seem hell-bent on capturing them whenever possible. Maybe keep this somewhere safe. Or don't." \
-	)
+		seem hell-bent on capturing them whenever possible. Maybe keep this somewhere safe. Or don't.")
+	)))
 
 // X-ray Laser Gun
 
 /obj/item/gun/energy/laser/xray/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 6 Heat Delivery System (sometimes referred to as the HDS6 in research notes) is a breakthrough in the \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 6 Heat Delivery System (sometimes referred to as the HDS6 in research notes) is a breakthrough in the \
 		development of man-portable directed energy weaponry.<br>\
 		<br>\
 		Very little is known about the Type 6, as it is a relatively new experimental weapon only accessible to Nanotrasen security forces. \
@@ -440,15 +434,14 @@
 		perhaps even allowing the weapon to operate through supernatural means: perhaps even powered by the 'spirits of the damned'.<br>\
 		<br>\
 		Whatever the truth may be, the weapon seems to function as advertized, and is even more energy efficient than the Type 5. Nanotrasen \
-		expects full commercial rollout sometime in the next quarter." \
-	)
+		expects full commercial rollout sometime in the next quarter.")
+	)))
 
 // Laser Carbine
 
 /obj/item/gun/energy/laser/carbine/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "The NT Type 5/R Rapid Heat Delivery System (sometimes referred to as the HDS-5/R in briefing manuals, and 'that piece of shit flashlight' \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The NT Type 5/R Rapid Heat Delivery System (sometimes referred to as the HDS-5/R in briefing manuals, and 'that piece of shit flashlight' \
 		amongst TGMC troopers) was a shaky first step into automatic directed energy weaponry. <br>\
 		<br>\
 		Intended for use in special operations, particularly in the hands of orbital drop shock troopers, the Type 5/R was foreseen to be an excellent \
@@ -463,5 +456,5 @@
 		<br>\
 		Instead, the weapon found favour in the hands of private security teams, who enjoyed the volume of fire it provided, while maintaining \
 		exceptional accuracy even at long ranges, along with being compact enough to allow a high degree of discretion compared to a full sized rifle. \
-		The weapon is also often utilized by rim pirates and marauders, giving the weapon something of an ill reputation." \
-	)
+		The weapon is also often utilized by rim pirates and marauders, giving the weapon something of an ill reputation.")
+	)))
