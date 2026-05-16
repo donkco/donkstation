@@ -28,7 +28,7 @@
 	subject.dna.copy_dna(dna)
 	age = subject.age
 	physique = subject.physique
-	athletics_level = subject.mind?.get_skill_level(/datum/skill/athletics) || SKILL_LEVEL_NONE
+	athletics_level = subject.mind?.get_skill_level(/datum/skill/athletics) || SKILL_LEVEL_HORRIBLE
 	height = subject.mob_height
 
 	quirks = list()

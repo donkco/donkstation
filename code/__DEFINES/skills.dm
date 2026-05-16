@@ -1,8 +1,8 @@
 
 // Skill levels
-#define SKILL_LEVEL_NONE 1
-#define SKILL_LEVEL_NOVICE 2
-#define SKILL_LEVEL_APPRENTICE 3
+#define SKILL_LEVEL_HORRIBLE 1
+#define SKILL_LEVEL_BAD 2
+#define SKILL_LEVEL_NORMAL 3 // This is the baseline; Default level
 #define SKILL_LEVEL_JOURNEYMAN 4
 #define SKILL_LEVEL_EXPERT 5
 #define SKILL_LEVEL_MASTER 6

@@ -402,6 +402,36 @@
 	flags_1 = IS_PLAYER_COLORABLE_1
 	hair_mask = /datum/hair_mask/standard_hat_middle
 
+/obj/item/clothing/head/beret/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list( \
+		list( \
+			"skill" = /datum/skill/lore/corporate, \
+			"min_level" = SKILL_LEVEL_JOURNEYMAN, \
+			"article" = "a", \
+			"name" = "Donk Co. Executive Beret", \
+			"desc" = "The beret has become something of an unofficial status symbol within Donk Co.'s upper management tiers. \
+				Mid-level executives and above often sport them during internal company events, board meetings, and inspections \
+				of subsidiary facilities - a quiet signal that the wearer is not merely a floor supervisor or shift lead, \
+				but someone with actual clout in the organizational chart. \
+				Nanotrasen's own security culture appears to have absorbed this habit through contractor crossover, \
+				which explains why the things keep turning up in station arms lockers.", \
+		), \
+		list( \
+			"skill" = /datum/skill/lore/mothic, \
+			"min_level" = SKILL_LEVEL_EXPERT, \
+			"article" = "a", \
+			"name" = "Mothic Delicacy (Woven)", \
+			"desc" = "To the discerning Mothic palate, the beret represents a pinnacle of the textile arts - not for its aesthetics, \
+				but for its structural integrity as a foodstuff. The tight circular weave traps heat exceptionally well, \
+				the lanolin content of wool variants provides a subtle savory note, and the badge or emblem, if present, \
+				adds a satisfying crunch. \
+				Mothic food critics have awarded the classic wool beret a prestigious four-antenna rating. \
+				Synthetic variants are considered acceptable but inferior, likened to instant noodles \
+				by those with refined tastes.", \
+		), \
+	)), show_only_on_examine_more = FALSE)
+
 //Security
 /obj/item/clothing/head/hats/hos
 	name = "generic head of security hat"

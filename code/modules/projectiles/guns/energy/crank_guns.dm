@@ -191,9 +191,8 @@
 // Laser Musket
 
 /obj/item/gun/energy/laser/musket/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("think carefully")] to learn a little more about [src]."), \
-		lore = "The first examples of laser muskets emerged somewhat recently, even though improvised firearms have had \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The first examples of laser muskets emerged somewhat recently, even though improvised firearms have had \
 		a rich history throughout human, Mothic and Tiziran history.<br>\
 		<br>\
 		Laser muskets often started to emerge when conventional weaponry or ammunition started to grow scarcer, and the amount \
@@ -203,15 +202,14 @@
 		Constructing one of these is sometimes seen as a rite of passage amongst militia groups and rebel forces. Each one as unique \
 		as the next. <br>\
 		<br>\
-		What will this one's name be? What history will it write? Time will surely tell." \
-	)
+		What will this one's name be? What history will it write? Time will surely tell.")
+	)))
 
 // Thermal Pistols
 
 /obj/item/gun/energy/laser/thermal/add_deep_lore()
-	AddElement(/datum/element/examine_lore, \
-		lore_hint = span_notice("You can [EXAMINE_HINT("look closer")] to learn a little more about [src]."), \
-		lore = "A weapon with no name, more a pattern of design. Examples of thermal pistols vary heavily based on the \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "A weapon with no name, more a pattern of design. Examples of thermal pistols vary heavily based on the \
 		manufacturer or craftsperson. However, the original inventor of the thermal pistol is largely clouded in mystery. \
 		Replica versions of the pistol were circulating long before weaponized nanites were banned by the \
 		TerraGov Subdermal Weapons Accord, and have continued to exist as a means of disposing of the self-replicating stocks \
@@ -230,5 +228,5 @@
 		as mildly tacky. <br>\
 		<br>\
 		It isn't fully understood who started the practice of 'pairing' the pistols, though the custom has remained as long as \
-		living memory. Every thermal pistol has a mate, and it is considered ill fortune to separate them purposefully." \
-	)
+		living memory. Every thermal pistol has a mate, and it is considered ill fortune to separate them purposefully.")
+	)))
