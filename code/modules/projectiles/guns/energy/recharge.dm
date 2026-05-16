@@ -165,21 +165,19 @@
 
 /obj/item/gun/energy/recharge/fisher/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/examine_lore, \
-		lore = "The SC/FISHER is an illegally-modified kinetic accelerator that's been cut down and refit into a miniature energy gun chassis, \
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
+		list("desc" = "The SC/FISHER is an illegally-modified kinetic accelerator that's been cut down and refit into a miniature energy gun chassis, \
 			optimized for temporary, but effective, electronic warfare.<br>\
 			<br>\
 			The reengineered kinetic accelerator central to the SC/FISHER's functionality has been modified for its kinetic bolts to \
 			<b>temporarily disrupt flashlights, cameras, APCs, and pAI speech modules</b>, in return for dealing no damage. \
-			This effect works longer against targets struck with the SC/FISHER either in melee or by having it thrown at them, but \
-			you probably shouldn't be throwing it at people.<br>\
 			<br>\
 			While some would argue that sacrificing damage for a light-disrupting, fixture-breaking gimmick \
 			makes the SC/FISHER a dead-end in equipment development, others argue that it is both amusing and tactically sound \
 			to be able to shoot at light sources and pesky pAIs to disrupt their function.<br>\
 			<br>\
-			Caveat emptor." \
-	)
+			Caveat emptor.")
+	)))
 
 /obj/item/gun/energy/recharge/fisher/attack(mob/living/target_mob, mob/living/user, list/modifiers, list/attack_modifiers)
 	. = ..()

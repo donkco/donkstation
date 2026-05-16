@@ -65,6 +65,13 @@ GLOBAL_LIST_INIT_TYPED(detective_scan_categories, /datum/detective_scan_category
 	ui_icon = "shirt"
 	ui_icon_color = "green"
 
+/datum/detective_scan_category/soil
+	id = DETSCAN_CATEGORY_SOIL
+	name = "Soil Samples"
+	display_order = 4
+	ui_icon = "mountain"
+	ui_icon_color = "#8B5E3C"
+
 /datum/detective_scan_category/drink
 	id = DETSCAN_CATEGORY_REAGENTS
 	name = "Reagents"

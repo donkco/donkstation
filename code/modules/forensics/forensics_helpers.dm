@@ -259,3 +259,26 @@
  */
 /atom/proc/transfer_fibers_to(atom/transfer_to)
 	transfer_to.add_fiber_list(GET_ATOM_FIBRES(src))
+
+/// Adds a single soil sample to the atom
+/atom/proc/add_soil_sample(sample)
+	if(QDELETED(src))
+		return
+	if(isnull(sample))
+		return
+	if(isnull(forensics))
+		forensics = new(src)
+	forensics.add_soil_sample(sample)
+	return TRUE
+
+/// Adds a list of soil samples to the atom
+/atom/proc/add_soil_sample_list(list/samples_to_add)
+	if(QDELETED(src))
+		return
+	if(isnull(samples_to_add))
+		return
+	if(forensics)
+		forensics.inherit_new(soil_samples = samples_to_add)
+	else
+		forensics = new(src, soil_samples = samples_to_add)
+	return TRUE

@@ -15,7 +15,14 @@
 /atom/proc/examine(mob/user)
 	. = list()
 	. += get_name_chaser(user)
-	if(desc)
+
+	var/list/lore = list()
+
+	SEND_SIGNAL(src, COMSIG_ATOM_EXAMINE_LORE, user, lore)
+
+	if(length(lore))
+		. += lore
+	else if(desc)
 		. += "<i>[desc]</i>"
 
 	var/list/tags_list = examine_tags(user)
