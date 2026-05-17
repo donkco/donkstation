@@ -25,3 +25,10 @@
 	name = "suspicious light"
 	icon_state = "starlight-5"
 	color = "#d42651"
+
+/obj/effect/starlight_window/sweeper
+	icon = 'icons/effects/donk_effects_96x96.dmi'
+	icon_state = "starlight-sweeper"
+
+	color = "#aed2db"
+	SET_BASE_PIXEL(-32,-32)

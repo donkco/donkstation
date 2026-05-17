@@ -17,15 +17,15 @@
 	name = "concrete ramp"
 	desc = "A steep but sturdy ramp."
 	icon = 'icons/obj/donk_structures/donk_stairs.dmi'
-	icon_state = "concrete_ramp"
+	icon_state = "ramp-concrete"
 	anchored = TRUE
 	move_resist = INFINITY
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT)
 	///  base_pixel_offsets for the different dirs(x,y)
 	var/static/list/dir_offsets = list(
-		TEXT_SOUTH = list(0, 1),
+		TEXT_SOUTH = list(0, -1),
 		TEXT_EAST = list(2, 0),
-		TEXT_NORTH = list(0, -8),
+		TEXT_NORTH = list(0, 8),
 		TEXT_WEST = list(-2, 0),
 	)
 
@@ -33,7 +33,7 @@
 	. = ..()
 	// set the pixel offsets based on the direction the ramp is facing
 	if((dir in dir_offsets) && !mapload)
-		SET_BASE_PIXEL(dir_offsets[dir]dir_offsets[1], dir_offsets[dir][2])
+		SET_BASE_PIXEL(dir_offsets[dir][1], dir_offsets[dir][2])
 
 /obj/structure/steps/concrete_ramp/setDir(newdir)
 	. = ..()
@@ -51,3 +51,5 @@
 
 /obj/structure/steps/concrete_ramp/atom_deconstruct(disassembled = TRUE)
 	return
+
+RAMP_DIRECTIONAL_HELPERS(/obj/structure/steps/concrete_ramp)

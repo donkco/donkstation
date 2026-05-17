@@ -6,7 +6,7 @@
 /obj/machinery/power/apc/auto_name/directional/north,
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "ao" = (
 /obj/structure/cable,
 /turf/open/floor/iron_tile,
@@ -23,7 +23,7 @@
 "aY" = (
 /obj/structure/table/rolling/tool_cart,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "bk" = (
 /obj/effect/landmark/latejoin,
 /turf/open/floor/carpet/borderless/zigzag,
@@ -35,15 +35,15 @@
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/north,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "cr" = (
 /obj/structure/table/glass,
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "cu" = (
 /turf/closed/wall/calabash/sus,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "cA" = (
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/zigzag,
@@ -55,7 +55,7 @@
 	dir = 8
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "cU" = (
 /obj/machinery/light/directional/north,
 /turf/open/floor/cool_tile,
@@ -63,7 +63,7 @@
 "ds" = (
 /obj/effect/landmark/start/station_engineer,
 /turf/open/floor/plastitanium_tile/textured,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "dv" = (
 /turf/closed/wall/calabash,
 /area/station/maintenance/floor1/port/aft)
@@ -75,7 +75,7 @@
 	pixel_y = 4
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "dQ" = (
 /obj/machinery/door/airlock/security,
 /turf/open/floor/carpet/borderless/zigzag,
@@ -88,15 +88,16 @@
 /obj/structure/table/optable,
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile/textured,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "el" = (
 /obj/structure/chair/stool/bar/directional/west,
 /turf/open/floor/carpet/borderless/red,
 /area/spaceport_lounge)
 "eu" = (
-/obj/effect/starlight_window,
+/obj/structure/cable,
+/obj/machinery/power/terminal,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "eG" = (
 /turf/open/concrete,
 /area/station/engineering/engine_smes)
@@ -132,14 +133,14 @@
 "ft" = (
 /obj/item/kirbyplants/organic/plant1,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "fH" = (
 /turf/closed/wall/calabash/sus,
 /area/space)
 "fJ" = (
 /obj/structure/cable,
 /turf/open/floor/cool_tile,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "fV" = (
 /obj/machinery/light/small/dim/directional/east,
 /obj/effect/decal/cleanable/dirt/dust,
@@ -157,7 +158,7 @@
 "gr" = (
 /obj/machinery/light/red/directional/north,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "gC" = (
 /obj/effect/decal/cleanable/dirt/dust,
 /turf/open/floor/plating,
@@ -176,15 +177,15 @@
 "gN" = (
 /obj/structure/closet/crate/bin,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "gP" = (
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "gV" = (
 /obj/effect/spawner/structure/window/reinforced/plasma/plastitanium,
 /turf/open/floor/plastitanium_tile/ribbed,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "hj" = (
 /obj/structure/window/reinforced/plasma/plastitanium,
 /turf/open/floor/plastitanium_tile,
@@ -193,7 +194,7 @@
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "hy" = (
 /obj/structure/cable,
 /obj/structure/cable,
@@ -207,7 +208,7 @@
 	dir = 1
 	},
 /turf/open/floor/carpet/donk,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "hU" = (
 /obj/structure/table/shelves,
 /turf/open/floor/iron_tile,
@@ -247,11 +248,15 @@
 "iZ" = (
 /turf/open/floor/carpet/borderless/zigzag,
 /area/spaceport)
+"jf" = (
+/obj/machinery/power/smes/full,
+/turf/open/concrete,
+/area/station/engineering/cybersun/rtg_engine)
 "jj" = (
 /obj/machinery/disposal/bin,
 /obj/structure/disposalpipe/trunk,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "jl" = (
 /obj/effect/decal/cleanable/vomit/nanites,
 /turf/open/floor/iron_tile/corroded,
@@ -263,7 +268,7 @@
 "jv" = (
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile/large,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "jD" = (
 /obj/structure/railing/corner/end{
 	dir = 1
@@ -280,11 +285,11 @@
 "kd" = (
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "ks" = (
-/obj/effect/starlight_window/square_bars,
+/obj/structure/steps/concrete_ramp/directional/north,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "kD" = (
 /turf/open/floor/carpet/borderless/teal,
 /area/station/medical/medbay/lobby)
@@ -350,11 +355,15 @@
 "lw" = (
 /obj/item/dedeplants/ceramic/monstera,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
+"lA" = (
+/obj/structure/platform/concrete,
+/turf/open/concrete,
+/area/station/engineering/cybersun/rtg_engine)
 "lE" = (
 /obj/machinery/light/small/directional/north,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "lG" = (
 /turf/open/indestructible/plating,
 /area/space)
@@ -366,7 +375,7 @@
 /area/spaceport_lounge)
 "lN" = (
 /turf/open/floor/cool_tile,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "lQ" = (
 /obj/structure/window/reinforced/plasma/plastitanium,
 /turf/open/floor/iron_tile,
@@ -384,14 +393,19 @@
 	pixel_w = -8
 	},
 /turf/closed/wall/calabash/donk,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "ml" = (
 /obj/structure/cable,
 /turf/open/floor/iron_tile,
 /area/station/hallway/secondary/entry)
 "mm" = (
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
+"mn" = (
+/obj/structure/cable,
+/obj/effect/starlight_window/sweeper,
+/turf/open/floor/carpet/borderless/cream,
+/area/plaza)
 "mr" = (
 /turf/closed/wall/calabash/sus,
 /area/station/engineering/circuit_workshop)
@@ -414,7 +428,7 @@
 "nx" = (
 /obj/structure/platform/plastitanium,
 /turf/open/concrete,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "nD" = (
 /obj/effect/decal/cleanable/garbage,
 /turf/open/floor/plating,
@@ -425,7 +439,7 @@
 "nK" = (
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "nL" = (
 /obj/structure/table/credenza,
 /obj/item/reagent_containers/cup/glass/bottle/vodka{
@@ -446,7 +460,7 @@
 	pixel_y = 21
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "nR" = (
 /turf/closed/wall/calabash/sus,
 /area/station/command/heads_quarters/ce)
@@ -460,17 +474,17 @@
 "oB" = (
 /obj/machinery/light/directional/south,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "oE" = (
 /obj/structure/table/glass,
 /obj/item/pen,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "oH" = (
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/east,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "oS" = (
 /turf/closed/wall/tile,
 /area/spaceport)
@@ -479,22 +493,18 @@
 /turf/open/floor/cool_tile,
 /area/station/medical/medbay/lobby)
 "po" = (
-/obj/machinery/power/terminal{
-	dir = 4
-	},
-/obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "pM" = (
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "pT" = (
 /obj/structure/table/shelves{
 	pixel_y = 4
 	},
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "pV" = (
 /turf/closed/wall/plywood,
 /area/spaceport)
@@ -502,7 +512,7 @@
 /obj/machinery/light/directional/east,
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "qy" = (
 /obj/effect/decal/cleanable/blood/splatter/oil,
 /turf/open/concrete,
@@ -513,7 +523,7 @@
 "rg" = (
 /obj/structure/chair/sofa/bench/left,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "rh" = (
 /obj/machinery/door/airlock/maintenance_hatch,
 /turf/open/floor/iron_tile/corroded,
@@ -524,7 +534,7 @@
 	dir = 8
 	},
 /turf/open/floor/cool_tile,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "rj" = (
 /obj/structure/sign/warning/yes_smoking/circle/directional/north,
 /obj/structure/table/wood/teak{
@@ -545,7 +555,7 @@
 	pixel_y = 8
 	},
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "rM" = (
 /turf/open/space/basic,
 /area/shuttle/arrival)
@@ -555,22 +565,22 @@
 	pixel_z = 7
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "sf" = (
 /obj/structure/table/glass,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "st" = (
 /turf/closed/wall/calabash/med,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "su" = (
 /obj/structure/cable,
 /turf/closed/wall/calabash/sus,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "sA" = (
-/obj/structure/sign/poster/contraband/cybersun_six_hundred,
-/turf/closed/wall/calabash/sus,
-/area/station/engineering/storage/tech)
+/obj/structure/steps/concrete_ramp/directional/north,
+/turf/open/concrete,
+/area/space)
 "sC" = (
 /obj/effect/turf_decal{
 	dir = 1
@@ -587,7 +597,7 @@
 "sW" = (
 /obj/structure/chair/cane,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "th" = (
 /obj/structure/table/credenza/twin_doors{
 	pixel_y = 11
@@ -602,7 +612,7 @@
 	pixel_z = 26
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "tk" = (
 /obj/effect/landmark/start/chief_medical_officer,
 /turf/open/floor/cool_tile,
@@ -630,15 +640,15 @@
 	pixel_y = 8
 	},
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "tY" = (
 /obj/machinery/door/airlock/security,
 /turf/open/floor/cool_tile,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "uj" = (
 /obj/effect/decal/cleanable/blood/gibs/robot_debris/down,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "uk" = (
 /obj/structure/disposalpipe/segment{
 	dir = 1
@@ -654,13 +664,13 @@
 /turf/open/floor/iron_tile,
 /area/spaceport)
 "uS" = (
-/obj/effect/starlight_window/circle_bars,
+/obj/structure/steps/concrete_ramp/directional/west,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "vh" = (
 /obj/structure/chair/sofa/bench/right,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "vJ" = (
 /obj/structure/cable,
 /obj/structure/cable,
@@ -702,7 +712,7 @@
 /obj/effect/decal/cleanable/blood/oil,
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "wM" = (
 /turf/closed/wall/tile/decaying,
 /area/station/maintenance/floor1/port/aft)
@@ -763,7 +773,7 @@
 	pixel_x = 3
 	},
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "zp" = (
 /turf/open/floor/iron_tile,
 /area/spaceport)
@@ -774,7 +784,7 @@
 "Al" = (
 /obj/effect/decal/cleanable/blood/gibs/robot_debris,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "Au" = (
 /obj/structure/table/credenza{
 	pixel_y = 6
@@ -788,10 +798,10 @@
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/north,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "BQ" = (
 /turf/closed/wall/calabash,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "BS" = (
 /obj/structure/cable,
 /turf/open/floor/iron_tile,
@@ -815,12 +825,12 @@
 "Do" = (
 /obj/effect/landmark/start/coroner,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Dr" = (
 /obj/machinery/power/rtg,
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "Dx" = (
 /obj/structure/chair/sofa/bench/right{
 	dir = 8
@@ -830,7 +840,7 @@
 "Dz" = (
 /obj/structure/chair/office/executive,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "DB" = (
 /obj/structure/disposalpipe/segment{
 	dir = 1
@@ -840,24 +850,24 @@
 "DC" = (
 /obj/machinery/light/red/directional/east,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "DD" = (
 /obj/effect/decal/remains/robot,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "DI" = (
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "DR" = (
 /obj/machinery/light/directional/east,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "DZ" = (
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Ea" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
@@ -872,7 +882,7 @@
 "En" = (
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile/textured,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "EH" = (
 /obj/item/bedsheet/orange/double{
 	dir = 1
@@ -884,10 +894,14 @@
 /obj/item/storage/fancy/cigarettes/cigpack_syndicate/empty,
 /turf/open/floor/carpet/borderless/red,
 /area/spaceport_lounge)
+"FB" = (
+/obj/effect/starlight_window/sweeper,
+/turf/open/floor/iron_tile/corroded,
+/area/station/maintenance/floor1/port/aft)
 "FO" = (
 /obj/structure/table/wood/teak,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "FQ" = (
 /obj/vehicle/ridden/wheelchair,
 /turf/open/floor/carpet/borderless/teal,
@@ -900,7 +914,7 @@
 "FZ" = (
 /obj/item/kirbyplants/organic/plant24,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Gk" = (
 /turf/open/floor/iron_tile/corroded,
 /area/spaceport)
@@ -917,10 +931,10 @@
 /area/spaceport)
 "HC" = (
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "HD" = (
 /turf/open/floor/plastitanium_tile/ribbed,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "Ii" = (
 /obj/machinery/light/directional/north,
 /turf/open/concrete,
@@ -933,46 +947,49 @@
 /obj/structure/cable,
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "It" = (
 /obj/machinery/gravity_generator/main,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "Iu" = (
 /obj/machinery/light/directional/west,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Iw" = (
 /obj/structure/table/desk/fancy_wood,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Iz" = (
 /obj/effect/landmark/start/detective,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Ja" = (
 /obj/structure/disposalpipe/segment{
 	dir = 8
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Jh" = (
 /obj/structure/chair/sofa/bench/left{
 	dir = 4
 	},
 /turf/open/floor/carpet/borderless/zigzag,
 /area/spaceport)
+"Jl" = (
+/turf/closed/wall/calabash/sus,
+/area/station/engineering/cybersun/robotics_lab)
 "Jw" = (
 /obj/structure/table/desk/fancy_wood,
 /obj/item/pen_holder{
 	pixel_z = 12
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Jy" = (
 /obj/machinery/light/directional/north,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "JQ" = (
 /turf/open/floor/plastitanium_tile/hose,
 /area/station/engineering/break_room)
@@ -982,10 +999,10 @@
 "Ku" = (
 /obj/effect/landmark/observer_start,
 /turf/open/floor/carpet/donk,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "KL" = (
 /turf/closed/wall/calabash/donk,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "KY" = (
 /obj/docking_port/stationary,
 /obj/machinery/door/airlock/security,
@@ -994,26 +1011,26 @@
 "Lc" = (
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile/ribbed,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "Ld" = (
 /obj/structure/closet/crate/secure/syndicate/cybersun/dawn,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "Lh" = (
 /obj/machinery/light/small/dim/directional/north,
 /turf/open/floor/plastitanium_tile/hose,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "Lu" = (
 /obj/effect/landmark/start/clown,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Ly" = (
 /obj/machinery/light/directional/north,
 /turf/open/floor/plastitanium_tile,
 /area/station/command/heads_quarters/ce)
 "LC" = (
 /turf/closed/wall/calabash/donk,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "LG" = (
 /obj/effect/decal/cleanable/blood/oil,
 /turf/open/concrete,
@@ -1035,11 +1052,11 @@
 "Mb" = (
 /obj/structure/closet/abductor,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "Mz" = (
 /obj/structure/cable,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "MA" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
@@ -1056,19 +1073,20 @@
 /obj/item/clothing/mask/gas/syndicate/cybersun,
 /obj/item/clothing/under/syndicate/cybersun,
 /turf/open/concrete,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "Nc" = (
 /obj/item/kirbyplants/fern,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Nd" = (
 /obj/effect/landmark/start,
 /turf/open/floor/carpet/borderless/zigzag,
 /area/spaceport)
 "Nu" = (
 /obj/machinery/light/directional/north,
+/obj/structure/platform/concrete,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "Nx" = (
 /obj/structure/table/credenza,
 /obj/item/statuette/goose{
@@ -1080,7 +1098,7 @@
 	pixel_z = 12
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "NC" = (
 /obj/machinery/door/airlock/maintenance_hatch,
 /turf/open/floor/iron_tile/corroded,
@@ -1088,11 +1106,11 @@
 "NU" = (
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile/large,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "Ob" = (
 /obj/structure/chair/sofa/bench,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Od" = (
 /obj/machinery/door/airlock/security,
 /obj/structure/cable,
@@ -1105,7 +1123,7 @@
 	pixel_z = 12
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Ou" = (
 /turf/open/concrete,
 /area/space)
@@ -1127,11 +1145,11 @@
 /area/spaceport)
 "OG" = (
 /turf/open/floor/plastitanium_tile/large,
-/area/station/engineering/storage/tech)
+/area/station/engineering/cybersun/synth_storage)
 "OT" = (
 /obj/effect/starlight_window/thin_slits,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "OY" = (
 /obj/structure/table/pedestal{
 	pixel_z = 6
@@ -1141,12 +1159,12 @@
 	pixel_z = 8
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "Pb" = (
 /obj/machinery/door/airlock/security,
 /obj/structure/cable,
 /turf/open/floor/cool_tile,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "PT" = (
 /obj/machinery/light/directional/south,
 /turf/open/floor/cool_tile,
@@ -1164,7 +1182,7 @@
 "Qx" = (
 /obj/effect/starlight_window/circle,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/station/engineering/cybersun/rtg_engine)
 "QX" = (
 /obj/item/clothing/head/cone,
 /turf/open/indestructible/plating,
@@ -1172,7 +1190,7 @@
 "Rn" = (
 /obj/machinery/light/small/directional/north,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "RD" = (
 /obj/structure/cable,
 /turf/closed/wall/calabash/sus,
@@ -1207,9 +1225,9 @@
 /turf/open/floor/carpet/borderless/teal,
 /area/station/medical/medbay/lobby)
 "Sl" = (
-/obj/machinery/power/smes/full,
+/obj/structure/platform/concrete,
 /turf/open/concrete,
-/area/station/engineering/engine_smes)
+/area/space)
 "So" = (
 /obj/structure/cable,
 /turf/open/floor/cool_tile,
@@ -1233,18 +1251,18 @@
 	pixel_x = 6
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Ti" = (
 /obj/effect/landmark/start/cook,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "TB" = (
 /turf/open/floor/carpet/donk,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "TN" = (
 /obj/structure/cable,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "TP" = (
 /obj/structure/cable,
 /obj/machinery/power/apc/auto_name/directional/east,
@@ -1284,16 +1302,16 @@
 	dir = 8
 	},
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Wk" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Wo" = (
 /obj/machinery/light/red/directional/west,
 /turf/open/floor/plastitanium_tile,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "Wx" = (
 /obj/structure/disposalpipe/segment{
 	dir = 1
@@ -1320,7 +1338,7 @@
 /area/template_noop)
 "Yw" = (
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "YB" = (
 /obj/structure/cable,
 /obj/structure/disposalpipe/segment{
@@ -1339,7 +1357,7 @@
 "Zd" = (
 /obj/structure/chair/bean,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/hallway/primary/tram/center)
+/area/plaza)
 "Ze" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron_tile/corroded,
@@ -1348,14 +1366,14 @@
 /obj/machinery/power/apc/auto_name/directional/south,
 /obj/structure/cable,
 /turf/open/floor/carpet/borderless/cream,
-/area/station/command/heads_quarters/captain)
+/area/command/executive_office)
 "ZD" = (
 /obj/structure/table/desk,
 /turf/open/floor/cool_tile,
 /area/station/medical/medbay/lobby)
 "ZO" = (
 /turf/open/floor/plastitanium_tile/textured,
-/area/station/engineering/circuit_workshop)
+/area/station/engineering/cybersun/robotics_lab)
 "ZT" = (
 /obj/effect/landmark/start/chemist,
 /turf/open/floor/cool_tile,
@@ -22006,18 +22024,18 @@ yg
 yg
 JQ
 ab
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -22263,18 +22281,18 @@ yg
 yg
 JQ
 ab
-eG
+po
 It
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -22520,18 +22538,18 @@ CN
 yg
 JQ
 ab
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-ks
-eG
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -22777,18 +22795,18 @@ Ov
 yg
 JQ
 ab
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+po
+po
+po
+uS
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -23035,17 +23053,17 @@ yg
 JQ
 ab
 Nu
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -23291,18 +23309,18 @@ xf
 yg
 JQ
 ab
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-uS
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -23530,7 +23548,7 @@ fH
 jE
 jE
 jE
-sA
+cu
 pM
 pM
 pT
@@ -23548,18 +23566,18 @@ vW
 ab
 ab
 ab
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -23805,18 +23823,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eu
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+ks
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -24062,18 +24080,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
 Qx
-eG
+po
 fZ
 jE
 jE
@@ -24301,7 +24319,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 tQ
 mm
 TN
@@ -24310,7 +24328,7 @@ mm
 Wo
 mm
 mm
-mr
+Jl
 bl
 bl
 bl
@@ -24319,18 +24337,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -24558,7 +24576,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 rm
 mm
 TN
@@ -24567,7 +24585,7 @@ mm
 mm
 ZO
 mm
-mr
+Jl
 bl
 bl
 bl
@@ -24576,18 +24594,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -24815,7 +24833,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 Lh
 mm
 Lc
@@ -24824,7 +24842,7 @@ HD
 ZO
 ZO
 mm
-mr
+Jl
 bl
 bl
 bl
@@ -24833,18 +24851,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -25072,7 +25090,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 ac
 TN
 Lc
@@ -25090,18 +25108,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+lA
+lA
+lA
+lA
+po
+po
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -25329,7 +25347,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 OT
 mm
 HD
@@ -25338,7 +25356,7 @@ HD
 ZO
 ds
 mm
-mr
+Jl
 bl
 bl
 tK
@@ -25347,18 +25365,18 @@ YB
 bl
 bl
 bl
-eG
-eG
-eG
-eG
-eG
-eG
-eG
-eG
+po
+po
+po
+po
+po
+po
+po
+po
 Dr
-eG
+po
 Dr
-eG
+po
 fZ
 jE
 jE
@@ -25586,7 +25604,7 @@ fH
 jE
 jE
 jE
-mr
+Jl
 mm
 mm
 mm
@@ -25595,7 +25613,7 @@ mm
 mm
 mm
 mm
-mr
+Jl
 Ii
 Qb
 id
@@ -25615,7 +25633,7 @@ DI
 DI
 DI
 DI
-eG
+po
 fZ
 jE
 jE
@@ -25843,7 +25861,7 @@ SG
 jE
 jE
 jE
-mr
+Jl
 nx
 nx
 nx
@@ -25852,7 +25870,7 @@ mm
 DC
 mm
 mm
-mr
+Jl
 bl
 bl
 YB
@@ -25861,18 +25879,18 @@ bl
 bl
 bl
 bl
-eG
-eG
-eG
-DI
-eG
 po
-eG
-eG
+po
+po
+eu
+jf
+DI
+po
+po
 Dr
-eG
+po
 Dr
-eG
+po
 fZ
 jE
 jE
@@ -26100,16 +26118,16 @@ SG
 jE
 jE
 jE
-mr
+Jl
 gV
 gV
 gV
-mr
-mr
-mr
-mr
-mr
-mr
+Jl
+Jl
+Jl
+Jl
+Jl
+Jl
 bl
 bl
 YB
@@ -26118,18 +26136,18 @@ bl
 bl
 bl
 bl
-eG
-eG
-eG
+po
+po
+po
 oH
-eG
-Sl
-eG
-eG
-eG
-eG
-eG
-eG
+po
+DI
+po
+po
+po
+po
+po
+po
 fZ
 jE
 jE
@@ -29706,7 +29724,7 @@ KL
 Yw
 Yw
 Yw
-gP
+mn
 Yw
 Yw
 Yw
@@ -33043,14 +33061,14 @@ NC
 Kc
 Kc
 Kc
-LC
-LC
-LC
-LC
-kd
-LC
-LC
-LC
+KL
+KL
+KL
+KL
+gP
+KL
+KL
+KL
 KL
 KL
 KL
@@ -35088,7 +35106,7 @@ ih
 ts
 ts
 ts
-ts
+FB
 ts
 aQ
 dv
@@ -36107,9 +36125,9 @@ jE
 jE
 jE
 fZ
-Ou
-Ou
-Ou
+Sl
+Sl
+sA
 Ou
 Ou
 Ou
@@ -36364,8 +36382,8 @@ jE
 jE
 jE
 fZ
-Ou
-Ou
+Sl
+Sl
 Ou
 Ou
 Ou
@@ -36621,8 +36639,8 @@ jE
 jE
 jE
 fZ
-Ou
-Ou
+Sl
+Sl
 Ou
 Ou
 Ou
