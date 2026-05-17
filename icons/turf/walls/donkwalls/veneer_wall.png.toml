@@ -1,2 +1,7 @@
 output_name = "veneer_wall"
-template = "bitmask/diagonal_32x32.toml"
+template = "bitmask/donk_wall_32x32.toml"
+
+
+[cut_pos]
+x = 16
+y = 3

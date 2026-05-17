@@ -1,2 +1,2 @@
 output_name = "decaying_tile_wall"
-template = "bitmask/diagonal_32x32.toml"
+template = "bitmask/donk_wall_32x32.toml"

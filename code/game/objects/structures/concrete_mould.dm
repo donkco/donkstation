@@ -76,26 +76,26 @@
 	name = "concrete ramp mould (south)"
 	desc = "A wedge-shaped wooden mould for casting a southward concrete ramp. Fill with one shovel load."
 	required_units = 2
-	dry_result = /obj/structure/steps/concrete_ramp/south
+	dry_result = /obj/structure/steps/concrete_ramp/directional/south
 	dir = SOUTH
 
 /obj/structure/concrete_mould/ramp/north
 	name = "concrete ramp mould (north)"
 	desc = "A wedge-shaped wooden mould for casting a northward concrete ramp. Fill with one shovel load."
 	dir = NORTH
-	dry_result = /obj/structure/steps/concrete_ramp/north
+	dry_result = /obj/structure/steps/concrete_ramp/directional/north
 
 /obj/structure/concrete_mould/ramp/east
 	name = "concrete ramp mould (east)"
 	desc = "A wedge-shaped wooden mould for casting an eastward concrete ramp. Fill with one shovel load."
 	dir = EAST
-	dry_result = /obj/structure/steps/concrete_ramp/east
+	dry_result = /obj/structure/steps/concrete_ramp/directional/east
 
 /obj/structure/concrete_mould/ramp/west
 	name = "concrete ramp mould (west)"
 	desc = "A wedge-shaped wooden mould for casting a westward concrete ramp. Fill with one shovel load."
 	dir = WEST
-	dry_result = /obj/structure/steps/concrete_ramp/west
+	dry_result = /obj/structure/steps/concrete_ramp/directional/west
 
 /**
  * Casts a /obj/item/concrete_sow.
@@ -103,6 +103,6 @@
  */
 /obj/structure/concrete_mould/concrete_sow
 	name = "concrete sow mould"
-	desc = "A simple rectangular mould for casting a concrete sow. Fill with one shovel load."
+	desc = "A mould for casting a concrete sow. Fill with one shovel load."
 	required_units = 1
 	dry_result = /obj/item/concrete_sow

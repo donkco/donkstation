@@ -4,9 +4,8 @@
 	desc = "A concrete slab raised above the rest."
 
 	icon = 'icons/obj/smooth_structures/donk_platforms/platform_concrete.dmi'
+	icon_state = "platform_concrete-0"
 	base_icon_state = "platform_concrete"
-	icon_state = "platform_concrete"
-
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 2)
 	max_integrity = 250
 	resistance_flags = FIRE_PROOF | FREEZE_PROOF
@@ -24,9 +23,9 @@
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT)
 	///  base_pixel_offsets for the different dirs(x,y)
 	var/static/list/dir_offsets = list(
-		TEXT_SOUTH = list(0, 1),
+		TEXT_SOUTH = list(0, -1),
 		TEXT_EAST = list(2, 0),
-		TEXT_NORTH = list(0, -8),
+		TEXT_NORTH = list(0, 8),
 		TEXT_WEST = list(-2, 0),
 	)
 
@@ -55,15 +54,4 @@
 /obj/structure/steps/concrete_ramp/atom_deconstruct(disassembled = TRUE)
 	return
 
-
-/obj/structure/steps/concrete_ramp/south
-	dir = SOUTH
-
-/obj/structure/steps/concrete_ramp/east
-	dir = EAST
-
-/obj/structure/steps/concrete_ramp/north
-	dir = NORTH
-
-/obj/structure/steps/concrete_ramp/west
-	dir = WEST
+RAMP_DIRECTIONAL_HELPERS(/obj/structure/steps/concrete_ramp)
