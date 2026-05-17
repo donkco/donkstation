@@ -4,4 +4,4 @@ template = "bitmask/diagonal_32x32.toml"
 
 [cut_pos]
 x = 16
-y = 8
+y = 4
