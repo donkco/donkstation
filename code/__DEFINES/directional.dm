@@ -95,3 +95,4 @@
 
 /// Directional helpers for things that use the wall_mount element
 #define WALL_MOUNT_DIRECTIONAL_HELPERS(path) _WALL_MOUNT_DIRECTIONAL_HELPERS(path, 13, 13, -1, 2, -2, 0)
+#define APC_DIRECTIONAL_HELPERS(path) _WALL_MOUNT_DIRECTIONAL_HELPERS(path, 13, 20, -20, 18, -18, 6)

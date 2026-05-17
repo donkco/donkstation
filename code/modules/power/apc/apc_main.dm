@@ -17,8 +17,9 @@
 /obj/machinery/power/apc
 	name = "area power controller"
 	desc = "A control terminal for the area's electrical systems."
-	icon = 'icons/obj/machines/wallmounts.dmi'
-	icon_state = "apc0"
+
+	icon = 'icons/obj/machines/APC.dmi'
+	icon_state = "frame"
 	use_power = NO_POWER_USE
 	req_access = null
 	max_integrity = 200
@@ -42,6 +43,7 @@
 	///Type of cell we start with
 	var/cell_type = /obj/item/stock_parts/power_store/battery/upgraded //Base cell has 2500 capacity. Enter the path of a different cell you want to use. cell determines charge rates, max capacity, ect. These can also be changed with other APC vars, but isn't recommended to minimize the risk of accidental usage of dirty editted APCs
 	///State of the cover (closed, opened, removed)
+	///Opens the upper hatch, exposes the cell, and the first part of the terminal
 	var/opened = APC_COVER_CLOSED
 	///Is the APC shorted and not working?
 	var/shorted = FALSE
@@ -112,8 +114,6 @@
 	var/low_power_nightshift_lights = FALSE
 	///Time when the nightshift where turned on last, to prevent spamming
 	var/last_nightshift_switch = 0
-	///Stores the flags for the icon state
-	var/update_state = -1
 	///Stores the flag for the overlays
 	var/update_overlay = -1
 	///Used to stop process from updating the icons too much
@@ -122,8 +122,6 @@
 	var/mob/remote_control_user = null
 	///Represents a signel source of power alarms for this apc
 	var/datum/alarm_handler/alarm_manager
-	/// Offsets the object by APC_PIXEL_OFFSET (defined in apc_defines.dm) pixels in the direction we want it placed in. This allows the APC to be embedded in a wall, yet still inside an area (like mapping).
-	var/offset_old
 	/// Used for apc helper called cut_AI_wire to make apc's wore responsible for ai connectione mended.
 	var/cut_AI_wire = FALSE
 	/// Used for apc helper called unlocked to make apc unlocked.
@@ -173,9 +171,8 @@
 	//. += NAMEOF(src, locked)
 	return .
 
-/obj/machinery/power/apc/Initialize(mapload)
+/obj/machinery/power/apc/Initialize(mapload, ndir)
 	. = ..()
-
 	//APCs get added to their own processing tasks for the machines subsystem.
 	if (!(datum_flags & DF_ISPROCESSING))
 		datum_flags |= DF_ISPROCESSING
@@ -215,8 +212,6 @@
 		make_terminal()
 		///This is how we test to ensure that mappers use the directional subtypes of APCs, rather than use the parent and pixel-shift it themselves.
 		setDir(dir)
-		if(abs(offset_old) != APC_PIXEL_OFFSET)
-			log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([dir] | [uppertext(dir2text(dir))]) has pixel_[dir & (WEST|EAST) ? "x" : "y"] value [offset_old] - should be [dir & (SOUTH|EAST) ? "-" : ""][APC_PIXEL_OFFSET]. Use the directional/ helpers!")
 		find_and_mount_on_atom()
 	// For apcs created during the round players need to configure them from scratch
 	else
@@ -259,19 +254,6 @@
 /obj/machinery/power/apc/setDir(newdir)
 	. = ..()
 
-	switch(newdir)
-		if(NORTH)
-			offset_old = pixel_y
-			pixel_y = APC_PIXEL_OFFSET
-		if(SOUTH)
-			offset_old = pixel_y
-			pixel_y = -APC_PIXEL_OFFSET
-		if(EAST)
-			offset_old = pixel_x
-			pixel_x = APC_PIXEL_OFFSET
-		if(WEST)
-			offset_old = pixel_x
-			pixel_x = -APC_PIXEL_OFFSET
 
 	var/image/hud_image = image(icon = 'icons/mob/huds/hud.dmi', icon_state = "apc_hacked")
 	hud_image.pixel_w = pixel_x
@@ -603,15 +585,9 @@
 		malfai.malf_picker.processing_time += 1
 
 	//dont use any power from that channel if we shut that power channel off
-	if(operating)
-		lastused_light = APC_CHANNEL_IS_ON(lighting) ? area.energy_usage[AREA_USAGE_LIGHT] + area.energy_usage[AREA_USAGE_STATIC_LIGHT] : 0
-		lastused_equip = APC_CHANNEL_IS_ON(equipment) ? area.energy_usage[AREA_USAGE_EQUIP] + area.energy_usage[AREA_USAGE_STATIC_EQUIP] : 0
-		lastused_environ = APC_CHANNEL_IS_ON(environ) ? area.energy_usage[AREA_USAGE_ENVIRON] + area.energy_usage[AREA_USAGE_STATIC_ENVIRON] : 0
-	else
-		lastused_light = 0
-		lastused_equip = 0
-		lastused_environ = 0
-
+	lastused_light = APC_CHANNEL_IS_ON(lighting) ? area.energy_usage[AREA_USAGE_LIGHT] + area.energy_usage[AREA_USAGE_STATIC_LIGHT] : 0
+	lastused_equip = APC_CHANNEL_IS_ON(equipment) ? area.energy_usage[AREA_USAGE_EQUIP] + area.energy_usage[AREA_USAGE_STATIC_EQUIP] : 0
+	lastused_environ = APC_CHANNEL_IS_ON(environ) ? area.energy_usage[AREA_USAGE_ENVIRON] + area.energy_usage[AREA_USAGE_STATIC_ENVIRON] : 0
 	lastused_charge = charging == APC_CHARGING ? area.energy_usage[AREA_USAGE_APC_CHARGE] : 0
 
 	lastused_total = lastused_light + lastused_equip + lastused_environ + lastused_charge
