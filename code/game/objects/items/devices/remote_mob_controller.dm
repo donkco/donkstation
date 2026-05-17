@@ -1,13 +1,11 @@
 /obj/item/remote_mob_controller
-	name = "remote mob controller"
-	desc = "A device used to remotely control a mob."
-	icon = 'icons/obj/toys/toy.dmi'
-	icon_state = "dread_ipad"
+	name = "RC controller"
+	desc = "A device that employs invisible rays, quite like those picked up by an ordinary household radio, in order to remotely operate machinery."
+	icon = 'icons/obj/antags/nt_agent.dmi'
+	icon_state = "rc_controller"
 	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/remote_mob_controller/bot
-	name = "Bot controller"
-	desc = "A control device for a bot. It has a built in camera to see through the bot's eyes."
 	var/mob/living/assigned_bot
 	///Can new bots be assigned to this controller manually?
 	var/can_assign_bots = FALSE
@@ -47,8 +45,6 @@
 
 
 /obj/item/remote_mob_controller/bot/monkey
-	name = "Monkey Bot controller"
-	desc = "A control device for monkey bots. For people that have gone both nutty and bananas."
 	///Has the monkey been created?
 	var/has_monkey_been_made = FALSE
 	///The name to give the monkey when it's created

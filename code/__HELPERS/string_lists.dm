@@ -1,10 +1,14 @@
 GLOBAL_LIST_EMPTY(string_lists)
 
+/// Returns a cache key string for a flat list of stringify-able values.
+/proc/string_list_key(list/values)
+	return values.Join("-")
+
 /**
  * Caches lists with non-numeric stringify-able values (text or typepath).
  */
 /proc/string_list(list/values)
-	var/string_id = values.Join("-")
+	var/string_id = string_list_key(values)
 
 	. = GLOB.string_lists[string_id]
 

@@ -2,7 +2,6 @@
 //Exercise good judgement and don't add these to a lathe willy nilly.
 
 //Saw-tier bulky & blunt weapon. A decent bone breaker. Source of lead reagent.
-//Add lead material to this once implemented.
 /obj/item/lead_pipe
 	name = "lead pipe"
 	icon = 'icons/obj/maintenance_loot.dmi'
@@ -25,12 +24,12 @@
 	drop_sound = 'sound/items/handling/materials/metal_drop.ogg'
 	throw_drop_sound = 'sound/items/handling/lead_pipe/lead_pipe_drop.ogg'
 	hitsound = 'sound/items/lead_pipe_hit.ogg'
+	custom_materials = list(/datum/material/lead = SHEET_MATERIAL_AMOUNT * 2)
 
 /obj/item/lead_pipe/grind_results()
 	return list(/datum/reagent/lead = 20)
 
 //A good battery early in the shift. Source of lead & sulfuric acid reagents.
-//Add lead material to this once implemented.
 /obj/item/stock_parts/power_store/cell/lead
 	name = "lead-acid battery"
 	desc = "A primitive battery. It is quite large and feels unexpectedly heavy."
@@ -44,6 +43,8 @@
 	emp_damage_modifier = 4 // 15 shots.
 	charge_light_type = null
 	connector_type = "leadacid"
+	custom_materials = list(/datum/material/lead = SHEET_MATERIAL_AMOUNT, /datum/material/plastic = SHEET_MATERIAL_AMOUNT)
+
 
 /obj/item/stock_parts/power_store/cell/lead/grind_results()
 	return list(/datum/reagent/lead = 15, /datum/reagent/toxin/acid = 15, /datum/reagent/water = 20)

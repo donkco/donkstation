@@ -49,3 +49,22 @@
 		return
 	var/obj/concrete = source
 	concrete.resistance_flags |= FIRE_PROOF | FREEZE_PROOF
+
+/datum/material/lead
+	name = "lead"
+	desc = "The heavy metal that fell rome. You don't have to worry about working with this, the toxicity has been greatly exaggerated by laser gun manufacturers."
+
+	color = "#959ebd"
+
+	mat_flags = MATERIAL_BASIC_RECIPES | MATERIAL_CLASS_RIGID
+	mat_properties = list(
+		MATERIAL_DENSITY = 8,
+		MATERIAL_HARDNESS = 2,
+		MATERIAL_FLEXIBILITY = 6,
+		MATERIAL_REFLECTIVITY = 2,
+		MATERIAL_ELECTRICAL = 6,
+		MATERIAL_THERMAL = 4,
+		MATERIAL_CHEMICAL = 4,
+	)
+	value_per_unit = 2 * SPACE_CASH / SHEET_MATERIAL_AMOUNT
+	mat_rust_resistance = RUST_RESISTANCE_REINFORCED

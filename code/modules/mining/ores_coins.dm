@@ -182,12 +182,35 @@ GLOBAL_LIST_INIT(sand_recipes, list(\
 	mine_experience = 0
 	merge_type = /obj/item/stack/ore/glass/basalt
 
+/obj/item/stack/ore/glass/dirt
+	name = "dirt pile"
+	singular_name = "dirt pile"
+	mine_experience = 0
+	merge_type = /obj/item/stack/ore/glass/dirt
+
 /obj/item/stack/ore/glass/siderite
 	name = "siderite dust"
 	icon_state = "siderite_sand"
 	singular_name = "siderite dust pile"
 	mine_experience = 0
 	merge_type = /obj/item/stack/ore/glass/siderite
+
+GLOBAL_LIST_INIT(snow_ore_recipes, list(
+	new /datum/stack_recipe("snow block", /obj/item/stack/sheet/mineral/snow, 1, 3, 50, crafting_flags = CRAFT_NO_MATERIALS, category = CAT_MISC),
+))
+
+/obj/item/stack/ore/snow
+	name = "packed snow"
+	singular_name = "packed snow"
+	icon = 'icons/obj/ore.dmi'
+	icon_state = "sand-snow"
+	w_class = WEIGHT_CLASS_TINY
+	mine_experience = 0
+	merge_type = /obj/item/stack/ore/snow
+
+/obj/item/stack/ore/snow/get_main_recipes()
+	. = ..()
+	. += GLOB.snow_ore_recipes
 
 /obj/item/stack/ore/plasma
 	name = "plasma ore"

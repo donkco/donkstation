@@ -32,13 +32,15 @@
 /obj/structure/steps/concrete_ramp/Initialize(mapload)
 	. = ..()
 	// set the pixel offsets based on the direction the ramp is facing
-	if((dir in dir_offsets) && !mapload)
-		SET_BASE_PIXEL(dir_offsets[dir][1], dir_offsets[dir][2])
+	if((dir_offsets["[dir]"]) && !mapload)
+		var/dir_list = dir_offsets["[dir]"]
+		SET_BASE_PIXEL(dir_list[1], dir_list[2])
 
 /obj/structure/steps/concrete_ramp/setDir(newdir)
 	. = ..()
-	if(newdir in dir_offsets)
-		SET_BASE_PIXEL(dir_offsets[newdir][1], dir_offsets[newdir][2])
+	if((dir_offsets["[newdir]"]))
+		var/dir_list = dir_offsets["[newdir]"]
+		SET_BASE_PIXEL(dir_list[1], dir_list[2])
 
 /obj/structure/steps/concrete_ramp/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	return NONE

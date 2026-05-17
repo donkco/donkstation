@@ -159,12 +159,12 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_TILE_WALLS S_TURF(69) ///turf/closed/wall/tile
 #define SMOOTH_GROUP_PLYWOOD_WALLS S_TURF(70) ///turf/closed/wall/plywood
 #define SMOOTH_GROUP_DECAYING_TILE_WALLS S_TURF(71) ///turf/closed/wall/tile/decaying
-#define SMOOTH_GROUP_CONCRETE S_TURF(72) ///turf/open/concrete
-#define SMOOTH_GROUP_SLUDGE_POOL S_TURF(73) ///turf/open/concrete/sludge_pool
-#define SMOOTH_GROUP_SHAFT_GRATING S_TURF(74) ///turf/open/shaft_grating
-#define SMOOTH_GROUP_SHAFT S_TURF(75) ///turf/open/chasm/shaft
-#define SMOOTH_GROUP_PLASTITANIUM_SCALE S_TURF(76) ///turf/open/floor/plastitanium_tile/scale
-#define SMOOTH_GROUP_SUS_CARPET S_TURF(77) ///turf/open/floor/carpet/sus
+#define SMOOTH_GROUP_SLUDGE_POOL S_TURF(72) ///turf/open/floor/concrete/sludge_pool
+#define SMOOTH_GROUP_SHAFT_GRATING S_TURF(73) ///turf/open/shaft_grating
+#define SMOOTH_GROUP_SHAFT S_TURF(74) ///turf/open/chasm/shaft
+#define SMOOTH_GROUP_PLASTITANIUM_SCALE S_TURF(75) ///turf/open/floor/plastitanium_tile/scale
+#define SMOOTH_GROUP_SUS_CARPET S_TURF(76) ///turf/open/floor/carpet/sus
+#define SMOOTH_GROUP_FLOOR_CONCRETE S_TURF(77) ///turf/open/floor/concrete (dry and wet)
 #define SMOOTH_GROUP_VENEER_WALLS S_TURF(78) ///turf/closed/wall/veneer
 
 #define MAX_S_TURF 78 //Always match this value with the one above it.

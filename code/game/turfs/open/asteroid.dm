@@ -30,6 +30,8 @@
 	var/dug = FALSE
 	/// Percentage chance of receiving a bonus worm
 	var/worm_chance = 30
+	/// Soil sample text added to a shovel's forensics when this turf is dug
+	var/soil_sample_text = "Grains of asteroid sand"
 
 /turf/open/misc/asteroid/broken_states()
 	if(initial(dug))
@@ -68,6 +70,9 @@
 		return TRUE
 
 	if(attack_item.tool_behaviour == TOOL_SHOVEL || attack_item.tool_behaviour == TOOL_MINING)
+		if(locate(/obj/structure/closet/crate/grave/fresh) in src)
+			balloon_alert(user, "there's a grave here!")
+			return TRUE
 		if(!can_dig(user))
 			return TRUE
 
@@ -81,6 +86,8 @@
 				return TRUE
 			getDug()
 			SSblackbox.record_feedback("tally", "pick_used_mining", 1, attack_item.type)
+			if(attack_item.tool_behaviour == TOOL_SHOVEL && soil_sample_text)
+				attack_item.add_soil_sample(soil_sample_text)
 			return TRUE
 	else if(istype(attack_item, /obj/item/storage/bag/ore))
 		for(var/obj/item/stack/ore/dropped_ore in src)
@@ -140,6 +147,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	base_icon_state = "basalt"
 	floor_variance = 15
 	dig_result = /obj/item/stack/ore/glass/basalt
+	soil_sample_text = "Specks of volcanic ash"
 
 /turf/open/misc/asteroid/basalt/getDug()
 	. = ..()
@@ -312,7 +320,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	planetary_atmos = TRUE
 	bullet_sizzle = TRUE
 	bullet_bounce_sound = null
-	dig_result = /obj/item/stack/sheet/mineral/snow
+	dig_result = /obj/item/stack/ore/snow
 	leave_footprints = TRUE
 
 /turf/open/misc/asteroid/snow/burn_tile()
@@ -358,7 +366,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 		UnregisterSignal(SSdcs, COMSIG_WEATHER_START(snow_type))
 
 /turf/open/misc/asteroid/snow/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
-	if(!istype(tool, /obj/item/stack/sheet/mineral/snow))
+	if(!istype(tool, /obj/item/stack/ore/snow))
 		return ..()
 
 	if(dug)

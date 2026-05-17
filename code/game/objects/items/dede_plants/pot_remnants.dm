@@ -3,7 +3,8 @@
 	name = "ceramic shard"
 	desc = "The potter's fractured vision. Maybe some glue could fix it?"
 
-
+	icon = 'icons/obj/fluff/flora/pot_stuff.dmi'
+	icon_state = "ceramic_shard_1"
 	base_icon_state = "ceramic_shard"
 
 	force = 5
@@ -22,12 +23,20 @@
 /obj/item/pot_shard/Initialize(mapload)
 	. = ..()
 	icon_state = "[base_icon_state]_[rand(1, shard_variants)]"
+	update_appearance(UPDATE_ICON_STATE)
 
 /obj/item/pot_shard/terracotta
 	name = "terracotta shard"
 	icon_state = "terracotta_shard_1"
 	base_icon_state = "terracotta_shard"
 	shard_variants = 9
+
+/obj/item/pot_shard/ming
+	name = "worthless ming shard"
+	desc = "Another victory in the struggle against the four olds."
+	icon_state = "ming_shard_1"
+	base_icon_state = "ming_shard"
+	shard_variants = 16
 
 /obj/effect/decal/cleanable/soil_spill
 	name = "soil"
