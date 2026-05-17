@@ -265,6 +265,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	// Custom hotkeys
 	key_bindings = savefile.get_entry("key_bindings", key_bindings)
 
+	// Job Slate (preferences-level, shared across all character slots)
+	job_slate = savefile.get_entry("job_slate", job_slate)
+	overflow_char_slot = savefile.get_entry("overflow_char_slot", overflow_char_slot)
+
 	//try to fix any outdated data if necessary
 	if(SHOULD_UPDATE_DATA(data_validity_integer))
 		var/bacpath = PREFS_BACKUP_PATH(path) //todo: if the savefile version is higher then the server, check the backup, and give the player a prompt to load the backup
@@ -282,6 +286,25 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	be_special = sanitize_be_special(SANITIZE_LIST(be_special))
 	key_bindings = sanitize_keybindings(key_bindings)
 	favorite_outfits = SANITIZE_LIST(favorite_outfits)
+
+	//Validate job slate — always rebuild as a fresh sequential list of fresh assoc lists
+	//to handle any format drift from old savefiles (e.g. assoc keys instead of array indices)
+	var/list/raw_slate = SANITIZE_LIST(job_slate)
+	var/list/clean_slate = list()
+	for(var/i in 1 to 5)
+		var/list/src_entry = (i <= length(raw_slate)) ? raw_slate[i] : null
+		var/cs = islist(src_entry) ? src_entry["char_slot"] : 0
+		var/job_str = islist(src_entry) ? src_entry["job"] : ""
+		if(!isnum(cs) || cs < 0 || cs > max_save_slots)
+			cs = 0
+		if(!istext(job_str))
+			job_str = ""
+		clean_slate += list(list("char_slot" = cs, "job" = job_str))
+	job_slate = clean_slate
+
+	//Validate overflow char slot
+	if(!isnum(overflow_char_slot) || overflow_char_slot < 0 || overflow_char_slot > max_save_slots)
+		overflow_char_slot = 0
 
 	key_bindings_by_key = get_key_bindings_by_key(key_bindings)
 
@@ -337,6 +360,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	savefile.set_entry("hearted_until", (hearted_until > world.realtime ? hearted_until : null))
 	savefile.set_entry("favorite_outfits", favorite_outfits)
 	savefile.set_entry("secretary_points", secretary_points)
+	savefile.set_entry("job_slate", job_slate)
+	savefile.set_entry("overflow_char_slot", overflow_char_slot)
 	savefile.save()
 	return TRUE
 

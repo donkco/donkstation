@@ -119,7 +119,7 @@
 	icon_state = "character_setup_disabled"
 	base_icon_state = "character_setup"
 	enabled = FALSE
-	always_available = FALSE
+	always_available = TRUE
 
 /atom/movable/screen/lobby/button/character_setup/Initialize(mapload, datum/hud/hud_owner)
 	. = ..()
@@ -138,9 +138,7 @@
 		return
 
 	var/datum/preferences/preferences = hud.mymob.canon_client.prefs
-	preferences.current_window = PREFERENCE_TAB_CHARACTER_PREFERENCES
-	preferences.update_static_data(usr)
-	preferences.ui_interact(usr)
+	preferences.character_slate.ui_interact(usr)
 
 /atom/movable/screen/lobby/button/character_setup/proc/enable_character_setup()
 	SIGNAL_HANDLER

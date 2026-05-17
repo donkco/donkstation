@@ -48,6 +48,14 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	//Job preferences 2.0 - indexed by job title , no key or value implies never
 	var/list/job_preferences = list()
 
+	/// Ordered list of 5 entries for the character slate job queue.
+	/// Each entry: list("char_slot" = N, "job" = "Job Title"). char_slot 0 / job "" = empty.
+	var/list/job_slate = list()
+
+	/// The character slot used as the overflow (assistant fallback) if all 5 slate slots fail.
+	/// 0 = no preference (server picks at random from the player's characters).
+	var/overflow_char_slot = 0
+
 	/// The current window, PREFERENCE_TAB_* in [`code/__DEFINES/preferences.dm`]
 	var/current_window = PREFERENCE_TAB_CHARACTER_PREFERENCES
 
@@ -94,6 +102,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/character_created = FALSE
 	/// The CharacterContract TGUI datum, opened from the lobby
 	var/datum/character_contract/character_contract
+	/// The CharacterSlate TGUI datum, opened from the character_setup lobby button
+	var/datum/character_slate/character_slate
 	/// Account-level Secretary Points balance. Saved in preferences (not per-character).
 	var/secretary_points = 0
 	/// Transient accumulator for playtime-based SP grants. Resets on relog, never saved.
@@ -101,6 +111,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 /datum/preferences/Destroy(force)
 	QDEL_NULL(character_contract)
+	QDEL_NULL(character_slate)
 	QDEL_NULL(character_preview_view)
 	QDEL_LIST(middleware)
 	value_cache = null
@@ -109,6 +120,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 /datum/preferences/New(client/parent)
 	src.parent = parent
 	character_contract = new /datum/character_contract(src)
+	character_slate = new /datum/character_slate(src)
 
 	for (var/middleware_type in subtypesof(/datum/preference_middleware))
 		middleware += new middleware_type(src)
@@ -432,6 +444,67 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 		job_preferences[job.title] = level
 
 	return TRUE
+
+/// Returns the default empty 5-slot job slate.
+/datum/preferences/proc/default_job_slate()
+	var/list/slate = list()
+	for(var/i in 1 to 5)
+		slate += list(list("char_slot" = 0, "job" = ""))
+	return slate
+
+/**
+ * Returns a list of job typepaths the character in the given slot is allowed to select.
+ * Includes: JOB_ALWAYS_AVAILABLE jobs + archetype whitelist + quirk unlocks.
+ * Returns an empty list if the slot is invalid or the character hasn't been created yet.
+ */
+/datum/preferences/proc/get_available_jobs_for_character(slot_index)
+	if(!isnum(slot_index) || slot_index < 1 || slot_index > max_save_slots)
+		return list()
+
+	var/archetype_id_str
+	var/list/quirk_names = list()
+
+	if(slot_index == default_slot)
+		if(!character_created)
+			return list()
+		archetype_id_str = archetype_id
+		quirk_names = all_quirks || list()
+	else
+		var/tree_key = "character[slot_index]"
+		var/list/save_data = savefile?.get_entry(tree_key)
+		if(!save_data || !save_data["character_created"])
+			return list()
+		archetype_id_str = save_data["archetype"]
+		quirk_names = SANITIZE_LIST(save_data["all_quirks"])
+
+	return _compute_available_jobs(archetype_id_str, quirk_names)
+
+/// Internal helper — derives the available job typepath list from archetype + quirk data.
+/datum/preferences/proc/_compute_available_jobs(archetype_id_str, list/quirk_names)
+	var/list/result = list()
+
+	for(var/datum/job/job as anything in SSjob.joinable_occupations)
+		if(job.job_flags & JOB_ALWAYS_AVAILABLE)
+			result |= job.type
+
+	if(!archetype_id_str)
+		return result
+
+	for(var/archetype_type in SScharacters.all_archetypes)
+		var/datum/character_archetype/arch = SScharacters.all_archetypes[archetype_type]
+		if(arch.archetype_id == archetype_id_str)
+			result |= arch.available_jobs
+			break
+
+	for(var/quirk_name in quirk_names)
+		var/quirk_type = SSquirks.quirks[quirk_name]
+		if(!quirk_type)
+			continue
+		var/datum/quirk/prototype = SSquirks.quirk_prototypes[quirk_type]
+		if(prototype && length(prototype.unlocked_jobs))
+			result |= prototype.unlocked_jobs
+
+	return result
 
 /datum/preferences/proc/GetQuirkBalance()
 	var/bal = SSquirks.default_quirk_points

@@ -113,20 +113,6 @@ export function CharacterPreferenceWindow(props) {
           <Stack.Item grow>
             <PageButton
               currentPage={currentPage}
-              page={Page.Jobs}
-              setPage={setCurrentPage}
-            >
-              {/*
-                    Fun fact: This isn't "Jobs" so that it intentionally
-                    catches your eyes, because it's really important!
-                  */}
-              Occupations
-            </PageButton>
-          </Stack.Item>
-
-          <Stack.Item grow>
-            <PageButton
-              currentPage={currentPage}
               page={Page.Antags}
               setPage={setCurrentPage}
             >

@@ -153,6 +153,12 @@
 	if(eligibility_check != JOB_AVAILABLE)
 		return eligibility_check
 
+	// Check archetype/quirk job availability — jobs not in the character's unlock list are unavailable.
+	if(client?.prefs)
+		var/list/avail = client.prefs.get_available_jobs_for_character(client.prefs.default_slot)
+		if(length(avail) && !(job.type in avail))
+			return JOB_UNAVAILABLE_GENERIC
+
 	if(latejoin && !job.special_check_latejoin(client))
 		return JOB_UNAVAILABLE_GENERIC
 	return JOB_AVAILABLE
@@ -271,6 +277,15 @@
 	spawning = TRUE
 
 	mind.active = FALSE //we wish to transfer the key manually
+
+	// If the mind was assigned to a specific character slot by the slate lottery, load that slot first.
+	// Otherwise fall back to the player's currently active slot.
+	var/use_slot = mind.assigned_character_slot
+	if(!use_slot)
+		use_slot = client.prefs.default_slot
+	if(use_slot != client.prefs.default_slot)
+		client.prefs.load_character(use_slot)
+
 	var/mob/living/spawning_mob = mind.assigned_role.get_spawn_mob(client, destination)
 	if(QDELETED(src) || !HAS_CONNECTED_PLAYER(src))
 		return // Disconnected while checking for the appearance ban.
@@ -278,11 +293,11 @@
 	if(!isAI(spawning_mob)) // Unfortunately there's still snowflake AI code out there.
 		// transfer_to sets mind to null
 		var/datum/mind/preserved_mind = mind
-		preserved_mind.original_character_slot_index = client.prefs.default_slot
+		preserved_mind.original_character_slot_index = use_slot
 		preserved_mind.transfer_to(spawning_mob) //won't transfer key since the mind is not active
 		preserved_mind.set_original_character(spawning_mob)
 
-	LAZYADD(persistent_client.joined_as_slots, "[client.prefs.default_slot]")
+	LAZYADD(persistent_client.joined_as_slots, "[use_slot]")
 	client.init_verbs()
 	. = spawning_mob
 	new_character = .
