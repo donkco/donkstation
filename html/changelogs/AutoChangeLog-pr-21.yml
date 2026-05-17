@@ -1,0 +1,6 @@
+author: "Krysonism"
+delete-after: True
+changes:
+  - rscadd: "Added new abstract overhead lights, starlights!"
+  - image: "Ported wallening APC and light sprites."
+  - map: "Added a new test map to showcase new assets: Goodtimestation"
