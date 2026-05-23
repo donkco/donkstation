@@ -130,7 +130,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/navigate
 	name = "navigate"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "navigate"
 	screen_loc = ui_navigate_menu
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -143,14 +143,14 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/craft
 	name = "crafting menu"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "craft"
 	screen_loc = ui_crafting
 	mouse_over_pointer = MOUSE_HAND_POINTER
 
 /atom/movable/screen/area_creator
 	name = "create new area"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "area_edit"
 	screen_loc = ui_building
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -166,7 +166,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/language_menu
 	name = "language menu"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "talk_wheel"
 	screen_loc = ui_language_menu
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -176,7 +176,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/memories
 	name = "Memories"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "memories"
 	screen_loc = ui_memories_menu
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -309,7 +309,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 /atom/movable/screen/close
 	name = "close"
 	plane = ABOVE_HUD_PLANE
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "storage_close"
 	mouse_over_pointer = MOUSE_HAND_POINTER
 	hud_group_key = HUD_GROUP_STORAGE
@@ -327,7 +327,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/drop
 	name = "drop"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "act_drop"
 	mouse_over_pointer = MOUSE_HAND_POINTER
 
@@ -337,7 +337,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/combattoggle
 	name = "toggle combat mode"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "combat_off"
 	screen_loc = ui_acti
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -389,7 +389,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/floor_changer
 	name = "change floor"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "floor_change"
 	screen_loc = ui_above_intent
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -480,7 +480,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/mov_intent
 	name = "run/walk toggle"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "running"
 	mouse_over_pointer = MOUSE_HAND_POINTER
 	screen_loc = ui_movi
@@ -510,7 +510,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/pull
 	name = "stop pulling"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "pull"
 	base_icon_state = "pull"
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -531,7 +531,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/resist
 	name = "resist"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "act_resist"
 	base_icon_state = "act_resist"
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -545,7 +545,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/rest
 	name = "rest"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "act_rest"
 	base_icon_state = "act_rest"
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -569,7 +569,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/sleep
 	name = "sleep"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "act_sleep"
 	base_icon_state = "act_sleep"
 	mouse_over_pointer = MOUSE_HAND_POINTER
@@ -601,7 +601,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/storage
 	name = "storage"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "storage_cell"
 	hud_group_key = HUD_GROUP_STORAGE
 
@@ -668,7 +668,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 /atom/movable/screen/throw_catch
 	name = "throw/catch"
-	icon = 'icons/hud/screen_midnight.dmi'
+	icon = 'icons/hud/screen_donk.dmi'
 	icon_state = "act_throw"
 	mouse_over_pointer = MOUSE_HAND_POINTER
 	screen_loc = ui_drop_throw
