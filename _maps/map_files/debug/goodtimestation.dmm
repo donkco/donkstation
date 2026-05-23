@@ -481,7 +481,8 @@
 /turf/open/floor/plastitanium_tile,
 /area/station/engineering/break_room)
 "mr" = (
-)
+/turf/open/floor/iron_tile,
+/area/station/hallway/secondary/entry)
 "mU" = (
 /turf/open/floor/carpet/borderless/red,
 /area/spaceport_lounge)
