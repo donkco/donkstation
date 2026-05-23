@@ -1,0 +1,5 @@
+author: "Krysonism"
+delete-after: True
+changes:
+  - bugfix: "fixed missing turfs on map."
+  - image: " Added the first draft of the new hud."
