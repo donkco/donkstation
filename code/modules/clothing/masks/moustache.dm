@@ -7,9 +7,19 @@
 	flags_inv = HIDEFACE
 	species_exception = list(/datum/species/golem)
 
+/obj/item/clothing/mask/fakemoustache/equipped(mob/user, slot)
+	. = ..()
+	if(ishuman(user) && (slot & ITEM_SLOT_MASK))
+		ADD_TRAIT(src, TRAIT_EXAMINE_SKIP, CLOTHING_TRAIT)
+
+/obj/item/clothing/mask/fakemoustache/dropped(mob/user)
+	. = ..()
+	REMOVE_TRAIT(src, TRAIT_EXAMINE_SKIP, CLOTHING_TRAIT)
+
 /obj/item/clothing/mask/fakemoustache/italian
 	name = "italian moustache"
 	desc = "Made from authentic Italian moustache hairs. Gives the wearer an irresistible urge to gesticulate wildly."
+
 
 /obj/item/clothing/mask/fakemoustache/italian/Initialize(mapload)
 	. = ..()

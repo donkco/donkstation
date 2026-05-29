@@ -117,8 +117,9 @@ type Data = {
 };
 
 const GENDER_OPTIONS = [
-  { value: 'male', label: 'He/Him' },
-  { value: 'female', label: 'She/Her' },
+  { value: 'male', label: 'Mr.' },
+  { value: 'female', label: 'Mrs.' },
+  { value: 'female', label: 'Ms.' },
   { value: 'plural', label: 'They/Them' },
   { value: 'neuter', label: 'It/Its' },
 ] as const;
@@ -516,7 +517,7 @@ const ContractPage = () => {
               >
                 <input
                   type="checkbox"
-                  name="gender"
+                  name="title"
                   value={option.value}
                   checked={gender === option.value}
                   onChange={() => act('set_gender', { value: option.value })}

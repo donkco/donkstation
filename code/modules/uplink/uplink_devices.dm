@@ -93,3 +93,6 @@
 /obj/item/pen/uplink/Initialize(mapload, owner, tc_amount = 20, datum/uplink_handler/uplink_handler_override = null)
 	. = ..()
 	AddComponent(/datum/component/uplink, owner, TRUE, FALSE, UPLINK_TRAITORS, tc_amount)
+
+/obj/item/uplink/nt_agent
+	uplink_flag = UPLINK_NTRAITORS
