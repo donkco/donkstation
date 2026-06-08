@@ -194,6 +194,8 @@
 		select_fire(user)
 
 /obj/item/gun/energy/can_shoot()
+	if(isnull(ammo_type))
+		return FALSE
 	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
 	return !QDELETED(cell) ? (cell.charge >= shot.e_cost) : FALSE
 

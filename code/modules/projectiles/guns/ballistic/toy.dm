@@ -9,7 +9,6 @@
 	force = 0
 	throwforce = 0
 	burst_size = 3
-	can_suppress = TRUE
 	clumsy_check = FALSE
 	item_flags = NONE
 	gun_flags = TOY_FIREARM_OVERLAY | NOT_A_REAL_GUN
@@ -46,7 +45,6 @@
 	clumsy_check = FALSE
 	item_flags = NONE
 	casing_ejector = FALSE
-	can_suppress = FALSE
 	weapon_weight = WEAPON_LIGHT
 	pb_knockback = 0
 	gun_flags = TOY_FIREARM_OVERLAY | NOT_A_REAL_GUN
@@ -85,7 +83,6 @@
 /obj/item/gun/ballistic/automatic/c20r/toy //This is the syndicate variant with syndicate firing pin and riot darts.
 	name = "donksoft SMG"
 	desc = "A bullpup three-round burst toy SMG, designated 'C-20r'. Ages 8 and up."
-	can_suppress = TRUE
 	item_flags = NONE
 	accepted_magazine_type = /obj/item/ammo_box/magazine/toy/smgm45
 	spawn_magazine_type = /obj/item/ammo_box/magazine/toy/smgm45/riot
@@ -93,6 +90,8 @@
 	clumsy_check = FALSE
 	gun_flags = TOY_FIREARM_OVERLAY | NOT_A_REAL_GUN
 	can_muzzle_flash = FALSE
+
+
 
 /obj/item/gun/ballistic/automatic/c20r/toy/unrestricted //Use this for actual toys
 	pin = /obj/item/firing_pin
@@ -105,7 +104,6 @@
 	name = "donksoft LMG"
 	desc = "A heavily modified toy light machine gun, designated 'L6 SAW'. Ages 8 and up."
 	fire_sound = 'sound/items/syringeproj.ogg'
-	can_suppress = FALSE
 	item_flags = NONE
 	accepted_magazine_type = /obj/item/ammo_box/magazine/toy/m762
 	spawn_magazine_type = /obj/item/ammo_box/magazine/toy/m762/riot

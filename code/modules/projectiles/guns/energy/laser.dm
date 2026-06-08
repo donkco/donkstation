@@ -8,6 +8,7 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/lasergun)
 	shaded_charge = TRUE
 	light_color = COLOR_SOFT_RED
+	barrel_mount_position = vector(31, 20)
 
 /obj/item/gun/energy/laser/Initialize(mapload)
 	. = ..()
@@ -38,6 +39,7 @@
 	projectile_damage_multiplier = 0.8
 	cell_type = /obj/item/stock_parts/power_store/cell/laser_pistol
 	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/pistol)
+	barrel_mount_position = vector(30, 18)
 
 /obj/item/gun/energy/laser/pistol/add_seclight_point()
 	return

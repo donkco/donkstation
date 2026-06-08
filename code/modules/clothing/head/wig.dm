@@ -11,6 +11,7 @@
 	var/hairstyle = "Very Long Hair"
 	var/adjustablecolor = TRUE //can color be changed manually?
 	var/adjustablehairstyle = TRUE //can hairstyle be changed manually?
+	SET_BASE_PIXEL(0, -8)
 
 /obj/item/clothing/head/wig/Initialize(mapload)
 	. = ..()

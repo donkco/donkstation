@@ -4,7 +4,6 @@
 	icon_state = "pistol"
 	w_class = WEIGHT_CLASS_SMALL
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m9mm
-	can_suppress = TRUE
 	burst_size = 1
 	fire_delay = 0 SECONDS
 	actions_types = list()
@@ -23,9 +22,8 @@
 	pickup_sound = 'sound/items/handling/gun/ballistics/pistol/pistol_pickup1.ogg'
 	fire_sound_volume = 90
 	bolt_wording = "slide"
-	suppressor_x_offset = 10
-	suppressor_y_offset = -1
 	recoil_backtime_multiplier = 1
+	barrel_mount_position = vector(26, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/no_mag
 	spawnwithmagazine = FALSE
@@ -47,10 +45,8 @@
 	pin.pin_removable = FALSE
 
 
-/obj/item/gun/ballistic/automatic/pistol/suppressed/Initialize(mapload)
-	. = ..()
-	var/obj/item/suppressor/S = new(src)
-	install_suppressor(S)
+/obj/item/gun/ballistic/automatic/pistol/suppressed/
+	barrel_attachment = /obj/item/gun_attachment/suppressor
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine
 	name = "\improper Ansem pistol"
@@ -58,7 +54,8 @@
 	icon_state = "pistol_evil"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m10mm
 	empty_indicator = TRUE
-	suppressor_x_offset = 12
+	barrel_mount_position = vector(27, 19)
+
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher
 	name = "\improper Ansem/SC pistol"
@@ -67,8 +64,8 @@
 	desc_controls = "Right-click to use the underbarrel disruptor. Two shots maximum between self-charges."
 	icon_state = "pistol_evil_fisher"
 	suppressed = SUPPRESSED_QUIET
-	can_suppress = FALSE
-	can_unsuppress = FALSE
+	barrel_mount_position = vector(30, 18)
+
 	var/obj/item/gun/energy/recharge/fisher/underbarrel
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher/Initialize(mapload)
@@ -119,12 +116,11 @@
 	icon_state = "m1911"
 	w_class = WEIGHT_CLASS_NORMAL
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m45
-	can_suppress = FALSE
 	fire_sound = 'sound/items/weapons/gun/pistol/shot_alt.ogg'
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
-
+	barrel_mount_position = vector(28, 20)
 /**
  * Weak 1911 for syndicate chimps. It comes in a 4 TC kit.
  * 15 damage every.. second? 7 shots to kill. Not fast.
@@ -146,12 +142,12 @@
 	icon_state = "deagle"
 	force = 14
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m50
-	can_suppress = FALSE
 	mag_display = TRUE
 	fire_sound = 'sound/items/weapons/gun/rifle/shot.ogg'
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
+	barrel_mount_position = vector(31, 21)
 
 /obj/item/gun/ballistic/automatic/pistol/deagle/contraband
 
@@ -197,12 +193,11 @@
 	icon_state = "aps"
 	w_class = WEIGHT_CLASS_NORMAL
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m9mm_aps
-	can_suppress = TRUE
 	burst_size = 3
 	burst_delay = 1
 	spread = 10
 	actions_types = list(/datum/action/item_action/toggle_firemode)
-	suppressor_x_offset = 6
+	barrel_mount_position = vector(28, 18)
 
 /obj/item/gun/ballistic/automatic/pistol/stickman
 	name = "flat gun"
@@ -237,11 +232,11 @@
 	force = 10
 	max_integrity = 100
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/doorhickey
-	can_suppress = FALSE
 	semi_auto = FALSE
 	show_bolt_icon = FALSE
 	projectile_damage_multiplier = 0.5
 	spread = 10
+	barrel_mount_position = vector(24, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/doorhickey/unload_ammo(mob/living/user, forced = FALSE)
 	if (forced)

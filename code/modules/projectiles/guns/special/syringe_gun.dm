@@ -164,7 +164,6 @@
 	pixel_x = 0
 	force = 2 //Also very weak because it's smaller
 	suppressed = SUPPRESSED_QUIET //Softer fire sound
-	can_unsuppress = FALSE //Permanently silenced
 	syringes = list(new /obj/item/reagent_containers/syringe())
 
 /obj/item/gun/syringe/dna

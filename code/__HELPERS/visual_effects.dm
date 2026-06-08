@@ -144,3 +144,18 @@
 	add_overlay(glow_appearance)
 	LAZYADD(update_overlays_on_z, glow_appearance)
 	return glow_appearance
+
+/// sets the pixel offsets of a mutable appearance, takes a vector or a list
+/mutable_appearance/proc/set_pixel_offset(pixel_offsets)
+	pixel_w = pixel_offsets[1]
+	pixel_z = pixel_offsets[2]
+
+/// sets the pixel offsets(x, y) of an atom, takes a vector or a list
+/atom/proc/set_pixel_offset(pixel_offsets)
+	pixel_x = pixel_offsets[1]
+	pixel_y = pixel_offsets[2]
+
+/// sets the visual pixel offsets(w, z) of an atom, takes a vector or a list
+/atom/proc/set_visual_offset(pixel_offsets)
+	pixel_w = pixel_offsets[1]
+	pixel_z = pixel_offsets[2]

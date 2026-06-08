@@ -1,6 +1,7 @@
 /obj/item/grenade/c4
 	name = "C-4 charge"
 	desc = "Used to put holes in specific areas without too much extra hole. A saboteur's favorite."
+	icon = 'icons/obj/weapons/donk_grenade.dmi'
 	icon_state = "plastic-explosive0"
 	inhand_icon_state = "plastic-explosive"
 	worn_icon_state = "c4"
@@ -184,6 +185,7 @@
 /obj/item/grenade/c4/x4
 	name = "X-4 charge"
 	desc = "A shaped high-explosive breaching charge. Designed to ensure user safety and wall nonsafety."
+	icon = 'icons/obj/weapons/grenade.dmi'
 	icon_state = "plasticx40"
 	inhand_icon_state = "plasticx4"
 	worn_icon_state = "x4"

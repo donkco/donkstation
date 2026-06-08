@@ -12,6 +12,7 @@
 	internal_magazine = TRUE
 	bolt_type = BOLT_TYPE_NO_BOLT
 	tac_reloads = FALSE
+	barrel_mount_position = vector(29, 19)
 	var/spin_delay = 10
 	var/recent_spin = 0
 	var/last_fire = 0
@@ -107,7 +108,7 @@
 	icon_state = "c38"
 	base_icon_state = "c38"
 	fire_sound = 'sound/items/weapons/gun/revolver/shot.ogg'
-
+	barrel_mount_position = vector(27, 18)
 // 38 special skins
 /datum/atom_skin/det_revolver
 	abstract_type = /datum/atom_skin/det_revolver
@@ -124,6 +125,7 @@
 /datum/atom_skin/det_revolver/police_positive_special
 	preview_name = "Police Positive Special"
 	new_icon_state = "c38_police"
+	barrel_mount_position = vector(29, 18)
 
 /datum/atom_skin/det_revolver/blued_steel
 	preview_name = "Blued Steel"
@@ -144,10 +146,12 @@
 /datum/atom_skin/det_revolver/peacemaker
 	preview_name = "The Peacemaker"
 	new_icon_state = "c38_peacemaker"
+	barrel_mount_position = vector(29, 18)
 
 /datum/atom_skin/det_revolver/black_panther
 	preview_name = "Black Panther"
 	new_icon_state = "c38_panther"
+	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/ballistic/revolver/c38/detective
 	name = "\improper Colt Detective Special"
@@ -179,6 +183,7 @@
 	desc = "A classic revolver, refurbished for modern use. Uses .357 ammo."
 	//There's already a cowboy sprite in there!
 	icon_state = "lucky"
+	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/ballistic/revolver/cowboy/nuclear
 	pin = /obj/item/firing_pin/implant/pindicate
@@ -187,6 +192,7 @@
 	name = "\improper Unica 6 auto-revolver"
 	desc = "A retro high-powered autorevolver typically used by officers of the New Russia military. Uses .357 ammo."
 	icon_state = "mateba"
+	barrel_mount_position = vector(30, 17)
 
 /obj/item/gun/ballistic/revolver/golden
 	name = "\improper Golden revolver"
@@ -195,14 +201,14 @@
 	fire_sound = 'sound/items/weapons/resonator_blast.ogg'
 	recoil = 8
 	pin = /obj/item/firing_pin
+	barrel_mount_position = vector(29, 19)
 
 /obj/item/gun/ballistic/revolver/nagant
 	name = "\improper Nagant revolver"
 	desc = "An old model of revolver that originated in Russia. Able to be suppressed. Uses 7.62x38mmR ammo."
 	icon_state = "nagant"
-	can_suppress = TRUE
-
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/cylinder/rev762
+	barrel_mount_position = vector(28, 18)
 
 
 // A gun to play Russian Roulette!
@@ -217,6 +223,7 @@
 	gun_flags = NOT_A_REAL_GUN
 	can_hold_up = FALSE // for obvious reasons
 	doafter_self_shoot = FALSE // snowflake
+	barrel_mount_position = vector(29, 19)
 	/// If we've been spun before firing
 	var/spun = FALSE
 	/// Do after for trying to fire the gun
@@ -422,6 +429,7 @@
 	desc = /obj/item/gun/ballistic/revolver/mateba::desc
 	clumsy_check = FALSE
 	icon_state = "mateba"
+	barrel_mount_position = vector(30, 17)
 
 /obj/item/gun/ballistic/revolver/peashooter
 	name = "peashooter"
@@ -429,3 +437,4 @@
 	desc = "A wild plantlife mutation that shoots hardened peas. Incredible."
 	fire_sound = 'sound/items/weapons/peashoot.ogg'
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/cylinder/peashooter
+	barrel_mount_position = vector(29, 18)

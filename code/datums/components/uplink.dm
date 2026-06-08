@@ -233,6 +233,7 @@
 /datum/component/uplink/ui_assets(mob/user)
 	return list(
 		get_asset_datum(/datum/asset/json/uplink),
+		get_asset_datum(/datum/asset/simple/nt_uplink),
 	)
 
 /datum/component/uplink/ui_act(action, params, datum/tgui/ui, datum/ui_state/state)

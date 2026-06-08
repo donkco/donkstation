@@ -87,7 +87,7 @@
 	var/limited_discount_stock = -1
 	/// A bitfield to represent what uplinks can purchase this item.
 	/// See [`code/__DEFINES/uplink.dm`].
-	var/purchasable_from = ALL
+	var/purchasable_from = UPLINK_ALL_SYNDIE
 	/// If this uplink item is only available to certain roles. Roles are dependent on the frequency chip or stored ID.
 	var/list/restricted_roles = list()
 	/// The species able to purchase this uplink item.

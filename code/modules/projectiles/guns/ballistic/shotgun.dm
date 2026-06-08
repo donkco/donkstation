@@ -199,7 +199,6 @@
 	projectile_damage_multiplier = 1.2
 	weapon_weight = WEAPON_MEDIUM
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m12g
-	can_suppress = FALSE
 	burst_size = 2
 	burst_delay = 1
 	pin = /obj/item/firing_pin/implant/pindicate
@@ -298,6 +297,10 @@
 	secondary_magazine = primary_magazine
 	playsound(src, load_empty_sound, load_sound_volume, load_sound_vary)
 	update_appearance()
+
+/obj/item/gun/ballistic/shotgun/bulldog/can_attach(obj/item/gun_attachment/attachment)
+	return FALSE
+
 
 /obj/item/gun/ballistic/shotgun/bulldog/unrestricted
 	pin = /obj/item/firing_pin

@@ -15,7 +15,7 @@
 	var/turf/dazzle_turf = get_turf(src)
 	if(!dazzle_turf)
 		return
-	playsound(dazzle_turf, 'sound/items/weapons/flashbang.ogg', 100, TRUE, 8, 0.9)
+	playsound(dazzle_turf, 'sound/effects/explosion/dazzle_grenade.ogg', 100, FALSE, 8, 0.9)
 	new /obj/effect/temp_visual/dazzle(dazzle_turf)
 	qdel(src)
 
@@ -35,8 +35,9 @@
 	name = "lumious orb"
 	icon = 'icons/effects/donk_effects_96x96.dmi'
 	icon_state = "dazzle_k"
+	base_icon_state = "dazzle_k"
 	mouse_opacity = MOUSE_OPACITY_ICON
-	duration = 6 SECONDS
+	duration = 12 SECONDS
 	plane = ABOVE_LIGHTING_PLANE	//Our effect orbs
 	alpha = 0
 
@@ -47,26 +48,40 @@
 
 	SET_BASE_VISUAL_PIXEL(-32,-0)
 
+/obj/effect/temp_visual/dazzle/Destroy()
+	. = ..()
+	QDEL_NULL(r_orb)
+	QDEL_NULL(g_orb)
+	QDEL_NULL(b_orb)
+	QDEL_NULL(dazzle_field)
+
 
 /obj/effect/split_spectrum
 	name = "lumious orb"
 	plane = ABOVE_LIGHTING_PLANE
-	alpha = 0
 	layer = 5
 	icon = 'icons/effects/donk_effects_96x96.dmi'
 	blend_mode = BLEND_ADD
 	appearance_flags = RESET_COLOR | PIXEL_SCALE
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
+
+/obj/effect/split_spectrum/Initialize()
+	. = ..()
+	flick("[base_icon_state]_grow", src)
+
+
 /obj/effect/split_spectrum/red
 	icon_state = "dazzle_r"
+	base_icon_state = "dazzle_r"
 
 /obj/effect/split_spectrum/green
 	icon_state = "dazzle_g"
+	base_icon_state = "dazzle_g"
 
 /obj/effect/split_spectrum/blue
 	icon_state = "dazzle_b"
-
+	base_icon_state = "dazzle_b"
 
 /obj/effect/temp_visual/dazzle/Initialize()
 	. = ..()
@@ -81,9 +96,12 @@
 	dazzle_field = new /obj/effect/dazzle_field()
 	vis_contents += dazzle_field
 
+	flick("[base_icon_state]_grow", src)
+
 	var/horizontal_wiggle = 2
 	var/orb_rise = 8
 	var/orb_rise_duration = 3 SECONDS
+	var/wiggle_speed = 100 MILLISECONDS
 
 
 	var/trisplit_x = 4
@@ -92,16 +110,18 @@
 	var/trisplit_return_ease = SINE_EASING | EASE_IN
 	var/split_speed = 2
 	var/split_delay = 30
-	var/fade_in_delay = 500 MILLISECONDS
-	var/fade_in_time = 300 MILLISECONDS
-	// FIRST SPLIT
-	// BLUE DOWN
 
-	animate(r_orb, time =  fade_in_time, alpha = 255, delay = fade_in_delay)
-	for(var/i in 1 to 12)
-		animate(time = 180 MILLISECONDS - i * 10, pixel_x = (i % 2) ? horizontal_wiggle : -horizontal_wiggle)
 
-	animate(time = split_speed, pixel_x = -trisplit_x, pixel_z = trisplit_z, easing = trisplit_ease, delay = 1 SECONDS)
+
+	animate(r_orb, time = wiggle_speed, pixel_x = 2, delay = 1 SECONDS)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = -2)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = 2)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = -2)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate( time = split_speed, pixel_x = -trisplit_x, pixel_z = trisplit_z, easing = trisplit_ease, delay = 0.5 SECONDS)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
 	animate(time = split_speed, pixel_x = trisplit_x, pixel_z = -trisplit_z, easing = trisplit_ease)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
@@ -114,10 +134,8 @@
 	animate(time = split_speed, pixel_x = -trisplit_x, pixel_z = -trisplit_z, easing = trisplit_ease)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
 
-	//Fade in
-	animate(g_orb, time =  fade_in_time, alpha = 255, delay = fade_in_delay)
 
-	animate(time = split_speed, pixel_x = trisplit_x, pixel_z = trisplit_z, easing = trisplit_ease, delay = 1 SECONDS)
+	animate(g_orb, time = split_speed, pixel_x = trisplit_x, pixel_z = trisplit_z, easing = trisplit_ease, delay = 1.5 SECONDS + wiggle_speed * 8)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
 	animate(time = split_speed, pixel_x = -trisplit_x, pixel_z = -trisplit_z, easing = trisplit_ease)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
@@ -130,11 +148,15 @@
 	animate(time = split_speed, pixel_x = 0, pixel_z = trisplit_z, easing = trisplit_ease)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)
 
-	animate(b_orb, time =  fade_in_time, alpha = 255, delay = fade_in_delay)
 
-	for(var/i in 1 to 12)
-		animate(time = 180 MILLISECONDS - i * 10, pixel_x = (i % 2) ? -horizontal_wiggle : horizontal_wiggle)
-
+	animate(b_orb, time = wiggle_speed, pixel_x = -2, delay = 1 SECONDS)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = 2)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = -2)
+	animate(time = wiggle_speed, pixel_x = 0)
+	animate(time = wiggle_speed, pixel_x = 2)
+	animate(time = wiggle_speed, pixel_x = 0)
 	animate(time = split_speed, pixel_x = 0, pixel_z = -trisplit_z, easing = trisplit_ease, delay = 1 SECONDS)
 	animate(time = split_speed, pixel_x = -0, pixel_z = 0, easing = trisplit_return_ease)
 	animate(time = split_speed, pixel_x = 0, pixel_z = trisplit_z, easing = trisplit_ease)
@@ -149,8 +171,7 @@
 	animate(time = split_speed, pixel_x = trisplit_x, pixel_z = -trisplit_z, easing = trisplit_ease)
 	animate(time = split_speed, pixel_x = -0, pixel_z = 0, easing = trisplit_return_ease)
 
-	animate(src, time =  fade_in_time, alpha = 255, delay = fade_in_delay)
-	animate(time = orb_rise_duration, color = list(1,1,1, 1,1,1, 1,1,1, 0.5, 0.5, 0.5))
+	animate(src, time = orb_rise_duration, color = list(1,1,1, 1,1,1, 1,1,1, 0.5, 0.5, 0.5))
 	animate(time = orb_rise_duration, color = list(1,1,1, 1,1,1, 1,1,1, 0, 0, 0))
 
 /obj/effect/dazzle_field

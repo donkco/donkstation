@@ -12,7 +12,7 @@
 	item = /obj/item/storage/toolbox/guncase/traitor/ammunition/donksoft
 	cost = 2
 	uplink_item_flags = SYNDIE_TRIPS_CONTRABAND
-	purchasable_from = ~UPLINK_SERIOUS_OPS
+	purchasable_from = ~(UPLINK_SERIOUS_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/ammo/pistol
 	name = "9mm Magazine Case"
@@ -20,7 +20,7 @@
 		a box of loose 9mm ammunition."
 	item = /obj/item/storage/toolbox/guncase/traitor/ammunition
 	cost = 2
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 	uplink_item_flags = SYNDIE_TRIPS_CONTRABAND
 
 /datum/uplink_item/ammo/pistolap
@@ -29,7 +29,7 @@
 			These rounds are less effective at injuring the target but penetrate protective gear."
 	item = /obj/item/ammo_box/magazine/m9mm/ap
 	cost = 2
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/ammo/pistolhp
 	name = "9mm Hollow Point Magazine"
@@ -37,7 +37,7 @@
 			These rounds are more damaging but ineffective against armour."
 	item = /obj/item/ammo_box/magazine/m9mm/hp
 	cost = 3
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/ammo/pistolfire
 	name = "9mm Incendiary Magazine"
@@ -45,7 +45,7 @@
 			Loaded with incendiary rounds which inflict little damage, but ignite the target."
 	item = /obj/item/ammo_box/magazine/m9mm/fire
 	cost = 2
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/ammo/revolver
 	name = ".357 Speed Loader"
@@ -53,5 +53,5 @@
 			For when you really need a lot of things dead."
 	item = /obj/item/ammo_box/speedloader/c357
 	cost = 4
-	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_SPY) //nukies get their own version
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_SPY | UPLINK_NTRAITORS) //nukies get their own version
 	uplink_item_flags = SYNDIE_TRIPS_CONTRABAND
