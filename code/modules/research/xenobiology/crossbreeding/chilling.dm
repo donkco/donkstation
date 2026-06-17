@@ -95,7 +95,7 @@ Chilling extracts:
 		return
 
 	var/obj/machinery/power/apc/area_apc = user_area.apc
-	area_apc.cell.charge = min(area_apc.cell.charge + area_apc.cell.maxcharge / 2, area_apc.cell.maxcharge)
+	area_apc.cell.set_charge(min(area_apc.cell.charge() + area_apc.cell.max_charge() / 2, area_apc.cell.max_charge()))
 	user.visible_message(span_notice("[src] shatters, and the air suddenly feels charged for a moment."))
 	..()
 

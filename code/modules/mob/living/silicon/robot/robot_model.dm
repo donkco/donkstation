@@ -172,9 +172,9 @@
 			flash.update_appearance()
 		else if(istype(module, /obj/item/melee/baton/security))
 			var/obj/item/melee/baton/security/baton = module
-			if(baton.cell?.charge < baton.cell.maxcharge)
+			if(baton.cell?.used_charge())
 				. = TRUE //if sec borgs ever make a mainstream return, we should probably do this differntly.
-				baton.cell?.charge = baton.cell.maxcharge
+				baton.cell?.set_charge(baton.cell.max_charge())
 		else if(istype(module, /obj/item/gun/energy))
 			var/obj/item/gun/energy/gun = module
 			if(!gun.chambered)
@@ -841,7 +841,7 @@
 	..()
 	var/obj/item/gun/energy/e_gun/advtaser/cyborg/taser = locate(/obj/item/gun/energy/e_gun/advtaser/cyborg) in basic_modules
 	if(taser)
-		if(taser.cell.charge < taser.cell.maxcharge)
+		if(!taser.cell.is_fully_charged())
 			. = TRUE
 			var/obj/item/ammo_casing/energy/shot = taser.ammo_type[taser.select]
 			taser.cell.give(shot.e_cost * coeff)

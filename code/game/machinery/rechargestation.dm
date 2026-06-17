@@ -77,7 +77,7 @@
 	for(var/datum/stock_part/servo/servo in component_parts)
 		repairs += servo.tier - 1
 	for(var/obj/item/stock_parts/power_store/cell in component_parts)
-		recharge_speed *= cell.maxcharge
+		recharge_speed *= cell.max_charge()
 
 /obj/machinery/recharge_station/examine(mob/user)
 	. = ..()

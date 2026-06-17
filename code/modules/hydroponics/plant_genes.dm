@@ -355,9 +355,9 @@
 	var/batteries_recharged = FALSE
 	var/obj/item/seeds/our_seed = our_plant.get_plant_seed()
 	for(var/obj/item/stock_parts/power_store/found_cell in assoc_to_values(eater.get_all_cells()))
-		var/newcharge = min(our_seed.potency * 0.01 * found_cell.maxcharge, found_cell.maxcharge)
-		if(found_cell.charge < newcharge)
-			found_cell.charge = newcharge
+		var/newcharge = min(our_seed.potency * 0.01 * found_cell.max_charge(), found_cell.max_charge())
+		if(found_cell.charge() < newcharge)
+			found_cell.set_charge(newcharge)
 			if(isobj(found_cell.loc))
 				var/obj/cell_location = found_cell.loc
 				cell_location.update_appearance() //update power meters and such
@@ -614,16 +614,16 @@
 	var/obj/item/stock_parts/power_store/cell/potato/pocell = new /obj/item/stock_parts/power_store/cell/potato(user.loc)
 	pocell.icon = our_plant.icon // Just in case the plant icons get spread out in different files eventually, this trait won't cause error sprites (also yay downstreams)
 	pocell.icon_state = our_plant.icon_state
-	pocell.maxcharge = our_seed.potency * 0.02 * STANDARD_CELL_CHARGE
+	pocell.set_maxcharge(our_seed.potency * 0.02 * STANDARD_CELL_CHARGE)
 
 	// The secret of potato supercells!
 	var/datum/plant_gene/trait/cell_charge/electrical_gene = our_seed.get_gene(/datum/plant_gene/trait/cell_charge)
 	if(electrical_gene) // Cell charge max is now 40MJ or otherwise known as 400KJ (Same as bluespace power cells)
-		pocell.maxcharge *= (electrical_gene.rate * 100)
+		pocell.set_maxcharge(pocell.max_charge() * electrical_gene.rate * 100)
 
-	pocell.charge = pocell.maxcharge
+	pocell.set_charge(pocell.max_charge())
 	pocell.name = "[our_plant.name] battery"
-	pocell.desc = "A rechargeable plant-based power cell. This one has a rating of [display_energy(pocell.maxcharge)], and you should not swallow it."
+	pocell.desc = "A rechargeable plant-based power cell. This one has a rating of [display_energy(pocell.max_charge())], and you should not swallow it."
 	qdel(our_plant)
 
 /*

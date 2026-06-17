@@ -591,7 +591,7 @@
 		playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, FALSE)
 		return
 
-	if(cell_powered && cell?.charge < TIER_1_CELL_CHARGE_RATE * efficiency)
+	if(cell_powered && cell?.charge() < TIER_1_CELL_CHARGE_RATE * efficiency)
 		playsound(src, 'sound/machines/buzz/buzz-sigh.ogg', 50, FALSE)
 		balloon_alert(cooker, "no power draw!")
 		return
@@ -814,7 +814,7 @@
 		return
 
 	wzhzhzh()
-	var/vampire_charge_amount = vampire_cell.maxcharge - vampire_cell.charge
+	var/vampire_charge_amount = vampire_cell.used_charge()
 	charge_loop(vampire_charge_amount, cooker = cooker)
 
 /obj/machinery/microwave/proc/charge(mob/cooker)
@@ -854,12 +854,12 @@
 		pre_fail()
 		return
 
-	if(!vampire_charge_amount || !length(ingredients) || isnull(cell) || !cell.charge || vampire_charge_amount < 25)
+	if(!vampire_charge_amount || !length(ingredients) || isnull(cell) || !cell.charge() || vampire_charge_amount < 25)
 		vampire_cell = null
 		charge_loop_finish(cooker)
 		return
 
-	var/charge_rate = vampire_cell.chargerate * (1 + ((efficiency - 1) * 0.25))
+	var/charge_rate = vampire_cell.get_chargerate() * (1 + ((efficiency - 1) * 0.25))
 	if(charge_rate > vampire_charge_amount)
 		charge_rate = vampire_charge_amount
 
@@ -870,7 +870,7 @@
 	charge_cell(charge_rate * (0.5 + efficiency * 0.12), vampire_cell) //Cell gets charged, which further uses power.
 
 
-	vampire_charge_amount = vampire_cell.maxcharge - vampire_cell.charge
+	vampire_charge_amount = vampire_cell.used_charge()
 
 	addtimer(CALLBACK(src, PROC_REF(charge_loop), vampire_charge_amount, wait, cooker), wait)
 
@@ -938,12 +938,12 @@
 /obj/machinery/microwave/engineering/Initialize(mapload)
 	. = ..()
 	if(mapload)
-		cell = new /obj/item/stock_parts/power_store/cell/upgraded/plus
+		cell = new /obj/item/stock_parts/power_store/cell/d
 	update_appearance()
 
 /obj/machinery/microwave/engineering/cell_included/Initialize(mapload)
 	. = ..()
-	cell = new /obj/item/stock_parts/power_store/cell/upgraded/plus
+	cell = new /obj/item/stock_parts/power_store/cell/d
 	update_appearance()
 
 #undef MICROWAVE_NORMAL

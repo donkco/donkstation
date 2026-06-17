@@ -95,7 +95,7 @@
 	custom_materials = null
 	weapon_weight = WEAPON_HEAVY
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/minigun)
-	cell_type = /obj/item/stock_parts/power_store/cell/crap
+	cell_type = /obj/item/stock_parts/power_store/cell/aa
 	item_flags = NEEDS_PERMIT | SLOWS_WHILE_IN_HAND
 	can_charge = FALSE
 	var/obj/item/minigunpack/ammo_pack
@@ -133,7 +133,7 @@
 		return
 	ammo_pack.overheat++
 	if(ammo_pack.battery)
-		var/transferred = ammo_pack.battery.use(cell.maxcharge - cell.charge, force = TRUE)
+		var/transferred = ammo_pack.battery.use(cell.used_charge(), force = TRUE)
 		cell.give(transferred)
 
 

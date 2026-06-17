@@ -9,7 +9,7 @@
 
 	/// What type of power cell this uses
 	var/obj/item/stock_parts/power_store/cell
-	var/cell_type = /obj/item/stock_parts/power_store/cell
+	var/cell_type = /obj/item/stock_parts/power_store/cell/aa
 	///if the weapon has custom icons for individual ammo types it can switch between. ie disabler beams, taser, laser/lethals, ect.
 	var/modifystate = FALSE
 	var/list/ammo_type = list(/obj/item/ammo_casing/energy)
@@ -54,6 +54,13 @@
 
 	/// A divide to the amount of charge lost when the weapon is EMP'd. Higher means more resistant.
 	var/emp_resistance = 1
+	///If the electronics inside the gun have been made accessible.
+	var/electronics_exposed = FALSE
+	var/convenient_hatch = FALSE
+	///If the cell is soldered and needs to be desoldered before removing.
+	var/soldered_cell = TRUE
+	///pixel coordinate where we want to display our cell / electronic guts overlay
+	var/vector/electronics_overlay_postition = vector(14, 17)
 
 /obj/item/gun/energy/fire_sounds()
 	// What frequency the energy gun's sound will make
@@ -61,13 +68,13 @@
 
 	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
 	// What percentage of the full battery a shot will expend
-	var/shot_cost_percent = round(clamp(shot.e_cost / cell.maxcharge, 0, 1) * 100)
+	var/shot_cost_percent = round(clamp(shot.e_cost / cell.max_charge(), 0, 1) * 100)
 	// Ignore this on oversized/infinite cells or ammo without cost
 	if(shot_cost_percent > 0 && shot_cost_percent < 100)
 		// The total amount of shots the fully charged energy gun can fire before running out
 		var/max_shots = round(100/shot_cost_percent) - 1
 		// How many shots left before the energy gun's current battery runs out of energy
-		var/shots_left = round((round(clamp(cell.charge / cell.maxcharge, 0, 1) * 100))/shot_cost_percent) - 1
+		var/shots_left = round((round(clamp(cell.get_charge_ratio(), 0, 1) * 100))/shot_cost_percent) - 1
 		pitch_to_use = LERP(1, 0.3, (1 - (shots_left/max_shots)) ** 2)
 
 	var/sound/playing_sound = sound(suppressed ? suppressed_sound : fire_sound)
@@ -81,7 +88,7 @@
 /obj/item/gun/energy/emp_act(severity)
 	. = ..()
 	if(!(. & EMP_PROTECT_CONTENTS))
-		cell.use(round(cell.charge / emp_resistance / severity))
+		cell.use(round(cell.charge() / emp_resistance / severity))
 		chambered = null //we empty the chamber
 		recharge_newshot() //and try to charge a new shot
 		update_appearance()
@@ -99,7 +106,7 @@
 	else
 		cell = new(src)
 	if(!dead_cell)
-		cell.give(cell.maxcharge)
+		cell.give(cell.max_charge())
 	if(cell && resistance_flags & INDESTRUCTIBLE)
 		cell.resistance_flags |= INDESTRUCTIBLE
 	cell.resistance_flags |= BOMB_PROOF
@@ -193,11 +200,83 @@
 	if(ammo_type.len > 1 && can_select)
 		select_fire(user)
 
+/obj/item/gun/energy/screwdriver_act(mob/living/user, obj/item/I)
+	if(I.use_tool(src, user, convenient_hatch ? 0.5 SECONDS : 4 SECONDS, volume = 50))
+		electronics_exposed = !electronics_exposed
+		balloon_alert(user, "electronics [electronics_exposed ? "exposed" : "unexposed"]")
+		update_appearance()
+		return ITEM_INTERACT_SUCCESS
+	return ..()
+
+/obj/item/gun/energy/soldering_iron_act(mob/living/user, obj/item/tool)
+	if(!electronics_exposed)
+		to_chat(user, span_alert("You need to open the enclosure to access the electronics."))
+		return ITEM_INTERACT_BLOCKING
+	if(soldered_cell)
+		to_chat(user, span_alert("You begin to desolder the cell."))
+		if(tool.use_tool(src, user, 4 SECONDS, volume = 70))
+			soldered_cell = FALSE
+			balloon_alert(user, "cell desoldered")
+			return ITEM_INTERACT_SUCCESS
+	else
+		if(!tool.tool_use_check(user, 1))
+			to_chat(user, span_warning("You need to tin your iron first."))
+			return ITEM_INTERACT_BLOCKING
+
+		to_chat(user, span_alert("You begin to solder the cell to the connector."))
+		if(tool.use_tool(src, user, 4 SECONDS, amount = 1, volume = 70))
+			soldered_cell = TRUE
+			balloon_alert(user, "cell soldered")
+			return ITEM_INTERACT_SUCCESS
+	return ..()
+
+/obj/item/gun/energy/attack_hand_secondary(mob/user, list/modifiers)
+	if(electronics_exposed)
+		if(!cell?.get_cell())
+			to_chat(user, span_alert("The device has no cell installed."))
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+
+		var/atom/movable/truecell = cell.get_cell() //find a cell in there, might be a regular cell, or one of the tenanants in a battery comparment.
+		if(soldered_cell && cell == truecell) // We check if the power store produced is the main cell as battery compartment cells can be removed freely.
+			to_chat(user, span_alert("The cell is firmly soldered to the electronics."))
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+		to_chat(user, span_notice("You remove the cell."))
+		truecell.forceMove(drop_location())
+		user.put_in_hands(truecell)
+		playsound(src, 'sound/items/click.ogg', 100, TRUE)
+		update_appearance() //This might already have been called by Exited(), but whatever
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+	return ..()
+
+/obj/item/gun/energy/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
+	if(electronics_exposed && istype(attacking_item, /obj/item/stock_parts/power_store))
+		if(!cell)
+			if(istype(attacking_item, /obj/item/stock_parts/power_store/cell)) //We should probably make eguns check for a maximum cell size later.
+				attacking_item.forceMove(src)
+				cell = attacking_item
+				playsound(src, 'sound/items/click.ogg', 100, TRUE)
+				to_chat(user, span_notice("You install the new power cell inside [src]."))
+				update_appearance()
+				return
+		else
+			if(istype(cell, /obj/item/stock_parts/power_store/battery_array))
+				var/obj/item/stock_parts/power_store/battery_array/gun_array = cell
+				if(gun_array.add_cell(attacking_item))
+					playsound(src, 'sound/items/pen_click.ogg', 60, TRUE)
+					to_chat(user, span_notice("You install a cell inside the battery compartment."))
+					update_appearance()
+					return
+				else
+					to_chat(user, span_notice("That won't fit in the battery compartment."))
+					return
+	return ..()
+
+
 /obj/item/gun/energy/can_shoot()
 	if(isnull(ammo_type))
 		return FALSE
 	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
-	return !QDELETED(cell) ? (cell.charge >= shot.e_cost) : FALSE
+	return !QDELETED(cell) ? (cell.charge() >= shot.e_cost) : FALSE
 
 /obj/item/gun/energy/recharge_newshot(no_cyborg_drain)
 	if (!ammo_type || !cell)
@@ -214,7 +293,7 @@
 
 	if(!chambered)
 		var/obj/item/ammo_casing/energy/AC = ammo_type[select]
-		if(cell.charge >= AC.e_cost) //if there's enough power in the cell cell...
+		if(cell.charge() >= AC.e_cost) //if there's enough power in the cell cell...
 			chambered = AC //...prepare a new shot based on the current ammo type selected
 			if(!chambered.loaded_projectile)
 				chambered.newshot()
@@ -277,11 +356,23 @@
 
 /obj/item/gun/energy/update_overlays()
 	. = ..()
+	if(QDELETED(src))
+		return
+
+	if(electronics_exposed && cell)
+		if(istype(cell, /obj/item/stock_parts/power_store/battery_array))
+			var/obj/item/stock_parts/power_store/battery_array/visible_array = cell
+			var/mutable_appearance/cell_overlay = new()
+			cell_overlay.appearance = visible_array.appearance
+			cell_overlay.set_pixel_offset(electronics_overlay_postition - visible_array.overlay_base_pixel)
+			. += cell_overlay
+
 	if(!automatic_charge_overlays)
 		return
 
 	var/overlay_icon_state = "[icon_state]_charge"
 	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
+
 
 	if(modifystate)
 		if(single_shot_type_overlay)
@@ -306,9 +397,11 @@
 		. += new /mutable_appearance(charge_overlay)
 
 
+
+
 ///Used by update_icon_state() and update_overlays()
 /obj/item/gun/energy/proc/get_charge_ratio()
-	return can_shoot() ? CEILING(clamp(cell.charge / cell.maxcharge, 0, 1) * charge_sections, 1) : 0
+	return can_shoot() ? CEILING(clamp(cell.get_charge_ratio(), 0, 1) * charge_sections, 1) : 0
 	// Sets the ratio to 0 if the gun doesn't have enough charge to fire, or if its power cell is removed.
 
 /obj/item/gun/energy/suicide_act(mob/living/user)
@@ -372,6 +465,6 @@
 	SIGNAL_HANDLER
 	if(!cell)
 		return
-	cell.charge = cell.maxcharge
+	cell.set_charge(cell.max_charge())
 	recharge_newshot(no_cyborg_drain = TRUE)
 	update_appearance()

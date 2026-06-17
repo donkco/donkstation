@@ -99,7 +99,6 @@
 	flick("[base_icon_state]_grow", src)
 
 	var/horizontal_wiggle = 2
-	var/orb_rise = 8
 	var/orb_rise_duration = 3 SECONDS
 	var/wiggle_speed = 100 MILLISECONDS
 
@@ -113,13 +112,13 @@
 
 
 
-	animate(r_orb, time = wiggle_speed, pixel_x = 2, delay = 1 SECONDS)
+	animate(r_orb, time = wiggle_speed, pixel_x = horizontal_wiggle, delay = 1 SECONDS)
 	animate(time = wiggle_speed, pixel_x = 0)
-	animate(time = wiggle_speed, pixel_x = -2)
+	animate(time = wiggle_speed, pixel_x = -horizontal_wiggle)
 	animate(time = wiggle_speed, pixel_x = 0)
-	animate(time = wiggle_speed, pixel_x = 2)
+	animate(time = wiggle_speed, pixel_x = horizontal_wiggle)
 	animate(time = wiggle_speed, pixel_x = 0)
-	animate(time = wiggle_speed, pixel_x = -2)
+	animate(time = wiggle_speed, pixel_x = -horizontal_wiggle)
 	animate(time = wiggle_speed, pixel_x = 0)
 	animate( time = split_speed, pixel_x = -trisplit_x, pixel_z = trisplit_z, easing = trisplit_ease, delay = 0.5 SECONDS)
 	animate(time = split_speed, pixel_x = 0, pixel_z = 0, easing = trisplit_return_ease)

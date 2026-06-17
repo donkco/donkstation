@@ -34,6 +34,7 @@
 	var/solder_refill = min(SOLDER_RESERVOIR_MAX - solder_reservoir, solder_wire.amount)
 	solder_reservoir += solder_refill
 	solder_wire.use(solder_refill)
+	update_appearance()
 	return TRUE
 
 /obj/item/soldering_iron/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
@@ -45,7 +46,7 @@
 /obj/item/soldering_iron/update_overlays()
 	. = ..()
 	if(solder_reservoir)
-		. +="[base_icon_state]-tinned"
+		. +="[base_icon_state]_tinned"
 
 /obj/item/soldering_iron/use(amount)
 	. = ..()

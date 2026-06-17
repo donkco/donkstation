@@ -385,7 +385,7 @@
 	if(cyborg_check.lockcharge)
 		return FALSE
 	//borg cell dying restricts borg networking
-	if(!cyborg_check.cell || cyborg_check.cell.charge == 0)
+	if(!cyborg_check.cell || !cyborg_check.cell.charge())
 		return FALSE
 
 	return ..()

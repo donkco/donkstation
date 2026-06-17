@@ -77,7 +77,7 @@
 
 	var/obj/item/stock_parts/power_store/our_cell = get_cell(src, user)
 	if(!QDELETED(our_cell))
-		. += span_notice("Its display shows: [display_energy(our_cell.charge)].")
+		. += span_notice("Its display shows: [display_energy(our_cell.charge())].")
 		if(opened)
 			. += span_notice("The cell can be removed with an empty hand.")
 			. += span_notice("Plasma sheets can be used to recharge the cell.")
@@ -172,7 +172,7 @@
 		balloon_alert(user, "no cell installed!")
 		return ITEM_INTERACT_FAILURE
 
-	if(!our_cell.charge)
+	if(!our_cell.charge())
 		balloon_alert(user, "no charge!")
 		return ITEM_INTERACT_FAILURE
 
@@ -195,7 +195,7 @@
 			break
 
 		//transfer of charge
-		var/transferred = min(our_cell.charge, target_cell.used_charge(), target_cell.rating_base * target_cell.rating * power_transfer_multiplier)
+		var/transferred = min(our_cell.charge(), target_cell.used_charge(), target_cell.rating_base * target_cell.rating * power_transfer_multiplier)
 		if(!transferred)
 			break
 		our_cell.use(target_cell.give(transferred))
@@ -256,7 +256,7 @@
 
 	var/obj/item/stock_parts/power_store/our_cell = get_cell(src, user)
 	if(!QDELETED(our_cell))
-		. += span_notice("Its display shows: [display_energy(our_cell.charge)].")
+		. += span_notice("Its display shows: [display_energy(our_cell.charge())].")
 		if(opened)
 			. += span_notice("Plasma sheets can be used to recharge the cell.")
 	else

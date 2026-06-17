@@ -27,8 +27,8 @@
 	tac_reloads = FALSE
 	weapon_weight = WEAPON_HEAVY
 	misfire_probability_cap = 35 // Even if the misfire probability and increment are both zero, we've some shots that may do that.
-
 	pb_knockback = 2
+	barrel_mount_position = vector(32, 17)
 
 /obj/item/gun/ballistic/shotgun/blow_up(mob/user)
 	. = 0
@@ -456,3 +456,4 @@
 	bolt_wording = "bolt"
 	internal_magazine = TRUE
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/shot/single/musket
+	barrel_mount_position = vector(31, 17)

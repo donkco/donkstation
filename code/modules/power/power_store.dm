@@ -13,15 +13,15 @@
 	/// The size icon overlay prefix.
 	var/cell_size_prefix = "cell"
 	///Current charge in cell units
-	var/charge = 0
+	VAR_PROTECTED/charge = 0
 	/// Standard cell charge used for rating
 	var/rating_base = STANDARD_CELL_CHARGE
 	///Maximum charge in cell units
-	var/maxcharge = STANDARD_CELL_CHARGE
+	VAR_PROTECTED/maxcharge = STANDARD_CELL_CHARGE
 	///If the power cell was damaged by an explosion, chance for it to become corrupted and function the same as if it was rigged with plasma.
 	var/corrupted = FALSE
 	///How much power is given per second in a recharger.
-	var/chargerate = STANDARD_CELL_RATE * 0.05
+	VAR_PROTECTED/chargerate = STANDARD_CELL_RATE * 0.05
 	///If true, the cell will state it's maximum charge in it's description
 	var/ratingdesc = TRUE
 	///If it's a grown that acts as a battery, add a wire overlay to it.
@@ -34,6 +34,11 @@
 	var/empty = FALSE
 	// Damage multiplier the cells take from emps to prevent stuff like bluespace cells taking 40 shots to drain.
 	var/emp_damage_modifier = 1
+	/// Cell size, used for allowing or disallowing certain cell sizes / shapes for certain uses
+	var/cell_size = CELL_SIZE_AA
+	///tiny icon_state used for displaying ontop of other sprites
+	var/tiny_state ="cell-aa_tiny"
+
 
 /obj/item/stock_parts/power_store/get_cell()
 	return src
@@ -48,12 +53,12 @@
 	. = ..()
 	create_reagents(5, INJECTABLE | DRAINABLE)
 	if (override_maxcharge)
-		maxcharge = override_maxcharge
-	rating = max(round(maxcharge / (rating_base * 10), 1), 1)
-	if(!empty && !charge)
-		charge = maxcharge
+		set_maxcharge(override_maxcharge)
+	rating = max(round(max_charge() / (rating_base * 10), 1), 1)
+	if(!empty && !charge())
+		set_charge(max_charge())
 	if(ratingdesc)
-		desc += " This one has a rating of [display_energy(maxcharge)][prob(10) ? ", and you should not swallow it" : ""]." //joke works better if it's not on every cell
+		desc += " This one has a rating of [display_energy(max_charge())][prob(10) ? ", and you should not swallow it" : ""]." //joke works better if it's not on every cell
 	update_appearance()
 
 	RegisterSignal(src, COMSIG_ITEM_MAGICALLY_CHARGED, PROC_REF(on_magic_charge))
@@ -85,13 +90,13 @@
 	. = COMPONENT_ITEM_CHARGED
 
 	if(prob(80))
-		maxcharge -= rating_base * 0.2
+		set_maxcharge(max_charge() - rating_base * 0.2)
 
-	if(maxcharge <= 1) // Div by 0 protection
-		maxcharge = 1
+	if(max_charge() <= 1 JOULES) // Div by 0 protection
+		set_maxcharge(1 JOULES)
 		. |= COMPONENT_ITEM_BURNT_OUT
 
-	charge = maxcharge
+	set_charge(max_charge())
 	update_appearance()
 
 	// Guns need to process their chamber when we've been charged
@@ -109,7 +114,7 @@
 	. = ..()
 	if(grown_battery)
 		. += mutable_appearance('icons/obj/machines/cell_charger.dmi', "grown_wires")
-	if((charge < 0.01) || !charge_light_type)
+	if((charge() < 0.01) || !charge_light_type)
 		return
 	. += mutable_appearance('icons/obj/machines/cell_charger.dmi', "[cell_size_prefix]-[charge_light_type]-o[(percent() >= 99.5) ? 2 : 1]")
 
@@ -130,7 +135,7 @@
  * Returns the percentage of the cell's charge.
  */
 /obj/item/stock_parts/power_store/proc/percent() // return % charge of cell
-	return 100 * charge / maxcharge
+	return 100 * charge() / max_charge()
 
 /**
  * Returns the maximum charge of the cell.
@@ -144,11 +149,19 @@
 /obj/item/stock_parts/power_store/proc/charge()
 	return charge
 
+/// Returns the charge rate of the power store.
+/obj/item/stock_parts/power_store/proc/get_chargerate()
+	return chargerate
+
+/// return the corruption status of the cell
+/obj/item/stock_parts/power_store/proc/is_corrupted()
+	return corrupted
+
 /**
  * Returns the amount of charge used on the cell.
  */
 /obj/item/stock_parts/power_store/proc/used_charge()
-	return maxcharge - charge
+	return max_charge() - charge()
 
 /// Use power from the cell.
 /// Args:
@@ -156,12 +169,12 @@
 /// - force: If true, uses the remaining power from the cell if there isn't enough power to supply the demand.
 /// Returns: The power used from the cell in joules.
 /obj/item/stock_parts/power_store/use(used, force = FALSE)
-	var/power_used = min(used, charge)
+	var/power_used = min(used, charge())
 	if(power_used > 0 && try_explode())
 		return 0 // The cell decided to explode so we won't be able to use it.
-	if(!force && charge < used)
+	if(!force && charge() < used)
 		return 0
-	charge -= power_used
+	set_charge(charge() - power_used)
 	if(!istype(loc, /obj/machinery/power/apc))
 		SSblackbox.record_feedback("tally", "cell_used", 1, type)
 	return power_used
@@ -171,8 +184,8 @@
 /// - amount: The amount of energy to give to the cell in joules.
 /// Returns: The power given to the cell in joules.
 /obj/item/stock_parts/power_store/proc/give(amount)
-	var/power_used = min(maxcharge-charge,amount)
-	charge += power_used
+	var/power_used = min(used_charge(),amount)
+	set_charge(charge() + power_used)
 	if (amount)
 		try_explode()
 	return power_used
@@ -184,11 +197,27 @@
  * Returns: The energy that was given to the cell (can be negative).
  */
 /obj/item/stock_parts/power_store/proc/change(amount)
-	var/energy_used = clamp(amount, -charge, maxcharge - charge)
-	charge += energy_used
+	var/energy_used = clamp(amount, -charge(), used_charge())
+	set_charge(charge() + energy_used)
 	if(energy_used)
 		try_explode()
 	return energy_used
+
+/// setter proc for charge
+/obj/item/stock_parts/power_store/proc/set_charge(amount)
+	charge = amount
+
+/// setter proc for max charge
+/obj/item/stock_parts/power_store/proc/set_maxcharge(amount)
+	charge = amount
+
+///setter for corruption status
+/obj/item/stock_parts/power_store/proc/set_corrupted(corruption = TRUE)
+	corrupted = corruption
+
+/// Setter for chargerate
+/obj/item/stock_parts/power_store/proc/set_chargerate(amount)
+	chargerate = amount
 
 /obj/item/stock_parts/power_store/examine(mob/user)
 	. = ..()
@@ -198,9 +227,9 @@
 		. += "The charge meter reads [CEILING(percent(), 0.1)]%." //so it doesn't say 0% charge when the overlay indicates it still has charge
 
 /obj/item/stock_parts/power_store/proc/try_explode(max_charge = FALSE)
-	var/check_charge = charge
+	var/check_charge = charge()
 	if (max_charge)
-		check_charge = maxcharge
+		check_charge = max_charge()
 
 	if(!check_charge)
 		return FALSE
@@ -228,10 +257,10 @@
 	return TRUE
 
 /obj/item/stock_parts/power_store/proc/corrupt(force)
-	charge /= 2
-	maxcharge = max(maxcharge/2, chargerate)
+	set_charge(charge() / 2)
+	set_maxcharge(max(max_charge() / 2, chargerate))
 	if (force || prob(10))
-		corrupted = TRUE
+		set_corrupted(TRUE)
 
 /obj/item/stock_parts/power_store/emp_act(severity)
 	. = ..()
@@ -260,14 +289,14 @@
 	var/eating_success = do_after(user, 5 SECONDS, src)
 	if(QDELETED(user))
 		return SHAME
-	if(!eating_success || QDELETED(src) || charge == 0)
+	if(!eating_success || QDELETED(src) || charge() == 0)
 		user.visible_message(span_suicide("[user] chickens out!"))
 		return SHAME
-	playsound(user, 'sound/effects/sparks/sparks1.ogg', charge / maxcharge)
-	var/damage = charge / (1 KILO JOULES)
-	var/discharged_energy = charge
+	playsound(user, 'sound/effects/sparks/sparks1.ogg', charge() / max_charge())
+	var/damage = charge() / (1 KILO JOULES)
+	var/discharged_energy = charge()
 	user.electrocute_act(damage, src, 1, SHOCK_IGNORE_IMMUNITY|SHOCK_DELAY_STUN|SHOCK_NOGLOVES)
-	charge = 0
+	set_charge(0 JOULES)
 	update_appearance()
 	if(user.stat != DEAD)
 		to_chat(user, span_suicide("There's not enough charge in [src] to kill you!"))
@@ -336,10 +365,18 @@
 	SSexplosions.high_mov_atom += src
 
 /obj/item/stock_parts/power_store/proc/get_electrocute_damage()
-	return ELECTROCUTE_DAMAGE(charge / max(0.001 * STANDARD_CELL_CHARGE, 1)) // Wouldn't want it to consider more energy than whatever is actually in the cell if for some strange reason someone set the STANDARD_CELL_CHARGE to below 1kJ.
+	return ELECTROCUTE_DAMAGE(charge() / max(0.001 * STANDARD_CELL_CHARGE, 1)) // Wouldn't want it to consider more energy than whatever is actually in the cell if for some strange reason someone set the STANDARD_CELL_CHARGE to below 1kJ.
 
 /obj/item/stock_parts/power_store/get_part_rating()
-	return maxcharge * 10 + charge
+	return max_charge() * 10 + charge()
+
+//returns the ratio between charge and max charge.
+/obj/item/stock_parts/power_store/proc/get_charge_ratio()
+	return charge() / max_charge()
+
+// returns TRUE or FALSE depending on if the store is fully charged
+/obj/item/stock_parts/power_store/proc/is_fully_charged()
+	return charge() == max_charge()
 
 #undef ETHEREAL_CELL_DRAIN_TIME
 #undef ETHEREAL_CELL_POWER_DRAIN

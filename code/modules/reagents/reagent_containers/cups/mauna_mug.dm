@@ -21,22 +21,22 @@
 
 /obj/item/reagent_containers/cup/maunamug/examine(mob/user)
 	. = ..()
-	. += span_notice("The status display reads: Current temperature: <b>[reagents.chem_temp]K</b> Current Charge:[cell ? "[cell.charge / cell.maxcharge * 100]%" : "No cell found"].")
+	. += span_notice("The status display reads: Current temperature: <b>[reagents.chem_temp]K</b> Current Charge:[cell ? "[cell.percent()]%" : "No cell found"].")
 	if(open)
 		. += span_notice("The battery case is open.")
-	if(cell && cell.charge > 0)
+	if(cell && cell.charge())
 		. += span_notice("<b>Ctrl+Click</b> to toggle the power.")
 
 /obj/item/reagent_containers/cup/maunamug/process(seconds_per_tick)
 	..()
-	if(on && (!cell || cell.charge <= 0)) //Check if we ran out of power
+	if(on && (!cell || !cell.charge())) //Check if we ran out of power
 		change_power_status(FALSE)
 		return FALSE
 	cell.use(0.005 * STANDARD_CELL_RATE * seconds_per_tick) //Basic cell goes for like 200 seconds, bluespace for 8000
 	if(!reagents.total_volume)
 		return FALSE
 	var/max_temp = min(500 + (500 * (0.2 * cell.rating)), 1000) // 373 to 1000
-	reagents.adjust_thermal_energy(0.4 * cell.maxcharge * reagents.total_volume * seconds_per_tick, max_temp = max_temp) // 4 kelvin every tick on a basic cell. 160k on bluespace
+	reagents.adjust_thermal_energy(0.4 * cell.max_charge() * reagents.total_volume * seconds_per_tick, max_temp = max_temp) // 4 kelvin every tick on a basic cell. 160k on bluespace
 	reagents.handle_reactions()
 	update_appearance()
 	if(reagents.chem_temp >= max_temp)
@@ -54,7 +54,7 @@
 	if(on)
 		change_power_status(FALSE)
 	else
-		if(!cell || cell.charge <= 0)
+		if(!cell || !cell.charge())
 			return FALSE //No power, so don't turn on
 		change_power_status(TRUE)
 	return CLICK_ACTION_SUCCESS

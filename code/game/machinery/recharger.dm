@@ -150,9 +150,9 @@
 		return PROCESS_KILL
 	var/obj/item/stock_parts/power_store/charging_cell = charging.get_cell()
 	if(charging_cell)
-		if(charging_cell.charge < charging_cell.maxcharge)
-			charge_cell(charging_cell.chargerate * recharge_coeff * seconds_per_tick, charging_cell)
-			if(charging_cell.charge >= charging_cell.maxcharge) //Inserted thing is at max charge/ammo, notify those around us
+		if(charging_cell.used_charge())
+			charge_cell(charging_cell.get_chargerate() * recharge_coeff * seconds_per_tick, charging_cell)
+			if(charging_cell.is_fully_charged()) //Inserted thing is at max charge/ammo, notify those around us
 				playsound(src, 'sound/machines/ping.ogg', 30, TRUE)
 				say("[charging] has finished recharging!")
 			else
@@ -207,7 +207,7 @@
 	else if(istype(charging, /obj/item/melee/baton/security))
 		var/obj/item/melee/baton/security/batong = charging
 		if(batong.cell)
-			batong.cell.charge = 0
+			batong.cell.set_charge(0)
 
 /obj/machinery/recharger/update_overlays()
 	. = ..()

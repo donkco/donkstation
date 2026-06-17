@@ -11,14 +11,14 @@
 		return
 
 	if(low_power_mode)
-		if(cell?.charge)
+		if(cell?.charge())
 			low_power_mode = FALSE
 	else if(stat == CONSCIOUS)
 		use_energy(seconds_per_tick)
 
 /mob/living/silicon/robot/proc/use_energy(seconds_per_tick)
-	if(cell?.charge)
-		if(cell.charge <= 0.01 * STANDARD_CELL_CHARGE)
+	if(cell?.charge())
+		if(cell.charge() < 01 * STANDARD_CELL_CHARGE)
 			drop_all_held_items()
 		var/energy_consumption = max(lamp_power_consumption * lamp_enabled * lamp_intensity * seconds_per_tick, BORG_MINIMUM_POWER_CONSUMPTION * seconds_per_tick) //Lamp will use a max of 5 * [BORG_LAMP_POWER_CONSUMPTION], depending on brightness of lamp. If lamp is off, borg systems consume [BORG_MINIMUM_POWER_CONSUMPTION], or the rest of the cell if it's lower than that.
 		cell.use(energy_consumption, force = TRUE)
@@ -61,7 +61,7 @@
 
 /mob/living/silicon/robot/proc/update_cell_hud_icon()
 	if(cell)
-		var/cellcharge = cell.charge/cell.maxcharge
+		var/cellcharge = cell.get_charge_ratio()
 		switch(cellcharge)
 			if(0.75 to INFINITY)
 				clear_alert(ALERT_CHARGE)

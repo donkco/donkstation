@@ -321,7 +321,7 @@
 
 /obj/machinery/light/proc/is_full_charge()
 	if(cell)
-		return cell.charge == cell.maxcharge
+		return !cell.used_charge()
 	return TRUE
 
 /obj/machinery/light/process(seconds_per_tick)
@@ -353,7 +353,7 @@
 
 /obj/machinery/light/get_cell()
 	if (has_mock_cell)
-		cell = new /obj/item/stock_parts/power_store/cell/emergency_light(src)
+		cell = new /obj/item/stock_parts/power_store/cell/button/emergency_light(src)
 		has_mock_cell = FALSE
 
 	return cell
@@ -371,7 +371,7 @@
 		if(LIGHT_BROKEN)
 			. += span_danger("The [fitting] has been smashed.")
 	if(cell || has_mock_cell)
-		. +=  span_notice("Its backup power charge meter reads [has_mock_cell ? 100 : round((cell.charge / cell.maxcharge) * 100, 0.1)]%.")
+		. +=  span_notice("Its backup power charge meter reads [has_mock_cell ? 100 : round(cell.percent(), 0.1)]%.")
 
 
 
@@ -507,7 +507,7 @@
 		return FALSE
 	if (has_mock_cell)
 		return status == LIGHT_OK
-	if(power_usage_amount ? cell.charge >= power_usage_amount : cell.charge)
+	if(power_usage_amount ? cell.charge() >= power_usage_amount : cell.charge())
 		return status == LIGHT_OK
 	return FALSE
 
@@ -516,14 +516,14 @@
 	if(!has_emergency_power(power_usage_amount))
 		return FALSE
 	var/obj/item/stock_parts/power_store/real_cell = get_cell()
-	if(real_cell.charge > 2.5 * /obj/item/stock_parts/power_store/cell/emergency_light::maxcharge) //it's meant to handle 120 W, ya doofus
+	if(real_cell.charge() > 2.5 * BUTTON_CELL_CHARGE) //it's meant to handle 120 W, ya doofus
 		visible_message(span_warning("[src] short-circuits from too powerful of a power cell!"))
 		burn_out()
 		return FALSE
 	real_cell.use(power_usage_amount)
 	set_light(
 		l_range = brightness * bulb_low_power_brightness_mul,
-		l_power = max(bulb_low_power_pow_min, bulb_low_power_pow_mul * (real_cell.charge / real_cell.maxcharge)),
+		l_power = max(bulb_low_power_pow_min, bulb_low_power_pow_mul * (real_cell.charge() / real_cell.max_charge())),
 		l_color = bulb_low_power_colour
 		)
 	return TRUE

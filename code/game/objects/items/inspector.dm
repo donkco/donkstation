@@ -25,7 +25,7 @@
 	pickup_sound = SFX_GENERIC_DEVICE_PICKUP
 	drop_sound = SFX_GENERIC_DEVICE_DROP
 	///Power cell used to power the scanner. Paths g
-	var/obj/item/stock_parts/power_store/cell = /obj/item/stock_parts/power_store/cell/crap
+	var/obj/item/stock_parts/power_store/cell = /obj/item/stock_parts/power_store/cell/button
 	///Cell cover status
 	var/cell_cover_open = FALSE
 	///Does this item scan for contraband correctly? If not, will provide a flipped response.
@@ -94,7 +94,7 @@
 	if(cell_cover_open)
 		balloon_alert(user, "close cover first!")
 		return ITEM_INTERACT_BLOCKING
-	if(!cell || !cell.use(0.001 * STANDARD_CELL_CHARGE))
+	if(!cell || !cell.use(20 JOULES))
 		balloon_alert(user, "check cell!")
 		return ITEM_INTERACT_BLOCKING
 

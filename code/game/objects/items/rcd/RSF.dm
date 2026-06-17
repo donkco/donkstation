@@ -142,12 +142,11 @@ RSF
 /obj/item/rsf/proc/use_matter(charge, mob/user)
 	if(iscyborg(user))
 		var/mob/living/silicon/robot/R = user
-		var/end_charge = R.cell.charge - charge
-		if(end_charge < 0)
+		if(R.cell.charge() < charge)
 			to_chat(user, span_warning("You do not have enough power to use [src]."))
 			icon_state = spent_icon_state
 			return FALSE
-		R.cell.charge = end_charge
+		R.cell.use(charge)
 		return TRUE
 	else
 		if(matter - 1 < 0)

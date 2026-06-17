@@ -33,6 +33,9 @@
 	righthand_file = 'icons/mob/inhands/donk_inhands/donk_wide_righthand.dmi'
 
 	w_class = WEIGHT_CLASS_SMALL
+	cell_type =  /obj/item/stock_parts/power_store/battery_array/two_aa
+
+	electronics_overlay_postition = vector(8, 6)
 
 /obj/item/gun/energy/laser/agent_pistol/can_attach(obj/item/gun_attachment/attachment)
 	if(istype(attachment, /obj/item/gun_attachment/fluoressor))

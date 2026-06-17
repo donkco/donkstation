@@ -72,7 +72,7 @@
 		var/obj/item/integrated_circuit/circuit = comp.attached_circuit
 		if (!circuit.cell)
 			return
-		var/transferred = src.cell.give(min(0.1 * STANDARD_CELL_CHARGE, circuit.cell.charge))
+		var/transferred = src.cell.give(min(0.1 * STANDARD_CELL_CHARGE, circuit.cell.charge()))
 		if (transferred)
 			circuit.cell.use(transferred, force=TRUE)
 
@@ -96,6 +96,6 @@
 	if(!parent?.cell)
 		return
 	var/obj/item/gun/energy/fired_gun = source
-	var/transferred = fired_gun.cell.give(min(0.1 * STANDARD_CELL_CHARGE, parent.cell.charge))
+	var/transferred = fired_gun.cell.give(min(0.1 * STANDARD_CELL_CHARGE, parent.cell.charge()))
 	if(transferred)
 		parent.cell.use(transferred, force = TRUE)

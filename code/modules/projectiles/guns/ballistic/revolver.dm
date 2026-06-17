@@ -108,7 +108,7 @@
 	icon_state = "c38"
 	base_icon_state = "c38"
 	fire_sound = 'sound/items/weapons/gun/revolver/shot.ogg'
-	barrel_mount_position = vector(27, 18)
+
 // 38 special skins
 /datum/atom_skin/det_revolver
 	abstract_type = /datum/atom_skin/det_revolver
@@ -125,7 +125,6 @@
 /datum/atom_skin/det_revolver/police_positive_special
 	preview_name = "Police Positive Special"
 	new_icon_state = "c38_police"
-	barrel_mount_position = vector(29, 18)
 
 /datum/atom_skin/det_revolver/blued_steel
 	preview_name = "Blued Steel"
@@ -146,12 +145,10 @@
 /datum/atom_skin/det_revolver/peacemaker
 	preview_name = "The Peacemaker"
 	new_icon_state = "c38_peacemaker"
-	barrel_mount_position = vector(29, 18)
 
 /datum/atom_skin/det_revolver/black_panther
 	preview_name = "Black Panther"
 	new_icon_state = "c38_panther"
-	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/ballistic/revolver/c38/detective
 	name = "\improper Colt Detective Special"

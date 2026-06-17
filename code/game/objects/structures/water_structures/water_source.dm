@@ -77,7 +77,7 @@
 
 	if(istype(attacking_item, /obj/item/melee/baton/security))
 		var/obj/item/melee/baton/security/baton = attacking_item
-		if(baton.cell?.charge && baton.active)
+		if(baton.cell?.charge()&& baton.active)
 			flick("baton_active", src)
 			user.Paralyze(baton.knockdown_time)
 			user.set_stutter(baton.knockdown_time)

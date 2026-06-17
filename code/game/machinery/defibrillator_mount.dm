@@ -61,7 +61,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/defibrillator_mount, 28)
 	if(defib.powered)
 		var/obj/item/stock_parts/power_store/cell = defib.cell
 		var/mutable_appearance/safety = mutable_appearance(icon, defib.safety ? "online" : "emagged", offset_spokesman = src)
-		var/mutable_appearance/charge_overlay = mutable_appearance(icon, "charge[CEILING((cell.charge / cell.maxcharge) * 4, 1) * 25]", offset_spokesman = src)
+		var/mutable_appearance/charge_overlay = mutable_appearance(icon, "charge[CEILING((cell.charge() / cell.max_charge()) * 4, 1) * 25]", offset_spokesman = src)
 
 		defib_overlay.overlays += list(safety, charge_overlay)
 
@@ -199,7 +199,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/defibrillator_mount, 28)
 	if(isnull(defib_cell)) // Something is very wrong if we hit this, so we should stack trace
 		stack_trace("[src] was set to process with no cell inside its defib")
 		return PROCESS_KILL
-	if(defib_cell.charge < defib_cell.maxcharge)
+	if(defib_cell.used_charge())
 		charge_cell(active_power_usage * seconds_per_tick, defib_cell)
 		defib.update_power()
 

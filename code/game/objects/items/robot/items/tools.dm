@@ -143,7 +143,7 @@
 		else
 			energy = clamp(energy + energy_recharge * seconds_per_tick, 0, maxenergy)
 			return
-	if(host.cell && (host.cell.charge >= (host.cell.maxcharge * cyborg_cell_critical_percentage)) && (energy < maxenergy))
+	if(host.cell && (host.cell.charge() >= (host.cell.max_charge() * cyborg_cell_critical_percentage)) && (energy < maxenergy))
 		host.cell.use(energy_recharge * seconds_per_tick * POWER_RECHARGE_CYBORG_DRAIN_MULTIPLIER)
 		energy += energy_recharge * seconds_per_tick
 

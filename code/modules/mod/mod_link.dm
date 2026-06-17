@@ -270,7 +270,7 @@
 		mod_link.end_call()
 	else if(QDELETED(cell))
 		user.balloon_alert(user, "no cell installed!")
-	else if(!cell.charge)
+	else if(!cell.charge())
 		user.balloon_alert(user, "no charge!")
 	else
 		call_link(user, mod_link)
@@ -281,7 +281,7 @@
 
 /obj/item/clothing/neck/link_scryer/proc/can_call()
 	var/mob/living/user = loc
-	return istype(user) && cell?.charge && user.stat < DEAD
+	return istype(user) && cell?.charge()&& user.stat < DEAD
 
 /obj/item/clothing/neck/link_scryer/proc/make_link_visual()
 	var/mob/living/user = mod_link.get_user_callback.Invoke()

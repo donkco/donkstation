@@ -59,13 +59,13 @@
 
 /obj/item/gun/energy/recharge/proc/empty()
 	if(cell)
-		cell.use(cell.charge)
+		cell.use(cell.charge())
 	update_appearance()
 
 /obj/item/gun/energy/recharge/proc/attempt_reload(set_recharge_time)
 	if(!cell)
 		return
-	if(cell.charge == cell.maxcharge)
+	if(cell.is_fully_charged())
 		return
 	if(!set_recharge_time)
 		set_recharge_time = recharge_time
@@ -80,7 +80,7 @@
 	recharge_timerid = addtimer(CALLBACK(src, PROC_REF(reload)), set_recharge_time * carried, TIMER_STOPPABLE)
 
 /obj/item/gun/energy/recharge/proc/reload()
-	cell.give(cell.maxcharge)
+	cell.give(cell.max_charge())
 	if(!suppressed && recharge_sound)
 		playsound(src.loc, recharge_sound, 60, TRUE)
 	else

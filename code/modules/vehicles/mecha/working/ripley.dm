@@ -224,7 +224,7 @@
 	. = ..()
 	take_damage(125)
 	if(cell)
-		cell.charge = FLOOR(cell.charge * 0.25, 1) //Starts at very low charge
+		cell.set_charge(FLOOR(cell.charge()* 0.25, 1)) //Starts at very low charge
 	if(prob(70)) //Maybe add a drill
 		if(prob(15)) //Possible diamond drill... Feeling lucky?
 			var/obj/item/mecha_parts/mecha_equipment/drill/diamonddrill/D = new

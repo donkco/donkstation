@@ -603,11 +603,11 @@
 	cooldown = max_cooldown
 	var/list/batteries = list()
 	for(var/obj/item/stock_parts/power_store/C in assoc_to_values(owner.get_all_cells()))
-		if(C.charge < C.maxcharge)
+		if(!C.is_fully_charged())
 			batteries += C
 	if(batteries.len)
 		var/obj/item/stock_parts/power_store/ToCharge = pick(batteries)
-		ToCharge.charge += min(ToCharge.maxcharge - ToCharge.charge, ToCharge.maxcharge/10) //10% of the cell, or to maximum.
+		ToCharge.give(min(ToCharge.used_charge(), ToCharge.max_charge() /10)) //10% of the cell, or to maximum.
 	return ..()
 
 /obj/item/hothands

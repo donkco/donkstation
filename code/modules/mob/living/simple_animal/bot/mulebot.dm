@@ -77,7 +77,7 @@
 	access_card.add_access(cargo_trim.access + cargo_trim.wildcard_access)
 	prev_access = access_card.access.Copy()
 
-	cell = new /obj/item/stock_parts/power_store/cell/upgraded(src, 2000)
+	cell = new /obj/item/stock_parts/power_store/cell/button(src)
 
 	AddElement(/datum/element/ridable, /datum/component/riding/creature/mulebot)
 	diag_hud_set_mulebotcell()
@@ -125,7 +125,7 @@
 
 /// returns true if the bot is fully powered.
 /mob/living/simple_animal/bot/mulebot/proc/has_power()
-	return cell && cell.charge > 0 && (!wires.is_cut(WIRE_POWER1) && !wires.is_cut(WIRE_POWER2))
+	return cell && cell.charge() > 0 && (!wires.is_cut(WIRE_POWER1) && !wires.is_cut(WIRE_POWER2))
 
 /mob/living/simple_animal/bot/mulebot/attack_hand(mob/living/carbon/human/user, list/modifiers)
 	if(bot_cover_flags & BOT_COVER_MAINTS_OPEN && !HAS_AI_ACCESS(user))
@@ -465,7 +465,7 @@
 /mob/living/simple_animal/bot/mulebot/get_status_tab_items()
 	. = ..()
 	if(cell)
-		. += "Charge Left: [cell.charge]/[cell.maxcharge]"
+		. += "Charge Left: [cell.charge()]/[cell.max_charge() ]"
 	else
 		. += "No Cell Inserted!"
 	if(load)
@@ -783,7 +783,7 @@
 	if(!(bot_mode_flags & BOT_MODE_ON))
 		return COMPONENT_MOB_BOT_BLOCK_PRE_STEP
 
-	if((cell && (cell.charge < cell_move_power_usage)) || !has_power())
+	if((cell && (cell.charge() < cell_move_power_usage)) || !has_power())
 		turn_off()
 		return COMPONENT_MOB_BOT_BLOCK_PRE_STEP
 

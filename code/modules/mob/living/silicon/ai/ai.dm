@@ -269,12 +269,12 @@
 			robot_status = "AI SHELL"
 		else if(connected_robot.stat != CONSCIOUS || !connected_robot.client)
 			robot_status = "OFFLINE"
-		else if(!connected_robot.cell || connected_robot.cell.charge <= 0)
+		else if(!connected_robot.cell || connected_robot.cell.charge())
 			robot_status = "DEPOWERED"
 		//Name, Health, Battery, Model, Area, and Status! Everything an AI wants to know about its borgies!
 		. += list(list("[connected_robot.name]: ",
 			"S.Integrity: [connected_robot.health]% | \
-			Cell: [connected_robot.cell ? "[display_energy(connected_robot.cell.charge)]/[display_energy(connected_robot.cell.maxcharge)]" : "Empty"] | \
+			Cell: [connected_robot.cell ? "[display_energy(connected_robot.cell.charge())]/[display_energy(connected_robot.cell.max_charge())]" : "Empty"] | \
 			Model: [connected_robot.designation] | Loc: [get_area_name(connected_robot, TRUE)] | \
 			Status: [robot_status]",
 			"src=[REF(src)];track_cyborg=[text_ref(connected_robot)]",

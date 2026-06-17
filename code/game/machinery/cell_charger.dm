@@ -22,7 +22,7 @@
 	if(charging.grown_battery)
 		. += mutable_appearance('icons/obj/machines/cell_charger.dmi', "grown_wires")
 	. += "ccharger-[charging.connector_type]-on"
-	if((charging.charge > 0.01) && charging.charge_light_type)
+	if((charging.charge() > 0.01) && charging.charge_light_type)
 		. += mutable_appearance('icons/obj/machines/cell_charger.dmi', "cell-[charging.charge_light_type]-o[(charging.percent() >= 99.5) ? 2 : 1]")
 
 /obj/machinery/cell_charger/examine(mob/user)

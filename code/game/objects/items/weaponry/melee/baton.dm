@@ -526,7 +526,7 @@
 	return cell
 
 /obj/item/melee/baton/security/suicide_act(mob/living/user)
-	if(cell?.charge && active)
+	if(cell?.charge() && active)
 		user.visible_message(span_suicide("[user] is putting the live [name] in [user.p_their()] mouth! It looks like [user.p_theyre()] trying to commit suicide!"))
 		finalize_baton_attack(user, user)
 		return FIRELOSS
@@ -602,7 +602,7 @@
 		if(cell)
 			to_chat(user, span_warning("[src] already has a cell!"))
 		else
-			if(active_cell.maxcharge < cell_hit_cost)
+			if(active_cell.max_charge() < cell_hit_cost)
 				to_chat(user, span_notice("[src] requires a higher capacity cell."))
 				return
 			if(!user.transferItemToLoc(item, src))
@@ -621,14 +621,14 @@
 	return FALSE
 
 /obj/item/melee/baton/security/attack_self(mob/user)
-	if(cell?.charge >= cell_hit_cost && !active)
+	if(cell?.charge() >= cell_hit_cost && !active)
 		turn_on(user)
 		balloon_alert(user, "turned on")
 	else
 		turn_off()
 		if(!cell)
 			balloon_alert(user, "no power source!")
-		else if(cell?.charge < cell_hit_cost)
+		else if(cell?.charge() < cell_hit_cost)
 			balloon_alert(user, "out of charge!")
 		else
 			balloon_alert(user, "turned off")
@@ -661,7 +661,7 @@
 	//Note this value returned is significant, as it will determine
 	//if a stun is applied or not
 	. = cell.use(deducted_charge)
-	if(active && cell.charge < cell_hit_cost)
+	if(active && cell.charge()< cell_hit_cost)
 		//we're below minimum, turn off
 		turn_off()
 
@@ -731,7 +731,7 @@
 	if (!(. & EMP_PROTECT_SELF))
 		cell.emp_act(severity)
 
-	if (cell.charge >= cell_hit_cost)
+	if (cell.charge()>= cell_hit_cost)
 		var/scramble_time
 		scramble_mode()
 		for(var/loops in 1 to rand(6, 12))
@@ -739,7 +739,7 @@
 			addtimer(CALLBACK(src, PROC_REF(scramble_mode)), scramble_time*loops * (1 SECONDS))
 
 /obj/item/melee/baton/security/proc/scramble_mode()
-	if (!cell || cell.charge < cell_hit_cost)
+	if (!cell || cell.charge()< cell_hit_cost)
 		return
 	active = !active
 	toggle_light()

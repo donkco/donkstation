@@ -12,7 +12,7 @@
 	for(var/obj/machinery/power/smes/smes as anything in all_smes)
 		if(istype(get_area(smes), /area/station/ai) || !is_station_level(smes.z))
 			continue
-		smes.charge = 0
+		smes.charge= 0
 		smes.output_level = 0
 		smes.output_attempt = FALSE
 		smes.update_appearance()
@@ -37,7 +37,7 @@
 			if(GLOB.typecache_powerfailure_safe_areas[A.type])
 				continue
 
-			C.cell.charge = 0
+			C.cell.set_charge(0)
 
 /**
  * Restores power to all rooms on the station.
@@ -48,7 +48,7 @@
 	priority_announce("Power has been restored to [station_name()]. We apologize for the inconvenience.", "Power Systems Nominal", ANNOUNCER_POWERON)
 	for(var/obj/machinery/power/apc/C as anything in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc))
 		if(C.cell && is_station_level(C.z))
-			C.cell.charge = C.cell.maxcharge
+			C.cell.set_charge(C.cell.max_charge())
 			COOLDOWN_RESET(C, failure_timer)
 	var/list/all_smes = SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/smes)
 	for(var/obj/machinery/power/smes/smes as anything in all_smes)

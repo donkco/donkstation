@@ -309,13 +309,13 @@
 		var/datum/component/shell/shell = charging.GetComponent(/datum/component/shell)
 		charging_cell = shell?.attached_circuit?.get_cell()
 	if(charging_cell)
-		var/wanted_power = min(charging_cell.maxcharge - charging_cell.charge, charging_cell.chargerate)
+		var/wanted_power = min(charging_cell.used_charge(), charging_cell.get_chargerate())
 		if(wanted_power > 0)
 			var/power_to_give = min(available_power, wanted_power) * seconds_per_tick / 2
 			if (power_to_give > 0)
 				charging_cell.give(power_to_give)
 				available_power -= power_to_give
-				if(charging_cell.charge == charging_cell.maxcharge)
+				if(charging_cell.is_fully_charged())
 					playsound(src, 'sound/machines/ping.ogg', 30, TRUE)
 					say("[charging] has finished recharging!")
 				else
@@ -333,7 +333,7 @@
 
 	else if(istype(charging, /obj/item/melee/baton/security))
 		var/obj/item/melee/baton/security/batong = charging
-		batong?.cell.charge = 0
+		batong?.cell.set_charge(0 JOULES)
 
 /obj/item/portable_wind_turbine/update_overlays()
 	. = ..()

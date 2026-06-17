@@ -60,11 +60,11 @@
 
 
 /datum/design/miniature_power_cell
-	name = "Light Fixture Battery"
+	name = "Button Cell"
 	id = "miniature_power_cell"
 	build_type = AUTOLATHE | PROTOLATHE | AWAY_LATHE
-	materials = list(/datum/material/glass =SMALL_MATERIAL_AMOUNT*0.2)
-	build_path = /obj/item/stock_parts/power_store/cell/emergency_light
+	materials = list(/datum/material/iron =SMALL_MATERIAL_AMOUNT*0.2, /datum/material/silver =SMALL_MATERIAL_AMOUNT*0.2)
+	build_path = /obj/item/stock_parts/power_store/cell/button
 	category = list(
 		RND_CATEGORY_INITIAL,
 		RND_CATEGORY_CONSTRUCTION + RND_SUBCATEGORY_CONSTRUCTION_LIGHTING,

@@ -8,6 +8,8 @@
 	name ="Disguise and Deceit"
 	weight = 3
 
+/datum/uplink_category/weapons
+	name = "Armaments and Weaponry"
 // NT AGENT ITEMS
 
 /datum/uplink_item/spywatch_kit
@@ -20,7 +22,7 @@
 
 	cost = 4
 	purchasable_from = UPLINK_NTRAITORS
-	category = /datum/uplink_category/stealthy
+	category = /datum/uplink_category/weapons
 
 /datum/uplink_item/ammo_twomm_scylla
 	name ="'Scylla's Kiss' 2mm mollusk toxin box"
@@ -62,7 +64,17 @@
 	cost = 3
 
 	purchasable_from = UPLINK_NTRAITORS
-	category = /datum/uplink_category/stealthy
+	category = /datum/uplink_category/weapons
+
+/datum/uplink_item/agent_pistol
+	name = "'Merlin' Laser Pistol 53"
+	desc = "A compact laser pistol featuring a convenient battery compartment for easy replacement of spent batteries, as well a threaded barrel that allows it to be modified with a fluoressor.\nIt is sold with a carrying care and a spare set of batteries"
+
+	cost = 8
+	purchasable_from = UPLINK_NTRAITORS
+	category = /datum/uplink_category/weapons
+	item = /obj/item/storage/case/nt_gun
+
 
 /datum/uplink_item/dazzle_grenade
 	name = "Dazzle Grenade"
@@ -92,11 +104,9 @@
 	cost = 4
 
 	purchasable_from = UPLINK_NTRAITORS
-	category = /datum/uplink_category/stealthy
+	category = /datum/uplink_category/weapons
 
 /datum/uplink_item/explosives/c4bag/nt
-	name = "Bag of C-4 explosives"
-	desc = "Because sometimes quantity is quality. Contains 10 C-4 plastic explosives."
 	item = /obj/item/storage/backpack/duffelbag/syndie/nt/c4
 	limited_stock = 2
 	purchasable_from = UPLINK_NTRAITORS
@@ -143,15 +153,19 @@
 	base_icon_state = "nt_case"
 	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT *2)
 
+/obj/item/storage/case/nt_gun/PopulateContents()
+	. = ..()
+	new /obj/item/gun/energy/laser/agent_pistol(src)
+	new /obj/item/stock_parts/power_store/cell/aa(src)
 
 /obj/item/storage/case/nt_gun/update_overlays()
 	. = ..()
-	if(!lid_opem)
+	if(!lid_open)
 		return
 	if(locate(/obj/item/gun) in contents)
 		var/mutable_appearance/gun_overlay = mutable_appearance(icon, "[base_icon_state]_gun")
 		. += gun_overlay
-	if(locate(/obj/item/stock_parts/power_store/cell/crap) in contents)
+	if(locate(/obj/item/stock_parts/power_store/cell/aa/alkaline) in contents)
 		var/mutable_appearance/alkaline_overlay = mutable_appearance(icon, "[base_icon_state]_cell-alkaline")
 		. += alkaline_overlay
 	else if(locate(/obj/item/stock_parts/power_store/cell) in contents)

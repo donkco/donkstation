@@ -265,14 +265,14 @@
 	var/maxcapacity = FALSE //Safety check for batteries
 	var/drain = 0 //Drain amount from batteries
 	var/drain_total = 0
-	if(!cell?.charge)
+	if(!cell?.charge())
 		hacking_module.charge_message(src, drain_total)
 		return
 	var/datum/effect_system/basic/spark_spread/spark_system = new(loc, 5, FALSE)
-	while(cell.charge> 0 && !maxcapacity)
+	while(cell.charge() > 0 JOULES && !maxcapacity)
 		drain = rand(NINJA_MIN_DRAIN, NINJA_MAX_DRAIN)
-		if(cell.charge < drain)
-			drain = cell.charge
+		if(cell.charge()< drain)
+			drain = cell.charge()
 		if(hacking_module.mod.get_charge() + drain > hacking_module.mod.get_max_charge())
 			drain = hacking_module.mod.get_max_charge() - hacking_module.mod.get_charge()
 			maxcapacity = TRUE//Reached maximum battery capacity.
@@ -446,8 +446,8 @@
 				for(var/obj/machinery/power/terminal/affected_terminal in wire_powernet.nodes)
 					if(istype(affected_terminal.master, /obj/machinery/power/apc))
 						var/obj/machinery/power/apc/AP = affected_terminal.master
-						if(AP.operating && AP.cell && AP.cell.charge > 0)
-							AP.cell.charge = max(0, AP.cell.charge - 5)
+						if(AP.operating && AP.cell && AP.cell.charge())
+							AP.cell.set_charge(max(0, AP.cell.charge()- 5))
 							drained += 5
 		else
 			break
@@ -472,10 +472,10 @@
 	var/drain = 0 //Drain amount
 	var/drain_total = 0
 	if(get_charge())
-		while(cell.charge > 0 && !maxcapacity)
+		while(cell.charge() && !maxcapacity)
 			drain = rand(NINJA_MIN_DRAIN, NINJA_MAX_DRAIN)
-			if(cell.charge < drain)
-				drain = cell.charge
+			if(cell.charge()< drain)
+				drain = cell.charge()
 			if(hacking_module.mod.get_charge() + drain > hacking_module.mod.get_max_charge())
 				drain = hacking_module.mod.get_max_charge() - hacking_module.mod.get_charge()
 				maxcapacity = TRUE
@@ -571,16 +571,16 @@
 
 //ENERGY WEAPONS, drains power from the weapon to supply your modsuit
 /obj/item/gun/energy/ninjadrain_act(mob/living/carbon/human/ninja, obj/item/mod/module/hacker/hacking_module)
-	if(cell.charge == 0)
+	if(!cell.charge())
 		balloon_alert(ninja, "no energy!")
 		return COMPONENT_CANCEL_ATTACK_CHAIN
 
 	if(!do_after(ninja, 1.5 SECONDS, target = src, hidden = TRUE))
 		return COMPONENT_CANCEL_ATTACK_CHAIN
 
-	hacking_module.mod.add_charge(cell.charge)
-	hacking_module.charge_message(src, cell.charge)
-	cell.charge = 0
+	hacking_module.mod.add_charge(cell.charge())
+	hacking_module.charge_message(src, cell.charge())
+	cell.set_charge(0 JOULES)
 	update_appearance()
 	visible_message(span_warning("[ninja] drains the energy from the [src]!"))
 	do_sparks(number = 3, cardinal_only = FALSE, source = src)

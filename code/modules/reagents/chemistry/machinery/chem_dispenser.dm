@@ -140,7 +140,7 @@
 		begin_processing()
 
 /obj/machinery/chem_dispenser/process(seconds_per_tick)
-	if(cell.maxcharge == cell.charge)
+	if(cell.is_fully_charged())
 		return
 	use_energy(active_power_usage * seconds_per_tick) //Additional power cost before charging the cell.
 	charge_cell(recharge_amount * seconds_per_tick, cell) //This also costs power.
@@ -215,10 +215,10 @@
 /obj/machinery/chem_dispenser/ui_data(mob/user)
 	. = list()
 	.["amount"] = amount
-	.["energy"] = cell.charge ? cell.charge : 0 //To prevent NaN in the UI.
-	.["maxEnergy"] = cell.maxcharge
-	.["displayedUnits"] = cell.charge ? (cell.charge / power_cost) : 0
-	.["displayedMaxUnits"] = cell.maxcharge / power_cost
+	.["energy"] = cell.charge()? cell.charge(): 0 //To prevent NaN in the UI.
+	.["maxEnergy"] = cell.max_charge()
+	.["displayedUnits"] = cell.charge()? (cell.charge() / power_cost) : 0
+	.["displayedMaxUnits"] = cell.max_charge() / power_cost
 	.["showpH"] = isnull(recording_recipe) ? show_ph : FALSE //virtual beakers have no ph to compute & display
 	var/obj/item/held_item = user.get_active_held_item()
 	.["hasBeakerInHand"] = held_item?.is_chem_container() || FALSE
@@ -437,7 +437,7 @@
 	if(. & EMP_PROTECT_SELF)
 		return
 	var/list/datum/reagents/R = list()
-	var/total = min(rand(7,15), FLOOR(cell.charge*INVERSE(power_cost), 1))
+	var/total = min(rand(7,15), FLOOR(cell.charge()*INVERSE(power_cost), 1))
 	var/datum/reagents/Q = new(total*10)
 	if(beaker?.reagents)
 		R += beaker.reagents

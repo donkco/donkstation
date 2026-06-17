@@ -46,7 +46,7 @@
 	return COMPONENT_CANCEL_ATTACK_CHAIN
 
 /datum/component/crank_recharge/proc/crank(obj/source, mob/user)
-	if(charging_cell.charge >= charging_cell.maxcharge)
+	if(charging_cell.charge() >= charging_cell.max_charge())
 		source.balloon_alert(user, "already charged!")
 		return
 	if(is_charging)

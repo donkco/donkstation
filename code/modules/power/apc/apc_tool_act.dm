@@ -38,7 +38,7 @@
 
 	if(cell || terminal) //The mob gets shocked by whichever powersource has the most electricity
 		if(cell && terminal)
-			shock_source = cell.charge > terminal.powernet.avail ? cell : terminal.powernet
+			shock_source = cell.charge()> terminal.powernet.avail ? cell : terminal.powernet
 		else
 			shock_source = terminal?.powernet || cell
 
@@ -48,7 +48,7 @@
 		do_sparks(5, TRUE, src)
 		user.visible_message(span_notice("[user.name] shoves [tool] into the internal components of [src], erupting into a cascade of sparks!"))
 		if(shock_source == cell)//If the shock is coming from the cell just fully discharge it, because it's funny
-			cell.use(cell.charge)
+			cell.use(cell.charge())
 		return ITEM_INTERACT_SUCCESS
 
 /// Called when we interact with the APC with a cell, attempts to insert it

@@ -83,14 +83,14 @@ Industrial extracts:
 
 /obj/item/slimecross/industrial/yellow
 	colour = SLIME_TYPE_YELLOW
-	effect_desc = "Produces high capacity power cells, which are not fully charged on creation."
+	effect_desc = "Produces nine volt power cells, which are not fully charged on creation."
 	plasmarequired = 5
-	itempath = /obj/item/stock_parts/power_store/cell/high
+	itempath = /obj/item/stock_parts/power_store/cell/nine_volt
 
 /obj/item/slimecross/industrial/yellow/do_after_spawn(obj/item/spawned)
-	var/obj/item/stock_parts/power_store/cell/high/C = spawned
+	var/obj/item/stock_parts/power_store/C = spawned
 	if(istype(C))
-		C.charge = rand(0,C.maxcharge/2)
+		C.set_charge(rand(0, C.max_charge() / 2))
 
 /obj/item/slimecross/industrial/darkpurple
 	colour = SLIME_TYPE_DARK_PURPLE

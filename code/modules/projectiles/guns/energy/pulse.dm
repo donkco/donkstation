@@ -11,7 +11,7 @@
 	slot_flags = ITEM_SLOT_BACK
 	light_color = COLOR_BLUE
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/pulse, /obj/item/ammo_casing/energy/electrode, /obj/item/ammo_casing/energy/laser)
-	cell_type = /obj/item/stock_parts/power_store/cell/pulse
+	cell_type = /obj/item/stock_parts/power_store/cell/bluespace/tactical
 
 /obj/item/gun/energy/pulse/Initialize(mapload)
 	. = ..()
@@ -45,7 +45,7 @@
 	icon_state = "pulse_carbine"
 	worn_icon_state = "gun"
 	inhand_icon_state = null
-	cell_type = /obj/item/stock_parts/power_store/cell/pulse/carbine
+	cell_type = /obj/item/stock_parts/power_store/cell/ba5800/tactical
 
 /obj/item/gun/energy/pulse/carbine/add_seclight_point()
 	AddComponent(/datum/component/seclite_attachable, \
@@ -81,7 +81,7 @@
 	icon_state = "pulse_pistol"
 	worn_icon_state = "gun"
 	inhand_icon_state = "gun"
-	cell_type = /obj/item/stock_parts/power_store/cell/pulse/pistol
+	cell_type = /obj/item/stock_parts/power_store/cell/nine_volt/tactical
 
 /obj/item/gun/energy/pulse/pistol/taserless
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/pulse, /obj/item/ammo_casing/energy/laser)

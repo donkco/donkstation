@@ -253,7 +253,7 @@
 /mob/living/silicon/robot/get_status_tab_items()
 	. = ..()
 	if(cell)
-		. += "Charge Left: [display_energy(cell.charge)]/[display_energy(cell.maxcharge)]"
+		. += "Charge Left: [display_energy(cell.charge())]/[display_energy(cell.max_charge())]"
 	else
 		. += "No Cell Inserted!"
 
@@ -997,9 +997,9 @@
 	SIGNAL_HANDLER
 
 	if(model)
-		if(cell.charge)
-			if(model.respawn_consumable(src, cell.charge * 0.005))
-				cell.use(cell.charge * 0.005)
+		if(cell.charge())
+			if(model.respawn_consumable(src, cell.charge()* 0.005))
+				cell.use(cell.charge()* 0.005)
 		if(sendmats)
 			model.restock_consumable()
 	if(repairs)

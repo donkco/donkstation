@@ -88,11 +88,11 @@ Regenerative extracts:
 /obj/item/slimecross/regenerative/yellow/core_effect(mob/living/target, mob/user)
 	var/list/batteries = list()
 	for(var/obj/item/stock_parts/power_store/cell in assoc_to_values(target.get_all_cells()))
-		if(cell.charge < cell.maxcharge)
+		if(cell.used_charge())
 			batteries += cell
 	if(batteries.len)
 		var/obj/item/stock_parts/power_store/ToCharge = pick(batteries)
-		ToCharge.charge = ToCharge.maxcharge
+		ToCharge.set_charge(ToCharge.max_charge())
 		to_chat(target, span_notice("You feel a strange electrical pulse, and one of your electrical items was recharged."))
 
 /obj/item/slimecross/regenerative/darkpurple

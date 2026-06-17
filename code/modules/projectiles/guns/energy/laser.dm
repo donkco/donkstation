@@ -5,7 +5,8 @@
 	inhand_icon_state = "laser"
 	w_class = WEIGHT_CLASS_BULKY
 	custom_materials = list(/datum/material/iron=SHEET_MATERIAL_AMOUNT)
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser)
+	cell_type = /obj/item/stock_parts/power_store/battery_array/two_aa
 	shaded_charge = TRUE
 	light_color = COLOR_SOFT_RED
 	barrel_mount_position = vector(31, 20)
@@ -37,8 +38,8 @@
 	icon_state = "laser_pistol"
 	w_class = WEIGHT_CLASS_NORMAL
 	projectile_damage_multiplier = 0.8
-	cell_type = /obj/item/stock_parts/power_store/cell/laser_pistol
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/pistol)
+	cell_type = /obj/item/stock_parts/power_store/battery_array/four_aaa
+	ammo_type = list(/obj/item/ammo_casing/energy/laser)
 	barrel_mount_position = vector(30, 18)
 
 /obj/item/gun/energy/laser/pistol/add_seclight_point()
@@ -55,10 +56,13 @@
 	slot_flags = ITEM_SLOT_BACK
 	burst_size = 2
 	fire_delay = 1
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/assault)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/assault)
+	cell_type = /obj/item/stock_parts/power_store/battery_array/double_d
 	emp_resistance = 2
 	weapon_weight = WEAPON_HEAVY
 	projectile_speed_multiplier = 1.5
+	barrel_mount_position = vector(45, 17)
+	electronics_overlay_postition = vector(25, 14)
 	SET_BASE_PIXEL(-8, 0)
 
 /obj/item/gun/energy/laser/assault/add_seclight_point()
@@ -85,6 +89,7 @@
 		it is still quite deadly and easy to maintain, making it a favorite amongst pirates and other outlaws."
 	icon_state = "retro"
 	ammo_x_offset = 3
+	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/energy/laser/soul
 	name ="\improper Type 3 laser gun"
@@ -102,18 +107,22 @@
 	fire_delay = 2
 	projectile_damage_multiplier = 0.75
 	projectile_speed_multiplier = 1.5
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/carbine)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/carbine)
+	cell_type = /obj/item/stock_parts/power_store/cell/d
 	weapon_weight = WEAPON_MEDIUM
+	barrel_mount_position = vector(31, 17)
 
 /obj/item/gun/energy/laser/cybersun
 	name = "\improper Cybersun S-120"
 	desc = "A laser gun primarily used by syndicate security guards. It fires a rapid spray of low-power plasma beams."
 	icon_state = "cybersun_s120"
 	inhand_icon_state = "s120"
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/cybersun)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/cybersun)
+	cell_type = /obj/item/stock_parts/power_store/cell/ba5800
 	spread = 14
 	pin = /obj/item/firing_pin/implant/pindicate
 	ammo_x_offset = 1
+	barrel_mount_position = vector(29, 17)
 
 /obj/item/gun/energy/laser/cybersun/Initialize(mapload)
 	. = ..()
@@ -128,7 +137,7 @@
 /obj/item/gun/energy/laser/carbine/practice
 	name = "practice laser carbine"
 	desc = "A modified version of the Type 5/R laser carbine. Fires entirely harmless bolts of directed energy. Safe AND entertaining to fire with abandon."
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/carbine/practice)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/carbine/practice)
 	clumsy_check = FALSE
 	item_flags = NONE
 	gun_flags = NOT_A_REAL_GUN
@@ -138,7 +147,7 @@
 
 /obj/item/gun/energy/laser/retro/old
 	desc = "The NT Type 1 Heat Delivery System, developed by Nanotrasen. This one looks downright ancient. What the hell happened to it?"
-	ammo_type = list(/obj/item/ammo_casing/energy/lasergun/old)
+	ammo_type = list(/obj/item/ammo_casing/energy/laser/old)
 
 /obj/item/gun/energy/laser/retro/old/add_deep_lore()
 	return
@@ -153,6 +162,7 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/hellfire)
 	ammo_x_offset = 1
 	light_color = COLOR_AMMO_HELLFIRE
+	barrel_mount_position = vector(31, 16)
 
 /obj/item/gun/energy/laser/captain
 	name = "antique laser gun"
@@ -168,6 +178,7 @@
 	flags_1 = PREVENT_CONTENTS_EXPLOSION_1
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/hellfire)
 	light_color = COLOR_AMMO_HELLFIRE
+	barrel_mount_position = vector(31, 17)
 
 /obj/item/gun/energy/laser/captain/scattershot
 	name = "scatter shot laser rifle"
@@ -179,7 +190,7 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/scatter, /obj/item/ammo_casing/energy/laser)
 	shaded_charge = FALSE
 	ammo_x_offset = 1
-
+	barrel_mount_position = vector(32, 18)
 
 /obj/item/gun/energy/laser/captain/scattershot/add_deep_lore()
 	return
@@ -187,6 +198,7 @@
 /obj/item/gun/energy/laser/cyborg
 	can_charge = FALSE
 	desc = "An energy-based laser gun that draws power from the cyborg's internal energy cell directly. So this is what freedom looks like?"
+	cell_type = /obj/item/stock_parts/power_store/cell/aaa
 	use_cyborg_cell = TRUE
 	ammo_x_offset = 1
 
@@ -217,6 +229,7 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/scatter/disabler, /obj/item/ammo_casing/energy/electrode)
 	automatic_charge_overlays = FALSE
 	ammo_x_offset = 1
+	barrel_mount_position = vector(32, 16)
 
 ///Laser Cannon
 
@@ -231,8 +244,10 @@
 	obj_flags = CONDUCTS_ELECTRICITY
 	slot_flags = ITEM_SLOT_BACK
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/accelerator)
+	cell_type = /obj/item/stock_parts/power_store/cell/ba5800
 	pin = null
 	ammo_x_offset = 3
+	barrel_mount_position = vector(32, 18)
 
 ///X-ray gun
 
@@ -244,6 +259,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	inhand_icon_state = null
 	ammo_type = list(/obj/item/ammo_casing/energy/xray)
+	cell_type = /obj/item/stock_parts/power_store/cell/d
 	ammo_x_offset = 3
 	custom_materials = list(
 		/datum/material/iron = SHEET_MATERIAL_AMOUNT * 3.5,
@@ -254,6 +270,7 @@
 	)
 	shaded_charge = FALSE
 	light_color = LIGHT_COLOR_GREEN
+	barrel_mount_position = vector(31, 16)
 
 ////////Laser Tag////////////////////
 
@@ -268,6 +285,7 @@
 	ammo_x_offset = 2
 	selfcharge = TRUE
 	gun_flags = NOT_A_REAL_GUN
+	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/energy/laser/bluetag/hitscan
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/bluetag/hitscan)
@@ -286,6 +304,7 @@
 	ammo_x_offset = 2
 	selfcharge = TRUE
 	gun_flags = NOT_A_REAL_GUN
+	barrel_mount_position = vector(29, 18)
 
 /obj/item/gun/energy/laser/redtag/add_deep_lore()
 	return

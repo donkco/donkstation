@@ -272,7 +272,7 @@
 					to_chat(user, span_warning("[target] has no power port!"))
 					return
 
-			if(!cell.charge)
+			if(!cell.charge())
 				to_chat(user, span_warning("[target] has no power!"))
 
 
@@ -288,7 +288,7 @@
 				if(cell != target && cell.loc != target)
 					return
 
-				var/draw = min(cell.charge, cell.chargerate*0.5, user.cell.maxcharge - user.cell.charge)
+				var/draw = min(cell.charge(), cell.get_chargerate()*0.5, user.cell.used_charge())
 				if(!cell.use(draw))
 					break
 				if(!user.cell.give(draw))
@@ -311,7 +311,7 @@
 				to_chat(user, span_warning("[target] has no power port!"))
 				return
 
-		if(cell.charge >= cell.maxcharge)
+		if(cell.is_fully_charged())
 			to_chat(user, span_warning("[target] is already charged!"))
 
 		to_chat(user, span_notice("You connect to [target]'s power port..."))
@@ -326,7 +326,7 @@
 			if(cell != target && cell.loc != target)
 				return
 
-			var/draw = min(user.cell.charge, cell.chargerate * 0.5, cell.maxcharge - cell.charge)
+			var/draw = min(user.cell.charge(), cell.get_chargerate() * 0.5, cell.used_charge())
 			if(!user.cell.use(draw))
 				break
 			if(!cell.give(draw))
@@ -359,10 +359,10 @@
 
 	if(iscyborg(user))
 		var/mob/living/silicon/robot/robot_user = user
-		if(!robot_user.cell || robot_user.cell.charge < 1200)
+		if(!robot_user.cell || robot_user.cell.charge() < 1200 JOULES)
 			to_chat(user, span_warning("You don't have enough charge to do this!"))
 			return
-		robot_user.cell.charge -= 1000
+		robot_user.cell.use(1000 JOULES)
 		if(robot_user.emagged)
 			safety = FALSE
 

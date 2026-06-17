@@ -217,7 +217,7 @@ own integrity back to max. Shield is automatically dropped if we run out of powe
 		return
 	if(switching && !signal_args[1])
 		return
-	if(!chassis.defense_mode && (!chassis.cell || chassis.cell.charge < 100)) //If it's off, and we have less than 100 units of power
+	if(!chassis.defense_mode && (!chassis.cell || chassis.cell.charge()< 100 JOULES)) //If it's off, and we have less than 100 units of power
 		chassis.balloon_alert(owner, "insufficient power")
 		return
 	switching = TRUE
@@ -276,7 +276,7 @@ own integrity back to max. Shield is automatically dropped if we run out of powe
 	if(!.)
 		return
 	if(!chassis.use_energy(. * (STANDARD_CELL_CHARGE / 150)))
-		chassis.cell?.charge = 0
+		chassis.cell?.set_charge(0 JOULES)
 		for(var/O in chassis.occupants)
 			var/mob/living/occupant = O
 			var/datum/action/action = LAZYACCESSASSOC(chassis.occupant_actions, occupant, /datum/action/vehicle/sealed/mecha/mech_defense_mode)

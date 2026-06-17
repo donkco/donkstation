@@ -22,7 +22,7 @@
 	ai_controller = /datum/ai_controller/basic_controller/trooper/ranged
 	r_hand = /obj/item/gun/energy/alien
 	/// Type of bullet we use
-	var/casingtype = /obj/item/ammo_casing/energy/lasergun
+	var/casingtype = /obj/item/ammo_casing/energy/laser
 	/// Sound to play when firing weapon
 	var/projectilesound = 'sound/items/weapons/laser2.ogg'
 	/// number of burst shots
