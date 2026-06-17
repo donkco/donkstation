@@ -730,6 +730,6 @@
 	var/list/cell_items = list()
 	for(var/obj/item/stored in get_all_gear())
 		var/obj/item/stock_parts/power_store/stored_cell = stored.get_cell()
-		if(stored_cell && stored_cell.charge <= (stored_cell.maxcharge * max_percent))
+		if(stored_cell && stored_cell.percent() <= max_percent)
 			cell_items[stored] = stored_cell
 	return cell_items

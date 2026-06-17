@@ -127,7 +127,7 @@
 	if(!charge_multiplier)
 		return NONE
 
-	if(cell.charge == cell.maxcharge)
+	if(cell.is_fully_charged())
 		balloon_alert(user, "already fully charged!")
 		return ITEM_INTERACT_BLOCKING
 
@@ -161,7 +161,7 @@
 	// Amount cannot be used if drain is made continuous, e.g. amount = 5, charge_weld = 25
 	// Then it'll drain 125 at first and 25 periodically, but fail if charge dips below 125 even though it still can finish action
 	// Alternately it'll need to drain amount*charge_weld every period, which is either obscene or makes it free for other uses
-	if(amount ? cell.charge < PLASMA_CUTTER_CHARGE_WELD * amount : cell.charge < PLASMA_CUTTER_CHARGE_WELD)
+	if(amount ? cell.charge() < PLASMA_CUTTER_CHARGE_WELD * amount : cell.charge() < PLASMA_CUTTER_CHARGE_WELD)
 		balloon_alert(user, "not enough charge!")
 		return FALSE
 	if(heat < heat_required)
@@ -315,7 +315,7 @@
 	desc = "An LMG that fires 3D-printed flechettes. They are slowly resupplied using the cyborg's internal power source."
 	icon_state = "l6_cyborg"
 	icon = 'icons/obj/weapons/guns/ballistic.dmi'
-	cell_type = /obj/item/stock_parts/power_store/cell/secborg
+	cell_type = /obj/item/stock_parts/power_store/cell/aaa
 	ammo_type = list(/obj/item/ammo_casing/energy/c3dbullet)
 	can_charge = FALSE
 	use_cyborg_cell = TRUE

@@ -39,6 +39,8 @@
 	/// If TRUE, the sticker can only be removed via the examine peel link, not by cleaning.
 	var/peel_via_examine_only = FALSE
 
+
+
 /obj/item/sticker/Initialize(mapload)
 	. = ..()
 
@@ -244,8 +246,9 @@
  */
 /obj/item/sticker/tracking
 	name = "tracking sticker"
-	desc = "A sticker with a tiny tracking chip embedded in the adhesive. It can be tracked by a crypto-chipped crew pinpointer."
-	icon_state = "tider"
+	desc = "A sticker that conceals a thin film tracking device!"
+	icon = 'icons/obj/stickers/5x4.dmi'
+	icon_state = "grey"
 	exclude_from_random = TRUE
 	use_double_examine = TRUE
 	peel_via_examine_only = TRUE
@@ -275,4 +278,70 @@
 	var/atom/current_host = GLOB.trackable_atoms[REF(src)]
 	if(current_host && current_host != src)
 		current_host.RemoveElement(/datum/element/trackable, REF(src), name)
+
+// Conspicious tracking stickers
+
+/obj/item/sticker/tracking/nt
+	name = "NT sticker"
+	icon = 'icons/obj/stickers/8x5.dmi'
+	icon_state = "nt"
+
+/obj/item/sticker/tracking/sus
+	name = "suspicious sticker"
+	icon = 'icons/obj/stickers/8x5.dmi'
+	icon_state = "sus"
+
+/obj/item/sticker/tracking/smiley
+	name = "smiley sticker"
+	icon = 'icons/obj/stickers/5x4.dmi'
+	icon_state = "smiley"
+
+/obj/item/sticker/tracking/cat
+	name = "cat sticker"
+	icon = 'icons/obj/stickers/5x5.dmi'
+	icon_state = "cat"
+
+/obj/item/sticker/tracking/weed
+	name = "marihuana sticker"
+	icon = 'icons/obj/stickers/5x5.dmi'
+	icon_state = "weed"
+
+/obj/item/sticker/tracking/gay
+	name = "pride™ sticker"
+	icon = 'icons/obj/stickers/6x5.dmi'
+	icon_state = "gay"
+
+
+
+// Stealthy stickers
+// Some of these are REALLY small
+
+/obj/item/sticker/tracking/fly
+	name = "fly sticker"
+	icon = 'icons/obj/stickers/3x2.dmi'
+	icon_state = "fly"
+
+/obj/item/sticker/tracking/led
+	name = "fake LED sticker"
+	icon = 'icons/obj/stickers/3x2.dmi'
+	icon_state = "led"
+
+/obj/item/sticker/price
+	name = "price sticker"
+	icon = 'icons/obj/stickers/2x1.dmi'
+	icon_state = "price"
+
+/obj/item/sticker/tracking/warning
+	name = "warning label"
+	icon = 'icons/obj/stickers/8x5.dmi'
+	icon_state = "warn"
+
+/obj/item/sticker/tracking/warning/fire
+	name = "warning label - inflammable"
+	icon_state = "warn-fire"
+
+
+/obj/item/sticker/tracking/warning/zap
+	name = "warning label - electric hazard"
+	icon_state = "warn-zap"
 

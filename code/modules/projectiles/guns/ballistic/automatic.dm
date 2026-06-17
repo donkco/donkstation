@@ -1,7 +1,6 @@
 /obj/item/gun/ballistic/automatic
 	abstract_type = /obj/item/gun/ballistic/automatic
 	w_class = WEIGHT_CLASS_NORMAL
-	can_suppress = TRUE
 	burst_size = 3
 	burst_delay = 2
 	actions_types = list(/datum/action/item_action/toggle_firemode)
@@ -13,6 +12,11 @@
 	burst_fire_selection = TRUE
 	drop_sound = 'sound/items/handling/gun/ballistics/smg/smg_drop1.ogg'
 	pickup_sound = 'sound/items/handling/gun/ballistics/smg/smg_pickup1.ogg'
+
+/obj/item/gun/ballistic/automatic/can_attach(obj/item/gun_attachment/attachment)
+	if(istype(attachment, /obj/item/gun_attachment/suppressor))
+		return TRUE
+	return ..()
 
 /obj/item/gun/ballistic/automatic/proto
 	name = "\improper Nanotrasen Saber SMG"
@@ -75,7 +79,6 @@
 	inhand_icon_state = "arg"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/wt550m9
 	burst_delay = 2
-	can_suppress = FALSE
 	burst_size = 1
 	actions_types = list()
 	mag_display = TRUE
@@ -102,7 +105,6 @@
 	dual_wield_spread = 20
 	actions_types = list()
 	bolt_type = BOLT_TYPE_LOCKING
-	can_suppress = FALSE
 	mag_display = TRUE
 	empty_indicator = TRUE
 	click_on_low_ammo = FALSE
@@ -148,7 +150,6 @@
 	inhand_icon_state = "m90"
 	selector_switch_icon = TRUE
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m223
-	can_suppress = FALSE
 	burst_size = 3
 	burst_delay = 2
 	spread = 5
@@ -197,7 +198,6 @@
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = 0
 	accepted_magazine_type = /obj/item/ammo_box/magazine/tommygunm45
-	can_suppress = FALSE
 	burst_size = 1
 	actions_types = list()
 	burst_delay = 1
@@ -206,6 +206,7 @@
 	show_bolt_icon = FALSE
 	/// Rate of fire, set on initialize only
 	var/rof = 0.1 SECONDS
+	barrel_mount_position = vector(31, 18)
 
 /obj/item/gun/ballistic/automatic/tommygun/Initialize(mapload)
 	. = ..()
@@ -231,9 +232,9 @@
 	inhand_icon_state = "arg"
 	slot_flags = 0
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m223
-	can_suppress = FALSE
 	burst_size = 3
 	burst_delay = 1
+	barrel_mount_position = vector(32, 17)
 
 // L6 SAW //
 
@@ -249,7 +250,6 @@
 	weapon_weight = WEAPON_HEAVY
 	burst_size = 1
 	actions_types = list()
-	can_suppress = FALSE
 	spread = 7
 	pin = /obj/item/firing_pin/implant/pindicate
 	bolt_type = BOLT_TYPE_OPEN
@@ -260,6 +260,7 @@
 	fire_sound = 'sound/items/weapons/gun/l6/shot.ogg'
 	rack_sound = 'sound/items/weapons/gun/l6/l6_rack.ogg'
 	suppressed_sound = 'sound/items/weapons/gun/general/heavy_shot_suppressed.ogg'
+	barrel_mount_position = vector(32, 17)
 	var/cover_open = FALSE
 
 /obj/item/gun/ballistic/automatic/l6_saw/unrestricted
@@ -331,11 +332,11 @@
 	empty_indicator = TRUE
 	bolt_type = BOLT_TYPE_OPEN
 	fire_delay = 2 DECISECONDS
-	can_suppress = FALSE
 	burst_size = 0
 	actions_types = list()
 	fire_sound = 'sound/items/weapons/laser.ogg'
 	casing_ejector = FALSE
+	barrel_mount_position = vector(32, 19)
 
 // NT Battle Rifle //
 
@@ -363,7 +364,7 @@
 	burst_size = 1
 	actions_types = list()
 	fire_sound = 'sound/items/weapons/thermalpistol.ogg'
-	suppressor_x_offset = 0
+	barrel_mount_position = vector(40, 15)
 
 	/// Determines how many shots we can make before the weapon needs to be maintained.
 	var/shots_before_degradation = 10

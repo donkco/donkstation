@@ -8,6 +8,7 @@ import {
   Stack,
   Tabs,
   Tooltip,
+  Image,
 } from 'tgui-core/components';
 import { fetchRetry } from 'tgui-core/http';
 import type { BooleanLike } from 'tgui-core/react';
@@ -22,6 +23,7 @@ import {
 } from './calculateDangerLevel';
 import { GenericUplink, type Item } from './GenericUplink';
 import { PrimaryObjectiveMenu } from './PrimaryObjectiveMenu';
+import { useCurrentItemContext } from './useCurrentItem';
 
 type UplinkItem = {
   id: string;
@@ -75,6 +77,8 @@ type UplinkState = {
   allItems: UplinkItem[];
   allCategories: string[];
   currentTab: number;
+  selectedItem: Item | undefined;
+
 };
 
 type ServerData = {
@@ -100,6 +104,7 @@ export class Uplink extends Component<any, UplinkState> {
       allItems: [],
       allCategories: [],
       currentTab: 0,
+      selectedItem: undefined,
     };
   }
 
@@ -184,8 +189,10 @@ export class Uplink extends Component<any, UplinkState> {
       lockable,
       purchased_items,
       shop_locked,
+      uplink_flag,
     } = data;
-    const { allItems, allCategories, currentTab } = this.state as UplinkState;
+
+    const { allItems, allCategories, currentTab, selectedItem} = this.state as UplinkState;
     const itemsToAdd = [...allItems];
     const items: ItemExtraData[] = [];
     itemsToAdd.push(...extra_purchasable);
@@ -262,10 +269,12 @@ export class Uplink extends Component<any, UplinkState> {
       });
     }
 
+
+
     return (
-      <Window width={700} height={600} theme="syndicate">
+      <Window width={1000} height={600} theme="ntos95">
         <Window.Content>
-          <Stack fill vertical>
+          <Stack fill p={0} m={0}>
             <Stack.Item>
               <Section fitted>
                 <Stack fill>
@@ -297,7 +306,7 @@ export class Uplink extends Component<any, UplinkState> {
                     </Stack.Item>
                   )}
                   {!!primary_objectives && (
-                    <Stack.Item grow={1}>
+                    <Stack.Item>
                       <Tabs fluid>
                         {primary_objectives && (
                           <Tabs.Tab
@@ -365,6 +374,7 @@ export class Uplink extends Component<any, UplinkState> {
                         act('buy', { ref: item.extraData.ref });
                       }
                     }}
+                    setSelectedItem ={(item: Item) => this.setState({selectedItem: item})}
                   />
                   {(shop_locked && !data.debug && (
                     <Dimmer>
@@ -383,7 +393,22 @@ export class Uplink extends Component<any, UplinkState> {
                 </>
               )}
             </Stack.Item>
+            <Stack.Item maxWidth="288px">
+               <Stack fill vertical>
+                <Stack.Item>
+                  <Image src={resolveAsset('nt_spin.gif')} width="288px" height="288px">
+
+                  </Image>
+                </Stack.Item>
+                <Stack.Item grow>
+                  <Section m={1} p={2} preserveWhitespace fontSize="16px">
+                    {selectedItem?.desc || '...'}
+                  </Section>
+                </Stack.Item>
+              </Stack>
+            </Stack.Item>
           </Stack>
+
         </Window.Content>
       </Window>
     );

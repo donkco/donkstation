@@ -33,7 +33,7 @@
 	else
 		. += "[p_Their()] cover is closed[locked ? "" : ", and looks unlocked"]."
 
-	if(cell && cell.charge <= 0)
+	if(cell && cell.charge())
 		. += span_warning("[p_Their()] battery indicator is blinking red!")
 
 	switch(stat)

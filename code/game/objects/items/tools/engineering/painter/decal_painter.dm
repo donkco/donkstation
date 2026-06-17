@@ -151,11 +151,9 @@
 	var/mob/living/silicon/robot/cyborg = user
 	if(!iscyborg(user) || !cyborg.cell)
 		return
-	if(cyborg.cell && cyborg.cell.charge > 0)
-		cyborg.cell.use(0.025 * STANDARD_CELL_CHARGE)
-	else if(cyborg.cell.charge <= 0)
+	if(cyborg.cell.charge() < 250 JOULES)
 		balloon_alert(user, "not enough energy!")
 		return
-
+	cyborg.cell.use(250 JOULES)
 /obj/item/airlock_painter/decal/cyborg/click_alt(mob/user)
 	return CLICK_ACTION_BLOCKING

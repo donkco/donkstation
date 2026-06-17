@@ -492,7 +492,7 @@
 	if (!cart.cell && !cart.is_hotrod())
 		return COMPONENT_DRIVER_BLOCK_MOVE
 	if (cart.cell)
-		if (cart.cell.charge <= 0)
+		if (!cart.cell.charge())
 			return COMPONENT_DRIVER_BLOCK_MOVE
 	if (get_turf(cart.child) == get_step(cart, direction))
 		cart.set_movedelay_effect(2)
@@ -506,7 +506,7 @@
 		return ..()
 	var/obj/vehicle/ridden/golfcart/cart = parent
 	if (cart.cell)
-		var/charge_to_use = min(cart.charge_per_move, cart.cell.charge)
+		var/charge_to_use = min(cart.charge_per_move, cart.cell.charge())
 		cart.cell.use(charge_to_use)
 	return ..()
 

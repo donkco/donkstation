@@ -45,7 +45,7 @@
 	disrupt(user)
 
 /obj/item/borg_chameleon/attack_self(mob/living/silicon/robot/user)
-	if (user && user.cell && user.cell.charge >  ACTIVATION_COST)
+	if (user && user.cell && user.cell.charge() >  ACTIVATION_COST)
 		if (isturf(user.loc))
 			toggle(user)
 		else

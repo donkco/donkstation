@@ -14,12 +14,14 @@ import {
 import type { BooleanLike } from 'tgui-core/react';
 
 import { useBackend } from '../../backend';
+import { useCurrentItemContext } from './useCurrentItem';
 
 type GenericUplinkProps = {
   currency?: string | React.JSX.Element;
   categories: string[];
   items: Item[];
   handleBuy: (item: Item) => void;
+  setSelectedItem: (item: Item | undefined) => void;
 };
 
 export const GenericUplink = (props: GenericUplinkProps) => {
@@ -27,8 +29,8 @@ export const GenericUplink = (props: GenericUplinkProps) => {
   const {
     currency = 'cr',
     categories,
-
     handleBuy,
+    setSelectedItem,
   } = props;
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
@@ -117,6 +119,7 @@ export const GenericUplink = (props: GenericUplinkProps) => {
               compactMode={searchText.length > 0 || compactMode}
               items={items}
               handleBuy={handleBuy}
+              setSelectedItem={setSelectedItem}
             />
           )}
         </Box>
@@ -143,18 +146,20 @@ export type ItemListProps = {
   items: Item[];
 
   handleBuy: (item: Item) => void;
+  setSelectedItem: (item: Item | undefined) => void;
 };
 
 const ItemList = (props: ItemListProps) => {
-  const { compactMode, items, handleBuy } = props;
+  const { compactMode, items, handleBuy, setSelectedItem} = props;
   const fallback = (
     <Icon m={compactMode ? '10px' : '26px'} name="spinner" spin />
   );
+
   return (
     <Section fill scrollable>
-      <Stack vertical mt={compactMode ? -0.5 : -1}>
+      <Tabs vertical mt={compactMode ? -0.5 : -1}>
         {items.map((item, index) => (
-          <Stack.Item key={index} mt={compactMode ? 0.5 : 1}>
+          <Tabs.Tab key={index} mt={compactMode ? 0.5 : 1} onClick={() => setSelectedItem(item)}>
             <Section key={item.name} fitted={!!compactMode}>
               <Stack>
                 <Stack.Item>
@@ -261,9 +266,9 @@ const ItemList = (props: ItemListProps) => {
                 </Stack.Item>
               </Stack>
             </Section>
-          </Stack.Item>
+          </Tabs.Tab>
         ))}
-      </Stack>
+      </Tabs>
     </Section>
   );
 };

@@ -552,7 +552,7 @@
 	var/list/cells_to_charge = list()
 	for(var/obj/item/charging in list(mod, suit, helmet, mask, storage))
 		var/obj/item/stock_parts/power_store/cell_charging = charging.get_cell()
-		if(!istype(cell_charging) || cell_charging.charge == cell_charging.maxcharge)
+		if(!istype(cell_charging) || cell_charging.is_fully_charged())
 			continue
 
 		cells_to_charge += cell_charging

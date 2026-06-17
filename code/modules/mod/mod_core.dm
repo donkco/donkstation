@@ -142,11 +142,11 @@
 
 /obj/item/mod/core/standard/charge_amount()
 	var/obj/item/stock_parts/power_store/charge_source = charge_source()
-	return charge_source?.charge || 0
+	return charge_source?.charge()|| 0
 
 /obj/item/mod/core/standard/max_charge_amount(amount)
 	var/obj/item/stock_parts/power_store/charge_source = charge_source()
-	return charge_source?.maxcharge || 1
+	return charge_source?.max_charge() || 1
 
 /obj/item/mod/core/standard/add_charge(amount)
 	var/obj/item/stock_parts/power_store/charge_source = charge_source()

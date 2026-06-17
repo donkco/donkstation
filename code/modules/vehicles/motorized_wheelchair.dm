@@ -84,7 +84,7 @@
 		canmove = FALSE
 		addtimer(VARSET_CALLBACK(src, canmove, TRUE), 2 SECONDS)
 		return FALSE
-	if(power_cell.charge < energy_usage / max(power_efficiency, 1))
+	if(power_cell.charge() < energy_usage / max(power_efficiency, 1))
 		to_chat(user, span_warning("The display on [src] blinks 'Out of Power'."))
 		canmove = FALSE
 		addtimer(VARSET_CALLBACK(src, canmove, TRUE), 2 SECONDS)
@@ -179,7 +179,7 @@
 		return
 	. += "Speed: [speed]"
 	. += "Energy efficiency: [power_efficiency]"
-	. += "Power: [display_energy(power_cell.charge)] out of [display_energy(power_cell.maxcharge)]"
+	. += "Power: [display_energy(power_cell.charge())] out of [display_energy(power_cell.max_charge())]"
 
 /obj/vehicle/ridden/wheelchair/motorized/Move(newloc, direct)
 	. = ..()
@@ -245,4 +245,4 @@
 	component_parts += GLOB.stock_part_datums[/datum/stock_part/capacitor]
 	component_parts += GLOB.stock_part_datums[/datum/stock_part/servo/tier2]
 	component_parts += GLOB.stock_part_datums[/datum/stock_part/servo]
-	power_cell = new /obj/item/stock_parts/power_store/cell/upgraded/plus(src)
+	power_cell = new /obj/item/stock_parts/power_store/cell/d(src)

@@ -135,7 +135,7 @@
 	ed_assembly.created_name = name
 	new /obj/item/assembly/prox_sensor(drop_location)
 	var/obj/item/gun/energy/disabler/disabler_gun = new(drop_location)
-	disabler_gun.cell.charge = 0
+	disabler_gun.cell.set_charge(0 JOULES)
 	disabler_gun.update_appearance()
 	if(prob(50))
 		new /obj/item/bodypart/leg/left/robot(drop_location)

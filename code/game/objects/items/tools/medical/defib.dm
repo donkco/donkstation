@@ -84,7 +84,7 @@
 
 /obj/item/defibrillator/proc/update_power()
 	if(!QDELETED(cell))
-		if(QDELETED(paddles) || cell.charge < paddles.revivecost)
+		if(QDELETED(paddles) || cell.charge() < paddles.revivecost)
 			powered = FALSE
 		else
 			powered = TRUE
@@ -102,7 +102,7 @@
 	if(powered && powered_state)
 		. += powered_state
 		if(!QDELETED(cell) && charge_state)
-			var/ratio = cell.charge / cell.maxcharge
+			var/ratio = cell.get_charge_ratio()
 			ratio = ceil(ratio*4) * 25
 			. += "[charge_state][ratio]"
 	if(!cell && nocell_state)
@@ -153,7 +153,7 @@
 		to_chat(user, span_warning("[src] already has a cell!"))
 		return ITEM_INTERACT_BLOCKING
 
-	if(new_cell.maxcharge < paddles.revivecost)
+	if(new_cell.max_charge()  < paddles.revivecost)
 		to_chat(user, span_notice("[src] requires a higher capacity cell."))
 		return ITEM_INTERACT_BLOCKING
 	if(!user.transferItemToLoc(new_cell, src))
@@ -222,7 +222,7 @@
 	if(QDELETED(cell))
 		return
 
-	if(cell.charge < (paddles.revivecost + chrgdeductamt))
+	if(cell.charge() < (paddles.revivecost + chrgdeductamt))
 		powered = FALSE
 	if(!cell.use(chrgdeductamt))
 		powered = FALSE
@@ -234,7 +234,7 @@
 
 /obj/item/defibrillator/proc/finish_charging()
 	if(cell)
-		if(cell.charge >= paddles.revivecost)
+		if(cell.charge() >= paddles.revivecost)
 			visible_message(span_notice("[src] beeps: Unit ready."))
 			playsound(src, 'sound/machines/defib/defib_ready.ogg', 50, FALSE)
 		else

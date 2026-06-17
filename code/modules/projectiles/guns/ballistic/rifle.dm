@@ -18,6 +18,7 @@
 	tac_reloads = FALSE
 	/// Does the bolt need to be open to interact with the gun (e.g. magazine interactions)?
 	var/need_bolt_lock_to_interact = FALSE
+	barrel_mount_position = vector(47, 17)
 
 /obj/item/gun/ballistic/rifle/rack(mob/user = null)
 	if (bolt_locked == FALSE)
@@ -141,6 +142,7 @@
 	worn_icon_state = "slopno"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/surplus
 	can_jam = TRUE
+	barrel_mount_position = vector(48, 17)
 
 /obj/item/gun/ballistic/rifle/boltaction/surplus/add_bayonet_point()
 	AddComponent(/datum/component/bayonet_attachable, offset_x = 41, offset_y = 14, bayonet_overlay = "bayonet_thin_surplus")
@@ -184,6 +186,7 @@
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/jezail
 	can_be_sawn_off = TRUE
 	sawn_desc = "A mass-manufactured bolt-action sporting rifle with a distinctively long barrel. Powerful enough to take down a space bear from a thousand paces. Its barrel has been cut off, so its power and accuracy have been impaired."
+	barrel_mount_position = vector(45, 17)
 
 /obj/item/gun/ballistic/rifle/boltaction/donkrifle/sawoff(mob/user) //the heavy price one pays for fitting this in a backpack
 	. = ..()
@@ -307,6 +310,7 @@
 	can_be_sawn_off = FALSE
 	trigger_guard = TRIGGER_GUARD_ALLOW_ALL
 	pb_knockback = 3
+	barrel_mount_position = vector(44, 16)
 
 	SET_BASE_PIXEL(-8, 0)
 
@@ -347,6 +351,7 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	weapon_weight = WEAPON_MEDIUM
 	semi_auto = TRUE
+	barrel_mount_position = vector(32, 16)
 
 	SET_BASE_PIXEL(0, 0)
 
@@ -393,6 +398,7 @@
 	var/guns_left = 30
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/enchanted
 	can_be_sawn_off = FALSE
+	barrel_mount_position = vector(47, 16)
 
 	SET_BASE_PIXEL(-8, 0)
 
@@ -450,10 +456,7 @@
 	mag_display = TRUE
 	tac_reloads = TRUE
 	rack_delay = 1 SECONDS
-	can_suppress = TRUE
-	can_unsuppress = TRUE
-	suppressor_x_offset = 3
-	suppressor_y_offset = 3
+	barrel_mount_position = vector(30, 31)
 
 /obj/item/gun/ballistic/rifle/sniper_rifle/examine(mob/user)
 	. = ..()
@@ -495,6 +498,7 @@
 	slot_flags = ITEM_SLOT_BACK
 	projectile_damage_multiplier = 0.5
 	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT * 8, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 5.5, /datum/material/cardboard = SHEET_MATERIAL_AMOUNT)
+	barrel_mount_position = vector(48, 17)
 
 	SET_BASE_PIXEL(-8, 0)
 
@@ -534,5 +538,4 @@
 	burst_size = 1
 	slot_flags = ITEM_SLOT_BACK
 	actions_types = list()
-	suppressor_x_offset = 3
-	suppressor_y_offset = 3
+	barrel_mount_position = vector(72, 17)

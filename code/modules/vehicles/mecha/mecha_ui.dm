@@ -81,8 +81,8 @@
 	data["name"] = name
 	data["integrity"] = atom_integrity
 	data["integrity_max"] = max_integrity
-	data["power_level"] = cell?.charge
-	data["power_max"] = cell?.maxcharge
+	data["power_level"] = cell?.charge()
+	data["power_max"] = cell?.max_charge()
 	data["mecha_flags"] = mecha_flags
 	data["internal_damage"] = internal_damage
 

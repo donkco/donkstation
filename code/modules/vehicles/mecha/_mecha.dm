@@ -357,7 +357,7 @@
 		if(cell)
 			WR.crowbar_salvage += cell
 			cell.forceMove(WR)
-			cell.use(rand(0, cell.charge), TRUE)
+			cell.use(rand(0, cell.charge()), TRUE)
 			cell = null
 	return ..()
 
@@ -675,7 +675,7 @@
 		spark_system.start()
 		var/damage_energy_consumption = 0.005 * STANDARD_CELL_CHARGE * seconds_per_tick
 		use_energy(damage_energy_consumption)
-		cell.maxcharge -= min(damage_energy_consumption, cell.maxcharge)
+		cell.set_maxcharge(cell.max_charge() - min(damage_energy_consumption, cell.max_charge()))
 
 /obj/vehicle/sealed/mecha/proc/process_cabin_air(seconds_per_tick)
 	if(!(internal_damage & MECHA_INT_TEMP_CONTROL) && cabin_air && cabin_air.return_volume() > 0)
@@ -696,8 +696,8 @@
 		if(!(mecha_flags & IS_ENCLOSED) && occupant?.incapacitated) //no sides mean it's easy to just sorta fall out if you're incapacitated.
 			mob_exit(occupant, randomstep = TRUE) //bye bye
 			continue
-		if(cell && cell.maxcharge)
-			var/cellcharge = cell.charge/cell.maxcharge
+		if(cell && cell.max_charge())
+			var/cellcharge = cell.get_charge_ratio()
 			switch(cellcharge)
 				if(0.75 to INFINITY)
 					occupant.clear_alert(ALERT_CHARGE)

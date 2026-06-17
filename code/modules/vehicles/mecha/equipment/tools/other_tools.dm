@@ -362,7 +362,7 @@
 		return PROCESS_KILL
 	//how much fuel are we using per tick
 	var/fuel_usage_rate = fuelrate_idle
-	if(current_charge < chassis.cell.maxcharge)
+	if(current_charge < chassis.cell.max_charge())
 		fuel_usage_rate = fuelrate_active
 		chassis.give_power(rechargerate * seconds_per_tick)
 	fuel.amount -= min(seconds_per_tick * fuel_usage_rate / SHEET_MATERIAL_AMOUNT, fuel.amount)

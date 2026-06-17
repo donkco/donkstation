@@ -116,7 +116,7 @@
  *   - 3: Sets the APCs channel to be [APC_CHANNEL_AUTO_ON]. If the APC doesn't have enough power this defaults to [APC_CHANNEL_AUTO_OFF] instead.
  */
 /obj/machinery/power/apc/proc/setsubsystem(val)
-	if(cell && cell.charge > 0)
+	if(cell && cell.charge())
 		return (val == 1) ? APC_CHANNEL_OFF : val
 	if(val == 3)
 		return APC_CHANNEL_AUTO_OFF

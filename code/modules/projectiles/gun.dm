@@ -43,11 +43,8 @@
 	var/dry_fire_sound_volume = 30
 	/// Whether or not a message is displayed when fired
 	var/suppressed = SUPPRESSED_NONE
-	var/can_suppress = FALSE
 	var/suppressed_sound = 'sound/items/weapons/gun/general/heavy_shot_suppressed.ogg'
 	var/suppressed_volume = 60
-	/// Whether a gun can be unsuppressed. for ballistics, also determines if it generates a suppressor overlay
-	var/can_unsuppress = TRUE
 
 	var/clumsy_check = TRUE
 	var/obj/item/ammo_casing/chambered = null
@@ -113,6 +110,11 @@
 	/// What this gun says when it's gonna shoot inside mail.
 	var/about_to_shoot_inside_mail_text = "Its trigger is already pulled!"
 
+	/// barrel_attachment
+	var/obj/item/gun_attachment/barrel_attachment = null
+	/// the offset for the barrel attachment, used to position the attachment sprite correctly.
+	var/vector/barrel_mount_position = vector(30, 18)
+
 	/// Cooldown for the visible message sent from gun flipping.
 	COOLDOWN_DECLARE(flip_cooldown)
 
@@ -121,6 +123,10 @@
 	if(ispath(pin))
 		pin = new pin
 		pin.gun_insert(new_gun = src, starting = TRUE)
+
+	if(ispath(barrel_attachment))
+		barrel_attachment = new barrel_attachment(src)
+		barrel_attachment.attach(src)
 
 	add_seclight_point()
 	add_bayonet_point()
@@ -144,6 +150,36 @@
 	projectile_damage_multiplier = reset_fantasy_variable("projectile_damage_multiplier", projectile_damage_multiplier)
 	return ..()
 
+
+/obj/item/gun/update_overlays()
+	. = ..()
+	if(barrel_attachment)
+		var/mutable_appearance/attachment_overlay = mutable_appearance(barrel_attachment.icon, "[barrel_attachment.icon_state]")
+		attachment_overlay.set_pixel_offset(barrel_mount_position - barrel_attachment.attachment_point)
+		. += attachment_overlay
+
+
+/obj/item/gun/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	. = ..()
+	if(istype(tool, /obj/item/gun_attachment))
+		if(barrel_attachment)
+			to_chat(user, "Your gun already has a barrel attachment.")
+			return ITEM_INTERACT_BLOCKING
+		if(!can_attach(tool) || !user.transferItemToLoc(tool, src))
+			to_chat(user, "You can't attach that to your gun.")
+			return ITEM_INTERACT_BLOCKING
+
+		barrel_attachment = tool
+		barrel_attachment.attach(src)
+		to_chat(user, "You attach [tool] to your [src].")
+		balloon_alert(user, "[tool.name] attached")
+		update_appearance()
+		return ITEM_INTERACT_SUCCESS
+
+/// Check an attachment for compatibility with this gun. returns TRUE / FALSE
+/obj/item/gun/proc/can_attach(obj/item/gun_attachment/attachment)
+	return FALSE
+
 /// Handles adding [the seclite mount component][/datum/component/seclite_attachable] to the gun.
 /// If the gun shouldn't have a seclight mount, override this with a return.
 /// Or, if a child of a gun with a seclite mount has slightly different behavior or icons, extend this.
@@ -160,13 +196,9 @@
 		pin = null
 	if(gone == chambered)
 		chambered = null
-		update_appearance()
-
-/// Clears var and updates icon.
-/obj/item/gun/proc/clear_suppressor()
-	if(!can_unsuppress)
-		return
-	suppressed = SUPPRESSED_NONE
+	if(gone == barrel_attachment)
+		barrel_attachment.detach(src)
+		barrel_attachment = null
 	update_appearance()
 
 /obj/item/gun/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
@@ -188,6 +220,9 @@
 
 /obj/item/gun/examine(mob/user)
 	. = ..()
+	if(barrel_attachment)
+		. += "It has a [barrel_attachment.name] that can be removed with <b>alt+click</b>."
+
 	if(!pinless)
 		if(pin)
 			. += "It has \a [pin] installed."
@@ -609,22 +644,6 @@
 /obj/item/gun/proc/reset_fire_cd()
 	fire_cd = FALSE
 
-/obj/item/gun/screwdriver_act(mob/living/user, obj/item/I)
-	. = ..()
-	if(.)
-		return
-	if(!user.can_perform_action(src, FORBID_TELEKINESIS_REACH))
-		return
-	if(pin?.pin_removable && user.is_holding(src))
-		user.visible_message(span_warning("[user] attempts to remove [pin] from [src] with [I]."),
-		span_notice("You attempt to remove [pin] from [src]. (It will take [DisplayTimeText(FIRING_PIN_REMOVAL_DELAY)].)"), null, 3)
-		if(I.use_tool(src, user, FIRING_PIN_REMOVAL_DELAY, volume = 50))
-			if(!pin) //check to see if the pin is still there, or we can spam messages by clicking multiple times during the tool delay
-				return
-			user.visible_message(span_notice("[pin] is pried out of [src] by [user], destroying the pin in the process."),
-								span_warning("You pry [pin] out with [I], destroying the pin in the process."), null, 3)
-			QDEL_NULL(pin)
-			return ITEM_INTERACT_SUCCESS
 
 /obj/item/gun/welder_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -716,6 +735,7 @@
 
 //Happens before the actual projectile creation
 /obj/item/gun/proc/before_firing(atom/target,mob/user)
+	SEND_SIGNAL(src, COMSIG_GUN_PREFIRE, target, user)
 	return
 
 /obj/item/gun/proc/on_mail_unwrap(atom/source, mob/user, obj/item/mail/traitor/letter)
@@ -733,6 +753,14 @@
 	if(process_fire(user, user, FALSE, zone_override = BODY_ZONE_HEAD))
 		forceMove(user.loc)
 		throw_at(pick(get_step(user, user.dir)), 1, 3)
+
+/obj/item/gun/click_alt(mob/user)
+	if(!user.is_holding(src))
+		return CLICK_ACTION_BLOCKING
+	balloon_alert(user, "[barrel_attachment.name] removed")
+	barrel_attachment.detach(src)
+	user.put_in_hands(barrel_attachment)
+	return CLICK_ACTION_SUCCESS
 
 #undef FIRING_PIN_REMOVAL_DELAY
 #undef DUALWIELD_PENALTY_EXTRA_MULTIPLIER

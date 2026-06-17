@@ -342,7 +342,7 @@
 	if (!engine)
 		var/power = 0
 		if (cell)
-			power = floor(cell.charge / cell.maxcharge * 100)
+			power = floor(cell.percent())
 		. += span_info("It is currently is at [power]% charge.")
 	if (hood_open)
 		. += span_warning("The hood is open!")

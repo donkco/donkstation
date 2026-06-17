@@ -1,0 +1,1 @@
+#define COLOR_INFRARED "#ff00008e"

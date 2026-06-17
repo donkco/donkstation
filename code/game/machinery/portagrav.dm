@@ -169,7 +169,7 @@
 		if(!isnull(user))
 			balloon_alert(user, "not anchored!")
 		return FALSE
-	if((!wire_mode && cell?.charge < draw_per_range * range) || (wire_mode && surplus() < draw_per_range * range))
+	if((!wire_mode && cell?.charge() < draw_per_range * range) || (wire_mode && surplus() < draw_per_range * range))
 		if(!isnull(user))
 			balloon_alert(user, "not enough power!")
 		return FALSE
@@ -216,7 +216,7 @@
 /obj/machinery/power/portagrav/ui_data(mob/user)
 	. = list()
 	if(!isnull(cell))
-		.["percentage"] = (cell.charge / cell.maxcharge) * 100
+		.["percentage"] = cell.percent()
 	.["gravity"] = grav_strength
 	.["range"] = range
 	.["maxrange"] = max_range

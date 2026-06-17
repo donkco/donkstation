@@ -93,7 +93,7 @@
 	if(!on)
 		return PROCESS_KILL
 
-	if((!cell || cell.charge <= 0) && !anchored)
+	if((!cell || !cell.charge()) && !anchored)
 		on = FALSE
 		update_appearance(UPDATE_ICON)
 		return PROCESS_KILL

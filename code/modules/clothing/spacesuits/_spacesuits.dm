@@ -299,7 +299,7 @@
 	// If we're turning thermal protection on, check for valid cell and for enough
 	// charge that cell. If it's too low, we shouldn't bother with setting the
 	// thermal protection value and should just return out early.
-	if(!thermal_on && (!cell || cell.charge < THERMAL_REGULATOR_COST))
+	if(!thermal_on && (!cell || cell.charge() < THERMAL_REGULATOR_COST))
 		if(toggler)
 			to_chat(toggler, span_warning("The thermal regulator on [src] has no charge."))
 		return
@@ -350,7 +350,7 @@
 	// Check if there's enough charge to trigger a thermal regulator tick and
 	// if there is, whethere the cell's capacity indicates high, medium or low
 	// charge based on it.
-	if(cell.charge < THERMAL_REGULATOR_COST)
+	if(cell.charge()< THERMAL_REGULATOR_COST)
 		spacesuit_hud.update_spacesuit_hud_icon(SPACESUIT_CELL_EMPTY, cell_percent, thermal_on)
 		return
 	switch(cell_percent)

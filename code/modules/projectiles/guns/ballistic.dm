@@ -104,10 +104,7 @@
 	///Whether we need to hold the gun in our off-hand to load it. FALSE means we can load it literally anywhere. Important for weapons like bows.
 	var/must_hold_to_load = FALSE
 	///Whether the gun can be sawn off by sawing tools
-	var/can_be_sawn_off = FALSE
-	var/suppressor_x_offset ///pixel offset for the suppressor overlay on the x axis.
-	var/suppressor_y_offset ///pixel offset for the suppressor overlay on the y axis.
-	/// Check if you are able to see if a weapon has a bullet loaded in or not.
+	var/can_be_sawn_off = FALSE	/// Check if you are able to see if a weapon has a bullet loaded in or not.
 	var/hidden_chambered = FALSE
 
 	// Gun internal magazine modification and misfiring
@@ -141,8 +138,6 @@
 	var/burst_fire_selection = FALSE
 	/// If it has an icon for a selector switch indicating current firemode.
 	var/selector_switch_icon = FALSE
-	/// Suppressor attached to the gun, if any
-	var/obj/item/suppressor/suppressor = null
 	/// Sound played when the burst mode is changed
 	var/burst_select_sound = SFX_FIRE_MODE_SWITCH
 
@@ -167,13 +162,8 @@
 
 /obj/item/gun/ballistic/Destroy()
 	QDEL_NULL(magazine)
-	QDEL_NULL(suppressor)
+	QDEL_NULL(barrel_attachment)
 	return ..()
-
-/obj/item/gun/ballistic/Exited(atom/movable/gone, direction)
-	. = ..()
-	if(gone == suppressor)
-		clear_suppressor()
 
 /obj/item/gun/ballistic/add_weapon_description()
 	AddElement(/datum/element/weapon_description, attached_proc = PROC_REF(add_notes_ballistic))
@@ -210,7 +200,7 @@
 
 /obj/item/gun/ballistic/vv_edit_var(vname, vval)
 	. = ..()
-	if(vname in list(NAMEOF(src, suppressor_x_offset), NAMEOF(src, suppressor_y_offset), NAMEOF(src, internal_magazine), NAMEOF(src, magazine), NAMEOF(src, chambered), NAMEOF(src, empty_indicator), NAMEOF(src, sawn_off), NAMEOF(src, bolt_locked), NAMEOF(src, bolt_type)))
+	if(vname in list(NAMEOF(src, internal_magazine), NAMEOF(src, magazine), NAMEOF(src, chambered), NAMEOF(src, empty_indicator), NAMEOF(src, sawn_off), NAMEOF(src, bolt_locked), NAMEOF(src, bolt_type)))
 		update_appearance()
 
 /obj/item/gun/ballistic/update_icon_state()
@@ -231,14 +221,6 @@
 			. += "[icon_state]_bolt[bolt_locked ? "_locked" : ""]"
 		if (bolt_type == BOLT_TYPE_OPEN && bolt_locked)
 			. += "[icon_state]_bolt"
-
-	if(suppressed && can_unsuppress) // if it can't be unsuppressed, we assume the suppressor is integrated into the gun itself and don't generate an overlay
-		var/mutable_appearance/MA = mutable_appearance(icon, "[icon_state]_suppressor")
-		if(suppressor_x_offset)
-			MA.pixel_w = suppressor_x_offset
-		if(suppressor_y_offset)
-			MA.pixel_z = suppressor_y_offset
-		. += MA
 
 	if(!chambered && empty_indicator) //this is duplicated in c20's update_overlayss due to a layering issue with the select fire icon.
 		. += "[icon_state]_empty"
@@ -532,27 +514,6 @@
 				return ITEM_INTERACT_SUCCESS
 			return ITEM_INTERACT_FAILURE
 
-	if(istype(tool, /obj/item/suppressor))
-		if(!can_suppress)
-			balloon_alert(user, "[tool.name] doesn't fit!")
-			return ITEM_INTERACT_FAILURE
-
-		if(!user.is_holding(src))
-			balloon_alert(user, "not in hand!")
-			return ITEM_INTERACT_FAILURE
-
-		if(suppressed)
-			balloon_alert(user, "already has a suppressor!")
-			return ITEM_INTERACT_FAILURE
-
-		if(!user.transferItemToLoc(tool, src))
-			balloon_alert(user, "cannot attach!")
-			return ITEM_INTERACT_FAILURE
-
-		balloon_alert(user, "[tool.name] attached")
-		install_suppressor(tool)
-		return ITEM_INTERACT_SUCCESS
-
 	if (can_be_sawn_off && sawoff(user, tool))
 		return ITEM_INTERACT_SUCCESS
 
@@ -601,34 +562,6 @@
 		misfire_probability += chambered.misfire_increment
 		misfire_probability = clamp(misfire_probability, 0, misfire_probability_cap)
 	return ..()
-
-///Installs a new suppressor, assumes that the suppressor is already in the contents of src
-/obj/item/gun/ballistic/proc/install_suppressor(obj/item/suppressor/new_suppressor)
-	suppressor = new_suppressor
-	suppressed = suppressor.suppression
-	update_weight_class(w_class + suppressor.w_class) //so pistols do not fit in pockets when suppressed
-	can_muzzle_flash = FALSE
-	update_appearance()
-
-/obj/item/gun/ballistic/clear_suppressor()
-	if(!can_unsuppress)
-		return
-	suppressed = SUPPRESSED_NONE
-	if(suppressor)
-		update_weight_class(w_class - suppressor.w_class)
-		suppressor = null
-	can_muzzle_flash = initial(can_muzzle_flash)
-	update_appearance()
-
-/obj/item/gun/ballistic/click_alt(mob/user)
-	if(!suppressed || !can_unsuppress)
-		return CLICK_ACTION_BLOCKING
-	if(!user.is_holding(src))
-		return CLICK_ACTION_BLOCKING
-	balloon_alert(user, "[suppressor.name] removed")
-	user.put_in_hands(suppressor)
-	clear_suppressor()
-	return CLICK_ACTION_SUCCESS
 
 ///Prefire empty checks for the bolt drop
 /obj/item/gun/ballistic/proc/prefire_empty_checks()
@@ -706,8 +639,6 @@
 		. += "It does not seem to have a round chambered."
 	if (bolt_locked)
 		. += "The [bolt_wording] is locked back and needs to be released before firing or de-fouling."
-	if (suppressor)
-		. += "It has a suppressor [can_unsuppress ? "attached that can be removed with <b>alt+click</b>." : "that is integral or can't otherwise be removed."]"
 	if(can_misfire)
 		. += span_danger("You get the feeling this might explode if you fire it...")
 		if(misfire_probability > 0)

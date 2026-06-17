@@ -95,12 +95,11 @@
 ///The gun we put into the spywatch, so we can use it to actually fire the weapon
 /obj/item/gun/ballistic/spywatch
 	dry_fire_sound = 'sound/items/weapons/gun/pistol/dry_fire.ogg'
-	suppressed_sound = 'sound/items/weapons/gun/pistol/shot_suppressed.ogg'
+	suppressed_sound = 'sound/items/weapons/gun/general/tiny_suppressed_shot.ogg'
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/spywatch
 	spawnwithmagazine = TRUE
 	tac_reloads = FALSE
 	bolt_type = BOLT_TYPE_NO_BOLT
-	can_unsuppress = FALSE
 	suppressed = SUPPRESSED_VERY
 	pinless = TRUE
 	internal_magazine = TRUE

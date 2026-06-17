@@ -570,7 +570,7 @@
 
 	if(istype(item_to_drop, /obj/item/stock_parts/power_store/cell))
 		var/obj/item/stock_parts/power_store/cell/dropped_cell = item_to_drop
-		dropped_cell.charge = 0
+		dropped_cell.set_charge(0 JOULES)
 
 	else if(istype(item_to_drop, /obj/item/storage))
 		var/obj/item/storage/storage_to_drop = item_to_drop
@@ -578,7 +578,7 @@
 
 	else if(istype(item_to_drop, /obj/item/gun/energy))
 		var/obj/item/gun/energy/dropped_gun = item_to_drop
-		dropped_gun.cell.charge = 0
+		dropped_gun.cell.set_charge(0 JOULES)
 		dropped_gun.update_appearance()
 
 //Generalized behavior code, override where needed!

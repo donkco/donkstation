@@ -5,11 +5,13 @@
 	inhand_icon_state = "musket"
 	worn_icon_state = "las_musket"
 	ammo_type = list(/obj/item/ammo_casing/energy/laser/musket)
+	cell_type = /obj/item/stock_parts/power_store/cell/supercap
 	slot_flags = ITEM_SLOT_BACK
 	obj_flags = UNIQUE_RENAME
 	weapon_weight = WEAPON_HEAVY
 	custom_materials = list(/datum/material/wood = SHEET_MATERIAL_AMOUNT * 8, /datum/material/glass = SHEET_MATERIAL_AMOUNT * 1.2, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 1.2)
 	light_color = COLOR_PURPLE
+	barrel_mount_position = vector(31, 18)
 
 /obj/item/gun/energy/laser/musket/add_bayonet_point()
 	AddComponent(/datum/component/bayonet_attachable, offset_x = 22, offset_y = 11)
@@ -19,7 +21,7 @@
 	AddComponent( \
 		/datum/component/crank_recharge, \
 		charging_cell = get_cell(), \
-		charge_amount = STANDARD_CELL_CHARGE * 0.5, \
+		charge_amount = AAA_CELL_CHARGE * 0.5, \
 		cooldown_time = 2 SECONDS, \
 		charge_sound = 'sound/items/weapons/laser_crank.ogg', \
 		charge_sound_cooldown_time = 1.8 SECONDS, \
@@ -176,7 +178,7 @@
 	AddComponent( \
 		/datum/component/crank_recharge, \
 		charging_cell = get_cell(), \
-		charge_amount = LASER_SHOTS(6, STANDARD_CELL_CHARGE), \
+		charge_amount = LASER_SHOTS(6, AAA_CELL_CHARGE), \
 		cooldown_time = 0.4 SECONDS, \
 		charge_sound = 'sound/machines/clockcult/integration_cog_install.ogg', \
 		charge_sound_cooldown_time = 3 SECONDS, \

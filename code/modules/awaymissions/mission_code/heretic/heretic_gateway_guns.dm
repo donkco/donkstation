@@ -27,12 +27,16 @@
 	accepted_magazine_type = /obj/item/ammo_box/magazine/napad
 	fire_sound = 'sound/items/weapons/gun/rifle/smg_heavy.ogg'
 	fire_sound_volume = 80
-	can_suppress = FALSE
 	burst_size = 1
 	fire_delay = 0.55 SECONDS
 	actions_types = list()
 	projectile_wound_bonus = -10
 	projectile_damage_multiplier = 0.65
+
+/obj/item/gun/ballistic/automatic/napad/can_attach(obj/item/gun_attachment/attachment)
+	if(istype(attachment, /obj/item/gun_attachment/suppressor))
+		return TRUE
+	return ..()
 
 /obj/item/gun/ballistic/automatic/napad/no_mag
 	spawnwithmagazine = FALSE

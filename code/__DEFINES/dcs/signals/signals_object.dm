@@ -384,6 +384,8 @@
 	#define COMPONENT_CANCEL_SAWING_OFF (1<<0)
 #define COMSIG_GUN_SAWN_OFF "gun_sawn_off"
 
+#define COMSIG_GUN_PREFIRE "gun_prefire"
+
 ///called in /obj/item/firing_pin/proc/gun_insert(mob/living/user, obj/item/gun/new_gun, starting): (obj/item/firing_pin/pin, mob/living/user, starting)
 #define COMSIG_GUN_PIN_INSERTED "gun_pin_inserted"
 

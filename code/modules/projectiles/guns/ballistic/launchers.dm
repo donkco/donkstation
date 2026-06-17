@@ -85,7 +85,6 @@
 	fire_sound = 'sound/items/weapons/gun/general/rocket_launch.ogg'
 	slot_flags = ITEM_SLOT_BACK
 	w_class = WEIGHT_CLASS_BULKY
-	can_suppress = FALSE
 	pin = /obj/item/firing_pin/implant/pindicate
 	burst_size = 1
 	fire_delay = 0 SECONDS
@@ -104,6 +103,9 @@
 	. = ..()
 	if(backblast)
 		AddElement(/datum/element/backblast)
+
+/obj/item/gun/ballistic/rocketlauncher/can_attach(obj/item/gun_attachment/attachment)
+	return FALSE
 
 /obj/item/gun/ballistic/rocketlauncher/unrestricted
 	desc = "A reusable rocket propelled grenade launcher. An arrow pointing toward the front of the launcher \

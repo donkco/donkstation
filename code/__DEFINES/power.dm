@@ -20,18 +20,45 @@
 #define JOULES * JOULE
 
 ///The capacity of a standard power cell
-#define STANDARD_CELL_VALUE (10 KILO)
+#define STANDARD_CELL_VALUE (15 KILO)
 	///The amount of energy, in joules, a standard powercell has.
-	#define STANDARD_CELL_CHARGE (STANDARD_CELL_VALUE JOULES) // 10 KJ.
+	#define STANDARD_CELL_CHARGE (STANDARD_CELL_VALUE JOULES) // 15 KJ.
 	///The amount of power, in watts, a standard powercell can give.
-	#define STANDARD_CELL_RATE (STANDARD_CELL_VALUE WATTS) // 10 KW.
+	#define STANDARD_CELL_RATE (STANDARD_CELL_VALUE WATTS) // 15 KW.
+
+
+#define BUTTON_CELL_CHARGE (2.2 KILO JOULES)
+#define AAA_CELL_CHARGE (6.4 KILO JOULES)
+ ///Roughly the amount of energy contained in good akaline / NiMh  AA battery
+#define AA_CELL_CHARGE (STANDARD_CELL_CHARGE)
+#define NINE_VOLT_CHARGE (40 KILO JOULES)
+#define D_CELL_CHARGE (65 KILO JOULES)
+#define BA5800_CELL_CHARGE (140 KILO JOULES)
+#define TOOL_PACK_CHARGE (250 KILO JOULES)
+#define BLUESPACE_CELL_CHARGE (400 KILO JOULES)
 
 /// Capacity of a standard battery
 #define STANDARD_BATTERY_VALUE (STANDARD_CELL_VALUE * 100)
 	/// The amount of energy, in joules, a standard battery has.
-	#define STANDARD_BATTERY_CHARGE (STANDARD_BATTERY_VALUE JOULES) // 1 MJ
+	#define STANDARD_BATTERY_CHARGE (STANDARD_BATTERY_VALUE JOULES) // 1.5 MJ
 	/// The amount of energy, in watts, a standard battery can give.
-	#define STANDARD_BATTERY_RATE (STANDARD_BATTERY_VALUE WATTS) // 1 MW
+	#define STANDARD_BATTERY_RATE (STANDARD_BATTERY_VALUE WATTS) // 1.5 MW
+
+//Physical cell size formats
+
+#define CELL_SIZE_BUTTON (1 << 0)
+#define CELL_SIZE_AAA (1 <<1)
+#define CELL_SIZE_AA (1 << 2)
+#define CELL_SIZE_NINE_VOLT (1 << 3)
+#define CELL_SIZE_D (1 << 4)
+#define CELL_SIZE_BA5800 (1 << 5)
+#define CELL_SIZE_TOOL (1 << 6)
+#define CELL_SIZE_LARGE (1 << 7)
+#define CELL_SIZE_HUGE (1 << 8)
+///Power Consumption rates.
+///How much power emergency lights will draw. (joules per second = wattsp)
+#define LIGHT_EMERGENCY_POWER_USE (4 WATTS)
+
 
 // Converts cable layer to its human readable name
 GLOBAL_LIST_INIT(cable_layer_to_name, list(

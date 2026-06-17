@@ -542,7 +542,7 @@ GLOBAL_LIST_INIT(blacklisted_borg_hats, typecacheof(list( //Hats that don't real
 	var/obj/item/shield_module/shield = locate() in borg
 	if(!shield)
 		return ..()
-	if(borg.cell.charge <= 0.4 * STANDARD_CELL_CHARGE)
+	if(borg.cell.charge() <= 0.4 * STANDARD_CELL_CHARGE)
 		balloon_alert(borg, "not enough energy!")
 		if(shield.active)
 			shield.active = FALSE

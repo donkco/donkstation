@@ -174,7 +174,7 @@
 		var/charge_amount = 0.05 * STANDARD_CELL_CHARGE
 		if(target.mind?.holy_role == HOLY_ROLE_HIGHPRIEST)
 			charge_amount *= 2
-		R.cell?.charge += charge_amount
+		R.cell?.give(charge_amount)
 		R.visible_message(span_notice("[chap] charges [R] with the power of [GLOB.deity]!"))
 		to_chat(R, span_boldnotice("You are charged by the power of [GLOB.deity]!"))
 		R.add_mood_event("blessing", /datum/mood_event/blessing)

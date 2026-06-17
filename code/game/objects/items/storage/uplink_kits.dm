@@ -892,7 +892,7 @@
 	new /obj/item/clothing/shoes/sandal(src)
 
 
-/obj/item/storage/box/syndicate/spywatch_kit
+/obj/item/storage/box/ntraitor/spywatch_kit
 	name = "A spywatch kit"
 	desc = "A box containing a spywatch and its ammo."
 

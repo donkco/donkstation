@@ -51,7 +51,7 @@ ADMIN_VERB(borg_panel, R_ADMIN, "Show Borg Panel", ADMIN_VERB_NO_DESCRIPTION, AD
 		if (k == RADIO_CHANNEL_COMMON)
 			continue
 		.["channels"] += list(list("name" = k, "installed" = (k in borg.radio.channels)))
-	.["cell"] = borg.cell ? list("missing" = FALSE, "maxcharge" = borg.cell.maxcharge, "charge" = borg.cell.charge) : list("missing" = TRUE, "maxcharge" = 1, "charge" = 0)
+	.["cell"] = borg.cell ? list("missing" = FALSE, "maxcharge" = borg.cell.max_charge(), "charge" = borg.cell.charge()) : list("missing" = TRUE, "maxcharge" = 1, "charge" = 0)
 	.["modules"] = list()
 	for(var/model_type in typesof(/obj/item/robot_model))
 		var/obj/item/robot_model/model = model_type
@@ -70,12 +70,12 @@ ADMIN_VERB(borg_panel, R_ADMIN, "Show Borg Panel", ADMIN_VERB_NO_DESCRIPTION, AD
 		return
 	switch (action)
 		if ("set_charge")
-			var/newcharge = tgui_input_number(usr, "Set new charge", borg.name, borg.cell.charge, borg.cell.maxcharge)
+			var/newcharge = tgui_input_number(usr, "Set new charge", borg.name, borg.cell.charge(), borg.cell.max_charge() )
 			if(isnull(newcharge))
 				return
-			borg.cell.charge = newcharge
-			message_admins("[key_name_admin(user)] set the charge of [ADMIN_LOOKUPFLW(borg)] to [borg.cell.charge].")
-			log_silicon("[key_name(user)] set the charge of [key_name(borg)] to [borg.cell.charge].")
+			borg.cell.set_charge(newcharge)
+			message_admins("[key_name_admin(user)] set the charge of [ADMIN_LOOKUPFLW(borg)] to [newcharge]J.")
+			log_silicon("[key_name(user)] set the charge of [key_name(borg)] to [newcharge]J.")
 		if ("remove_cell")
 			QDEL_NULL(borg.cell)
 			message_admins("[key_name_admin(user)] deleted the cell of [ADMIN_LOOKUPFLW(borg)].")
@@ -89,7 +89,7 @@ ADMIN_VERB(borg_panel, R_ADMIN, "Show Borg Panel", ADMIN_VERB_NO_DESCRIPTION, AD
 					QDEL_NULL(borg.cell)
 				var/new_cell = new chosen(borg)
 				borg.cell = new_cell
-				borg.cell.charge = borg.cell.maxcharge
+				borg.cell.set_charge(borg.cell.max_charge())
 				borg.diag_hud_set_borgcell()
 				message_admins("[key_name_admin(user)] changed the cell of [ADMIN_LOOKUPFLW(borg)] to [new_cell].")
 				log_silicon("[key_name(user)] changed the cell of [key_name(borg)] to [new_cell].")

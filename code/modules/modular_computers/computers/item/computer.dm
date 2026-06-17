@@ -648,7 +648,7 @@
 	data["PC_device_theme"] = device_theme
 
 	if(internal_cell)
-		data["PC_lowpower_mode"] = !internal_cell.charge
+		data["PC_lowpower_mode"] = !internal_cell.charge()
 		switch(internal_cell.percent())
 			if(80 to INFINITY)
 				data["PC_batteryicon"] = "batt_100.gif"
@@ -817,7 +817,7 @@
  * It is separated from ui_act() to be overwritten as needed.
 */
 /obj/item/modular_computer/proc/toggle_flashlight(mob/user)
-	if(!has_light || !internal_cell?.charge)
+	if(!has_light || !internal_cell?.charge())
 		return FALSE
 	if(!COOLDOWN_FINISHED(src, disabled_time))
 		if(user)

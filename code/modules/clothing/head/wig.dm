@@ -10,6 +10,8 @@
 	color = COLOR_BLACK
 	var/hairstyle = "Very Long Hair"
 	var/adjustablecolor = TRUE //can color be changed manually?
+	var/adjustablehairstyle = TRUE //can hairstyle be changed manually?
+	SET_BASE_PIXEL(0, -8)
 
 /obj/item/clothing/head/wig/Initialize(mapload)
 	. = ..()
@@ -50,7 +52,9 @@
 	hair_overlay.overlays += emissive_blocker(hair_overlay.icon, hair_overlay.icon_state, src, alpha = hair_overlay.alpha)
 
 /obj/item/clothing/head/wig/attack_self(mob/user)
-	var/new_style = tgui_input_list(user, "Select a hairstyle", "Wig Styling", SSaccessories.hairstyles_list - "Bald")
+	if(!(adjustablehairstyle || adjustablecolor))
+		return
+	var/new_style = adjustablehairstyle ? tgui_input_list(user, "Select a hairstyle", "Wig Styling", SSaccessories.hairstyles_list - "Bald") : null
 	var/newcolor = adjustablecolor ? tgui_color_picker(usr,"","Choose Color",color) : null
 	if(!user.can_perform_action(src))
 		return

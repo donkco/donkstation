@@ -14,6 +14,11 @@
 
 #define UPLINK_LONE_OP (1 << 4)
 
+#define UPLINK_NTRAITORS (1 << 5)
+
+
+/// A blanket define for an item being purchasable by all types of syndie
+#define UPLINK_ALL_SYNDIE (UPLINK_TRAITORS | UPLINK_NUKE_OPS | UPLINK_LONE_OP | UPLINK_CLOWN_OPS)
 /// A blanket define for an item being purchasable by all types of nukie
 #define UPLINK_ALL_SYNDIE_OPS (UPLINK_NUKE_OPS | UPLINK_LONE_OP | UPLINK_CLOWN_OPS)
 

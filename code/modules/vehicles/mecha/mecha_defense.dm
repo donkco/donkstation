@@ -177,7 +177,7 @@
 	var/mecha_explodies_vulnerability = (severity * capacitor.rating) //The more severe the EMP, the worse the outcome. The higher the tier of the capacitor, the less severe the outcome.
 
 	if(get_charge())
-		use_energy(round((cell.maxcharge / 2) / mecha_explodies_vulnerability, 1))
+		use_energy(round((cell.max_charge() / 2) / mecha_explodies_vulnerability, 1))
 
 	var/how_hard_are_we_explodies = rand(MECH_EMP_DAMAGE_LOWER, MECH_EMP_DAMAGE_UPPER)
 	take_damage(how_hard_are_we_explodies / mecha_explodies_vulnerability, BURN)
@@ -462,7 +462,7 @@
 /obj/vehicle/sealed/mecha/proc/full_repair(charge_cell)
 	repair_damage(max_integrity)
 	if(cell && charge_cell)
-		cell.charge = cell.maxcharge
+		cell.set_charge(cell.max_charge())
 		diag_hud_set_mechcell()
 	if(internal_damage & MECHA_INT_FIRE)
 		clear_internal_damage(MECHA_INT_FIRE)

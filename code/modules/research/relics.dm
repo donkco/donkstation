@@ -353,7 +353,7 @@
 		recharges--
 		var/obj/item/to_charge_base = pick_n_take(chargeable_items)
 		var/obj/item/stock_parts/power_store/to_charge = chargeable_items[to_charge_base]
-		to_charge.charge = to_charge.maxcharge
+		to_charge.set_charge(to_charge.max_charge())
 		to_charge_base.update_appearance(UPDATE_ICON|UPDATE_OVERLAYS)
 		to_chat(user, span_notice("[to_charge_base] feels energized!"))
 		lightning_fx(to_charge_base, 0.8 SECONDS)

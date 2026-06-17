@@ -406,8 +406,8 @@
 	var/mob/living/silicon/robot/borgy = user
 	if(!borgy.cell)
 		return 0
-	max_matter = borgy.cell.maxcharge
-	return borgy.cell.charge
+	max_matter = borgy.cell.max_charge()
+	return borgy.cell.charge()
 
 /obj/item/construction/rtd/borg/useResource(amount, mob/user, dry_run)
 	var/mob/living/silicon/robot/borgy = user
@@ -416,7 +416,7 @@
 	if(!borgy.cell)
 		balloon_alert(user, "no cell found!")
 		return FALSE
-	if(borgy.cell.charge < (amount * RTD_BORG_ENERGY_FACTOR))
+	if(borgy.cell.charge() < (amount * RTD_BORG_ENERGY_FACTOR))
 		balloon_alert(user, "insufficient charge!")
 		return FALSE
 	if(!dry_run)

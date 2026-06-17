@@ -165,7 +165,7 @@
 
 	if(istype(tool, /obj/item/gun/energy/laser))
 		var/obj/item/gun/energy/laser/lasergun = tool
-		return lasergun.cell?.charge > 0
+		return lasergun.cell?.charge()
 
 	return tool.get_temperature() >= FIRE_MINIMUM_TEMPERATURE_TO_EXIST
 

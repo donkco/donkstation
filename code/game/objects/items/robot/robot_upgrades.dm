@@ -347,7 +347,7 @@
 			deactivate_sr()
 			return
 
-		if(cyborg.cell.charge < energy_cost * 2)
+		if(cyborg.cell.charge() < energy_cost * 2)
 			to_chat(cyborg, span_alert("Self-repair module deactivated. Please recharge."))
 			deactivate_sr()
 			return

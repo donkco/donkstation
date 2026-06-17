@@ -142,8 +142,8 @@
 	if(QDELETED(recharging_mech.cell))
 		return data
 	data["recharge_port"]["mech"]["cell"] = list(
-	"charge" = recharging_mech.cell.charge,
-	"maxcharge" = recharging_mech.cell.maxcharge
+	"charge" = recharging_mech.cell.charge(),
+	"maxcharge" = recharging_mech.cell.max_charge()
 	)
 	return data
 
@@ -174,6 +174,6 @@
 
 	if(!recharging_mech?.cell)
 		return
-	if(recharging_mech.cell.charge >= recharging_mech.cell.maxcharge)
+	if(recharging_mech.cell.is_fully_charged())
 		return
 	. += "recharge_comp_on"

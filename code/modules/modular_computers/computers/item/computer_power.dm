@@ -13,7 +13,7 @@
 		return TRUE
 	if(!check_programs)
 		return FALSE
-	internal_cell.use(min(amount, internal_cell.charge)) //drain it anyways.
+	internal_cell.use(min(amount, internal_cell.charge())) //drain it anyways.
 	if(active_program?.program_flags & PROGRAM_RUNS_WITHOUT_POWER)
 		return TRUE
 	INVOKE_ASYNC(src, PROC_REF(close_all_programs))
@@ -61,7 +61,7 @@
 ///Returns TRUE if the PC should not be using any power, FALSE otherwise.
 ///Checks to see if the current app allows to be ran without power, if so we'll run with it.
 /obj/item/modular_computer/proc/check_power_override(amount)
-	return !amount && !internal_cell?.charge && (active_program?.program_flags & PROGRAM_RUNS_WITHOUT_POWER)
+	return !amount && !internal_cell?.charge()&& (active_program?.program_flags & PROGRAM_RUNS_WITHOUT_POWER)
 
 //Integrated (Silicon) tablets don't drain power, because the tablet is required to state laws, so it being disabled WILL cause problems.
 /obj/item/modular_computer/pda/silicon/check_power_override()

@@ -5,7 +5,7 @@
 	return (get_charge() >= amount)
 
 /obj/vehicle/sealed/mecha/proc/get_charge()
-	return cell?.charge
+	return cell?.charge()
 
 /obj/vehicle/sealed/mecha/proc/use_energy(amount)
 	var/output = cell.use(amount)

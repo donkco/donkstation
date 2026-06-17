@@ -15,7 +15,7 @@
 	item = /obj/item/storage/toolbox/guncase/traitor/donksoft
 	cost = 6
 	surplus = 10
-	purchasable_from = ~(UPLINK_SERIOUS_OPS | UPLINK_SPY)
+	purchasable_from = ~(UPLINK_SERIOUS_OPS | UPLINK_SPY | UPLINK_NTRAITORS)
 	relevant_child_items = list(
 		/datum/uplink_item/ammo/toydarts,
 	)
@@ -27,7 +27,7 @@
 		While not included in the kit, the pistol is compatible with suppressors, which can be purchased separately."
 	item = /obj/item/storage/toolbox/guncase/traitor
 	cost = 7
-	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_SPY)
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_SPY | UPLINK_NTRAITORS)
 	relevant_child_items = list(
 		/datum/uplink_item/ammo/pistol,
 		/datum/uplink_item/ammo/pistolap,
@@ -49,7 +49,7 @@
 			pocketed when inactive. Activating it produces a loud, distinctive noise."
 	item = /obj/item/melee/energy/sword/saber
 	cost = 6
-	purchasable_from = ~UPLINK_CLOWN_OPS
+	purchasable_from = ~(UPLINK_CLOWN_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/dangerous/powerfist
 	name = "Power Fist"
@@ -59,7 +59,7 @@
 			deal extra damage and hit targets further. Use a screwdriver to take out any attached tanks."
 	item = /obj/item/melee/powerfist
 	cost = 6
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 
 /datum/uplink_item/dangerous/rapid
 	name = "Gloves of the North Star"
@@ -76,7 +76,7 @@
 	item = /obj/item/dualsaber
 
 	cost = 13
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS //nukies get their own version
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS) //nukies get their own version
 
 /datum/uplink_item/dangerous/doublesword/get_discount_value(discount_type)
 	switch(discount_type)
@@ -94,7 +94,7 @@
 	item = /obj/item/guardian_creator/tech
 	cost = 18
 	surplus = 0
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS)
 	restricted = TRUE
 	refundable = TRUE
 
@@ -104,7 +104,7 @@
 	item = /obj/item/gun/ballistic/revolver
 	cost = 13
 	surplus = 50
-	purchasable_from = ~UPLINK_ALL_SYNDIE_OPS //only traitors get the original revolver
+	purchasable_from = ~(UPLINK_ALL_SYNDIE_OPS | UPLINK_NTRAITORS) //only traitors get the original revolver
 	relevant_child_items = list(
 		/datum/uplink_item/ammo/revolver,
 		/datum/uplink_item/ammo_nuclear/basic/revolver,

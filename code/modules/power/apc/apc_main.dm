@@ -163,7 +163,7 @@
 
 	. += NAMEOF(src, cell_type)
 	if(cell_type)
-		start_charge = cell.charge / cell.maxcharge // only used in Initialize() so direct edit is fine
+		start_charge = cell.get_charge_ratio() // only used in Initialize() so direct edit is fine
 		. += NAMEOF(src, start_charge)
 
 	// TODO save the wire data but need to include states for cute wires, signalers attached to wires, etc.
@@ -208,7 +208,7 @@
 		// is starting with a power cell installed, create it and set its charge level
 		if(cell_type)
 			cell = new cell_type(src)
-			cell.charge = start_charge * cell.maxcharge / 100 // (convert percentage to actual value)
+			cell.set_charge(start_charge * cell.max_charge() / 100) // (convert percentage to actual value)
 		make_terminal()
 		///This is how we test to ensure that mappers use the directional subtypes of APCs, rather than use the parent and pixel-shift it themselves.
 		setDir(dir)
@@ -544,7 +544,7 @@
  * This adds up the total static power usage for the apc's area, then draw that power usage from the grid or APC cell.
  */
 /obj/machinery/power/apc/proc/early_process()
-	if(!QDELETED(cell) && cell.charge < cell.maxcharge)
+	if(!QDELETED(cell) && cell.used_charge())
 		last_charging = charging
 		charging = APC_NOT_CHARGING
 	if(isnull(area))
@@ -608,7 +608,7 @@
 	if(cell && !shorted) //need to check to make sure the cell is still there since rigged/corrupted cells can randomly explode after give().
 		// set channels depending on how much charge we have left
 		var/cell_percent = cell.percent()
-		if(cell.charge <= 0) // zero charge, turn all off
+		if(!cell.charge()) // zero charge, turn all off
 			equipment = autoset(equipment, AUTOSET_FORCE_OFF)
 			lighting = autoset(lighting, AUTOSET_FORCE_OFF)
 			environ = autoset(environ, AUTOSET_FORCE_OFF)
@@ -669,16 +669,16 @@
 	var/need_charge_for_channel
 	switch(channel)
 		if(SSMACHINES_APCS_ENVIRONMENT)
-			need_charge_for_channel = (cell.maxcharge * 0.05) - cell.charge
+			need_charge_for_channel = (cell.max_charge() * 0.05) - cell.charge()
 		if(SSMACHINES_APCS_LIGHTS)
-			need_charge_for_channel = (cell.maxcharge * (APC_CHANNEL_LIGHT_TRESHOLD + 5) * 0.01) - cell.charge
+			need_charge_for_channel = (cell.max_charge() * (APC_CHANNEL_LIGHT_TRESHOLD + 5) * 0.01) - cell.charge()
 		if(SSMACHINES_APCS_EQUIPMENT)
-			need_charge_for_channel = (cell.maxcharge * (APC_CHANNEL_EQUIP_TRESHOLD + 5) * 0.01) - cell.charge
+			need_charge_for_channel = (cell.max_charge() * (APC_CHANNEL_EQUIP_TRESHOLD + 5) * 0.01) - cell.charge()
 		else
 			need_charge_for_channel = cell.used_charge()
 
 	var/charging_used = area ? area.energy_usage[AREA_USAGE_APC_CHARGE] : 0
-	var/remaining_charge_rate = min(cell.chargerate, cell.maxcharge * CHARGELEVEL) - charging_used
+	var/remaining_charge_rate = min(cell.get_chargerate(), cell.max_charge() * CHARGELEVEL) - charging_used
 	var/need_charge = min(need_charge_for_channel, remaining_charge_rate) * seconds_per_tick
 	//check if we can charge the battery
 	if(need_charge < 0)
@@ -687,8 +687,7 @@
 	charge_cell(need_charge, cell = cell, grid_only = TRUE, channel = AREA_USAGE_APC_CHARGE)
 
 	// show cell as fully charged if so
-	if(cell.charge >= cell.maxcharge)
-		cell.charge = cell.maxcharge
+	if(cell.is_fully_charged())
 		charging = APC_FULLY_CHARGED
 	else
 		charging = APC_CHARGING
@@ -768,15 +767,15 @@
 
 /// Used for no_charge apc helper, which sets apc charge to 0%.
 /obj/machinery/power/apc/proc/set_no_charge()
-	cell.charge = 0
+	cell.set_charge(0 JOULES)
 
 /// Used for full_charge apc helper, which sets apc charge to 100%.
 /obj/machinery/power/apc/proc/set_full_charge()
-	cell.charge = cell.maxcharge
+	cell.set_charge(cell.max_charge())
 
 /// Returns the cell's current charge.
 /obj/machinery/power/apc/proc/charge()
-	return cell.charge
+	return cell.charge()
 
 /*Power module, used for APC construction*/
 /obj/item/electronics/apc
