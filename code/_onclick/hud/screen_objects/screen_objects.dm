@@ -825,7 +825,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 	plane = FULLSCREEN_PLANE
 
 /atom/movable/screen/healths
-	name = "health"
+	name = "vitals"
+	icon = 'icons/hud/hud_48x64.dmi'
 	icon_state = "health0"
 	screen_loc = ui_health
 
@@ -862,7 +863,9 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /atom/movable/screen/healthdoll
-	name = "health doll"
+	icon = 'icons/hud/hud_48x64.dmi'
+	name = "interdyne limb monitor"
+	icon_state = "health_monitor"
 	screen_loc = ui_healthdoll
 
 /atom/movable/screen/healthdoll/Click()
@@ -874,7 +877,6 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 	return
 
 /atom/movable/screen/healthdoll/living
-	icon_state = "fullhealth0"
 	screen_loc = ui_living_healthdoll
 	///The image we create on New to use for showing mob's HP on hover. It uses a separate image as to not be cut off by `alpha_mask_filter`.
 	var/image/health_overlay
@@ -994,6 +996,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 
 // Basically just holds an icon we can put a filter on
 /atom/movable/screen/healthdoll_limb
+	icon = 'icons/hud/hud_48x64.dmi'
+
 	screen_loc = ui_living_healthdoll
 	vis_flags = VIS_INHERIT_ID | VIS_INHERIT_PLANE
 
