@@ -241,8 +241,8 @@
 #define ui_palette_scroll_offset(north_offset) ("WEST+1:8,NORTH-[6+north_offset]:28")
 
 //Middle right (status indicators)
-#define ui_healthdoll "EAST-1:28,CENTER-2:17"
-#define ui_health "EAST-1:28,CENTER-1:19"
+#define ui_healthdoll "EAST-1:16,CENTER-2"
+#define ui_health "EAST-1:16,CENTER-1"
 #define ui_internal "EAST-1:28,CENTER+1:21"
 #define ui_mood "EAST-1:28,CENTER:21"
 #define ui_hunger "EAST-1:2,CENTER:21"
