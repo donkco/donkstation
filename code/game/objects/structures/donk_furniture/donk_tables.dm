@@ -19,6 +19,54 @@
 
 	can_flip = FALSE
 
+/obj/structure/table/plastic
+	name = "future table"
+	desc = "A sleek plastic table, well suited for the hypermodern space corporation-"
+
+	icon = 'icons/obj/smooth_structures/donk_tables/table_future.dmi'
+	icon_state = "table_future-0"
+	base_icon_state = "table_future"
+
+	frame = /obj/structure/table_frame/plastic
+	framestack = /obj/item/stack/sheet/plastic
+	buildstack = /obj/item/stack/sheet/plastic
+
+	resistance_flags = FLAMMABLE
+	max_integrity = 70
+
+	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 3)
+
+	can_flip = FALSE
+
+/obj/structure/table/plastic/led
+	icon = 'icons/obj/smooth_structures/donk_tables/table_bright_future.dmi'
+	icon_state = "table_bright_future-0"
+	base_icon_state = "table_bright_future"
+	smoothing_junction = 0
+	buildstack = /obj/item/stack/tile/light
+
+/obj/structure/table/plastic/led/Initialize(mapload, obj/structure/table_frame/frame_used, obj/item/stack/stack_used)
+	. = ..()
+	AddElement(/datum/element/decal, 'icons/obj/smooth_structures/donk_tables/table_bright_future_emissive.dmi', "table_bright_future_emissive", dir, EMISSIVE_PLANE, null, 255, null, smoothing_junction, emissive_type = EMISSIVE_NO_BLOOM)
+
+/obj/structure/table/stratagem
+	name = "stratagem table"
+	desc = "A table of planning and scheming."
+	icon = 'icons/obj/smooth_structures/donk_tables/table_stratagem.dmi'
+	icon_state = "table_stratagem-0"
+	base_icon_state = "table_stratagem"
+	smoothing_junction = 0
+
+	frame = /obj/structure/table_frame/plastitanium
+	framestack = /obj/item/stack/sheet/mineral/plastitanium
+	buildstack = /obj/item/stack/tile/light
+
+	custom_materials = list(/datum/material/alloy/plastitanium = SHEET_MATERIAL_AMOUNT, /datum/material/glass = SHEET_MATERIAL_AMOUNT)
+
+/obj/structure/table/stratagem/Initialize(mapload, obj/structure/table_frame/frame_used, obj/item/stack/stack_used)
+	. = ..()
+	AddElement(/datum/element/decal, 'icons/obj/smooth_structures/donk_tables/table_stratagem_emissive.dmi', "table_stratagem_emissive", dir, EMISSIVE_PLANE, null, 255, null, smoothing_junction, emissive_type = EMISSIVE_NO_BLOOM)
+
 
 //----------- COARSE TABLES ------------------------------
 // Tables that don't smooth.
@@ -72,6 +120,17 @@
 	buildstack = /obj/item/stack/sheet/iron
 
 	can_flip = FALSE
+
+/obj/structure/table/plastic/symetra
+	name = "symetra future table"
+	desc = "A sleek plastic table created by the the famous designer Ken 'Kozo' Epplewhite."
+
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "plastic-R"
+	base_icon_state = "plastic-R"
+	smoothing_flags = NONE
+	smoothing_groups = null
+	canSmoothWith = null
 
 //-------- ROLLING TABLES----------------------------------
 // Tables that roll, like the famous rolly-polyrolling table.
@@ -148,3 +207,37 @@
 	icon = 'icons/obj/smooth_structures/donk_tables/credenza_teak_cabinet_drawers.dmi'
 	icon_state = "credenza_teak_cabinet_drawers-0"
 	base_icon_state = "credenza_teak_cabinet_drawers"
+
+// --------------- TABLE FRAMES ---------------------------------
+//-------------------------------------------------------------
+
+/obj/structure/table_frame/plastic
+	name = "plastic table frame"
+	desc = "Four plastic legs with four plastic  plastirods for a plastic table. You could easily pass through this."
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "frame-plastic"
+	framestack = /obj/item/stack/sheet/plastic
+	framestackamount = 2
+	resistance_flags = FLAMMABLE
+	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 2)
+
+/obj/structure/table_frame/plastic/get_table_type(obj/item/stack/our_stack)
+	if(istype(our_stack, /obj/item/stack/sheet/plastic))
+		return /obj/structure/table/plastic
+	if(istype(our_stack, /obj/item/stack/tile/light))
+		return /obj/structure/table/plastic/led
+
+/obj/structure/table_frame/plastitanium
+	name = "plastitanium table frame"
+	desc = "Four plastitanium legs heralds a suspicious table. You could easily pass through this."
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "frame-sus"
+	framestack = /obj/item/stack/sheet/mineral/plastitanium
+	framestackamount = 1
+	custom_materials = list(/datum/material/alloy/plastitanium = SHEET_MATERIAL_AMOUNT)
+
+/obj/structure/table_frame/plastitanium/get_table_type(obj/item/stack/our_stack)
+	if(istype(our_stack, /obj/item/stack/tile/light))
+		return /obj/structure/table/stratagem
+	else
+		return ..()

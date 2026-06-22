@@ -58,6 +58,7 @@
  * Plastitanium
  * An alloy of titanium and plasma.
  */
+
 /datum/material/alloy/plastitanium
 	name = "plastitanium"
 	desc = "The extremely heat resistant result of infusing titanium with plasma."

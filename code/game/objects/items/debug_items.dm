@@ -97,3 +97,46 @@
 	var/turf/loc_turf = get_turf(src)
 	for(var/spawn_atom in (choice == "No" ? typesof(path) : subtypesof(path)))
 		new spawn_atom(loc_turf)
+
+
+/obj/item/debug/celestial_conductor
+	name = "ȣ∇ɁႣႩႿỼẟ"
+	desc = "ȣ∇⊙Ɂթ ႿჅ ɁƟǂ ႣႩ ႣႩ |"
+	icon = 'icons/obj/donk_artifacts.dmi'
+	icon_state = "celestial_conductor"
+	var/device_ready = FALSE
+	var/starlight_color = COLOR_STARLIGHT
+	var/starlight_power = 1
+	var/starlight_range = 2
+
+/obj/item/debug/celestial_conductor/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list( \
+		list( \
+			"skill" = /datum/skill/lore/alien, \
+			"min_level" = SKILL_LEVEL_EXPERT, \
+			"article" = "a", \
+			"name" = "celestial conductor", \
+			"desc" = "A device capable of bendings even the brightest star to its will.", \
+		))), show_only_on_examine_more = FALSE)
+
+/obj/item/debug/celestial_conductor/update_overlays()
+	. = ..()
+	. += emissive_appearance(icon, "[icon_state]_emissive", src, alpha = 128, effect_type = EMISSIVE_NO_BLOOM)
+
+/obj/item/debug/celestial_conductor/attack_self(mob/user, modifiers)
+	. = ..()
+	if(!device_ready || !starlight_color)
+		playsound(src, 'sound/effects/industrial_scan/industrial_scan3.ogg', 100, frequency = 28 KILO HERTZ)
+		return
+
+	playsound(src, 'sound/effects/chemistry/shockwave_explosion.ogg', 100, TRUE)
+	set_starlight(starlight_color, starlight_range, starlight_power)
+	device_ready = FALSE
+
+/obj/item/debug/celestial_conductor/attack_self_secondary(mob/user, modifiers)
+	starlight_color = tgui_color_picker(user, "⊙ʭ∇Ͽ", "ȣ∇ɁႣႩႿỼẟ", default = starlight_color || COLOR_STARLIGHT) || COLOR_STARLIGHT
+	starlight_range = tgui_input_number(user, "Ỽẟ∇Ͽ", "ȣ∇ɁႣႩႿỼẟ", default = starlight_range || 0, round_value = FALSE) || 0
+	starlight_power = tgui_input_number(user, "ỼҨՊ∇Ͽ", "ȣ∇ɁႣႩႿỼẟ", default = starlight_power || 0, round_value = FALSE) || 0
+	playsound(src, 'sound/effects/magic/cosmic_expansion.ogg', 40, TRUE)
+	device_ready = TRUE

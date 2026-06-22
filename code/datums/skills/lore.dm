@@ -23,14 +23,14 @@
 
 
 /datum/skill/lore/human
-	name = "Human Lore"
-	title = "Human Scholar"
+	name = "History"
+	title = "Historian"
 	desc = "Knowledge of human history, politics, and culture across the galaxy."
 	is_abstract = FALSE
 
 /datum/skill/lore/mothic
-	name = "Mothic Lore"
-	title = "Moth Scholar"
+	name = "Mothology"
+	title = "Mothologist"
 	desc = "Knowledge of Moth culture, traditions, and their ancient history."
 	is_abstract = FALSE
 
@@ -40,3 +40,9 @@
 	title = "Corporate Analyst"
 	desc = "Understanding of megacorporate structures, brands, and internal politics."
 	is_abstract = FALSE
+
+/datum/skill/lore/alien
+	name = "Alien Lore"
+	title = "UFOlogist"
+	desc = "The study of illusive alien civilizations, their impact on the ancient world and the present."
+	is_abstract =FALSE
