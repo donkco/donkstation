@@ -64,7 +64,7 @@
 
 	icon = 'icons/turf/floors/donkfloors/carpet_really_sus.dmi'
 	icon_state = "carpet_really_sus-0"
-	base_icon_state = "carpet__really_sus"
+	base_icon_state = "carpet_really_sus"
 	smoothing_groups = SMOOTH_GROUP_SUS_CARPET + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_SUS_CARPET
 

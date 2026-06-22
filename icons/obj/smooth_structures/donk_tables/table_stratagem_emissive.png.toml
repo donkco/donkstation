@@ -1,0 +1,12 @@
+output_name = "table_stratagem_emissive"
+template = "bitmask/diagonal_32x32.toml"
+
+[prefabs]
+0 = 5
+4 = 6
+8 = 7
+
+
+[cut_pos]
+x = 16
+y = 8

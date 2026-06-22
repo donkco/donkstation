@@ -883,9 +883,9 @@
 /obj/structure/table/reinforced/plastitaniumglass
 	name = "plastitanium glass table"
 	desc = "A table made of titanium reinforced silica-plasma composite. About as durable as it sounds."
-	icon = 'icons/obj/smooth_structures/plastitaniumglass_table.dmi'
-	icon_state = "plastitaniumglass_table-0"
-	base_icon_state = "plastitaniumglass_table"
+	icon = 'icons/obj/smooth_structures/donk_tables/table_glass_plastitanium.dmi'
+	icon_state = "table_glass_plastitanium-0"
+	base_icon_state = "table_glass_plastitanium"
 	custom_materials = list(/datum/material/alloy/plastitaniumglass = SHEET_MATERIAL_AMOUNT)
 	buildstack = /obj/item/stack/sheet/plastitaniumglass
 	max_integrity = 300

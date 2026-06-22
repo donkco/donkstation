@@ -44,7 +44,7 @@
 	singular_name = "plastitanium scale tile"
 	desc = "These tilessssss.. feel cold and impersonal..."
 
-	icon_state = "plastitanium_scale_tile"
+	icon_state = "plastitanium_scale"
 
 	turf_type = /turf/open/floor/plastitanium_tile/scale
 

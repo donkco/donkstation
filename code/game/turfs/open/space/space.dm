@@ -61,8 +61,8 @@ GLOBAL_LIST_EMPTY(starlight)
 	run_later = TRUE
 	plane = PLANE_SPACE
 	layer = SPACE_LAYER
-	light_power = 1
-	light_range = 2
+	light_power = 0.24
+	light_range = 3
 	light_color = COLOR_STARLIGHT
 	light_height = LIGHTING_HEIGHT_SPACE
 	light_on = FALSE
