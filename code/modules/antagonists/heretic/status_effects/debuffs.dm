@@ -328,7 +328,7 @@
 	id = "painting_desire"
 	alert_type = /atom/movable/screen/alert/status_effect/eldritch_painting/desire
 	/// How much faster we loose hunger
-	var/hunger_rate = 15
+	var/hunger_rate = 10
 
 /datum/status_effect/eldritch_painting/desire/on_apply()
 	if(IS_HERETIC_OR_MONSTER(owner))
@@ -344,11 +344,10 @@
 	return TRUE
 
 /datum/status_effect/eldritch_painting/desire/on_tick(seconds_between_ticks)
-	// Causes them to need to eat at 10x the normal rate
-	owner.adjust_nutrition(-hunger_rate * HUNGER_FACTOR)
+	// Causes a 10x increase in passive power demand from rougly 80 watts to 800 watts
+	owner.adjust_nutrition(-SPACEMAN_ENERGY_CONSUMPTION * (hunger_rate - 1) * seconds_between_ticks)
 	if(SPT_PROB(10, seconds_between_ticks))
 		to_chat(owner, span_notice(pick("You can't stop thinking about raw meat...", "You **NEED** to eat someone.", "The hunger pangs are back...", "You hunger for flesh.", "You are starving!")))
-	owner.overeatduration = max(owner.overeatduration - 200 SECONDS, 0)
 
 /datum/status_effect/eldritch_painting/desire/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_VORACIOUS, TRAIT_STATUS_EFFECT(id))

@@ -282,7 +282,7 @@
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/fat_human = owner
-	fat_human.on_fat() // Make sure to update the movespeed modifier in case we gain the trait while already fat
+	fat_human.body_fat_ratio = BODY_FAT_OBESE // Make sure to update the movespeed modifier in case we gain the trait while already fat
 	var/obj/item/organ/tongue/tongue = fat_human.get_organ_slot(ORGAN_SLOT_TONGUE)
 	tongue.liked_foodtypes = ALL
 	tongue.disliked_foodtypes = NONE
@@ -345,7 +345,7 @@
 	if(!HAS_TRAIT(heretic, TRAIT_FAT))
 		return
 	heretic.physiology.damage_resistance -= 25
-	heretic.on_fat()
+	heretic.body_fat_ratio = BODY_FAT_NORMAL
 
 //---- Lock Passive
 // On gain you can understand and speak every language

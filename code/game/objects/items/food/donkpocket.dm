@@ -5,8 +5,12 @@
 	desc = "The food of choice for the seasoned traitor."
 	icon_state = "donkpocket"
 	food_reagents = list(
-		/datum/reagent/consumable/nutriment = 3,
-		/datum/reagent/consumable/nutriment/protein = 2,
+		/datum/reagent/consumable/flour = 70,
+		/datum/reagent/consumable/nutriment/fat = 30,
+		/datum/reagent/consumable/tomatojuice = 70,
+		/datum/reagent/consumable/nutriment/protein = 20,
+		/datum/reagent/consumable/soysauce = 20,
+		/datum/reagent/consumable/corn_syrup = 10,
 	)
 	tastes = list("umami" = 2, "dough" = 2, "laziness" = 1)
 	foodtypes = GRAIN
@@ -35,8 +39,12 @@
 	name = "warm Donk-pocket"
 	desc = "The heated food of choice for the seasoned traitor."
 	food_reagents = list(
-		/datum/reagent/consumable/nutriment = 3,
-		/datum/reagent/consumable/nutriment/protein = 2,
+		/datum/reagent/consumable/flour = 70,
+		/datum/reagent/consumable/nutriment/fat = 30,
+		/datum/reagent/consumable/tomatojuice = 70,
+		/datum/reagent/consumable/nutriment/protein = 20,
+		/datum/reagent/consumable/soysauce = 20,
+		/datum/reagent/consumable/corn_syrup = 10,
 		/datum/reagent/medicine/omnizine = 6,
 	)
 	tastes = list("umami" = 2, "dough" = 2, "laziness" = 1)

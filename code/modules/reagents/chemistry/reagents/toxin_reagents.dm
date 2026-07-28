@@ -1049,7 +1049,6 @@
 		if(affected_mob.adjust_tox_loss(1 * metabolization_ratio * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
 			. = UPDATE_MOB_HEALTH
 	affected_mob.adjust_nutrition(-3 * normalise_creation_purity() * metabolization_ratio * seconds_per_tick) // making the chef more valuable, one meme trap at a time
-	affected_mob.overeatduration = 0
 
 /datum/reagent/toxin/coniine
 	name = "Coniine"

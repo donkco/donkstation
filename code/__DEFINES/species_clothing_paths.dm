@@ -9,3 +9,6 @@
 //DIGITIGRADE PATHS
 ///The dmi containing digitigrade uniforms
 #define DIGITIGRADE_UNIFORM_FILE 'icons/mob/human/species/misc/digitigrade.dmi'
+
+#define FAT_UNIFORMS_FILE 'icons/mob/clothing/under/fat_uniforms.dmi'
+#define FAT_SUITS_FILE 'icons/mob/clothing/suits/fat_suits.dmi'

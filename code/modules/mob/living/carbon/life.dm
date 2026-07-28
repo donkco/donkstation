@@ -723,29 +723,14 @@
 //Stomach//
 ///////////
 
-/mob/living/carbon/get_fullness(only_consumable)
+/mob/living/carbon/get_fullness()
 	. = ..()
 
 	var/obj/item/organ/stomach/belly = get_organ_slot(ORGAN_SLOT_STOMACH)
 	if(!belly) //nothing to see here if we do not have a stomach
 		return .
 
-	for(var/datum/reagent/bits as anything in belly.reagents.reagent_list)
-		// hack to get around stomachs having 5u stomach lining reagent ugugugu
-		var/effective_volume = bits.volume
-		if(belly.food_reagents[bits.type])
-			effective_volume -= belly.food_reagents[bits.type]
-		if(effective_volume <= 0)
-			continue
-		if(istype(bits, /datum/reagent/consumable))
-			var/datum/reagent/consumable/goodbit = bits
-			. += goodbit.get_nutriment_factor(src) * effective_volume / goodbit.metabolization_rate
-			continue
-		if(!only_consumable)
-			continue
-		. += 0.6 * effective_volume / bits.metabolization_rate //not food takes up space
-
-	return .
+	return  belly.reagents.total_volume / belly.reagents.maximum_volume
 
 /mob/living/carbon/has_reagent(reagent, amount = -1, needs_metabolizing = FALSE)
 	. = ..()

@@ -11,9 +11,9 @@
 	var/start_at = NUTRITION_LEVEL_WELL_FED
 	var/stop_at = NUTRITION_LEVEL_STARVING
 	var/free_exit = TRUE //set to false to prevent people from exiting before being completely stripped of fat
-	var/bite_size = 7.5 //amount of nutrients we take per second
+	var/bite_size = 350 KILO WATTS //amount of nutrients we take per second. 350 KILOWATTS OF FAT SUCKING POWER!
 	var/nutrients //amount of nutrients we got build up
-	var/nutrient_to_meat = 90 //one slab of meat gives about 52 nutrition
+	var/nutrient_to_meat = 837 KILO CALORIES
 	var/datum/looping_sound/microwave/soundloop //100% stolen from microwaves
 	var/breakout_time = 600
 

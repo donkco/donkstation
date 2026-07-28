@@ -156,4 +156,8 @@ h1.alert, h2.alert		{color: #000000;}
 .upside_down			{display: inline; -moz-transform: scale(-1, -1); -webkit-transform: scale(-1, -1); -o-transform: scale(-1, -1); -ms-transform: scale(-1, -1); transform: scale(-1, -1);}
 
 .cyan					{color: #bde0dc;}
+.cautiousyellow			{color: #ffc00c;}
+.hotdog					{color: #ffc00c; background: #b90f14; padding: 1px;}
+.donkco					{color: #ffc00c; background: #b90f14; font-family: \"Donk Co\", sans-serif; padding: 2px;}
+.bigdonk				{color: #ffc00c; background: #b90f14; font-family: \"Donk Co\", sans-serif; padding: 4px; font-size: 200%;}
 </style>"}

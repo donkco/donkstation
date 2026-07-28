@@ -14,7 +14,7 @@
 	inverse_chem = null
 	creation_purity = CONSUMABLE_STANDARD_PURITY
 	/// How much nutrition this reagent supplies. Look at get_nutriment_factor() for an understanding.
-	var/nutriment_factor = 1
+	var/nutriment_factor = 1 KILO CALORIES
 	/// affects mood, typically higher for mixed drinks with more complex recipes'
 	var/quality = 0
 
@@ -29,7 +29,7 @@
 		return
 
 	var/mob/living/carbon/human/affected_human = affected_mob
-	affected_human.adjust_nutrition(0.5 * get_nutriment_factor(affected_mob) * metabolization_ratio * seconds_per_tick)
+	affected_human.adjust_nutrition(get_nutriment_factor(affected_mob) * metabolization_ratio * seconds_per_tick)
 
 /datum/reagent/consumable/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume)
 	. = ..()
@@ -56,12 +56,13 @@
 
 /// Gets just how much nutrition this reagent supplies per server tick to the eater
 /datum/reagent/consumable/proc/get_nutriment_factor(mob/living/carbon/eater)
-	return nutriment_factor * REAGENTS_METABOLISM * purity * 2
+	return nutriment_factor
 
 /datum/reagent/consumable/nutriment
 	name = "Nutriment"
 	description = "All the vitamins, minerals, and carbohydrates the body needs in pure form."
-	nutriment_factor = 15
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE
+	metabolization_rate = 0.4
 	color = "#664330" // rgb: 102, 67, 48
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -145,7 +146,8 @@
 	description = "A natural polyamide made up of amino acids. An essential constituent of most known forms of life."
 	taste_description = "chalk"
 	brute_heal = 0.8 //Rewards the player for eating a balanced diet.
-	nutriment_factor = 9 //45% as calorie dense as oil.
+	nutriment_factor = ENERGY_DENSITY_PROTEIN
+	metabolization_rate = 0.2 UNITS
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/protein
@@ -157,7 +159,8 @@
 	taste_description = "lard"
 	brute_heal = 0
 	burn_heal = 1
-	nutriment_factor = 18 // Twice as nutritious compared to protein and carbohydrates
+	nutriment_factor = 8.37 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	var/fry_temperature = 450 //Around ~350 F (117 C) which deep fryers operate around in the real world
@@ -220,8 +223,6 @@
 	taste_mult = 0.8
 	taste_description = "oil"
 	carry_food_tastes = FALSE
-	nutriment_factor = 7 //Not very healthy on its own
-	metabolization_rate = 10 * REAGENTS_METABOLISM
 	penetrates_skin = NONE
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -232,7 +233,6 @@
 	description = "A high quality oil, suitable for dishes where the oil is a key flavour."
 	taste_description = "olive oil"
 	color = "#DBCF5C"
-	nutriment_factor = 10
 	default_container = /obj/item/reagent_containers/condiment/olive_oil
 
 /datum/reagent/consumable/nutriment/fat/oil/corn
@@ -240,7 +240,6 @@
 	description = "An oil derived from various types of corn."
 	color = "#302000" // rgb: 48, 32, 0
 	taste_description = "slime"
-	nutriment_factor = 5 //it's a very cheap oil
 
 /datum/reagent/consumable/nutriment/organ_tissue
 	name = "Organ Tissue"
@@ -248,6 +247,7 @@
 	taste_description = "rich earthy pungent"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
+	nutriment_factor = ENERGY_DENSITY_PROTEIN / 2 //It is kinda watery, kinda proteiny, kinda fatty. pretty good
 
 /datum/reagent/consumable/nutriment/organ_tissue/stomach_lining
 	name = "Stomach Lining"
@@ -258,7 +258,8 @@
 	name = "Cloth Fibers"
 	description = "It's not actually a form of nutriment but it does keep Mothpeople going for a short while..."
 	taste_description = "cloth"
-	nutriment_factor = 30
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE // cellulose is just sugar and wool is just protein if you think about it.
+	metabolization_rate = 0.05 //very slow
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	brute_heal = 0
@@ -301,8 +302,8 @@
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 	color = COLOR_WHITE // rgb: 255, 255, 255
 	taste_mult = 1.5 // stop sugar drowning out other flavours
-	nutriment_factor = 2
-	metabolization_rate = 5 * REAGENTS_METABOLISM
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE
+	metabolization_rate = 4 UNITS // Absorbed like a rocket. quickly spiking blood sugar and making you fat.
 	creation_purity = 1 // impure base reagents are a big no-no
 	overdose_threshold = 120 // Hyperglycaemic shock
 	taste_description = "sweetness"
@@ -332,7 +333,7 @@
 /datum/reagent/consumable/virus_food
 	name = "Virus Food"
 	description = "A mixture of water and milk. Virus cells can use this mixture to reproduce."
-	nutriment_factor = 2
+	nutriment_factor = 200 CALORIES
 	color = "#899613" // rgb: 137, 150, 19
 	taste_description = "watery milk"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -345,9 +346,12 @@
 /datum/reagent/consumable/soysauce
 	name = "Soysauce"
 	description = "A salty sauce made from the soy plant."
-	nutriment_factor = 2
 	color = "#792300" // rgb: 121, 35, 0
 	taste_description = "umami"
+
+	nutriment_factor = 0.6 KILO CALORIES
+	metabolization_rate = 1 UNITS // already digested by microbes, nice!
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/soysauce
@@ -355,9 +359,12 @@
 /datum/reagent/consumable/ketchup
 	name = "Ketchup"
 	description = "Ketchup, catsup, whatever. It's tomato paste."
-	nutriment_factor = 5
 	color = "#731008" // rgb: 115, 16, 8
 	taste_description = "ketchup"
+
+	nutriment_factor = 1.3 KILO CALORIES
+	metabolization_rate = 3 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/ketchup
@@ -365,14 +372,17 @@
 /datum/reagent/consumable/mustard
 	name = "Mustard"
 	description = "Spicy, tangy sauce, made from the mustard plant."
-	nutriment_factor = 5
 	color = "#ffd129"
 	taste_description = "mustard"
+
+	nutriment_factor = 0.836 KILO CALORIES // Value corresponds to American yellow mustard, a sweeter mustard would be more energy dense.
+	metabolization_rate = 0.8 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/mustard
 
-/datum/reagent/consumable/capsaicin
+/datum/reagent/consumable/capsaicin //No reason to be a consumable?
 	name = "Capsaicin Oil"
 	description = "This is what makes chilis hot."
 	color = "#B31008" // rgb: 179, 16, 8
@@ -499,6 +509,8 @@
 	description = "A salt made of sodium chloride. Commonly used to season food."
 	color = COLOR_WHITE // rgb: 255,255,255
 	taste_description = "salt"
+	nutriment_factor = NONE
+	metabolization_rate = 0.6 UNITS
 	penetrates_skin = NONE
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -557,7 +569,7 @@
 /datum/reagent/consumable/coco
 	name = "Coco Powder"
 	description = "A fatty, bitter paste made from coco beans."
-	nutriment_factor = 5
+	nutriment_factor = 2 KILO CALORIES
 	color = "#302000" // rgb: 48, 32, 0
 	taste_description = "bitterness"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -613,6 +625,8 @@
 /datum/reagent/consumable/sprinkles
 	name = "Sprinkles"
 	description = "Multi-colored little bits of sugar, commonly found on donuts. Loved by cops."
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE
+	metabolization_rate = 1
 	color = COLOR_MAGENTA // rgb: 255, 0, 255
 	taste_description = "childhood whimsy"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -622,7 +636,7 @@
 	. = ..()
 	var/obj/item/organ/liver/liver = affected_mob.get_organ_slot(ORGAN_SLOT_LIVER)
 	if(liver && HAS_TRAIT(liver, TRAIT_LAW_ENFORCEMENT_METABOLISM))
-		if(affected_mob.heal_bodypart_damage(brute = 0.5 * metabolization_ratio * seconds_per_tick, burn = 0.5 * metabolization_ratio * seconds_per_tick, updating_health = FALSE))
+		if(affected_mob.heal_bodypart_damage(brute = 2.5 * metabolization_ratio * seconds_per_tick, burn = 2.5 * metabolization_ratio * seconds_per_tick, updating_health = FALSE))
 			return UPDATE_MOB_HEALTH
 
 /datum/reagent/consumable/enzyme
@@ -630,6 +644,10 @@
 	description = "A universal enzyme used in the preparation of certain chemicals and foods."
 	color = "#365E30" // rgb: 54, 94, 48
 	taste_description = "sweetness"
+
+	nutriment_factor = ENERGY_DENSITY_PROTEIN
+	metabolization_rate = 0.2 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/enzyme
@@ -639,6 +657,10 @@
 	description = "Space age food, since August 25, 1958. Contains dried noodles, vegetables, and chemicals that boil in contact with water."
 	color = "#302000" // rgb: 48, 32, 0
 	taste_description = "dry and cheap noodles"
+
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE // it is a bit airy, but also very oily. So it is pretty energy dense still.
+	metabolization_rate = 0.4 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/cup/glass/dry_ramen
@@ -646,9 +668,12 @@
 /datum/reagent/consumable/hot_ramen
 	name = "Hot Ramen"
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
-	nutriment_factor = 5
 	color = "#302000" // rgb: 48, 32, 0
 	taste_description = "wet and cheap noodles"
+
+	nutriment_factor = ENERGY_DENSITY_CARBOHYDRATE
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/cup/glass/dry_ramen
@@ -656,9 +681,12 @@
 /datum/reagent/consumable/nutraslop
 	name = "Nutraslop"
 	description = "Mixture of leftover prison foods served on previous days."
-	nutriment_factor = 5
 	color = "#3E4A00" // rgb: 62, 74, 0
 	taste_description = "your imprisonment"
+
+	nutriment_factor = 2 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -669,9 +697,12 @@
 /datum/reagent/consumable/hell_ramen
 	name = "Hell Ramen"
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
-	nutriment_factor = 5
 	color = "#302000" // rgb: 48, 32, 0
 	taste_description = "wet and cheap noodles on fire"
+
+	nutriment_factor = ENERGY_DENSITY_OIL
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -684,6 +715,8 @@
 	description = "This is what you rub all over yourself to pretend to be a ghost."
 	color = COLOR_WHITE // rgb: 0, 0, 0
 	taste_description = "chalky wheat"
+	nutriment_factor = 3.6 KILO CALORIES // Mostly carbohydrates, but the loose packing of the grains means it is a bit less energy dense.
+	metabolization_rate = 0.4 UNITS
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED|REAGENT_AFFECTS_WOUNDS
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/flour
@@ -731,7 +764,10 @@
 /datum/reagent/consumable/cherryjelly
 	name = "Cherry Jelly"
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
-	nutriment_factor = 10
+
+	nutriment_factor = 3 KILO CALORIES
+	metabolization_rate = 3 UNITS
+
 	color = "#801E28" // rgb: 128, 30, 40
 	taste_description = "cherry"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -742,14 +778,21 @@
 	name = "Blue Cherry Jelly"
 	description = "Blue and tastier kind of cherry jelly."
 	color = "#00F0FF"
+
+	nutriment_factor = 3 KILO CALORIES
+	metabolization_rate = 3 UNITS
+
 	taste_description = "blue cherry"
 
 /datum/reagent/consumable/rice
 	name = "Rice"
 	description = "tiny nutritious grains"
-	nutriment_factor = 3
 	color = COLOR_WHITE // rgb: 0, 0, 0
 	taste_description = "rice"
+
+	nutriment_factor = 2.8 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/rice
@@ -759,23 +802,32 @@
 	description = "Flour mixed with Rice"
 	color = COLOR_WHITE // rgb: 0, 0, 0
 	taste_description = "chalky wheat with rice"
+
+	nutriment_factor = 2.8 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
 /datum/reagent/consumable/vanilla
 	name = "Vanilla Powder"
 	description = "A fatty, bitter paste made from vanilla pods."
-
-	nutriment_factor = 5
 	color = "#FFFACD"
 	taste_description = "vanilla"
+
+	nutriment_factor = 3 KILO CALORIES
+	metabolization_rate = 0.2 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
 /datum/reagent/consumable/eggyolk
 	name = "Egg Yolk"
 	description = "It's full of protein."
-	nutriment_factor = 8
+
+	nutriment_factor = 3.2 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	color = "#FFB500"
 	taste_description = "egg"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -784,7 +836,7 @@
 /datum/reagent/consumable/eggwhite
 	name = "Egg White"
 	description = "It's full of even more protein."
-	nutriment_factor = 4
+	nutriment_factor = 0.53 KILO CALORIES
 	color = "#fffdf7"
 	taste_description = "bland egg"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -795,6 +847,7 @@
 	description = "A slippery solution."
 	color = "#DBCE95"
 	taste_description = "slime"
+	nutriment_factor = 2.06 KILO CALORIES
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED|REAGENT_AFFECTS_WOUNDS
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -834,20 +887,22 @@
 	name = "Corn Syrup"
 	description = "Decays into sugar."
 	color = "#DBCE95"
-	metabolization_rate = 3 * REAGENTS_METABOLISM
+	nutriment_factor = 4 KILO CALORIES
+	metabolization_rate = 4 UNITS
 	taste_description = "sweet slime"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
 /datum/reagent/consumable/corn_syrup/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, metabolization_ratio)
 	. = ..()
-	holder.add_reagent(/datum/reagent/consumable/sugar, 0.5 * metabolization_ratio * seconds_per_tick)
+	holder.add_reagent(/datum/reagent/consumable/sugar, 0.1 * metabolization_ratio * seconds_per_tick)
 
 /datum/reagent/consumable/honey
 	name = "Honey"
 	description = "Sweet sweet honey that decays into sugar. Has antibacterial and natural healing properties."
 	color = "#d3a308"
-	nutriment_factor = 15
+	nutriment_factor = 4 KILO CALORIES
+	metabolization_rate = 4 UNITS
 	taste_description = "sweetness"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -864,7 +919,7 @@
 
 /datum/reagent/consumable/honey/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, metabolization_ratio)
 	. = ..()
-	holder.add_reagent(/datum/reagent/consumable/sugar, 1.5 * metabolization_ratio * seconds_per_tick)
+	holder.add_reagent(/datum/reagent/consumable/sugar, 0.2 * metabolization_ratio * seconds_per_tick)
 	var/need_mob_update
 	if(SPT_PROB(33, seconds_per_tick))
 		var/health = -0.5 * metabolization_ratio
@@ -887,6 +942,10 @@
 	description = "A white and oily mixture of mixed egg yolks."
 	color = "#DFDFDF"
 	taste_description = "mayonnaise"
+
+	nutriment_factor = 6 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/mayonnaise
@@ -926,21 +985,30 @@
 	description = "It smells absolutely dreadful."
 	color ="#708a88"
 	taste_description = "rotten eggs"
+
+	nutriment_factor = 2 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
 /datum/reagent/consumable/nutriment/stabilized
 	name = "Stabilized Nutriment"
 	description = "A bioengineered protein-nutrient structure designed to decompose in high saturation. In layman's terms, it won't get you fat."
-	nutriment_factor = 15
 	color = "#664330" // rgb: 102, 67, 48
+
+	nutriment_factor = 6 KILO CALORIES
+	metabolization_rate = 0.1 UNITS // Slow calories, good for keeping hunger in check
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
-/datum/reagent/consumable/nutriment/stabilized/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, metabolization_ratio)
-	. = ..()
-	if(affected_mob.nutrition > NUTRITION_LEVEL_FULL - 25)
-		affected_mob.adjust_nutrition(-1.5 * metabolization_ratio * get_nutriment_factor(affected_mob) * seconds_per_tick)
+
+/datum/reagent/consumable/nutriment/stabilized/get_nutriment_factor(mob/living/carbon/affected_mob)
+	if(affected_mob.body_fat_ratio > BODY_FAT_NORMAL)
+		return 200 CALORIES
+	else
+		return ..()
 
 ////Lavaland Flora Reagents////
 
@@ -999,8 +1067,11 @@
 	name = "Vitrium Froth"
 	description = "A bubbly paste that heals wounds of the skin."
 	color = "#d3a308"
-	nutriment_factor = 3
 	taste_description = "fruity mushroom"
+
+	nutriment_factor = 2 KILO CALORIES
+	metabolization_rate = 0.4 UNITS
+
 	ph = 10.4
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -1009,17 +1080,19 @@
 	. = ..()
 	var/need_mob_update
 	if(SPT_PROB(55, seconds_per_tick))
-		need_mob_update = affected_mob.adjust_brute_loss(-0.5 * metabolization_ratio, updating_health = FALSE, required_bodytype = affected_bodytype)
-		need_mob_update += affected_mob.adjust_fire_loss(-0.5 * metabolization_ratio, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update = affected_mob.adjust_brute_loss(-1 * metabolization_ratio, updating_health = FALSE, required_bodytype = affected_bodytype)
+		need_mob_update += affected_mob.adjust_fire_loss(-1 * metabolization_ratio, updating_health = FALSE, required_bodytype = affected_bodytype)
 	if(need_mob_update)
 		return UPDATE_MOB_HEALTH
 
 /datum/reagent/consumable/liquidelectricity
 	name = "Liquid Electricity"
 	description = "The blood of Ethereals, and the stuff that keeps them going. Great for them, horrid for anyone else."
-	nutriment_factor = 5
 	color = "#97ee63"
 	taste_description = "pure electricity"
+
+	nutriment_factor = 131.3 KILO JOULES
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1047,8 +1120,8 @@
 /datum/reagent/consumable/astrotame
 	name = "Astrotame"
 	description = "A space age artificial sweetener."
-	nutriment_factor = 0
-	metabolization_rate = 2 * REAGENTS_METABOLISM
+	nutriment_factor = NONE
+	metabolization_rate = 0.4 UNITS
 	color = COLOR_WHITE // rgb: 255, 255, 255
 	taste_mult = 8
 	taste_description = "sweetness"
@@ -1064,7 +1137,6 @@
 /datum/reagent/consumable/secretsauce
 	name = "Secret Sauce"
 	description = "What could it be?"
-	nutriment_factor = 2
 	color = "#792300"
 	taste_description = "indescribable"
 	quality = FOOD_AMAZING
@@ -1076,9 +1148,12 @@
 	color = "#BBD4D9"
 	taste_description = "mint frosting"
 	description = "These restorative peptides not only speed up wound healing, but are nutritious as well!"
-	nutriment_factor = 10 // 33% less than nutriment to reduce weight gain
+
+	nutriment_factor = ENERGY_DENSITY_PROTEIN
+	metabolization_rate = 0.4 UNITS
 	brute_heal = 3
 	burn_heal = 1
+
 	inverse_chem = /datum/reagent/peptides_failed//should be impossible, but it's so it appears in the chemical lookup gui
 	inverse_chem_val = 0.2
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -1087,10 +1162,13 @@
 /datum/reagent/consumable/caramel
 	name = "Caramel"
 	description = "Who would have guessed that heated sugar could be so delicious?"
-	nutriment_factor = 10
 	color = "#D98736"
 	taste_mult = 2
 	taste_description = "caramel"
+
+	nutriment_factor = 4.6 KILO CALORIES
+	metabolization_rate = 2 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1102,7 +1180,6 @@
 /datum/reagent/consumable/char
 	name = "Char"
 	description = "Essence of the grill. Has strange properties when overdosed."
-	nutriment_factor = 5
 	color = "#C8C8C8"
 	taste_mult = 6
 	taste_description = "smoke"
@@ -1118,7 +1195,7 @@
 /datum/reagent/consumable/bbqsauce
 	name = "BBQ Sauce"
 	description = "Sweet, smoky, savory, and gets everywhere. Perfect for grilling."
-	nutriment_factor = 5
+	nutriment_factor = 2.2 KILO CALORIES
 	color = "#78280A" // rgb: 120 40, 10
 	taste_mult = 2.5 //sugar's 1.5, capsacin's 1.5, so a good middle ground.
 	taste_description = "smokey sweetness"
@@ -1129,10 +1206,13 @@
 /datum/reagent/consumable/chocolatepudding
 	name = "Chocolate Pudding"
 	description = "A great dessert for chocolate lovers."
-	color = COLOR_MAROON
-	quality = DRINK_VERYGOOD
-	nutriment_factor = 4
 	taste_description = "sweet chocolate"
+	color = COLOR_MAROON
+
+	nutriment_factor = 1.5 KILO CALORIES
+	metabolization_rate = 1.2 UNITS
+	quality = DRINK_VERYGOOD
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	glass_price = DRINK_PRICE_EASY
@@ -1147,10 +1227,13 @@
 /datum/reagent/consumable/vanillapudding
 	name = "Vanilla Pudding"
 	description = "A great dessert for vanilla lovers."
-	color = "#FAFAD2"
-	quality = DRINK_VERYGOOD
-	nutriment_factor = 4
 	taste_description = "sweet vanilla"
+	color = "#FAFAD2"
+
+	nutriment_factor = 1.5 KILO CALORIES
+	metabolization_rate = 1.2 UNITS
+	quality = DRINK_VERYGOOD
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1165,9 +1248,12 @@
 	name = "Laughin' Syrup"
 	description = "The product of juicing Laughin' Peas. Fizzy, and seems to change flavour based on what it's used with!"
 	color = "#803280"
-	nutriment_factor = 5
 	taste_mult = 2
 	taste_description = "fizzy sweetness"
+
+	nutriment_factor = 8 KILO CALORIES //giga syrup
+	metabolization_rate = 7 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1177,6 +1263,10 @@
 	taste_description = "gravy"
 	color = "#623301"
 	taste_mult = 1.2
+
+	nutriment_factor =  1 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1185,6 +1275,10 @@
 	description = "A very milky batter. 5 units of this on the griddle makes a mean pancake."
 	taste_description = "milky batter"
 	color = "#fccc98"
+
+	nutriment_factor =  1.3 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1193,6 +1287,10 @@
 	description = "A coarsely-ground, peppery flour made from korta nut shells."
 	taste_description = "earthy heat"
 	color = "#EEC39A"
+
+	nutriment_factor =  2.8 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1200,6 +1298,12 @@
 	name = "Korta Milk"
 	description = "A milky liquid made by crushing the centre of a korta nut."
 	taste_description = "sugary milk"
+
+
+	nutriment_factor =  0.7 KILO CALORIES
+	metabolization_rate = 1.2 UNITS
+
+
 	color = COLOR_WHITE
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -1208,7 +1312,10 @@
 	name = "Korta Nectar"
 	description = "A sweet, sugary syrup made from crushed sweet korta nuts."
 	color = "#d3a308"
-	nutriment_factor = 5
+
+	nutriment_factor =  3 KILO CALORIES
+	metabolization_rate = 5 UNITS
+
 	taste_description = "peppery sweetness"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -1217,7 +1324,10 @@
 	name = "Whipped Cream"
 	description = "A white fluffy cream made from whipping cream at intense speed."
 	color = "#efeff0"
-	nutriment_factor = 4
+
+	nutriment_factor = 2.6 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	taste_description = "fluffy sweet cream"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
@@ -1227,7 +1337,10 @@
 	description = "A rich, creamy spread produced by grinding peanuts."
 	taste_description = "peanuts"
 	color = "#D9A066"
-	nutriment_factor = 15
+
+	nutriment_factor = 5.9 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/peanut_butter
@@ -1243,6 +1356,10 @@
 	description = "Useful for pickling, or putting on chips."
 	taste_description = "acid"
 	color = "#661F1E"
+
+	nutriment_factor =  0.2 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/vinegar
@@ -1252,6 +1369,10 @@
 	description = "Ground cornmeal, for making corn related things."
 	taste_description = "raw cornmeal"
 	color = "#ebca85"
+
+	nutriment_factor =  3.6 KILO CALORIES
+	metabolization_rate = 0.3 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/cornmeal
@@ -1261,7 +1382,10 @@
 	description = "Creamy natural yoghurt, with applications in both food and drinks."
 	taste_description = "yoghurt"
 	color = "#efeff0"
-	nutriment_factor = 2
+
+	nutriment_factor =  0.7 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/yoghurt
@@ -1271,6 +1395,11 @@
 	description = "An eggy, milky, corny mixture that's not very good raw."
 	taste_description = "raw batter"
 	color = "#ebca85"
+
+	nutriment_factor =  1.5 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1279,6 +1408,11 @@
 	description = "A mushy pile of finely ground olives."
 	taste_description = "mushy olives"
 	color = "#adcf77"
+
+	nutriment_factor =  1.5 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
@@ -1287,7 +1421,10 @@
 	description = "Powdered milk for cheap coffee. How delightful."
 	taste_description = "milk"
 	color = "#efeff0"
-	nutriment_factor = 1.5
+
+	nutriment_factor =  1.3 KILO CALORIES
+	metabolization_rate = 1 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/creamer
@@ -1309,9 +1446,12 @@
 /datum/reagent/consumable/worcestershire
 	name = "Worcestershire Sauce"
 	description = "That's \"Woostershire\" sauce, by the way."
-	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#572b26"
 	taste_description = "sweet fish"
+
+	nutriment_factor =  0.8 KILO CALORIES
+	metabolization_rate = 0.8 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/worcestershire
@@ -1321,6 +1461,11 @@
 	description = "A secret blend of herbs and spices that goes well with anything- according to Martians, at least."
 	color = "#8E4C00"
 	taste_description = "spice"
+
+	nutriment_factor =  200 CALORIES
+	metabolization_rate = 0.2 UNITS
+
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/red_bay
@@ -1330,6 +1475,10 @@
 	description = "One of humanity's most common spices. Typically used to make curry."
 	color = "#F6C800"
 	taste_description = "dry curry"
+
+	nutriment_factor =  400 CALORIES
+	metabolization_rate = 0.2 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/curry_powder
@@ -1339,6 +1488,10 @@
 	description = "A concentrated form of dashi. Simmer with water in a 1:8 ratio to produce a tasty dashi broth."
 	color = "#372926"
 	taste_description = "extreme umami"
+
+	nutriment_factor =  0.8 KILO CALORIES
+	metabolization_rate = 0.3 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/condiment/dashi_concentrate
@@ -1348,6 +1501,10 @@
 	description = "A thick batter made with dashi and flour, used for making dishes such as okonomiyaki and takoyaki."
 	color = "#D49D26"
 	taste_description = "umami dough"
+
+	nutriment_factor =  1.4 KILO CALORIES
+	metabolization_rate = 0.6 UNITS
+
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 

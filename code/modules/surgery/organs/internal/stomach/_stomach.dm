@@ -133,69 +133,29 @@
 		to_chat(body, span_warning("Your stomach reels in pain as you're incapable of holding down all that food!"))
 
 /obj/item/organ/stomach/proc/handle_hunger(mob/living/carbon/human/human, seconds_per_tick)
-	if(HAS_TRAIT(human, TRAIT_NOHUNGER))
+	if(HAS_TRAIT(human, TRAIT_NOHUNGER) || HAS_TRAIT(human, TRAIT_STASIS))
 		return //hunger is for BABIES
 
-	//The fucking TRAIT_FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
-	if(HAS_TRAIT_FROM(human, TRAIT_FAT, OBESITY))//I share your pain, past coder.
-		if(human.overeatduration < (200 SECONDS))
-			to_chat(human, span_notice("You feel fit again!"))
-			human.remove_traits(list(TRAIT_FAT, TRAIT_OFF_BALANCE_TACKLER), OBESITY)
+	if(human.stat == DEAD)
+		return
 
-	else
-		if(human.overeatduration >= (200 SECONDS))
-			to_chat(human, span_danger("You suddenly feel blubbery!"))
-			human.add_traits(list(TRAIT_FAT, TRAIT_OFF_BALANCE_TACKLER), OBESITY)
+	// Calculate passive energy drain rate
 
-	// nutrition decrease and satiety
-	if (human.nutrition > 0 && human.stat != DEAD)
-		// THEY HUNGER
-		var/hunger_rate = HUNGER_FACTOR
-		if(human.mob_mood && human.mob_mood.sanity > SANITY_DISTURBED)
-			hunger_rate *= max(1 - 0.002 * human.mob_mood.sanity, 0.5) //0.85 to 0.75
-		// Whether we cap off our satiety or move it towards 0
-		if(human.satiety > MAX_SATIETY)
-			human.satiety = MAX_SATIETY
-		else if(human.satiety > 0)
-			human.satiety--
-		else if(human.satiety < -MAX_SATIETY)
-			human.satiety = -MAX_SATIETY
-		else if(human.satiety < 0)
-			human.satiety++
-			if(SPT_PROB(round(-human.satiety/77), seconds_per_tick))
-				human.set_jitter_if_lower(10 SECONDS)
-			hunger_rate = 3 * HUNGER_FACTOR
-		hunger_rate *= hunger_modifier
-		hunger_rate *= human.physiology.hunger_mod
-		human.adjust_nutrition(-hunger_rate * seconds_per_tick)
+	var/energy_demand = (SPACEMAN_ENERGY_CONSUMPTION * seconds_per_tick) SPACEWATTS
+	energy_demand *= human.physiology.hunger_mod //species modifer
+	energy_demand *= human.stat == UNCONSCIOUS ? 0.5 : 1 //hibernating
+	energy_demand *=  human.gender == FEMALE ? SPACEWOMAN_CALORIE_MOD : 1 //females use less calories
 
-	var/nutrition = human.nutrition
-	if(nutrition > NUTRITION_LEVEL_FULL && !HAS_TRAIT(human, TRAIT_NOFAT))
-		if(human.overeatduration < 20 MINUTES) //capped so people don't take forever to unfat
-			human.overeatduration = min(human.overeatduration + (1 SECONDS * seconds_per_tick), 20 MINUTES)
-	else
-		if(human.overeatduration > 0)
-			human.overeatduration = max(human.overeatduration - (2 SECONDS * seconds_per_tick), 0) //doubled the unfat rate
+	// At high nutrition levels we store some energyh as fat, and at very high levelvs we excrete some energy as well
+	// excreted energy grows exponentially with nutrition level to prevent players nuking themselves with sugar to speedrun fatness.
+	if(human.nutrition > BLOOD_SUGAR_NORMAL)
+		// At high blood sugar levels some energy is excreted.
+		energy_demand += ((human.nutrition / BLOOD_SUGAR_NORMAL) ** 2  * seconds_per_tick)
+		var/fat_storage_energy = (human.nutrition - human.nutrition * 0.95 ** seconds_per_tick)
+		energy_demand += fat_storage_energy
+		human.adjust_fat(fat_storage_energy)
 
-	//metabolism change
-	if(nutrition > NUTRITION_LEVEL_FAT)
-		human.metabolism_efficiency = 1
-	else if(nutrition > NUTRITION_LEVEL_FED && human.satiety > 80)
-		if(human.metabolism_efficiency != 1.25)
-			to_chat(human, span_notice("You feel vigorous."))
-			human.metabolism_efficiency = 1.25
-	else if(nutrition < NUTRITION_LEVEL_STARVING + 50)
-		if(human.metabolism_efficiency != 0.8)
-			to_chat(human, span_notice("You feel sluggish."))
-		human.metabolism_efficiency = 0.8
-	else
-		if(human.metabolism_efficiency == 1.25)
-			to_chat(human, span_notice("You no longer feel vigorous."))
-		human.metabolism_efficiency = 1
-
-	//Hunger slowdown for if mood isn't enabled
-	if(CONFIG_GET(flag/disable_human_mood))
-		handle_hunger_slowdown(human)
+	human.adjust_nutrition(-energy_demand)
 
 ///for when mood is disabled and hunger should handle slowdowns
 /obj/item/organ/stomach/proc/handle_hunger_slowdown(mob/living/carbon/human/human)

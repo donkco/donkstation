@@ -160,11 +160,15 @@ DEFINE_BITFIELD(no_equip_flags, list(
 #define FEMALE_UNIFORM_TOP_ONLY (1<<1)
 /// For when you don't want the "breast" effect to be applied (the one that cuts two pixels in the middle of the front of the uniform when facing east or west).
 #define FEMALE_UNIFORM_NO_BREASTS (1<<2)
+/// For handcrafted, artisinal sprites
+#define FEMALE_UNIFORM_BESPOKE (1<<3)
+
 
 //flags for alternate styles: These are hard sprited so don't set this if you didn't put the effort in
 #define NORMAL_STYLE 0
 #define ALT_STYLE 1
 #define DIGITIGRADE_STYLE 2
+#define FAT_STYLE 3
 
 //Flags (actual flags, fucker ^) for /obj/item/var/supports_variations_flags
 /// Has a sprite for digitigrade legs specifically.
@@ -176,6 +180,12 @@ DEFINE_BITFIELD(no_equip_flags, list(
 
 /// All variation flags which render "correctly" on a digitigrade leg setup
 #define DIGITIGRADE_VARIATIONS (CLOTHING_DIGITIGRADE_VARIATION|CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON|CLOTHING_DIGITIGRADE_MASK)
+
+// Has fat sprites
+#define CLOTHING_FAT_TAILORED (1<<0)
+#define CLOTHING_FAT_FRIENDLY (1 <<1)
+
+#define CLOTHING_FAT_COMPATIBLE (CLOTHING_FAT_TAILORED|CLOTHING_FAT_FRIENDLY)
 
 //flags for covering body parts
 #define GLASSESCOVERSEYES (1<<0)

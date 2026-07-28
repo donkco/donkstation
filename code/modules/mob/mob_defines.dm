@@ -111,14 +111,12 @@
 	/// Our body temperatue as of the last process, prevents pointless work when handling alerts
 	var/old_bodytemperature = 0
 
-	/// Hunger level of the mob
+	/// A combination of hunger and blood sugar / active energy
 	var/nutrition = NUTRITION_LEVEL_START_MIN // randomised in Initialize
 	/// Satiation level of the mob
 	var/satiety = 0//Carbon
-
-	/// How many ticks this mob has been over reating
-	var/overeatduration = 0 // How long this guy is overeating //Carbon
-
+	/// How much food energy we have stored as lipids.
+	var/body_fat_ratio = BODY_FAT_NORMAL
 	/// The last known IP of the client who was in this mob
 	var/lastKnownIP = null
 

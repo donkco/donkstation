@@ -21,6 +21,8 @@
 
 	///Associative list of positive quirks to roll associated with their selection weight
 	var/list/positive_quirk_table = list(
+		/datum/quirk/item_quirk/donk_club = 1, \
+		/datum/quirk/streetfighter = 1, \
 		/datum/quirk/alcohol_tolerance = 1,\
 		/datum/quirk/chipped = 1,\
 		/datum/quirk/drunkhealing = 1,\
@@ -113,6 +115,26 @@
 	name = "Manager"
 	archetype_id = CHARACTER_ARCHETYPE_MANAGER
 	cost = 100
+
+	positive_quirk_table = list(
+		/datum/quirk/item_quirk/donk_club = 1,
+		/datum/quirk/streetfighter = 1,
+		/datum/quirk/trust_fund = 1,
+		/datum/quirk/pumping_iron = 1,
+	)
+	negative_quirk_table =  list(
+		/datum/quirk/indebted = 2,
+		/datum/quirk/item_quirk/nearsighted = 2,
+		/datum/quirk/illiterate = 2,
+		/datum/quirk/paraplegic = 1,
+		/datum/quirk/item_quirk/blindness =1,
+	)
+	neutral_quirk_table = list(
+		/datum/quirk/pineapple_liker = 1,
+		/datum/quirk/pineapple_hater = 1,
+		/datum/quirk/item_quirk/musician = 1,
+		/datum/quirk/item_quirk/bald = 1,
+	)
 	available_jobs = list(
 		/datum/job/head_of_personnel,
 		/datum/job/head_of_security,

@@ -572,6 +572,9 @@ GLOBAL_LIST_EMPTY(features_by_species)
 		if(!excused)
 			return FALSE
 
+	var/waist_too_big = (H.bodyshape & BODYSHAPE_FAT_TORSO) && (I.supports_variations_flags & ~ CLOTHING_FAT_COMPATIBLE)
+	var/legs_too_big = (H.bodyshape & BODYSHAPE_FAT_LEGS) && (I.supports_variations_flags & ~ CLOTHING_FAT_COMPATIBLE) && (I.body_parts_covered & LEGS)
+
 	switch(slot)
 		if(ITEM_SLOT_HANDS)
 			if(!(H.mobility_flags & MOBILITY_PICKUP))
@@ -587,7 +590,12 @@ GLOBAL_LIST_EMPTY(features_by_species)
 			return TRUE
 		if(ITEM_SLOT_BACK)
 			return equip_delay_self_check(I, H, bypass_equip_delay_self)
+
 		if(ITEM_SLOT_OCLOTHING)
+			//check for fat
+			if(waist_too_big || legs_too_big)
+				to_chat(H, span_warning("This is a few sizes too small for you to wear!"))
+				return FALSE
 			return equip_delay_self_check(I, H, bypass_equip_delay_self)
 		if(ITEM_SLOT_GLOVES)
 			if(H.num_hands == 0)
@@ -625,6 +633,9 @@ GLOBAL_LIST_EMPTY(features_by_species)
 				return FALSE
 			return equip_delay_self_check(I, H, bypass_equip_delay_self)
 		if(ITEM_SLOT_ICLOTHING)
+			if(waist_too_big || legs_too_big)
+				to_chat(H, span_warning("This is a few sizes too small for you to wear!"))
+				return FALSE
 			return equip_delay_self_check(I, H, bypass_equip_delay_self)
 		if(ITEM_SLOT_ID)
 			var/obj/item/bodypart/O = H.get_bodypart(BODY_ZONE_CHEST)

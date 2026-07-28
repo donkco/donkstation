@@ -158,6 +158,11 @@
 #define span_notice_ml(text) "<span class='notice ml-1'>[text]</span>"
 #define span_danger_ml(text) "<span class='danger ml-1'>[text]</span>"
 #define span_info_ml(text) "<span class='info ml-1'>[text]</span>"
+#define span_cautiousyellow(str) ("<span class='cautiousyellow'>" + str + "</span>")
+#define span_hotdog(str) ("<span class='hotdog'>" + str + "</span>")
+#define span_donkco(str) ("<span class='donkco'>" + str + "</span>")
+#define span_bigdonk(str) ("<span class='bigdonk'>" + str + "</span>")
+
 
 // Spans that use embedded tgui components:
 // Sorted alphabetically

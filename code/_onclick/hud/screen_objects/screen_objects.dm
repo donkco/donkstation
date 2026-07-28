@@ -1158,27 +1158,32 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen) // I hate this place
 		fullness = NUTRITION_LEVEL_FED
 		state = HUNGER_STATE_FINE
 		return
-	if(HAS_TRAIT(hungry, TRAIT_FAT))
-		fullness = NUTRITION_LEVEL_FAT
-		state = HUNGER_STATE_FAT
-		return
 
 	if(HAS_TRAIT(hungry, TRAIT_GLUTTON))
 		fullness = NUTRITION_LEVEL_VERY_HUNGRY
 		state = HUNGER_STATE_HUNGRY // Can't get enough
 		return
 
-	fullness = round(hungry.get_fullness(only_consumable = TRUE), 0.05)
+	// Bulking out your diet non-nutritive substances makes you feel less hungry,
+	// A common practice in both times of starvation and dieting:
+	// See: pine pholem flour, haitian dirt cookies, sawdust bread, the democratic people's republic of Korea
+	// at starvation levels the effect is less pronounced. Which works out for both realism and balance purposes.
+	// When "VERY HUNGRY" a completely full stomach is capable of making you feel well fed.
+	// Values might need to be adjusted if people start to abuse the mechanic to ignore eating entirely.
+
+	fullness = hungry.nutrition * (1 + hungry.nutrition / NUTRITION_LEVEL_FULL * STOMACH_FULLNESS_HUNGER_MOD)
 	switch(fullness)
-		if(1 + NUTRITION_LEVEL_FULL to INFINITY)
+		if(NUTRITION_LEVEL_FULL to INFINITY)
+			state = HUNGER_STATE_FAT
+		if(NUTRITION_LEVEL_FED to NUTRITION_LEVEL_FULL)
 			state = HUNGER_STATE_FULL
-		if(1 + NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FULL)
+		if(NUTRITION_LEVEL_HUNGRY to NUTRITION_LEVEL_FED)
 			state = HUNGER_STATE_FINE
-		if(1 + NUTRITION_LEVEL_VERY_HUNGRY to NUTRITION_LEVEL_HUNGRY)
-			state = HUNGER_STATE_FINE
-		if(1 + NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_VERY_HUNGRY)
+		if(NUTRITION_LEVEL_VERY_HUNGRY to NUTRITION_LEVEL_HUNGRY)
 			state = HUNGER_STATE_HUNGRY
-		if(0 to NUTRITION_LEVEL_STARVING)
+		if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_VERY_HUNGRY)
+			state = HUNGER_STATE_VERY_HUNGRY
+		if(NONE to NUTRITION_LEVEL_STARVING)
 			state = HUNGER_STATE_STARVING
 
 /atom/movable/screen/hunger/update_appearance(updates)

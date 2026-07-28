@@ -965,6 +965,33 @@ em {
   text-shadow: 0 0 6px #bde0dc;
 }
 
+.cautiousyellow {
+  color: #ffc00c;
+}
+
+.hotdog {
+  color: #ffc00c;
+  background: #b90f14;
+  padding: 1px;
+}
+
+.donkco {
+  color: #ffc00c;
+  background: #b90f14;
+  font-family: "Donk Co", sans-serif;
+  font-size: 12pt;
+  padding: 2px;
+}
+
+.bigdonk {
+  color: #ffc00c;
+  background: #b90f14;
+  font-family: "Donk Co", sans-serif;
+  font-size: 24pt;
+  padding: 4px;
+  font-size: 200%;
+}
+
 .connectionClosed,
 .fatalError {
   background: red;

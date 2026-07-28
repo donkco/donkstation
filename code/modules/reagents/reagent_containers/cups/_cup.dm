@@ -3,7 +3,7 @@
 	abstract_type = /obj/item/reagent_containers/cup
 	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(5, 10, 15, 20, 25, 30, 50)
-	volume = 50
+	volume = 250 UNITS
 	initial_reagent_flags = OPENCONTAINER | DUNKABLE
 	resistance_flags = ACID_PROOF
 	icon_state = "bottle"
@@ -16,7 +16,7 @@
 	/// The last time we have checked for taste.
 	var/last_check_time
 	/// How much we drink at once, shot glasses drink more.
-	var/gulp_size = 5
+	var/gulp_size = 15 UNITS
 	/// Whether the 'bottle' is made of glass or not so that milk cartons dont shatter when someone gets hit by it.
 	var/isGlass = FALSE
 	/// What kind of chem transfer method does this cup use. Defaults to INGEST
