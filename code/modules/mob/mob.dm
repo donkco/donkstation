@@ -91,7 +91,6 @@
 	for(var/datum/atom_hud/alternate_appearance/alt_hud as anything in GLOB.active_alternate_appearances)
 		alt_hud.apply_to_new_mob(src)
 
-	set_nutrition(rand(NUTRITION_LEVEL_START_MIN, NUTRITION_LEVEL_START_MAX))
 	. = ..()
 	setup_hud_traits()
 	update_config_movespeed()
@@ -1471,31 +1470,25 @@
 
 	get_language_holder().open_language_menu(usr)
 
-///Adjust the nutrition of a mob
-/mob/proc/adjust_nutrition(change, forced = FALSE) //Honestly FUCK the oldcoders for putting nutrition on /mob someone else can move it up because holy hell I'd have to fix SO many typechecks
-	if(HAS_TRAIT(src, TRAIT_NOHUNGER) && !forced)
-		return
 
-	nutrition = max(0, nutrition + change)
-
-/mob/living/adjust_nutrition(change, forced)
-	. = ..()
-	// Queue update if change is small enough (6 is 1% of nutrition softcap)
-	if(abs(change) >= 6)
+/mob/living/proc/adjust_nutrition(change, forced)
+	if(nutrition < BLOOD_SUGAR_NORMAL && change < 0) //If below catabolic threshhold
+		var/sugar_fat_ratio = (nutrition / BLOOD_SUGAR_NORMAL) ** 2 //as blood sugar decreases, draw more from fat reserves instead.
+		nutrition = max(0, nutrition + change * sugar_fat_ratio)
+		adjust_fat(change * (1 - sugar_fat_ratio))
+	else
+		nutrition = max(0, nutrition + change)
+	// Queue update if change is small enough
+	if(abs(change) >= 20)
 		update_nutrition()
 	else
 		living_flags |= QUEUE_NUTRITION_UPDATE
 
-///Force set the mob nutrition
-/mob/proc/set_nutrition(set_to, forced = FALSE) //Seriously fuck you oldcoders.
+/mob/living/proc/set_nutrition(set_to, forced)
 	if(HAS_TRAIT(src, TRAIT_NOHUNGER) && !forced)
 		return
-
-	nutrition = max(0, set_to)
-
-/mob/living/set_nutrition(set_to, forced)
 	var/old_nutrition = nutrition
-	. = ..()
+	nutrition = max(0, set_to)
 	// Queue update if change is small enough (6 is 1% of nutrition softcap)
 	if(abs(old_nutrition - nutrition) >= 6)
 		update_nutrition()
@@ -1551,9 +1544,6 @@
 	switch(var_name)
 		if(NAMEOF(src, focus))
 			set_focus(var_value)
-			. = TRUE
-		if(NAMEOF(src, nutrition))
-			set_nutrition(var_value)
 			. = TRUE
 		if(NAMEOF(src, stat))
 			set_stat(var_value)

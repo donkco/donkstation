@@ -65,29 +65,50 @@
 		span_notice("[surgeon] successfully removes excess fat from [limb.owner]'s body!"),
 		span_notice("[surgeon] finishes cutting away excess fat from [limb.owner]'s [limb.plaintext_zone]."),
 	)
-	var/removednutriment = limb.owner.nutrition
-	limb.owner.overeatduration = 0 //patient is unfatted
-	limb.owner.set_nutrition(NUTRITION_LEVEL_WELL_FED)
-	removednutriment -= NUTRITION_LEVEL_WELL_FED //whatever was removed goes into the meat
+	var/removed_fat = limb.owner.body_fat_ratio - BODY_FAT_NORMAL
+	limb.owner.body_fat_ratio = BODY_FAT_NORMAL
 
 	if(limb.owner.flags_1 & HOLOGRAM_1)
 		return
 
-	var/typeofmeat = null
-	for(var/meat_path in limb.butcher_drops)
-		if(ispath(meat_path, /obj/item/food/meat))
-			typeofmeat = meat_path
-			break
 
-	if(!typeofmeat)
-		return
+	for(var/i in round(removed_fat / 255 * ENERGY_DENSITY_FAT))
+		new /obj/item/food/fat/human(limb.owner.drop_location())
 
-	var/obj/item/food/meat/slab/newmeat = new typeofmeat(limb.owner.drop_location())
-	newmeat.name = "fatty meat"
-	newmeat.desc = "Extremely fatty tissue taken from a patient."
-	newmeat.subjectname = limb.owner.real_name
-	newmeat.subjectjob = limb.owner.job
-	newmeat.reagents.add_reagent(/datum/reagent/consumable/nutriment, (removednutriment / /datum/reagent/consumable/nutriment::nutriment_factor))
+/obj/item/food/fat
+	name = "fatty glob"
+	desc = "A glob of wobbly fatty fat. "
+
+	icon = 'icons/obj/food/donk_ingredients.dmi'
+	icon_state = "fatty_tissue"
+
+	bite_consumption = 3
+	food_reagents = list(
+		/datum/reagent/consumable/nutriment/protein = 50,
+		/datum/reagent/consumable/nutriment/fat = 200,
+		/datum/reagent/consumable/nutriment/vitamin = 5,)
+	tastes = list("fat" = 1)
+	foodtypes = MEAT | RAW
+
+/obj/item/food/fat/human
+
+/obj/item/food/fat/human/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/lore, string_list_of_assoc_lists(list( \
+		list( \
+			"skill" = /datum/skill/medicine, \
+			"min_level" = SKILL_LEVEL_JOURNEYMAN, \
+			"article" = "a", \
+			"name " = "piece of adipose tissue", \
+			"desc" = "A sample of human adipose tissue, or fat, taken from a patient.", \
+		),
+		list( \
+			"skill" = /datum/skill/medicine, \
+			"min_level" = SKILL_LEVEL_LEGENDARY, \
+			"article" = "", \
+			"name " = "axungia hominis", \
+			"desc" = "Axungia hominis; the fat of man. A pox on its bearer, yet a substance of great potential when separated from its host.", \
+		))), show_only_on_examine_more = FALSE)
 
 /datum/surgery_operation/limb/lipoplasty/mechanic
 	name = "engage expulsion valve" //gross

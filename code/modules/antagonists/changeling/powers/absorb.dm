@@ -28,7 +28,7 @@
 	var/datum/antagonist/changeling/changeling = IS_CHANGELING(owner)
 	return changeling.can_absorb_dna(target)
 
-/datum/action/changeling/absorb_dna/sting_action(mob/owner)
+/datum/action/changeling/absorb_dna/sting_action(mob/living/owner)
 	SHOULD_CALL_PARENT(FALSE) // the only reason to call parent is for proper blackbox logging, and we do that ourselves in a snowflake way
 
 	var/datum/antagonist/changeling/changeling = IS_CHANGELING(owner)

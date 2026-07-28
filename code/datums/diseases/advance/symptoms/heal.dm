@@ -250,9 +250,7 @@
 /datum/symptom/heal/metabolism/Heal(mob/living/carbon/carbon_host, datum/disease/advance/our_disease, actual_power)
 	var/metabolic_boost = triple_metabolism ? 2 : 1
 	carbon_host.reagents.metabolize(carbon_host, metabolic_boost * SSMOBS_DT, 0, can_overdose=TRUE) //this works even without a liver; it's intentional since the virus is metabolizing by itself
-	carbon_host.overeatduration = max(carbon_host.overeatduration - 4 SECONDS, 0)
-	var/lost_nutrition = 9 - (reduced_hunger * 5)
-	carbon_host.adjust_nutrition(-lost_nutrition * HUNGER_FACTOR) //Hunger depletes at 10x the normal speed
+	carbon_host.adjust_nutrition(-SPACEMAN_ENERGY_CONSUMPTION * (reduced_hunger ? 5 : 10)) //Hunger depletes at 10x the normal speed
 	if(prob(2))
 		to_chat(carbon_host, span_notice("You feel an odd gurgle in your stomach, as if it was working much faster than normal."))
 	return TRUE

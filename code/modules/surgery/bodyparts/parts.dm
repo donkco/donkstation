@@ -95,6 +95,18 @@
 
 	return icon('icons/mob/butts.dmi', human_owner.physique == FEMALE ? BUTT_SPRITE_HUMAN_FEMALE : BUTT_SPRITE_HUMAN_MALE)
 
+/obj/item/bodypart/chest/on_became_obese(mob/fat)
+	. = ..()
+	if(bodyshape & BODYSHAPE_FAT_TORSO) //already fat
+		return
+	modify_bodyshape(gained_shapes = BODYSHAPE_FAT_TORSO)
+
+/obj/item/bodypart/chest/on_slimmed_down(mob/fat)
+	. = ..()
+	if(!(bodyshape & BODYSHAPE_FAT_TORSO)) //not fat
+		return
+	modify_bodyshape(lost_shapes = BODYSHAPE_FAT_TORSO)
+
 /obj/item/bodypart/chest/monkey
 	icon = 'icons/mob/human/species/monkey/bodyparts.dmi'
 	icon_static = 'icons/mob/human/species/monkey/bodyparts.dmi'
@@ -562,6 +574,18 @@
 	. = ..()
 	if(speed_modifier)
 		old_owner.update_bodypart_speed_modifier()
+
+/obj/item/bodypart/leg/on_became_obese(mob/fat)
+	. = ..()
+	if(bodyshape & BODYSHAPE_FAT_LEGS) //already fat
+		return
+	modify_bodyshape(gained_shapes = BODYSHAPE_FAT_LEGS)
+
+/obj/item/bodypart/leg/on_slimmed_down(mob/fat)
+	. = ..()
+	if(!(bodyshape & BODYSHAPE_FAT_LEGS)) //not fat
+		return
+	modify_bodyshape(lost_shapes = BODYSHAPE_FAT_LEGS)
 
 /obj/item/bodypart/leg/proc/set_speed_modifier(new_modifier)
 	if(speed_modifier == new_modifier)

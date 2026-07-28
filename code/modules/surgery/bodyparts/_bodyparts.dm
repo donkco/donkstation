@@ -1025,7 +1025,7 @@
 		SIGNAL_ADDTRAIT(TRAIT_NOBLOOD),
 	))
 
-	UnregisterSignal(old_owner, list(COMSIG_ATOM_RESTYLE, COMSIG_COMPONENT_CLEAN_ACT, COMSIG_LIVING_SET_BODY_POSITION))
+	UnregisterSignal(old_owner, list(COMSIG_ATOM_RESTYLE, COMSIG_COMPONENT_CLEAN_ACT, COMSIG_LIVING_SET_BODY_POSITION, COMSIG_MOB_BECAME_OBESE, COMSIG_MOB_SLIMMED_DOWN))
 
 	if(LIMB_HAS_SURGERY_STATE(src, ALL_SURGERY_FISH_STATES(body_zone)))
 		qdel(old_owner.GetComponent(/datum/component/fishing_spot))
@@ -1057,6 +1057,10 @@
 	RegisterSignal(owner, COMSIG_ATOM_RESTYLE, PROC_REF(on_attempt_feature_restyle_mob))
 	RegisterSignal(owner, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(on_owner_clean))
 	RegisterSignal(owner, COMSIG_LIVING_SET_BODY_POSITION, PROC_REF(refresh_bleed_rate))
+
+	RegisterSignal(owner, COMSIG_MOB_BECAME_OBESE, PROC_REF(on_became_obese))
+	RegisterSignal(owner, COMSIG_MOB_SLIMMED_DOWN, PROC_REF(on_slimmed_down))
+
 
 	forceMove(owner)
 	RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(on_forced_removal)) //this must be set after we moved, or we insta gib
@@ -1698,7 +1702,7 @@
 	//This foot gun needs a safety
 	if(!icon_exists(icon_holder, "[limb_id]_[body_zone][is_dimorphic ? "_[limb_gender]" : ""]"))
 		reset_appearance()
-		stack_trace("change_appearance([icon], [id], [greyscale], [dimorphic]) generated null icon")
+		stack_trace("change_appearance([icon], [id], [greyscale], [dimorphic]) generated null icon. [limb_id]_[body_zone][is_dimorphic ? "_[limb_gender]" : ""] does not exist")
 
 ///Resets the base appearance of a limb to it's default values.
 /obj/item/bodypart/proc/reset_appearance()
@@ -1848,3 +1852,34 @@
 	var/old_state = surgery_state
 	. = ..()
 	update_surgical_state(old_state, surgery_state ^ old_state)
+
+/obj/item/bodypart/proc/on_became_obese(mob/living/fat)
+	SIGNAL_HANDLER
+	if(limb_id != SPECIES_HUMAN) // only humans, at least for now..
+		return
+	if(!(bodytype & BODYTYPE_ORGANIC)) //No robots
+		return
+	if(bodypart_flags & BODYPART_FAT) //already fat
+		return
+	change_appearance(icon = 'icons/mob/human/bodyparts_fat.dmi', id = limb_id, greyscale = should_draw_greyscale, dimorphic = is_dimorphic)
+	bodypart_flags |= BODYPART_FAT
+
+/obj/item/bodypart/proc/on_slimmed_down(mob/living/slim)
+	SIGNAL_HANDLER
+	if(limb_id != SPECIES_HUMAN) // only humans, at least for now..
+		return
+	if(!(bodytype & BODYTYPE_ORGANIC)) //No robots
+		return
+	if(!(bodypart_flags & BODYPART_FAT)) //already slim
+		return
+	reset_appearance()
+	bodypart_flags &= ~BODYPART_FAT
+
+
+/obj/item/bodypart/proc/modify_bodyshape(gained_shapes, lost_shapes)
+	if(gained_shapes)
+		bodyshape |= gained_shapes
+	if(lost_shapes)
+		bodyshape &= ~lost_shapes
+	owner.synchronize_bodyshapes()
+	SEND_SIGNAL(src, COMSIG_BODYPART_BODYSHAPE_CHANGED)

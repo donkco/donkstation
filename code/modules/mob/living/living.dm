@@ -6,6 +6,7 @@
 	register_init_signals()
 	if(unique_name)
 		set_name()
+	set_nutrition(rand(NUTRITION_LEVEL_START_MIN, NUTRITION_LEVEL_START_MAX))
 	update_blood_status()
 	update_blood_effects()
 	var/datum/atom_hud/data/human/medical/advanced/medhud = GLOB.huds[DATA_HUD_MEDICAL_ADVANCED]
@@ -983,7 +984,6 @@
 
 	// I don't really care to keep this under a flag
 	set_nutrition(NUTRITION_LEVEL_FED + 50)
-	overeatduration = 0
 	satiety = 0
 
 	// These should be tracked by status effects
@@ -2074,6 +2074,9 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 				return FALSE
 		if(NAMEOF(src, health)) //this doesn't work. gotta use procs instead.
 			return FALSE
+		if(NAMEOF(src, nutrition))
+			set_nutrition(var_value)
+			. = TRUE
 		if(NAMEOF(src, resting))
 			set_resting(var_value)
 			. = TRUE
@@ -3051,3 +3054,23 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 	if(HAS_TRAIT(src, TRAIT_ANALGESIA) && !force)
 		return
 	INVOKE_ASYNC(src, PROC_REF(emote), "scream")
+
+/mob/living/proc/adjust_fat(fat_energy)
+	var/old_fat_ratio = body_fat_ratio
+	body_fat_ratio = max(0, body_fat_ratio + fat_energy * CALORIES_TO_BODYFAT_RATIO)
+	if(body_fat_ratio >= BODY_FAT_OVERWEIGHT && old_fat_ratio < BODY_FAT_OVERWEIGHT)
+		add_aliment(/datum/ailment/obesitas) // You're fat.
+
+/mob/living/proc/add_aliment(datum/ailment/new_affliction)
+	if(has_ailment(new_affliction))
+		return FALSE
+	ailments += new new_affliction(src)
+	return TRUE
+
+/mob/living/proc/has_ailment(datum/ailment/preexisting_condition)
+	if(!preexisting_condition)
+		return FALSE
+	for(var/datum/ailment/affliction in ailments)
+		if(affliction.type == preexisting_condition.type)
+			return TRUE
+	return FALSE

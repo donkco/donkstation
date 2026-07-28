@@ -5,7 +5,7 @@
 	name = "Ethanol"
 	description = "A well-known alcohol with a variety of applications."
 	color = "#404030" // rgb: 64, 64, 48
-	nutriment_factor = 0
+	nutriment_factor = ENERGY_DENSITY_ETHANOL
 	taste_description = "alcohol"
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	creation_purity = 1 // impure base reagents are a big no-no
@@ -1994,7 +1994,6 @@
 		if(drinker.adjust_tox_loss(1 * metabolization_ratio * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
 			. = UPDATE_MOB_HEALTH
 	drinker.adjust_nutrition(-5 * metabolization_ratio * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/fernet_cola
 	name = "Fernet Cola"
@@ -2012,7 +2011,6 @@
 		if(drinker.adjust_tox_loss(0.5 * metabolization_ratio * seconds_per_tick, updating_health = FALSE, required_biotype = affected_biotype))
 			. = UPDATE_MOB_HEALTH
 	drinker.adjust_nutrition(-3 * metabolization_ratio * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/fanciulli
 	name = "Fanciulli"
@@ -2028,7 +2026,6 @@
 /datum/reagent/consumable/ethanol/fanciulli/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, metabolization_ratio)
 	. = ..()
 	drinker.adjust_nutrition(-5 * metabolization_ratio * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/fanciulli/on_mob_metabolize(mob/living/drinker)
 	. = ..()
@@ -3261,7 +3258,6 @@
 /datum/reagent/consumable/ethanol/aperitivo/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired) //This and some of the cocktails it gets mixed into stimulate the apetite, as an aperitivo should
 	. = ..()
 	drinker.adjust_nutrition(-5 * REM * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/herbal_liqueur
 	name = "Herbal Liqueur"
@@ -3406,7 +3402,6 @@
 /datum/reagent/consumable/ethanol/negroni/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
 	. = ..()
 	drinker.adjust_nutrition(-3 * REM * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/nuclear_daiquiri
 	name = "Nuclear daiquiri"
@@ -3485,7 +3480,6 @@
 /datum/reagent/consumable/ethanol/spritz/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
 	. = ..()
 	drinker.adjust_nutrition(-5 * REM * seconds_per_tick)
-	drinker.overeatduration = 0
 
 /datum/reagent/consumable/ethanol/vieux_carre
 	name = "Vieux Carré"

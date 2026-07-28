@@ -14,7 +14,7 @@
 		return
 	if(nutrition <= 0 || stat == DEAD)
 		return
-	var/hunger_loss = HUNGER_FACTOR / 10
+	var/hunger_loss = ENERGY_CONSUMPTION_STEP
 	if(move_intent == MOVE_INTENT_RUN)
 		hunger_loss *= 2
 	adjust_nutrition(-1 * hunger_loss)

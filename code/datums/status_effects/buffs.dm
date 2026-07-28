@@ -219,7 +219,7 @@
 	if(HAS_TRAIT(new_owner, TRAIT_STIMMED)) // Naturally produces stimulants to help get you PUMPED
 		modifier += 1
 
-	if(HAS_TRAIT(new_owner, TRAIT_FAT)) // less xp until you get into shape
+	if(new_owner.body_fat_ratio >= BODY_FAT_OBESE) // less xp until you get into shape
 		modifier -= 0.5
 
 	if(new_owner.reagents.has_reagent(/datum/reagent/drug/pumpup)) // steriods? yes please!

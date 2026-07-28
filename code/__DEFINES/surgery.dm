@@ -70,6 +70,8 @@
 #define BODYPART_VIRGIN (1<<4)
 /// Not a full bodypart, but in fact is part of a missing limb
 #define BODYPART_STUMP (1<<5)
+/// Fat bodypart
+#define BODYPART_FAT (1<<6)
 
 // Bodypart change blocking flags
 ///Bodypart does not get replaced during set_species()

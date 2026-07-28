@@ -169,6 +169,9 @@
 #define BODYSHAPE_SNOUTED (1<<3)
 /// Golem's wacky rocky limbs
 #define BODYSHAPE_GOLEM (1<<4)
+#define BODYSHAPE_FAT_TORSO (1 << 5)
+#define BODYSHAPE_FAT_LEGS (1 << 6)
+
 
 #define BODYTYPE_BIOSCRAMBLE_INCOMPATIBLE (BODYTYPE_ROBOTIC | BODYTYPE_LARVA_PLACEHOLDER | BODYTYPE_GOLEM | BODYTYPE_PEG)
 #define BODYTYPE_CAN_BE_BIOSCRAMBLED(bodytype) (!(bodytype & BODYTYPE_BIOSCRAMBLE_INCOMPATIBLE))
@@ -301,18 +304,6 @@
 #define SCREWYHUD_CRIT 1
 #define SCREWYHUD_DEAD 2
 #define SCREWYHUD_HEALTHY 3
-
-//Nutrition levels for humans
-#define NUTRITION_LEVEL_FAT 600
-#define NUTRITION_LEVEL_FULL 550
-#define NUTRITION_LEVEL_WELL_FED 450
-#define NUTRITION_LEVEL_FED 350
-#define NUTRITION_LEVEL_HUNGRY 250
-#define NUTRITION_LEVEL_VERY_HUNGRY 200
-#define NUTRITION_LEVEL_STARVING 150
-
-#define NUTRITION_LEVEL_START_MIN 250
-#define NUTRITION_LEVEL_START_MAX 400
 
 //Disgust levels for humans
 #define DISGUST_LEVEL_MAXEDOUT 150
@@ -483,7 +474,6 @@
 #define POCKET_STRIP_DELAY (4 SECONDS) //time taken to search somebody's pockets
 #define DOOR_CRUSH_DAMAGE 20 //the amount of damage that airlocks deal when they crush you
 
-#define HUNGER_FACTOR 0.05 //factor at which mob nutrition decreases
 #define ETHEREAL_DISCHARGE_RATE (1e-3 * STANDARD_ETHEREAL_CHARGE) // Rate at which ethereal stomach charge decreases
 /// How much nutrition eating clothes as moth gives and drains
 #define CLOTHING_NUTRITION_GAIN 15

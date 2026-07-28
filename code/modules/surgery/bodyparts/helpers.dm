@@ -286,6 +286,12 @@
 
 	bodyshape = all_limb_flags
 
+/mob/living/carbon/human/synchronize_bodyshapes()
+	. = ..()
+	if(!has_dna())
+		return
+	dna.species.worn_items_fit_body_check(src)
+
 /// Get all bodyshapes but filter out bodyshapes that are currently being hidden
 /mob/living/carbon/proc/get_active_bodyshapes()
 	var/active_shapes = bodyshape

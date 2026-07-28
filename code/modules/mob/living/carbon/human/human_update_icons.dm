@@ -103,6 +103,9 @@ There are several things that need to be remembered:
 		var/handled_by_bodyshape = TRUE
 		var/icon_file
 		var/woman
+		if((bodyshape & (BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO)) && (uniform.supports_variations_flags & CLOTHING_FAT_TAILORED))
+			icon_file = FAT_UNIFORMS_FILE
+
 		//BEGIN SPECIES HANDLING
 		if((bodyshape & BODYSHAPE_DIGITIGRADE) && (uniform.supports_variations_flags & CLOTHING_DIGITIGRADE_VARIATION))
 			icon_file = DIGITIGRADE_UNIFORM_FILE
@@ -129,7 +132,7 @@ There are several things that need to be remembered:
 		overlays_standing[UNIFORM_LAYER] = uniform_overlay
 
 	apply_overlay(UNIFORM_LAYER)
-	check_body_shape(BODYSHAPE_DIGITIGRADE, ITEM_SLOT_ICLOTHING)
+	check_body_shape((BODYSHAPE_DIGITIGRADE|BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO), ITEM_SLOT_ICLOTHING)
 
 /mob/living/carbon/human/update_worn_id()
 	remove_overlay(ID_LAYER)
@@ -416,13 +419,17 @@ There are several things that need to be remembered:
 
 		var/icon_file = DEFAULT_SUIT_FILE
 
-		var/mutable_appearance/suit_overlay = wear_suit.build_worn_icon(default_layer = SUIT_LAYER, default_icon_file = icon_file)
+		var/bodyshape_icon
+		if((bodyshape & (BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO)) && (wear_suit.supports_variations_flags & CLOTHING_FAT_TAILORED))
+			bodyshape_icon = FAT_SUITS_FILE
+
+		var/mutable_appearance/suit_overlay = wear_suit.build_worn_icon(default_layer = SUIT_LAYER, default_icon_file = icon_file, override_file = bodyshape_icon)
 		var/obj/item/bodypart/chest/my_chest = get_bodypart(BODY_ZONE_CHEST)
 		my_chest?.worn_suit_offset?.apply_offset(suit_overlay)
 		overlays_standing[SUIT_LAYER] = suit_overlay
 
 	apply_overlay(SUIT_LAYER)
-	check_body_shape(BODYSHAPE_DIGITIGRADE, ITEM_SLOT_OCLOTHING)
+	check_body_shape((BODYSHAPE_DIGITIGRADE|BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO), ITEM_SLOT_OCLOTHING)
 
 /mob/living/carbon/human/update_pockets()
 	if(client && hud_used)
@@ -800,7 +807,9 @@ generate/load female uniform sprites matching all previously decided variables
 
 	var/mutable_appearance/draw_target // MA of the item itself, not the final result
 	var/icon/building_icon // used to construct an icon across multiple procs before converting it to MA
-	if(female_uniform)
+	if(female_uniform & FEMALE_UNIFORM_BESPOKE)
+		building_icon = icon(file2use, "[t_state]_f")
+	else if(female_uniform)
 		building_icon = wear_female_version(
 			icon_state = t_state,
 			icon = file2use,
@@ -1035,6 +1044,15 @@ generate/load female uniform sprites matching all previously decided variables
 				continue
 			if(thing.supports_variations_flags & DIGITIGRADE_VARIATIONS)
 				thing.update_slot_icon()
+
+	if(check_shapes & (BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO))
+		for(var/obj/item/thing as anything in get_equipped_items(INCLUDE_PROSTHETICS|INCLUDE_ABSTRACT))
+			if(thing.slot_flags & ignore_slots)
+				continue
+			if(thing.supports_variations_flags & CLOTHING_FAT_COMPATIBLE)
+				thing.update_slot_icon()
+			else
+				dropItemToGround(thing)
 
 // Hooks into human apply overlay so that we can modify all overlays applied through standing overlays to our height system.
 // Some of our overlays will be passed through a displacement filter to make our mob look taller or shorter.

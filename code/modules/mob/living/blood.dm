@@ -171,8 +171,8 @@
 		var/blood_to_restore = BLOOD_REGEN_FACTOR * physiology.blood_regen_mod * nutrition_ratio * seconds_per_tick
 		var/blood_restored = adjust_blood_volume(blood_to_restore, maximum = BLOOD_VOLUME_NORMAL)
 
-		if (blood_restored > 0)
-			adjust_nutrition(-nutrition_ratio * HUNGER_FACTOR * seconds_per_tick * (blood_restored / blood_to_restore))
+		if (blood_restored > 0) // additional ~40 watts of power drain when well fed. Might be too low? Using the spacewatt for ingame time scaling.
+			adjust_nutrition(-nutrition_ratio * (40 JOULES * seconds_per_tick SPACEWATTS) * (blood_restored / blood_to_restore))
 
 	var/bleed_rate = get_bleed_rate()
 

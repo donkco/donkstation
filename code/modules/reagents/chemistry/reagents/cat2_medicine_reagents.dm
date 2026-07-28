@@ -114,7 +114,7 @@
 	. = ..()
 	var/need_mob_update
 	need_mob_update = affected_mob.adjust_organ_loss(ORGAN_SLOT_LIVER, 0.3 * metabolization_ratio * seconds_per_tick, required_organ_flag = affected_organ_flags)
-	need_mob_update += affected_mob.adjust_brute_loss(-3 * normalise_creation_purity() * metabolization_ratio * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
+	need_mob_update += affected_mob.adjust_brute_loss(-15 * normalise_creation_purity() * metabolization_ratio * seconds_per_tick, updating_health = FALSE, required_bodytype = affected_bodytype)
 	if(need_mob_update)
 		return UPDATE_MOB_HEALTH
 

@@ -212,6 +212,12 @@
 			adjusted = DIGITIGRADE_STYLE
 			update_appearance()
 
+	if((supports_variations_flags & CLOTHING_FAT_TAILORED) && ishuman(user))
+		var/mob/living/carbon/human/wearer = user
+		if(wearer.bodyshape & (BODYSHAPE_FAT_LEGS|BODYSHAPE_FAT_TORSO))
+			adjusted = FAT_STYLE
+			update_appearance()
+
 /obj/item/clothing/under/generate_digitigrade_icons(icon/base_icon, greyscale_colors)
 	var/icon/legs = icon(SSgreyscale.GetColoredIconByType(/datum/greyscale_config/digitigrade, greyscale_colors), "jumpsuit_worn")
 	return replace_icon_legs(base_icon, legs)
@@ -547,14 +553,13 @@
 /// Returns the new state
 /obj/item/clothing/under/proc/toggle_jumpsuit_adjust()
 	switch(adjusted)
-		if(DIGITIGRADE_STYLE)
-			return
-
 		if(NORMAL_STYLE)
 			adjust_to_alt()
 
 		if(ALT_STYLE)
 			adjust_to_normal()
+		else
+			return
 
 	SEND_SIGNAL(src, COMSIG_CLOTHING_UNDER_ADJUSTED)
 	return adjusted
