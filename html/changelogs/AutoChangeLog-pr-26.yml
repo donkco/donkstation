@@ -1,0 +1,7 @@
+author: "Krysonism"
+delete-after: True
+changes:
+  - rscadd: "Obesity, you can now be fat."
+  - rscadd: "Fat character quirk , you can now start fat."
+  - rscadd: "Adds a couple of new outfits to show off the new system."
+  - balance: "food energy and hunger system reworked."
