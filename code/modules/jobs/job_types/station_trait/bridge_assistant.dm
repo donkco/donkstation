@@ -2,7 +2,6 @@
 	title = JOB_BRIDGE_ASSISTANT
 	description = "Watch over the Bridge, command its consoles, and spend your days brewing coffee for higher-ups."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD //not really a head but close enough
-	faction = FACTION_STATION
 	total_positions = 0
 	spawn_positions = 0
 	supervisors = "the Captain, and in non-Bridge related situations the other heads"

@@ -22,6 +22,28 @@
 	embed_chance = 65
 	fall_chance = 10
 
+/obj/item/melee/rubber_batong
+	name = "rubber baton"
+	desc = "A baton made of hard rubber. Used to non-lethally bludgeon the suspect into submission."
+	icon = 'icons/obj/weapons/donk_weapons.dmi'
+	icon_state = "batong-rubber"
+	icon_angle = -112
+	lefthand_file = 'icons/mob/inhands/donk_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/donk_righthand.dmi'
+	force = 7 //TODO introduce mixed damage types
+	throwforce = 7
+	attack_verb_continuous = list("beats", "bludgeons", "brutalizes")
+	attack_verb_simple = list("beat", "bludgeon", "brutalize")
+	/// How much stamina our batong will do per hit
+	var/stamina_force = 18
+
+/obj/item/melee/rubber_batong/melee/afterattack(atom/target, mob/user, list/modifiers, list/attack_modifiers)
+	. = ..()
+	if(!isliving(target))
+		return
+	var/mob/living/batong_victim = target
+	batong_victim.apply_damage(stamina_force, STAMINA, def_zone = user.zone_selected, blocked = batong_victim.run_armor_check(user.zone_selected, MELEE))
+
 /obj/item/gun/energy/laser/agent_pistol
 	name = "laser pistol"
 	desc = "Agent."

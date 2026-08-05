@@ -124,6 +124,7 @@
 	)
 	negative_quirk_table =  list(
 		/datum/quirk/indebted = 2,
+		/datum/quirk/fat = 2,
 		/datum/quirk/item_quirk/nearsighted = 2,
 		/datum/quirk/illiterate = 2,
 		/datum/quirk/paraplegic = 1,

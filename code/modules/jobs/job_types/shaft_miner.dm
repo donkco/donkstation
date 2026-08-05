@@ -2,7 +2,6 @@
 	title = JOB_SHAFT_MINER
 	description = "Travel to strange lands, mine ores, \
 		meet strange creatures, kill them for their gold."
-	faction = FACTION_STATION
 	total_positions = 3
 	spawn_positions = 3
 	supervisors = SUPERVISOR_QM

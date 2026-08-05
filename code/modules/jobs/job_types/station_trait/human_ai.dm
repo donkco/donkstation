@@ -2,7 +2,6 @@
 	title = JOB_HUMAN_AI
 	description = "Assist the crew, open airlocks, follow your lawset, and coordinate your cyborgs."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SILICON
-	faction = FACTION_STATION
 	total_positions = 0
 	spawn_positions = 0
 	supervisors = "the Captain, Research Director, and your lawset"

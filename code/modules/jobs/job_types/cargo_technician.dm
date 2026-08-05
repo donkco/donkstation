@@ -3,7 +3,6 @@
 	description = "Distribute supplies to the departments that ordered them, \
 		collect empty crates, load and unload the supply shuttle, \
 		ship bounty cubes."
-	faction = FACTION_STATION
 	total_positions = 5
 	spawn_positions = 3
 	supervisors = SUPERVISOR_QM

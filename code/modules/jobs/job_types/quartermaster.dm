@@ -4,7 +4,6 @@
 		economical purchasing."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD
 	head_announce = RADIO_CHANNEL_SUPPLY
-	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
 	minimal_player_age = 7

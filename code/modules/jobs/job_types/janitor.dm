@@ -1,7 +1,6 @@
 /datum/job/janitor
 	title = JOB_JANITOR
 	description = "Clean up trash and blood, replace broken lights, slip people over."
-	faction = FACTION_STATION
 	total_positions = 2
 	spawn_positions = 1
 	supervisors = SUPERVISOR_HOP

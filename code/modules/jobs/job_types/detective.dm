@@ -3,7 +3,6 @@
 	description = "Investigate crimes, gather evidence, perform interrogations, \
 		look badass, smoke cigarettes."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
-	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = SUPERVISOR_HOS

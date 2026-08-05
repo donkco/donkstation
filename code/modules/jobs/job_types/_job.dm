@@ -17,9 +17,6 @@
 	/// Bitflags for the job
 	var/auto_deadmin_role_flags = NONE
 
-	/// Players will be allowed to spawn in as jobs that are set to "Station"
-	var/faction = FACTION_NONE
-
 	/// How many players can be this job
 	var/total_positions = 0
 
@@ -142,7 +139,7 @@
 		spawn_positions = new_spawn_positions
 	var/new_total_positions = CHECK_MAP_JOB_CHANGE(title, "total_positions")
 	if(isnum(new_total_positions))
-		total_positions = new_total_positions
+	total_positions = new_total_positions
 
 /**
  * Returns the lottery weight for this job when a given client is competing for it in the character slate lottery.

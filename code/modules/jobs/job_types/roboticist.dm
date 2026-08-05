@@ -1,7 +1,6 @@
 /datum/job/roboticist
 	title = JOB_ROBOTICIST
 	description = "Build and repair the AI and cyborgs, create mechs."
-	faction = FACTION_STATION
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = SUPERVISOR_RD

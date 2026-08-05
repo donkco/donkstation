@@ -274,8 +274,8 @@ DEFINE_BITFIELD(job_flags, list(
 /// Combination flag for jobs which are enabled by station traits.
 #define STATION_TRAIT_JOB_FLAGS (JOB_CANNOT_OPEN_SLOTS|JOB_HIDE_WHEN_EMPTY|JOB_LATEJOIN_ONLY&~JOB_REOPEN_ON_ROUNDSTART_LOSS)
 
-#define FACTION_NONE "None"
-#define FACTION_STATION "Station"
+/// All the flags that make the job part of the station. Replaces the old faction check
+#define STATION_CREW_FLAGS (JOB_CREW_MEMBER|JOB_HEAD_OF_STAFF)
 
 // Variable macros used to declare who is the supervisor for a given job, announced to the player when they join as any given job.
 #define SUPERVISOR_CAPTAIN "the Captain"

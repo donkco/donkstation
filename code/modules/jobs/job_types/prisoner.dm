@@ -1,7 +1,6 @@
 /datum/job/prisoner
 	title = JOB_PRISONER
 	description = "Keep yourself occupied in permabrig."
-	faction = FACTION_STATION
 	total_positions = 0
 	spawn_positions = 2
 	supervisors = "the security team"

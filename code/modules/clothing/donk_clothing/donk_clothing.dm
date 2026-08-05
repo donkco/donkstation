@@ -25,3 +25,11 @@
 
 	has_sensor = HAS_SENSORS
 
+/obj/item/clothing/head/donksec
+	name = "donk co. security cap"
+
+	icon = 'icons/obj/clothing/under/donk_laundry.dmi'
+	worn_icon = 'icons/mob/clothing/under/donk_uniform.dmi'
+	icon_state = "donksec"
+	worn_icon_state = "donksec"
+	base_icon_state = "donksec"

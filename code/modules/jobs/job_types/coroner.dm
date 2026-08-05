@@ -2,7 +2,6 @@
 	title = JOB_CORONER
 	description = "Perform autopsies whenever needed, \
 		update medical records accordingly, apply formaldehyde."
-	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the Head of Personnel and the Chief Medical Officer"

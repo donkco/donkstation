@@ -2,7 +2,6 @@
 	title = JOB_MEDICAL_DOCTOR
 	description = "Save lives, run around the station looking for victims, \
 		scan everyone in sight."
-	faction = FACTION_STATION
 	total_positions = 6
 	spawn_positions = 4
 	supervisors = SUPERVISOR_CMO

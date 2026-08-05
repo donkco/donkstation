@@ -1,6 +1,5 @@
 /datum/job/recovered_crew
 	policy_override = "Recovered Crew"
-	faction = FACTION_STATION
 
 /datum/job/recovered_crew/doctor
 	title = JOB_LOSTCREW_MEDICAL

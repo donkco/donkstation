@@ -1,5 +1,5 @@
 /proc/get_configured_colored_assistant_type()
-	return CONFIG_GET(flag/grey_assistants) ? /datum/colored_assistant/grey : /datum/colored_assistant/random
+	return /datum/colored_assistant/grey
 
 /// Defines a style of jumpsuit/jumpskirt for assistants.
 /// Jumpsuit and jumpskirt lists should match in colors, as they are used interchangably.

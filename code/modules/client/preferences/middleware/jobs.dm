@@ -15,7 +15,7 @@
 	if (isnull(job))
 		return FALSE
 
-	if (job.faction != FACTION_STATION)
+	if !(job.job_flags & STATION_CREW_FLAGS)
 		return FALSE
 
 	if (!preferences.set_job_preference_level(job, level))
