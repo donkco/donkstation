@@ -1,4 +1,4 @@
-/* smoothing_flags */
+ /* smoothing_flags */
 /// Smoothing system in where adjacencies are calculated and used to select a pre-baked icon_state, encoded by bitmasking.
 #define SMOOTH_BITMASK (1<<0)
 /// Limits SMOOTH_BITMASK to only cardinal directions, for use with cardinal smoothing

@@ -66,6 +66,8 @@
 
 #define TC_VALUE_SURPLUS "%TC_VALUE_SURPLUS%"
 
+#define TC_VALUE_SURPLUS "%TC_VALUE_SURPLUS%"
+
 /datum/uplink_item/bundles_tc/surplus
 	name = "Syndicate Surplus Crate"
 	desc = "A dusty crate from the back of the Syndicate warehouse delivered directly to you via Supply Pod. \

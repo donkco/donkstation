@@ -32,13 +32,13 @@
 	/// Use this for surfaces that receive transferred footprints but don't generate new ones.
 	var/can_have_footprints = FALSE
 	/// Lazylist of all shoe types that have walked over this turf
-	var/list/footprint_shoe_types
+	VAR_PRIVATE/list/footprint_shoe_types
 	/// Lazylist of all species that have walked over this turf
-	var/list/footprint_species_types
+	VAR_PRIVATE/list/footprint_species_types
 	/// All dirs from which footprints have entered this turf
-	var/footprint_entrance_dirs = NONE
+	VAR_PRIVATE/footprint_entrance_dirs = NONE
 	/// All dirs from which footprints have exited this turf
-	var/footprint_exit_dirs = NONE
+	VAR_PRIVATE/footprint_exit_dirs = NONE
 
 /// Returns a list of every turf state considered "broken".
 /// Will be randomly chosen if a turf breaks at runtime.
@@ -71,12 +71,13 @@
 	return TRUE
 
 /turf/open/update_overlays()
+	if(isnull(damaged_dmi))
+		return ..()
+
 	. = ..()
+
 	if(broken)
-		if(isnull(damaged_dmi))
-			stack_trace("[type] has broken set to TRUE but doesn't have a damaged_dmi set.")
-		else
-			var/mutable_appearance/broken_appearance = mutable_appearance(damaged_dmi, pick(broken_states()))
+		var/mutable_appearance/broken_appearance = mutable_appearance(damaged_dmi, pick(broken_states()))
 
 			if(smoothing_flags && !smooth_broken)
 				var/matrix/translation = new
