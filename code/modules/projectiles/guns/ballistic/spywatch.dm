@@ -115,7 +115,10 @@
 /obj/item/ammo_casing/spywatch
 	name = "'Scylla's Kiss' 2mm mollusk toxin round"
 	desc = "A 2mm bullet casing, it has a faint smell of the sea..."
+
+	icon = 'icons/obj/weapons/guns/donk_ammo.dmi'
 	icon_state = "2mm_casing"
+
 	caliber = CALIBER_2MM
 	projectile_type = /obj/projectile/bullet/spywatch
 
@@ -140,7 +143,7 @@
 /obj/item/storage/fancy/spywatchammobox
 	name = "'Scylla's Kiss' 2mm mollusk toxin box"
 	desc = "A small box containing a handful of tiny bullets. Each one is coated with the venom of the infamous zyn snail."
-	icon = 'icons/obj/storage/box.dmi'
+	icon = 'icons/obj/storage/donk_storage.dmi'
 	icon_state = "box_snailtox"
 	base_icon_state = "box_snailtox"
 	contents_tag = "bullet"

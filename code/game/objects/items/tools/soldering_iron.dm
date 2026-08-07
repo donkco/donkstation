@@ -6,7 +6,7 @@
 	name = "soldering iron"
 	desc = "A small soldering iron for attaching and detaching electronic components."
 
-	icon = 'icons/obj/tools.dmi'
+	icon = 'icons/obj/donk_parts.dmi'
 	icon_state = "soldering_iron"
 	inhand_icon_state = "soldering_iron"
 	base_icon_state = "soldering_iron"
@@ -45,7 +45,7 @@
 
 /obj/item/soldering_iron/update_overlays()
 	. = ..()
-	if(solder_reservoir)
+	if(solder_reservoir > 0)
 		. +="[base_icon_state]_tinned"
 
 /obj/item/soldering_iron/use(amount)
@@ -92,7 +92,7 @@
 	name = "solder"
 	desc = "A spool of flux cored solder wire."
 
-	icon = 'icons/obj/tools.dmi'
+	icon = 'icons/obj/donk_parts.dmi'
 	icon_state = "solder"
 	base_icon_state = "solder"
 
