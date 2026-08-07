@@ -660,7 +660,7 @@
 	icon_state = "decker_suit"
 	inhand_icon_state = null
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
-	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+	supports_variations_flags = CLOTHING_DIGI_FRIENDLY
 
 /obj/item/clothing/suit/costume/soviet
 	name = "soviet armored coat"
@@ -682,7 +682,7 @@
 	icon_state = "tmc_suit"
 	inhand_icon_state = null
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
-	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+	supports_variations_flags = CLOTHING_DIGI_FRIENDLY
 
 /obj/item/clothing/suit/costume/pg
 	name = "powder ganger jacket"
@@ -690,7 +690,7 @@
 	icon_state = "pg_suit"
 	inhand_icon_state = null
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
-	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+	supports_variations_flags = CLOTHING_DIGI_FRIENDLY
 
 /obj/item/clothing/suit/costume/irs
 	name = "internal revenue service jacket"
@@ -698,7 +698,7 @@
 	icon_state = "irs_suit"
 	inhand_icon_state = null
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
-	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON
+	supports_variations_flags = CLOTHING_DIGI_FRIENDLY
 
 /obj/item/clothing/suit/costume/bear_suit
 	name = "bear suit"

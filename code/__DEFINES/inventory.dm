@@ -172,20 +172,25 @@ DEFINE_BITFIELD(no_equip_flags, list(
 
 //Flags (actual flags, fucker ^) for /obj/item/var/supports_variations_flags
 /// Has a sprite for digitigrade legs specifically.
-#define CLOTHING_DIGITIGRADE_VARIATION (1<<0)
+#define CLOTHING_DIGI_TAILORED (1<<0)
 /// The sprite works fine for digitigrade legs as-is.
-#define CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON (1<<1)
+#define CLOTHING_DIGI_FRIENDLY (1<<1)
 /// Auto-generates the leg portion of the sprite with GAGS
 #define CLOTHING_DIGITIGRADE_MASK (1<<2)
-
 /// All variation flags which render "correctly" on a digitigrade leg setup
-#define DIGITIGRADE_VARIATIONS (CLOTHING_DIGITIGRADE_VARIATION|CLOTHING_DIGITIGRADE_VARIATION_NO_NEW_ICON|CLOTHING_DIGITIGRADE_MASK)
+#define CLOTHING_DIGI_COMPATIBLE (CLOTHING_DIGI_TAILORED|CLOTHING_DIGI_FRIENDLY|CLOTHING_DIGITIGRADE_MASK)
 
 // Has fat sprites
-#define CLOTHING_FAT_TAILORED (1<<0)
-#define CLOTHING_FAT_FRIENDLY (1 <<1)
-
+#define CLOTHING_FAT_TAILORED (1<<3)
+#define CLOTHING_FAT_FRIENDLY (1 <<4)
 #define CLOTHING_FAT_COMPATIBLE (CLOTHING_FAT_TAILORED|CLOTHING_FAT_FRIENDLY)
+
+#define CLOTHING_FEMALE_TAILORED (1<<5)
+#define CLOTHING_FEMALE_FILTER (1<<6)
+#define CLOTHING_FEMALE_FRIENDLY (1<<7)
+#define CLOTHING_FEMALE_COMPATIBLE (CLOTHING_FEMALE_TAILORED|CLOTHING_FEMALE_FILTER|CLOTHING_FEMALE_FRIENDLY)
+#define CLOTHING_SNOUT_TAILORED (1<<8)
+#define CLOTHING_SNOUT_FRIENDLY (1<<9)
 
 //flags for covering body parts
 #define GLASSESCOVERSEYES (1<<0)

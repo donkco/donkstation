@@ -84,7 +84,7 @@
 	desc = "Boots lined with 'synthetic' animal fur."
 	icon_state = "winterboots"
 	inhand_icon_state = null
-	supports_variations_flags = CLOTHING_DIGITIGRADE_MASK|CLOTHING_FAT_FRIENDLY|CLOTHING_FAT_FRIENDLY|CLOTHING_FAT_FRIENDLY
+	supports_variations_flags = CLOTHING_DIGITIGRADE_MASK|CLOTHING_FAT_FRIENDLY
 	armor_type = /datum/armor/shoes_winterboots
 	cold_protection = FEET|LEGS
 	min_cold_protection_temperature = SHOES_MIN_TEMP_PROTECT
@@ -192,6 +192,7 @@
 
 /obj/item/clothing/shoes/pirate/Initialize(mapload)
 	. = ..()
+	create_storage(storage_type = /datum/storage/pockets/shoes)
 	AddElement(/datum/element/adjust_fishing_difficulty, -4)
 
 /obj/item/clothing/shoes/pirate/armored

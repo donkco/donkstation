@@ -596,22 +596,24 @@
 		tool.play_tool_sound(src)
 	return TRUE
 
-/obj/item/melee/baton/security/attackby(obj/item/item, mob/user, list/modifiers, list/attack_modifiers)
-	if(istype(item, /obj/item/stock_parts/power_store/cell))
-		var/obj/item/stock_parts/power_store/cell/active_cell = item
-		if(cell)
-			to_chat(user, span_warning("[src] already has a cell!"))
-		else
-			if(active_cell.max_charge() < cell_hit_cost)
-				to_chat(user, span_notice("[src] requires a higher capacity cell."))
-				return
-			if(!user.transferItemToLoc(item, src))
-				return
-			cell = item
-			to_chat(user, span_notice("You install a cell in [src]."))
-			update_appearance()
-	else
-		return ..()
+/obj/item/melee/baton/security/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(!istype(tool, /obj/item/stock_parts/power_store/cell))
+		return NONE
+	if(cell)
+		to_chat(user, span_warning("[src] already has a cell!"))
+		return ITEM_INTERACT_BLOCKING
+
+	if(astype(tool, /obj/item/stock_parts/power_store/cell).max_charge() < cell_hit_cost)
+		to_chat(user, span_notice("[src] requires a higher capacity cell."))
+		return ITEM_INTERACT_BLOCKING
+
+	if(!user.transferItemToLoc(tool, src))
+		return ITEM_INTERACT_BLOCKING
+
+	cell = tool
+	to_chat(user, span_notice("You install a cell in [src]."))
+	update_appearance()
+	return ITEM_INTERACT_SUCCESS
 
 /obj/item/melee/baton/security/proc/tryremovecell(mob/user)
 	if(cell && can_remove_cell)
@@ -837,37 +839,38 @@
 /obj/item/melee/baton/security/cattleprod/add_deep_lore()
 	return
 
-/obj/item/melee/baton/security/cattleprod/attackby(obj/item/item, mob/user, list/modifiers, list/attack_modifiers)//handles sticking a crystal onto a stunprod to make an improved cattleprod
-	if(!istype(item, /obj/item/stack))
+/obj/item/melee/baton/security/cattleprod/item_interaction(mob/living/user, obj/item/tool, list/modifiers)//handles sticking a crystal onto a stunprod to make an improved cattleprod
+	if(!istype(tool, /obj/item/stack))
 		return ..()
 
 	if(!can_upgrade)
 		user.visible_message(span_warning("This prod is already improved!"))
-		return ..()
+		return ITEM_INTERACT_BLOCKING
 
 	if(cell)
 		user.visible_message(span_warning("You can't put the crystal onto the stunprod while it has a power cell installed!"))
-		return ..()
+		return ITEM_INTERACT_BLOCKING
 
 	var/our_prod
-	if(istype(item, /obj/item/stack/ore/bluespace_crystal))
-		var/obj/item/stack/ore/bluespace_crystal/our_crystal = item
+	if(istype(tool, /obj/item/stack/ore/bluespace_crystal))
+		var/obj/item/stack/ore/bluespace_crystal/our_crystal = tool
 		our_crystal.use(1)
 		our_prod = /obj/item/melee/baton/security/cattleprod/teleprod
 
-	else if(istype(item, /obj/item/stack/telecrystal))
-		var/obj/item/stack/telecrystal/our_crystal = item
+	else if(istype(tool, /obj/item/stack/telecrystal))
+		var/obj/item/stack/telecrystal/our_crystal = tool
 		our_crystal.use(1)
 		our_prod = /obj/item/melee/baton/security/cattleprod/telecrystalprod
 	else
-		to_chat(user, span_notice("You don't think \the [item] will do anything to improve \the [src]."))
-		return ..()
+		to_chat(user, span_notice("You don't think \the [tool] will do anything to improve \the [src]."))
+		return ITEM_INTERACT_BLOCKING
 
-	to_chat(user, span_notice("You place \the [item] firmly into \the [sparkler]."))
+	to_chat(user, span_notice("You place \the [tool] firmly into \the [sparkler]."))
 	remove_item_from_storage(user)
 	qdel(src)
 	var/obj/item/melee/baton/security/cattleprod/brand_new_prod = new our_prod(user.loc)
 	user.put_in_hands(brand_new_prod)
+	return ITEM_INTERACT_SUCCESS
 
 /obj/item/melee/baton/security/cattleprod/try_stun(mob/living/target, mob/living/user, harmbatonning)
 	return ..() && sparkler.activate()
@@ -1002,54 +1005,3 @@
 		melee_attack_chain(owner, attacker, LEFT_CLICK)
 
 	return ..()
-
-// Deep Lore //
-
-/obj/item/melee/baton/security/add_deep_lore()
-	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
-		list("desc" = "The Secure Apprehension Device (sometimes referred to as the SAD in the officer training manuals) is \
-		the unholy union of a mace and a cattleprod. This nonlethal device was designed to put a stop to ruffians, \
-		scoundrels, ne'er-do-wells and criminals wherever they may rear their ugly heads.<br>\
-		<br>\
-		A symbol of Nanotrasen security forces, the stun baton is the primary tool officers employ against the \
-		unlawful scum and villainy of the Spinward and abroad. Trained to 'baton first, interrogate later', \
-		Nanotrasen security has long since earned itself a mixed reputation. Able to rapidly shut down the \
-		central nervous system of a criminal with only a few direct applications of the conductive striking head \
-		of the device, few would-be troublemakers want to find themselves on the wrong end of an officer brandishing \
-		this baton.<br>\
-		<br>\
-		TerraGov law enforcement has avoided the adoption of stun batons due to various ethical dilemmas posed by \
-		their usage, largely because of the longterm physical and mental ramifications of being struck by a human cattleprod. \
-		Citizens' rights advocacy groups protest against the proliferation of stun batons as a policing tool, \
-		arguing that they are 'inhumane' and 'authoritarian'. Nanotrasen, on the other hand, has had no such qualms \
-		when deploying stun batons as a compliance measure across all of their existing stations and facilities against \
-		unruly members of staff.")
-	)))
-
-// Contractor Baton
-
-/obj/item/melee/baton/telescopic/contractor_baton/add_deep_lore()
-	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
-		list("desc" = "The Contract Acquisition Device (sometimes referred to as the CAD in encrypted correspondence) is \
-		one of the more frequently encountered examples of Cybersun Industries weaponry. Extremely similar to Nanotrasen's \
-		own Secure Apprehension Device (also simply known as the stun baton), the contractor baton is able to induce \
-		CNS disruption in a target to render them helpless. It is also capable of devastating blunt force trauma if \
-		used as a bludgeon. The contractor baton is also capable of telescopic deployment, allowing for discretion while \
-		making an approach towards a target.<br>\
-		<br>\
-		The contractor baton is famously associated with contractors, elite Cybersun field agents. While the standard \
-		agent would often be tasked with sabotage, terrorism, murder or theft, contractors have the critical task of \
-		kidnapping high value personnel. Anyone with the potential to possess classified or sensitive data about Nanotrasen \
-		security systems and devices could be a target for Cybersun. <br>\
-		<br>\
-		Extracting this information is most easily performed on living subjects. As such, the contractor baton was designed \
-		with nonlethal incapacitation in mind. However, Cybersun Industries has long since found workarounds for extracting \
-		data from the recently deceased, should the contractor find themselves with only a corpse left to send back. Death \
-		may not spare you from the machinations of Cybersun Industries if they deem you a valuable asset towards their goals.<br>\
-		<br>\
-		Nanotrasen utilizes a number of countermeasures to contractor insurgencies, such as employing selective memory wiping \
-		or falsified memory injection, the establishment of 'dummy' command staff through the artificial acceleration \
-		of otherwise incompetent but useful crewmembers (whose incompetence will often result in an acceptable degree \
-		of operational disruption), which provides convenient scapegoats in the event of a security breach as well as \
-		frequent staff turnover and reassignment.")
-	)))

@@ -32,13 +32,13 @@
 	/// Use this for surfaces that receive transferred footprints but don't generate new ones.
 	var/can_have_footprints = FALSE
 	/// Lazylist of all shoe types that have walked over this turf
-	VAR_PRIVATE/list/footprint_shoe_types
+	var/list/footprint_shoe_types
 	/// Lazylist of all species that have walked over this turf
-	VAR_PRIVATE/list/footprint_species_types
+	var/list/footprint_species_types
 	/// All dirs from which footprints have entered this turf
-	VAR_PRIVATE/footprint_entrance_dirs = NONE
+	var/footprint_entrance_dirs = NONE
 	/// All dirs from which footprints have exited this turf
-	VAR_PRIVATE/footprint_exit_dirs = NONE
+	var/footprint_exit_dirs = NONE
 
 /// Returns a list of every turf state considered "broken".
 /// Will be randomly chosen if a turf breaks at runtime.
@@ -78,13 +78,12 @@
 
 	if(broken)
 		var/mutable_appearance/broken_appearance = mutable_appearance(damaged_dmi, pick(broken_states()))
+		if(smoothing_flags && !smooth_broken)
+			var/matrix/translation = new
+			translation.Translate(-LARGE_TURF_SMOOTHING_X_OFFSET, -LARGE_TURF_SMOOTHING_Y_OFFSET)
+			broken_appearance.transform = translation
 
-			if(smoothing_flags && !smooth_broken)
-				var/matrix/translation = new
-				translation.Translate(-LARGE_TURF_SMOOTHING_X_OFFSET, -LARGE_TURF_SMOOTHING_Y_OFFSET)
-				broken_appearance.transform = translation
-
-			. += broken_appearance
+		. += broken_appearance
 
 	else if(burnt)
 		if(isnull(damaged_dmi))

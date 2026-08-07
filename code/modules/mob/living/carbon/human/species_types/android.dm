@@ -161,13 +161,11 @@
 
 /datum/species/android/monkey/on_species_gain(mob/living/carbon/human/human_who_gained_species, datum/species/old_species, pref_load, regenerate_icons, replace_missing)
 	. = ..()
-	passtable_on(human_who_gained_species, SPECIES_TRAIT)
 	human_who_gained_species.AddElement(/datum/element/human_biter)
 	human_who_gained_species.update_mob_height()
 
 /datum/species/android/monkey/on_species_loss(mob/living/carbon/human/human, datum/species/new_species, pref_load)
 	. = ..()
-	passtable_off(human, SPECIES_TRAIT)
 	human.RemoveElement(/datum/element/human_biter)
 	human.update_mob_height()
 

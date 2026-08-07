@@ -104,7 +104,7 @@
 	else
 		base_examine += span_notice("There's nothing placed on [parent]. Yet.")
 
-/datum/component/hat_stabilizer/proc/get_worn_overlays(atom/movable/source, list/overlays, mutable_appearance/standing, isinhands, icon_file)
+/datum/component/hat_stabilizer/proc/get_worn_overlays(atom/movable/source, list/overlays, mutable_appearance/standing, isinhands, icon_file, bodyshape = NONE)
 	SIGNAL_HANDLER
 	if(isinhands)
 		return
@@ -121,7 +121,7 @@
 	worn_overlay.pixel_z = pixel_z_offset + attached_hat.worn_y_offset
 	overlays += worn_overlay
 
-/datum/component/hat_stabilizer/proc/get_separate_worn_overlays(atom/movable/source, list/overlays, mutable_appearance/standing, mutable_appearance/draw_target, isinhands, icon_file)
+/datum/component/hat_stabilizer/proc/get_separate_worn_overlays(atom/movable/source, list/overlays, mutable_appearance/standing, mutable_appearance/draw_target, isinhands, icon_file, bodyshape = NONE)
 	SIGNAL_HANDLER
 	if (isinhands)
 		return

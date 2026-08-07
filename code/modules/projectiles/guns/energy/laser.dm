@@ -13,8 +13,6 @@
 
 /obj/item/gun/energy/laser/Initialize(mapload)
 	. = ..()
-	add_deep_lore()
-
 	// Only regular lasguns can be slapcrafted
 	if(type != /obj/item/gun/energy/laser)
 		return
