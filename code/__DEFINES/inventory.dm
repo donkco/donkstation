@@ -167,8 +167,6 @@ DEFINE_BITFIELD(no_equip_flags, list(
 //flags for alternate styles: These are hard sprited so don't set this if you didn't put the effort in
 #define NORMAL_STYLE 0
 #define ALT_STYLE 1
-#define DIGITIGRADE_STYLE 2
-#define FAT_STYLE 3
 
 //Flags (actual flags, fucker ^) for /obj/item/var/supports_variations_flags
 /// Has a sprite for digitigrade legs specifically.

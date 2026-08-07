@@ -113,7 +113,7 @@
 	/// barrel_attachment
 	var/obj/item/gun_attachment/barrel_attachment = null
 	/// the offset for the barrel attachment, used to position the attachment sprite correctly.
-	var/vector/barrel_mount_position = vector(30, 18)
+	var/barrel_mount_position = TEMP_VECTOR_TRICK(30, 18)
 
 	/// Cooldown for the visible message sent from gun flipping.
 	COOLDOWN_DECLARE(flip_cooldown)
@@ -130,7 +130,6 @@
 
 	add_seclight_point()
 	add_bayonet_point()
-	add_deep_lore()
 	RegisterSignal(src, COMSIG_ITEM_IN_UNWRAPPED_TRAITOR_MAIL, PROC_REF(on_mail_unwrap))
 
 /obj/item/gun/Destroy()
@@ -156,7 +155,9 @@
 	. = ..()
 	if(barrel_attachment)
 		var/mutable_appearance/attachment_overlay = mutable_appearance(barrel_attachment.icon, "[barrel_attachment.icon_state]")
-		attachment_overlay.set_pixel_offset(barrel_mount_position - barrel_attachment.attachment_point)
+		var/vector/barrel_mount_vector = vector(barrel_mount_position[1], barrel_mount_position[2])
+		var/vector/attachment_point_vector = vector(barrel_attachment.attachment_point[1], barrel_attachment.attachment_point[2])
+		attachment_overlay.set_pixel_offset(barrel_mount_vector - attachment_point_vector)
 		. += attachment_overlay
 
 
@@ -189,10 +190,6 @@
 
 /// Similarly to add_seclight_point(), handles [the bayonet attachment component][/datum/component/bayonet_attachable]
 /obj/item/gun/proc/add_bayonet_point()
-	return
-
-/// For when you want to add the lore element to a gun, this is the proc to use.
-/obj/item/gun/proc/add_deep_lore()
 	return
 
 /obj/item/gun/Exited(atom/movable/gone, direction)

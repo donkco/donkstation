@@ -207,6 +207,23 @@
 	else if(old_states >= HUMAN_DISFIGURATION_HEAD_DAMAGE_STATES)
 		REMOVE_TRAIT(src, TRAIT_DISFIGURED, BODYPART_TRAIT)
 
+/obj/item/bodypart/head/modify_bodyshape(gained_shapes, lost_shapes)
+	. = ..()
+
+	if(!owner)
+		return
+
+	if(. & (BODYSHAPE_SNOUTED))
+		var/remaining_slots = owner.drop_unequipables(ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_EYES|ITEM_SLOT_EARS)
+		if(remaining_slots & ITEM_SLOT_HEAD)
+			owner.update_worn_head()
+		if(remaining_slots & ITEM_SLOT_MASK)
+			owner.update_worn_mask()
+		if(remaining_slots & ITEM_SLOT_EYES)
+			owner.update_worn_glasses()
+		if(remaining_slots & ITEM_SLOT_EARS)
+			owner.update_worn_ears()
+
 /obj/item/bodypart/head/proc/update_owner_name(datum/source)
 	SIGNAL_HANDLER
 

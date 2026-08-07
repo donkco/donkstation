@@ -1988,11 +1988,22 @@
 
 
 /obj/item/bodypart/proc/modify_bodyshape(gained_shapes, lost_shapes)
+	var/modifed_shapes
 	if(gained_shapes)
 		bodyshape |= gained_shapes
+		modifed_shapes |= gained_shapes
 	if(lost_shapes)
 		bodyshape &= ~lost_shapes
-	SEND_SIGNAL(src, COMSIG_BODYPART_BODYSHAPE_CHANGED)
+		modifed_shapes |= lost_shapes
+	SEND_SIGNAL(src, COMSIG_BODYPART_BODYSHAPE_CHANGED, gained_shapes, lost_shapes)
+
+	. = modifed_shapes
+
+	if(!owner)
+		update_icon_dropped()
+		return
+	owner.update_body_parts(TRUE)
+
 
 /// Adds biostate to the limb and ensures surgical states are updated accordingly
 /obj/item/bodypart/proc/add_biostate(new_biostate)

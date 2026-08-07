@@ -94,3 +94,5 @@ Energy densities in defined calories per unit (actual numeric values under the h
 #define ENERGY_DENSITY_PLASMA (83.8 BTUS) // Based on diborane which seems like a reasonable real world equivalent.  21.17 kcal per u
 #define ENERGY_DENSITY_OIL (36.59 BTUS) //based on diesel fuel which should be reasonably close to lubricating oil. 9.22 kcal per u
 #define ENERGY_DENSITY_FUEL (26.54 BTUS) // based on liquified butane, since it is a light volatile hydrocarbon.  6.69 kcal per u
+
+#define TEMP_VECTOR_TRICK(x, y) list(x, y)

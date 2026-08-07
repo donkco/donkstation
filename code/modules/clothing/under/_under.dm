@@ -100,7 +100,7 @@
 		context[SCREENTIP_CONTEXT_LMB] = "Cut suit sensors"
 		changed = TRUE
 
-	if(can_adjust && adjusted != DIGITIGRADE_STYLE)
+	if(can_adjust)
 		context[SCREENTIP_CONTEXT_ALT_LMB] =  "Wear [adjusted == ALT_STYLE ? "normally" : "casually"]"
 		changed = TRUE
 

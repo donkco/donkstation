@@ -60,7 +60,7 @@
 	///If the cell is soldered and needs to be desoldered before removing.
 	var/soldered_cell = TRUE
 	///pixel coordinate where we want to display our cell / electronic guts overlay
-	var/vector/electronics_overlay_postition = vector(14, 17)
+	var/vector/electronics_overlay_postition = TEMP_VECTOR_TRICK(14, 17)
 
 /obj/item/gun/energy/fire_sounds()
 	// What frequency the energy gun's sound will make
@@ -367,7 +367,9 @@
 			var/obj/item/stock_parts/power_store/battery_array/visible_array = cell
 			var/mutable_appearance/cell_overlay = new()
 			cell_overlay.appearance = visible_array.appearance
-			cell_overlay.set_pixel_offset(electronics_overlay_postition - visible_array.overlay_base_pixel)
+			var/vector/overlay_base_pixel_vector = vector(visible_array.overlay_base_pixel[1], visible_array.overlay_base_pixel[2])
+			var/vector/electronics_overlay_postition_vector = vector(electronics_overlay_postition[1], electronics_overlay_postition[2])
+			cell_overlay.set_pixel_offset(electronics_overlay_postition_vector - overlay_base_pixel_vector)
 			. += cell_overlay
 
 	if(!automatic_charge_overlays)

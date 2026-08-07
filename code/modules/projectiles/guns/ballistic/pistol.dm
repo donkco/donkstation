@@ -23,7 +23,7 @@
 	fire_sound_volume = 90
 	bolt_wording = "slide"
 	recoil_backtime_multiplier = 1
-	barrel_mount_position = vector(26, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(26, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/no_mag
 	spawnwithmagazine = FALSE
@@ -54,7 +54,7 @@
 	icon_state = "pistol_evil"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m10mm
 	empty_indicator = TRUE
-	barrel_mount_position = vector(27, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(27, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher
 	name = "\improper Ansem/SC pistol"
@@ -63,7 +63,7 @@
 	desc_controls = "Right-click to use the underbarrel disruptor. Two shots maximum between self-charges."
 	icon_state = "pistol_evil_fisher"
 	suppressed = SUPPRESSED_QUIET
-	barrel_mount_position = vector(30, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 18)
 
 	var/obj/item/gun/energy/recharge/fisher/underbarrel
 
@@ -106,7 +106,7 @@
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
-	barrel_mount_position = vector(28, 20)
+	barrel_mount_position = TEMP_VECTOR_TRICK(28, 20)
 /**
  * Weak 1911 for syndicate chimps. It comes in a 4 TC kit.
  * 15 damage every.. second? 7 shots to kill. Not fast.
@@ -117,9 +117,6 @@
 	projectile_damage_multiplier = 0.5
 	projectile_wound_bonus = -12
 	pin = /obj/item/firing_pin/monkey
-
-/obj/item/gun/ballistic/automatic/pistol/m1911/chimpgun/add_deep_lore()
-	return
 
 /obj/item/gun/ballistic/automatic/pistol/m1911/no_mag
 	spawnwithmagazine = FALSE
@@ -135,7 +132,7 @@
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
-	barrel_mount_position = vector(31, 21)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 21)
 
 /obj/item/gun/ballistic/automatic/pistol/deagle/contraband
 
@@ -188,7 +185,7 @@
 	burst_delay = 1
 	spread = 10
 	actions_types = list(/datum/action/item_action/toggle_firemode)
-	barrel_mount_position = vector(28, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(28, 18)
 
 /obj/item/gun/ballistic/automatic/pistol/stickman
 	name = "flat gun"
@@ -226,7 +223,7 @@
 	show_bolt_icon = FALSE
 	projectile_damage_multiplier = 0.5
 	spread = 10
-	barrel_mount_position = vector(24, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(24, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/doohickey/unload_ammo(mob/living/user, forced = FALSE)
 	if (forced)

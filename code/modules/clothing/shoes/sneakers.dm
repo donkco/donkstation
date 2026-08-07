@@ -19,9 +19,6 @@
 	var/colors = SSgreyscale.ParseColorString(greyscale_colors)
 	return colors ? colors[1] : ..()
 
-/obj/item/clothing/shoes/sneakers/generate_digitigrade_icons(icon/base_icon, greyscale_colors)
-	return icon(SSgreyscale.GetColoredIconByType(/datum/greyscale_config/digitigrade, greyscale_colors), "sneakers_worn")
-
 /obj/item/clothing/shoes/sneakers/random
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1 // same icon/color as base type
 

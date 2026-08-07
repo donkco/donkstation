@@ -6848,6 +6848,7 @@
 #include "code\modules\surgery\organs\external\wings\functional_wings.dm"
 #include "code\modules\surgery\organs\external\wings\moth_wings.dm"
 #include "code\modules\surgery\organs\external\wings\wings.dm"
+#include "code\modules\surgery\organs\internal\donk_organs.dm"
 #include "code\modules\surgery\organs\internal\appendix\_appendix.dm"
 #include "code\modules\surgery\organs\internal\appendix\appendix_golem.dm"
 #include "code\modules\surgery\organs\internal\cyberimp\augments_arms.dm"

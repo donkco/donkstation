@@ -124,6 +124,19 @@
 		return
 	modify_bodyshape(lost_shapes = BODYSHAPE_FAT_TORSO)
 
+/obj/item/bodypart/chest/modify_bodyshape(gained_shapes, lost_shapes)
+	. = ..()
+
+	if(!owner)
+		return
+
+	if(. & (BODYSHAPE_BOOBIES|BODYSHAPE_FEMININE_HIPS|BODYSHAPE_FAT_TORSO|BODYSHAPE_FAT_LEGS|BODYSHAPE_DIGITIGRADE))
+		var/remaining_slots = owner.drop_unequipables(ITEM_SLOT_ICLOTHING|ITEM_SLOT_OCLOTHING)
+		if(remaining_slots & ITEM_SLOT_ICLOTHING)
+			owner.update_worn_undersuit()
+		if(remaining_slots & ITEM_SLOT_OCLOTHING)
+			owner.update_worn_oversuit()
+
 /obj/item/bodypart/chest/monkey
 	icon = 'icons/mob/human/species/monkey/bodyparts.dmi'
 	icon_static = 'icons/mob/human/species/monkey/bodyparts.dmi'
@@ -527,6 +540,19 @@
 
 	speed_modifier = new_modifier
 	owner?.update_bodypart_speed_modifier()
+
+/obj/item/bodypart/leg/modify_bodyshape(gained_shapes, lost_shapes)
+	. = ..()
+
+	if(!owner)
+		return
+
+	if(. & (BODYSHAPE_FAT_LEGS|BODYSHAPE_DIGITIGRADE))
+		var/remaining_slots = owner.drop_unequipables(ITEM_SLOT_ICLOTHING|ITEM_SLOT_FEET)
+		if(remaining_slots & ITEM_SLOT_ICLOTHING)
+			owner.update_worn_undersuit()
+		if(remaining_slots & ITEM_SLOT_FEET)
+			owner.update_worn_shoes()
 
 /obj/item/bodypart/leg/left
 	name = "left leg"

@@ -732,3 +732,15 @@ GAME_VERB_HIDDEN(/mob, quick_equip, "quick-equip")
 		if(stored_cell && stored_cell.percent() <= max_percent)
 			cell_items[stored] = stored_cell
 	return cell_items
+
+/// Drops any items that no longer are valid to equip. Returns a bitfield which contains the slot id for items that passed.
+/mob/living/proc/drop_unequipables(slot_ids)
+	for (var/slot_id in bitfield_to_list(slot_ids))
+		var/suspect_item = get_item_by_slot(slot_id)
+		if(!suspect_item)
+			continue
+		if(can_equip(suspect_item, slot_id))
+			. |= slot_id
+			continue
+		doUnEquip(suspect_item)
+

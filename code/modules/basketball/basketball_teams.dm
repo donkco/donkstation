@@ -62,7 +62,6 @@
 
 /datum/outfit/basketball/nanotrasen
 	name = "Basketball NT Team"
-	undershirt = /datum/sprite_accessory/clothing/undershirt/bluejersey
 	uniform = /obj/item/clothing/under/shorts/blue
 	suit = /obj/item/clothing/suit/jacket/letterman_nanotrasen
 	shoes = /obj/item/clothing/shoes/sneakers/black
@@ -129,9 +128,6 @@
 
 /datum/outfit/basketball/beach_bums
 	name = "Basketball Beach Bums"
-	undershirt = /datum/sprite_accessory/clothing/undershirt/nude
-	underwear = /datum/sprite_accessory/clothing/underwear/nude
-	socks = /datum/sprite_accessory/clothing/socks/nude
 	uniform = /obj/item/clothing/under/shorts/red
 	glasses = /obj/item/clothing/glasses/sunglasses
 	shoes = /obj/item/clothing/shoes/sandal

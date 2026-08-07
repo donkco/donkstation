@@ -9,7 +9,7 @@
 	ammo_x_offset = 3
 	dual_wield_spread = 60
 	light_color = LIGHT_COLOR_CYAN
-	barrel_mount_position = vector(31, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 18)
 
 /obj/item/gun/energy/e_gun/Initialize(mapload)
 	. = ..()
@@ -40,7 +40,7 @@
 	ammo_x_offset = 2
 	charge_sections = 3
 	single_shot_type_overlay = FALSE
-	barrel_mount_position = vector(27, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(27, 19)
 
 /obj/item/gun/energy/e_gun/mini/add_seclight_point()
 	// The mini energy gun's light comes attached but is unremovable.
@@ -58,7 +58,7 @@
 	icon_state = "energytac"
 	ammo_x_offset = 2
 	ammo_type = list(/obj/item/ammo_casing/energy/electrode/spec, /obj/item/ammo_casing/energy/disabler, /obj/item/ammo_casing/energy/laser)
-	barrel_mount_position = vector(32, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(32, 18)
 
 /obj/item/gun/energy/e_gun/old
 	name = "prototype energy gun"
@@ -66,7 +66,7 @@
 	icon_state = "protolaser"
 	ammo_x_offset = 2
 	ammo_type = list(/obj/item/ammo_casing/energy/laser, /obj/item/ammo_casing/energy/electrode/old)
-	barrel_mount_position = vector(30, 17)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 17)
 
 /obj/item/gun/energy/e_gun/mini/practice_phaser
 	name = "practice phaser"
@@ -76,7 +76,7 @@
 	//You have no icons for energy types, you're a decloner
 	modifystate = FALSE
 	gun_flags = NOT_A_REAL_GUN
-	barrel_mount_position = vector(31, 20)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 20)
 
 /obj/item/gun/energy/e_gun/hos
 	name = "\improper X-01 MultiPhase Energy Gun"
@@ -89,7 +89,7 @@
 	ammo_x_offset = 4
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 	flags_1 = PREVENT_CONTENTS_EXPLOSION_1
-	barrel_mount_position = vector(31, 16)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 16)
 
 /obj/item/gun/energy/e_gun/dragnet
 	name = "\improper DRAGnet translocation shotgun"
@@ -109,7 +109,7 @@
 	ammo_x_offset = 0
 	charge_sections = 3
 	shot_type_fluff_overlay = TRUE
-	barrel_mount_position = vector(25, 16)
+	barrel_mount_position = TEMP_VECTOR_TRICK(25, 16)
 	///A dragnet beacon set to be the teleport destination for snare teleport rounds.
 	var/obj/item/dragnet_beacon/linked_beacon
 
@@ -170,7 +170,7 @@
 		/datum/material/glass = SHEET_MATERIAL_AMOUNT,
 		/datum/material/titanium = HALF_SHEET_MATERIAL_AMOUNT,
 	)
-	barrel_mount_position = vector(30, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 19)
 	var/reactor_overloaded
 	var/fail_tick = 0
 	var/fail_chance = 0
