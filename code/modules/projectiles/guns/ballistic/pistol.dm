@@ -23,7 +23,7 @@
 	fire_sound_volume = 90
 	bolt_wording = "slide"
 	recoil_backtime_multiplier = 1
-	barrel_mount_position = vector(26, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(26, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/no_mag
 	spawnwithmagazine = FALSE
@@ -54,8 +54,7 @@
 	icon_state = "pistol_evil"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m10mm
 	empty_indicator = TRUE
-	barrel_mount_position = vector(27, 19)
-
+	barrel_mount_position = TEMP_VECTOR_TRICK(27, 19)
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher
 	name = "\improper Ansem/SC pistol"
@@ -64,26 +63,13 @@
 	desc_controls = "Right-click to use the underbarrel disruptor. Two shots maximum between self-charges."
 	icon_state = "pistol_evil_fisher"
 	suppressed = SUPPRESSED_QUIET
-	barrel_mount_position = vector(30, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 18)
 
 	var/obj/item/gun/energy/recharge/fisher/underbarrel
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher/Initialize(mapload)
 	. = ..()
 	underbarrel = new /obj/item/gun/energy/recharge/fisher(src)
-	AddElement(/datum/element/lore, string_list_of_assoc_lists(list(
-		list("desc" = "The Ansem/SC is a Scarborough Arms overhaul suite for their own Ansem handgun, designed for special operators who operate operationally, \
-		especially against people who like using lightbulbs.<br>\
-		<br>\
-		The slide is chopped down, with the front half of the handgun featuring a monolithic integral suppressor built around the barrel, \
-		and a compact kinetic light disruptor mounted underneath the barrel assembly. The integral suppressor is engineered to not affect \
-		ballistic performance nor affect the concealability of the handgun, leading to a surprisingly robust firearm.<br>\
-		<br>\
-		Scarborough Arms has never actually addressed allegations of their involvement with the modification and/or manufacture \
-		of the SC/FISHER or similar disruptor weapons. Prospective operators are reminded that kinetic light disruptors do not actually physically harm targets.<br>\
-		<br>\
-		Caveat emptor.")
-	)))
 
 /obj/item/gun/ballistic/automatic/pistol/clandestine/fisher/Destroy()
 	QDEL_NULL(underbarrel)
@@ -120,7 +106,7 @@
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
-	barrel_mount_position = vector(28, 20)
+	barrel_mount_position = TEMP_VECTOR_TRICK(28, 20)
 /**
  * Weak 1911 for syndicate chimps. It comes in a 4 TC kit.
  * 15 damage every.. second? 7 shots to kill. Not fast.
@@ -131,7 +117,6 @@
 	projectile_damage_multiplier = 0.5
 	projectile_wound_bonus = -12
 	pin = /obj/item/firing_pin/monkey
-
 
 /obj/item/gun/ballistic/automatic/pistol/m1911/no_mag
 	spawnwithmagazine = FALSE
@@ -147,7 +132,7 @@
 	rack_sound = 'sound/items/weapons/gun/pistol/rack.ogg'
 	lock_back_sound = 'sound/items/weapons/gun/pistol/slide_lock.ogg'
 	bolt_drop_sound = 'sound/items/weapons/gun/pistol/slide_drop.ogg'
-	barrel_mount_position = vector(31, 21)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 21)
 
 /obj/item/gun/ballistic/automatic/pistol/deagle/contraband
 
@@ -176,16 +161,19 @@
 	name = "\improper Regal Condor"
 	desc = "Unlike the Desert Eagle, this weapon seems to utilize some kind of advanced internal stabilization system to significantly \
 		reduce felt recoil and increase overall accuracy, at the cost of using a smaller caliber. \
-		This does allow it to fire a very quick 2-round burst. Uses 10mm ammo."
+		This allows it to fire a very quick 2-round burst. Chambered in .45."
 	icon_state = "reagle"
 	inhand_icon_state = "deagleg"
 	burst_size = 2
 	burst_delay = 1
 	projectile_damage_multiplier = 1.25
-	accepted_magazine_type = /obj/item/ammo_box/magazine/r10mm
+	accepted_magazine_type = /obj/item/ammo_box/magazine/r45
 	actions_types = list(/datum/action/item_action/toggle_firemode)
 	obj_flags = UNIQUE_RENAME // if you did the sidequest, you get the customization
-	custom_materials = list(/datum/material/gold = SHEET_MATERIAL_AMOUNT * 30, /datum/material/silver = SHEET_MATERIAL_AMOUNT * 25, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 11.5, /datum/material/telecrystal = SHEET_MATERIAL_AMOUNT * 4)
+	custom_materials = list(/datum/material/gold = SHEET_MATERIAL_AMOUNT * 20, /datum/material/silver = SHEET_MATERIAL_AMOUNT * 15, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 1.5, /datum/material/telecrystal = SHEET_MATERIAL_AMOUNT * 4)
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/regal/no_mag
+	spawnwithmagazine = FALSE
 
 /obj/item/gun/ballistic/automatic/pistol/aps
 	name = "\improper Stechkin APS machine pistol"
@@ -197,7 +185,7 @@
 	burst_delay = 1
 	spread = 10
 	actions_types = list(/datum/action/item_action/toggle_firemode)
-	barrel_mount_position = vector(28, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(28, 18)
 
 /obj/item/gun/ballistic/automatic/pistol/stickman
 	name = "flat gun"
@@ -220,12 +208,11 @@
 #define DOORHICKEY_GUN_MIN_DAMAGE 70
 #define DOORHICKEY_GUN_MAX_DAMAGE 140
 
-/obj/item/gun/ballistic/automatic/pistol/doorhickey
+/obj/item/gun/ballistic/automatic/pistol/doohickey
 	name = "\improper Liberator"
-	desc = "A poorly made 3D printed \"gun\", only capable of firing a single shot. Well-known throughout the Spinward Sector \
-		after an incident where 3 assistants were killed by shrapnel from such a device exploding while attempting to shoot a mouse."
+	desc = "A poorly made 3D printed \"gun\", only capable of firing a single shot."
 	icon_state = "doorhickey"
-	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 2)
+	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 2, /datum/material/iron = SHEET_MATERIAL_AMOUNT * 1.5)
 	bolt_type = BOLT_TYPE_NO_BOLT
 	internal_magazine = TRUE
 	casing_ejector = FALSE
@@ -236,9 +223,9 @@
 	show_bolt_icon = FALSE
 	projectile_damage_multiplier = 0.5
 	spread = 10
-	barrel_mount_position = vector(24, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(24, 19)
 
-/obj/item/gun/ballistic/automatic/pistol/doorhickey/unload_ammo(mob/living/user, forced = FALSE)
+/obj/item/gun/ballistic/automatic/pistol/doohickey/unload_ammo(mob/living/user, forced = FALSE)
 	if (forced)
 		return ..()
 
@@ -249,7 +236,7 @@
 		return
 	. = ..()
 
-/obj/item/gun/ballistic/automatic/pistol/doorhickey/load_gun(obj/item/ammo, mob/living/user)
+/obj/item/gun/ballistic/automatic/pistol/doohickey/load_gun(obj/item/ammo, mob/living/user)
 	. = ..()
 	if (!.)
 		return
@@ -263,7 +250,7 @@
 	unload_ammo(user, forced = TRUE)
 	return FALSE
 
-/obj/item/gun/ballistic/automatic/pistol/doorhickey/process_fire(atom/target, mob/living/user, message, params, zone_override, bonus_spread)
+/obj/item/gun/ballistic/automatic/pistol/doohickey/process_fire(atom/target, mob/living/user, message, params, zone_override, bonus_spread)
 	var/dmg_multiplier = 1
 
 	if (get_dist(target, user) <= 1)
@@ -282,7 +269,7 @@
 	. = ..()
 	projectile_damage_multiplier /= dmg_multiplier
 
-/obj/item/gun/ballistic/automatic/pistol/doorhickey/shoot_live_shot(mob/living/user, pointblank = FALSE, atom/pbtarget = null, message = TRUE)
+/obj/item/gun/ballistic/automatic/pistol/doohickey/shoot_live_shot(mob/living/user, pointblank = FALSE, atom/pbtarget = null, message = TRUE)
 	. = ..()
 	if (!.)
 		return

@@ -11,6 +11,8 @@
 #define LABEL_ROBUST_HARVEST "robust"
 #define LABEL_LEFT_4_ZED "l4z"
 #define LABEL_SPACE_CLEANER "space_cleaner"
+#define LABEL_CONCRETE "concrete"
+#define LABEL_HEXACRETE "hexacrete"
 
 #define CAP_BLACK "black"
 #define CAP_WHITE "white"
@@ -85,7 +87,7 @@
 	if(cap_type)
 		. += mutable_appearance(icon, "[base_icon_state]_cap_[cap_type]")
 
-/obj/item/reagent_containers/cup/jerrycan/worn_overlays(mutable_appearance/standing, isinhands, icon_file)
+/obj/item/reagent_containers/cup/jerrycan/worn_overlays(mutable_appearance/standing, isinhands, icon_file, bodyshape = NONE)
 	. = ..()
 	if(!isinhands)
 		return
@@ -168,7 +170,6 @@
 	desc = "A jug of most wholesome milk."
 	list_reagents = list(/datum/reagent/consumable/milk = 200)
 
-
 #undef LABEL_TEXT
 #undef LABEL_TEXT_OLD
 #undef LABEL_INFLAMMABLE
@@ -182,6 +183,8 @@
 #undef LABEL_ROBUST_HARVEST
 #undef LABEL_LEFT_4_ZED
 #undef LABEL_SPACE_CLEANER
+#undef LABEL_CONCRETE
+#undef LABEL_HEXACRETE
 #undef CAP_BLACK
 #undef CAP_WHITE
 #undef CAP_RED

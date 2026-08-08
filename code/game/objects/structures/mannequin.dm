@@ -95,18 +95,6 @@
 	var/mutable_appearance/pedestal = mutable_appearance(icon, "pedestal_[material]")
 	pedestal.pixel_z = -3
 	. += pedestal
-	var/datum/sprite_accessory/clothing/underwear/underwear = SSaccessories.underwear_list[underwear_name]
-	var/mutable_appearance/underwear_overlay = underwear?.make_appearance(COLOR_WHITE, body_type, BODYSHAPE_HUMANOID)
-	if(underwear_overlay)
-		. += underwear_overlay
-	var/datum/sprite_accessory/clothing/undershirt/undershirt = SSaccessories.undershirt_list[undershirt_name]
-	var/mutable_appearance/undershirt_overlay = undershirt?.make_appearance(COLOR_WHITE, body_type, BODYSHAPE_HUMANOID)
-	if(undershirt_overlay)
-		. += undershirt_overlay
-	var/datum/sprite_accessory/clothing/socks/socks = SSaccessories.socks_list[socks_name]
-	var/mutable_appearance/socks_overlay = socks?.make_appearance(COLOR_WHITE, body_type, BODYSHAPE_HUMANOID)
-	if(socks_overlay)
-		. += socks_overlay
 	for(var/slot_flag in worn_items)
 		var/obj/item/worn_item = worn_items[slot_flag]
 		if(!worn_item)
@@ -117,7 +105,7 @@
 		if(body_type == FEMALE && istype(worn_item, /obj/item/clothing/under))
 			var/obj/item/clothing/under/worn_jumpsuit = worn_item
 			female_icon = worn_jumpsuit.female_sprite_flags
-		. += worn_item.build_worn_icon(default_layer, default_icon, female_uniform = female_icon)
+		. += worn_item.build_worn_icon(default_layer, default_icon)
 
 /obj/structure/mannequin/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()

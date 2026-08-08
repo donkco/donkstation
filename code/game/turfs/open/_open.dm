@@ -71,19 +71,19 @@
 	return TRUE
 
 /turf/open/update_overlays()
+	if(isnull(damaged_dmi))
+		return ..()
+
 	. = ..()
+
 	if(broken)
-		if(isnull(damaged_dmi))
-			stack_trace("[type] has broken set to TRUE but doesn't have a damaged_dmi set.")
-		else
-			var/mutable_appearance/broken_appearance = mutable_appearance(damaged_dmi, pick(broken_states()))
+		var/mutable_appearance/broken_appearance = mutable_appearance(damaged_dmi, pick(broken_states()))
+		if(smoothing_flags && !smooth_broken)
+			var/matrix/translation = new
+			translation.Translate(-LARGE_TURF_SMOOTHING_X_OFFSET, -LARGE_TURF_SMOOTHING_Y_OFFSET)
+			broken_appearance.transform = translation
 
-			if(smoothing_flags && !smooth_broken)
-				var/matrix/translation = new
-				translation.Translate(-LARGE_TURF_SMOOTHING_X_OFFSET, -LARGE_TURF_SMOOTHING_Y_OFFSET)
-				broken_appearance.transform = translation
-
-			. += broken_appearance
+		. += broken_appearance
 
 	else if(burnt)
 		if(isnull(damaged_dmi))

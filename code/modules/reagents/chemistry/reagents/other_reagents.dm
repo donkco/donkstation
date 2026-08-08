@@ -315,6 +315,7 @@
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	default_container = /obj/item/reagent_containers/cup/glass/bottle/holywater
 	metabolized_traits = list(TRAIT_HOLY)
+	COOLDOWN_DECLARE(spell_clear_cd)
 
 /datum/glass_style/drinking_glass/holywater
 	required_drink_type = /datum/reagent/water/holywater
@@ -350,14 +351,26 @@
 	affected_mob.adjust_jitter_up_to(2 SECONDS * metabolization_ratio * seconds_per_tick, 20 SECONDS)
 	var/need_mob_update = FALSE
 
-	if(IS_CULTIST(affected_mob))
-		for(var/datum/action/innate/cult/blood_magic/BM in affected_mob.actions)
+	if(COOLDOWN_FINISHED(src, spell_clear_cd))
+		if(IS_CULTIST(affected_mob))
+			for(var/datum/action/innate/cult/blood_magic/BM in affected_mob.actions)
+				var/removed_any = FALSE
+				for(var/datum/action/innate/cult/blood_spell/BS in BM.spells)
+					removed_any = TRUE
+					qdel(BS)
+				if(removed_any)
+					to_chat(affected_mob, span_cult_large("Your blood rites falter as holy water scours your body!"))
+					COOLDOWN_START(src, spell_clear_cd, 3 SECONDS)
+
+		if(IS_HERETIC(affected_mob))
+			var/datum/antagonist/heretic/heretic_datum = GET_HERETIC(affected_mob)
 			var/removed_any = FALSE
-			for(var/datum/action/innate/cult/blood_spell/BS in BM.spells)
-				removed_any = TRUE
-				qdel(BS)
+			for(var/datum/heretic_knowledge/spell/spell in heretic_datum.get_researched_knowledge())
+				if(spell.remove_charges(ceil(spell.max_charges * spell.holywater_drain_amount)))
+					removed_any = TRUE
 			if(removed_any)
-				to_chat(affected_mob, span_cult_large("Your blood rites falter as holy water scours your body!"))
+				to_chat(affected_mob, span_mansus("Your intricate rituals are distrupted by the holy water scouring your body!"))
+				COOLDOWN_START(src, spell_clear_cd, 3 SECONDS)
 
 	if(data["deciseconds_metabolized"] >= (25 SECONDS)) // 10 units
 		affected_mob.adjust_stutter_up_to(2 SECONDS * metabolization_ratio * seconds_per_tick, 20 SECONDS)
@@ -396,7 +409,7 @@
 	if(reac_volume >= 10)
 		for(var/obj/effect/rune/R in exposed_turf)
 			qdel(R)
-	exposed_turf.Bless()
+	exposed_turf.bless_turf()
 
 /datum/reagent/water/hollowwater
 	name = "Hollow Water"
@@ -677,6 +690,7 @@
 	color = "#5EFF3B" //RGB: 94, 255, 59
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM //metabolizes to prevent micro-dosage
 	taste_description = "slime"
+	affected_biotype = MOB_ORGANIC|MOB_SKELETAL|MOB_UNDEAD
 	var/race = /datum/species/human
 	var/list/mutationtexts = list( "You don't feel very well." = MUT_MSG_IMMEDIATE,
 									"Your skin feels a bit abnormal." = MUT_MSG_IMMEDIATE,
@@ -788,7 +802,7 @@
 	if(!ishuman(affected_mob))
 		return ..()
 	var/mob/living/carbon/affected_human = affected_mob
-	if(isjellyperson(affected_human))
+	if(affected_human.mob_biotypes & MOB_SLIME)
 		var/datum/species/species_type = pick(subtypesof(race))
 		affected_human.set_species(species_type)
 		holder.del_reagent(type)
@@ -1857,12 +1871,15 @@
 	color = COLOR_BLACK // RBG: 0, 0, 0
 	taste_description = "plant food"
 	ph = 3
+	/// The chance of toxin damage for a mob (heals toxins for MOB_PLANT biotype)
 	var/tox_prob = 0
 
 /datum/reagent/plantnutriment/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, metabolization_ratio)
 	. = ..()
+
 	if(SPT_PROB(tox_prob, seconds_per_tick))
-		if(affected_mob.adjust_tox_loss(1 * metabolization_ratio, updating_health = FALSE, required_biotype = affected_biotype))
+		var/tox_modifier = (affected_mob.mob_biotypes & MOB_PLANT) ? -1 : 1
+		if(affected_mob.adjust_tox_loss(tox_modifier * metabolization_ratio, updating_health = FALSE, required_biotype = affected_biotype))
 			return UPDATE_MOB_HEALTH
 
 /datum/reagent/plantnutriment/eznutriment
@@ -1889,7 +1906,6 @@
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 
 /datum/reagent/plantnutriment/left4zednutriment/on_hydroponics_apply(obj/machinery/hydroponics/mytray, mob/user)
-
 	mytray.adjust_plant_health(round(volume * 0.1))
 	mytray.myseed?.adjust_instability(round(volume * 0.2))
 
@@ -2825,10 +2841,27 @@
 
 /datum/reagent/pax/peaceborg
 	name = "Synthpax"
-	description = "A colorless liquid that suppresses violence in its subjects. Cheaper to synthesize than normal Pax, but wears off faster."
+	description = "A colorless liquid that suppresses violence in its subjects. Cheaper to synthesize than normal Pax, but wears off faster \
+	and cannot overpower any retaliatory responses triggered by physical trauma."
 	metabolization_rate = 1.5 * REAGENTS_METABOLISM
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED|REAGENT_NO_RANDOM_RECIPE
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
+	metabolized_traits = null
+
+/datum/reagent/pax/peaceborg/on_mob_metabolize(mob/living/affected_mob)
+	. = ..()
+	if(!HAS_TRAIT(affected_mob, TRAIT_SYNTHPAX_IMMUNE))
+		ADD_TRAIT(affected_mob, TRAIT_PACIFISM, METABOLIZATION_TRAIT(type))
+	RegisterSignal(affected_mob, COMSIG_MOB_AFTER_APPLY_DAMAGE, PROC_REF(on_metabolizer_damaged))
+
+/datum/reagent/pax/peaceborg/on_mob_end_metabolize(mob/living/affected_mob, metabolization_ratio)
+	. = ..()
+	UnregisterSignal(affected_mob, COMSIG_MOB_AFTER_APPLY_DAMAGE)
+	REMOVE_TRAIT(affected_mob, TRAIT_PACIFISM, METABOLIZATION_TRAIT(type))
+
+/datum/reagent/pax/peaceborg/proc/on_metabolizer_damaged(mob/living/source, amount)
+	SIGNAL_HANDLER
+	source.adjust_timed_status_effect(amount * 1 SECONDS, /datum/status_effect/synthpax_immunity, max_duration = 5 SECONDS)
 
 /datum/reagent/peaceborg/confuse
 	name = "Dizzying Solution"
@@ -3320,7 +3353,7 @@
 
 /datum/reagent/brimdust/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, metabolization_ratio)
 	. = ..()
-	if(affected_mob.adjust_fire_loss((ispodperson(affected_mob) ? -1 : 1 * seconds_per_tick), updating_health = FALSE))
+	if(affected_mob.adjust_fire_loss((affected_mob.mob_biotypes & MOB_PLANT) ? -1 : 1 * seconds_per_tick, updating_health = FALSE))
 		return UPDATE_MOB_HEALTH
 
 /datum/reagent/brimdust/on_hydroponics_apply(obj/machinery/hydroponics/mytray, mob/user)
@@ -3427,7 +3460,7 @@
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	randomized_spawns = REAGENT_SPAWN_ALL_RANDOM_SPAWNS
 	overdose_threshold = 50 // GLOW GLOW GLOW
-	metabolized_traits = list(TRAIT_MINOR_NIGHT_VISION)
+	metabolized_traits = list(TRAIT_NIGHT_VISION)
 	self_consuming = TRUE
 	/// Fake flashlight we're using to make owner's eyes glow
 	var/obj/item/flashlight/eyelight/glow/glowing
@@ -3507,7 +3540,7 @@
 	name = "Red Luminiscent Fluid"
 	color = COLOR_SOFT_RED
 	// The glow *is* unnatural, so...
-	metabolized_traits = list(TRAIT_MINOR_NIGHT_VISION, TRAIT_UNNATURAL_RED_GLOWY_EYES)
+	metabolized_traits = list(TRAIT_NIGHT_VISION, TRAIT_UNNATURAL_RED_GLOWY_EYES)
 
 /datum/reagent/luminescent_fluid/red/overdose_start(mob/living/affected_mob, metabolization_ratio)
 	. = ..()

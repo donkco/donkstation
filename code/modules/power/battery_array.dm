@@ -15,11 +15,11 @@
 	var/max_cells = 2
 	//Max cell size
 	var/max_cell_size = CELL_SIZE_AA
-	var/vector/array_offset = vector(2,0)
+	var/array_offset = TEMP_VECTOR_TRICK(2,0)
 	var/overlay_variant_num = 0
 	var/flip_alternating = TRUE
 
-	var/vector/overlay_base_pixel = vector(14, 14)
+	var/overlay_base_pixel = TEMP_VECTOR_TRICK(14, 14)
 
 /obj/item/stock_parts/power_store/battery_array/Initialize(mapload, override_maxcharge)
 	. = ..()
@@ -145,6 +145,7 @@
 	if(!tenant_cells.len)
 		return
 	var/vector/battery_offset = vector(0,0)
+	var/vector/array_offset_vector = vector(array_offset[1], array_offset[2])
 
 	var/state_suffix = 0
 	for(var/obj/item/stock_parts/power_store/tenant in tenant_cells)
@@ -154,7 +155,7 @@
 		var/mutable_appearance/tiny_overlay = mutable_appearance('icons/obj/donk_parts.dmi', "[tenant.tiny_state]_[state_suffix]")
 		tiny_overlay.set_pixel_offset(battery_offset)
 		. += tiny_overlay
-		battery_offset += array_offset
+		battery_offset += array_offset_vector
 		state_suffix = state_suffix ^ flip_alternating
 
 
@@ -202,8 +203,8 @@
 
 	flip_alternating = FALSE
 	overlay_variant_num = 3
-	array_offset = vector(7,0)
-	overlay_base_pixel = vector(12, 14)
+	array_offset = TEMP_VECTOR_TRICK(7,0)
+	overlay_base_pixel = TEMP_VECTOR_TRICK(12, 14)
 	starting_cells = list(
 		/obj/item/stock_parts/power_store/cell/d,
 		/obj/item/stock_parts/power_store/cell/d,

@@ -83,6 +83,9 @@
 	else
 		new /obj/item/stack/sheet/bone(src)
 
+/turf/open/misc/asteroid/basalt/wasteland/station
+	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
+
 //***Oil well puddles.
 /obj/structure/sink/oil_well //You're not going to enjoy bathing in this...
 	name = "oil well"
@@ -236,9 +239,9 @@
 	dug_closed = FALSE
 	return TRUE
 
-/obj/structure/closet/crate/grave/tool_interact(obj/item/weapon, mob/living/carbon/user)
+/obj/structure/closet/crate/grave/item_interaction(mob/living/carbon/user, obj/item/tool, list/modifiers)
 	//anything that isn't a shovel does normal stuff to the grave[like putting stuff in]
-	if(weapon.tool_behaviour != TOOL_SHOVEL)
+	if(tool.tool_behaviour != TOOL_SHOVEL)
 		return ..()
 
 	// Only allow digging open with a shovel, never closing
@@ -247,8 +250,8 @@
 			span_notice("[user] Is attempting to dig open [src]."),
 			span_notice("You start digging open [src]."),
 		)
-		if(!weapon.use_tool(src, user, delay = 15, volume = 40))
-			return TRUE
+		if(!tool.use_tool(src, user, delay = 15, volume = 40))
+			return ITEM_INTERACT_BLOCKING
 
 		var/is_chill_with_robbing = HAS_MIND_TRAIT(user, TRAIT_MORBID) || HAS_PERSONALITY(user, /datum/personality/callous) || HAS_PERSONALITY(user, /datum/personality/misanthropic)
 		if(open(user, force = TRUE) && affect_mood)
@@ -261,9 +264,9 @@
 					to_chat(user, span_boldwarning("Oh no, no no no, THEY'RE EVERYWHERE! EVERY ONE OF THEM IS EVERYWHERE!"))
 				first_open = FALSE
 
-		return TRUE
+		return ITEM_INTERACT_SUCCESS
 
-	return TRUE
+	return ..()
 
 /obj/structure/closet/crate/grave/container_resist_act(mob/living/user, loc_required = TRUE)
 	if(opened)
@@ -356,11 +359,11 @@
 /obj/structure/closet/crate/grave/fresh/closet_update_overlays(list/new_overlays)
 	icon_state = "[base_icon_state]_[opened ? "open" : "closed"]"
 
-/obj/structure/closet/crate/grave/fresh/tool_interact(obj/item/weapon, mob/living/carbon/user)
+/obj/structure/closet/crate/grave/fresh/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	// Block shovel-close for fresh graves; they require a soil item to fill
-	if(weapon.tool_behaviour == TOOL_SHOVEL && !user.combat_mode && opened)
+	if(tool.tool_behaviour == TOOL_SHOVEL && !user.combat_mode && opened)
 		user.balloon_alert(user, "needs [soil_fill_name]!")
-		return TRUE
+		return ITEM_INTERACT_BLOCKING
 	return ..()
 
 /obj/structure/closet/crate/grave/fresh/examine(mob/user)

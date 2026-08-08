@@ -12,7 +12,7 @@
 	internal_magazine = TRUE
 	bolt_type = BOLT_TYPE_NO_BOLT
 	tac_reloads = FALSE
-	barrel_mount_position = vector(29, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(29, 19)
 	var/spin_delay = 10
 	var/recent_spin = 0
 	var/last_fire = 0
@@ -42,7 +42,7 @@
 	chamber_round()
 
 /obj/item/gun/ballistic/revolver/click_alt(mob/user)
-	spin()
+	spin_chamber(user)
 	return CLICK_ACTION_SUCCESS
 
 /obj/item/gun/ballistic/revolver/fire_sounds()
@@ -58,15 +58,16 @@
 		if(play_click)
 			playsound(src, 'sound/items/weapons/gun/general/ballistic_click.ogg', fire_sound_volume, vary_fire_sound, frequency = click_frequency_to_use)
 
-/obj/item/gun/ballistic/revolver/verb/spin()
-	set name = "Spin Chamber"
-	var/mob/user = usr
+GAME_VERB(/obj/item/gun/ballistic/revolver, spin, "Spin Chamber", null)
+	spin_chamber(usr)
 
-	if(user.stat || !in_range(user, src))
+/obj/item/gun/ballistic/revolver/verb/spin_chamber(mob/living/user)
+	if(!istype(user) || IS_UNCONSCIOUS_OR_CRIT(user) || !in_range(user, src))
 		return
 
 	if (recent_spin > world.time)
 		return
+
 	recent_spin = world.time + spin_delay
 
 	if(do_spin())
@@ -180,7 +181,7 @@
 	desc = "A classic revolver, refurbished for modern use. Uses .357 ammo."
 	//There's already a cowboy sprite in there!
 	icon_state = "lucky"
-	barrel_mount_position = vector(29, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(29, 18)
 
 /obj/item/gun/ballistic/revolver/cowboy/nuclear
 	pin = /obj/item/firing_pin/implant/pindicate
@@ -189,7 +190,7 @@
 	name = "\improper Unica 6 auto-revolver"
 	desc = "A retro high-powered autorevolver typically used by officers of the New Russia military. Uses .357 ammo."
 	icon_state = "mateba"
-	barrel_mount_position = vector(30, 17)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 17)
 
 /obj/item/gun/ballistic/revolver/golden
 	name = "\improper Golden revolver"
@@ -198,14 +199,14 @@
 	fire_sound = 'sound/items/weapons/resonator_blast.ogg'
 	recoil = 8
 	pin = /obj/item/firing_pin
-	barrel_mount_position = vector(29, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(29, 19)
 
 /obj/item/gun/ballistic/revolver/nagant
 	name = "\improper Nagant revolver"
 	desc = "An old model of revolver that originated in Russia. Able to be suppressed. Uses 7.62x38mmR ammo."
 	icon_state = "nagant"
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/cylinder/rev762
-	barrel_mount_position = vector(28, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(28, 18)
 
 
 // A gun to play Russian Roulette!
@@ -220,7 +221,7 @@
 	gun_flags = NOT_A_REAL_GUN
 	can_hold_up = FALSE // for obvious reasons
 	doafter_self_shoot = FALSE // snowflake
-	barrel_mount_position = vector(29, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(29, 19)
 	/// If we've been spun before firing
 	var/spun = FALSE
 	/// Do after for trying to fire the gun
@@ -266,7 +267,7 @@
 
 /obj/item/gun/ballistic/revolver/russian/attack_self(mob/user)
 	if(!spun)
-		spin()
+		spin_chamber(user)
 		return TRUE
 	return ..()
 
@@ -363,7 +364,7 @@
 	user.visible_message(
 		span_danger("[user][is_target_face ? "": " cowardly"] aims \the [src] at [user.p_their()] [aimed_at_readable] as it goes off!"),
 		span_danger("You[is_target_face ? "": " cowardly"] aim \the [src] at your [aimed_at_readable] as it goes off![user.stat >= HARD_CRIT ? " <b>Everything suddenly goes black.</b>" : ""]"),
-		span_hear("You hear a grunt[user.stat == CONSCIOUS ? "" : ", followed by a thud"]!"),
+		span_hear("You hear a grunt[!IS_UNCONSCIOUS_OR_CRIT(user) ? "" : ", followed by a thud"]!"),
 		vision_distance = COMBAT_MESSAGE_RANGE,
 		visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 	)
@@ -426,7 +427,7 @@
 	desc = /obj/item/gun/ballistic/revolver/mateba::desc
 	clumsy_check = FALSE
 	icon_state = "mateba"
-	barrel_mount_position = vector(30, 17)
+	barrel_mount_position = TEMP_VECTOR_TRICK(30, 17)
 
 /obj/item/gun/ballistic/revolver/peashooter
 	name = "peashooter"
@@ -434,4 +435,4 @@
 	desc = "A wild plantlife mutation that shoots hardened peas. Incredible."
 	fire_sound = 'sound/items/weapons/peashoot.ogg'
 	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/cylinder/peashooter
-	barrel_mount_position = vector(29, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(29, 18)

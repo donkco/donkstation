@@ -100,9 +100,9 @@
 
 /// Returns a shared, cached copy of all tracks loaded from the jukebox config directory.
 /// Safe to call without a jukebox instance.
-/proc/get_jukebox_config_songs()
+/proc/get_jukebox_config_songs(force = FALSE)
 	var/static/list/config_songs
-	if(isnull(config_songs))
+	if(isnull(config_songs) || force)
 		config_songs = list()
 		var/list/tracks = flist(CONFIG_JUKEBOX_SOUNDS)
 		for(var/track_file in tracks)

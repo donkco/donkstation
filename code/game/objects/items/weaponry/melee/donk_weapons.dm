@@ -35,7 +35,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 	cell_type =  /obj/item/stock_parts/power_store/battery_array/two_aa
 
-	electronics_overlay_postition = vector(8, 6)
+	electronics_overlay_postition = TEMP_VECTOR_TRICK(8, 6)
 
 /obj/item/gun/energy/laser/agent_pistol/can_attach(obj/item/gun_attachment/attachment)
 	if(istype(attachment, /obj/item/gun_attachment/fluoressor))
@@ -49,7 +49,7 @@
 
 	/// attachment point vector,this is the pixel coordinate where you want the sprite to connect with the gun. This is subtracted from the guns mounting point vector.
 
-	var/vector/attachment_point = vector(5, 12)
+	var/list/attachment_point = TEMP_VECTOR_TRICK(5, 12)
 	/// Sound to play when attaching this to a gun. If null, no sound will play.
 	var/attach_sound = 'sound/items/pen_click.ogg'
 	/// modified fire sound
@@ -92,7 +92,7 @@
 /obj/item/gun_attachment/fluoressor
 	name = "fluoressor"
 	icon_state = "fluoressor"
-	attachment_point =  vector(8, 17)
+	attachment_point =  TEMP_VECTOR_TRICK(8, 17)
 	///Our projectile_type
 	var/obj/item/ammo_casing/laser/fluorscence_projectile
 
@@ -110,7 +110,7 @@
 /obj/item/gun_attachment/fluoressor/ultraviolet
 	name = "ultraviolet fluoressor"
 	icon_state = "fluoressor-uv"
-	attachment_point =  vector(8, 16)
+	attachment_point =  TEMP_VECTOR_TRICK(8, 16)
 	fluorscence_projectile = /obj/item/ammo_casing/energy/laser/ultraviolet
 
 /obj/item/ammo_casing/energy/laser/ultraviolet
@@ -146,7 +146,7 @@
 /obj/item/gun_attachment/fluoressor/infrared
 	name = "infrared fluoressor"
 	icon_state = "fluoressor-ir"
-	attachment_point = vector(7, 17)
+	attachment_point = TEMP_VECTOR_TRICK(7, 17)
 	fluorscence_projectile = /obj/item/ammo_casing/energy/laser/infrared
 
 /obj/item/ammo_casing/energy/laser/infrared

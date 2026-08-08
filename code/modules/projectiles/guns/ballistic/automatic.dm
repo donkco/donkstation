@@ -206,7 +206,7 @@
 	show_bolt_icon = FALSE
 	/// Rate of fire, set on initialize only
 	var/rof = 0.1 SECONDS
-	barrel_mount_position = vector(31, 18)
+	barrel_mount_position = TEMP_VECTOR_TRICK(31, 18)
 
 /obj/item/gun/ballistic/automatic/tommygun/Initialize(mapload)
 	. = ..()
@@ -234,7 +234,7 @@
 	accepted_magazine_type = /obj/item/ammo_box/magazine/m223
 	burst_size = 3
 	burst_delay = 1
-	barrel_mount_position = vector(32, 17)
+	barrel_mount_position = TEMP_VECTOR_TRICK(32, 17)
 
 // L6 SAW //
 
@@ -260,7 +260,7 @@
 	fire_sound = 'sound/items/weapons/gun/l6/shot.ogg'
 	rack_sound = 'sound/items/weapons/gun/l6/l6_rack.ogg'
 	suppressed_sound = 'sound/items/weapons/gun/general/heavy_shot_suppressed.ogg'
-	barrel_mount_position = vector(32, 17)
+	barrel_mount_position = TEMP_VECTOR_TRICK(32, 17)
 	var/cover_open = FALSE
 
 /obj/item/gun/ballistic/automatic/l6_saw/unrestricted
@@ -314,11 +314,11 @@
 		return
 	..()
 
-/obj/item/gun/ballistic/automatic/l6_saw/attackby(obj/item/A, mob/user, list/modifiers, list/attack_modifiers)
-	if(!cover_open && istype(A, accepted_magazine_type))
+/obj/item/gun/ballistic/automatic/l6_saw/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(!cover_open && istype(tool, accepted_magazine_type))
 		balloon_alert(user, "open the cover!")
-		return
-	..()
+		return ITEM_INTERACT_BLOCKING
+	return ..()
 
 // Laser rifle (rechargeable magazine) //
 
@@ -336,7 +336,7 @@
 	actions_types = list()
 	fire_sound = 'sound/items/weapons/laser.ogg'
 	casing_ejector = FALSE
-	barrel_mount_position = vector(32, 19)
+	barrel_mount_position = TEMP_VECTOR_TRICK(32, 19)
 
 // NT Battle Rifle //
 
@@ -364,7 +364,7 @@
 	burst_size = 1
 	actions_types = list()
 	fire_sound = 'sound/items/weapons/thermalpistol.ogg'
-	barrel_mount_position = vector(40, 15)
+	barrel_mount_position = TEMP_VECTOR_TRICK(40, 15)
 
 	/// Determines how many shots we can make before the weapon needs to be maintained.
 	var/shots_before_degradation = 10

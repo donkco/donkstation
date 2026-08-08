@@ -218,18 +218,9 @@
 	if(suit_store)
 		EQUIP_OUTFIT_ITEM(suit_store, ITEM_SLOT_SUITSTORE)
 
-	if(undershirt)
-		user.undershirt = initial(undershirt.name)
-
-	if(underwear)
-		user.underwear = initial(underwear.name)
-
-	if(socks)
-		user.socks = initial(socks.name)
-
 	if(accessory)
 		var/obj/item/clothing/under/U = user.w_uniform
-		if(U)
+		if(istype(U))
 			U.attach_accessory(SSwardrobe.provide_type(accessory, user))
 		else if(!visuals_only)
 			WARNING("Unable to equip accessory [accessory] in outfit [name]. No uniform present!")

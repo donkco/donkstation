@@ -64,35 +64,35 @@
 /turf/open/misc/asteroid/ex_act(severity, target)
 	return FALSE
 
-/turf/open/misc/asteroid/attackby(obj/item/attack_item, mob/user, list/modifiers)
+/turf/open/misc/asteroid/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	. = ..()
 	if(.)
 		return TRUE
 
-	if(attack_item.tool_behaviour == TOOL_SHOVEL || attack_item.tool_behaviour == TOOL_MINING)
+	if(tool.tool_behaviour == TOOL_SHOVEL || tool.tool_behaviour == TOOL_MINING)
 		if(locate(/obj/structure/closet/crate/grave/fresh) in src)
 			balloon_alert(user, "there's a grave here!")
-			return TRUE
+			return ITEM_INTERACT_BLOCKING
 		if(!can_dig(user))
-			return TRUE
+			return ITEM_INTERACT_BLOCKING
 
 		if(!isturf(user.loc))
-			return
+			return ITEM_INTERACT_BLOCKING
 
 		balloon_alert(user, "digging...")
 
-		if(attack_item.use_tool(src, user, 4 SECONDS, volume = 50))
+		if(tool.use_tool(src, user, 4 SECONDS, volume = 50))
 			if(!can_dig(user))
-				return TRUE
+				return ITEM_INTERACT_BLOCKING
 			getDug()
-			SSblackbox.record_feedback("tally", "pick_used_mining", 1, attack_item.type)
-			if(attack_item.tool_behaviour == TOOL_SHOVEL && soil_sample_text)
-				attack_item.add_soil_sample(soil_sample_text)
-			return TRUE
-	else if(istype(attack_item, /obj/item/storage/bag/ore))
+			SSblackbox.record_feedback("tally", "pick_used_mining", 1, tool.type)
+			if(tool.tool_behaviour == TOOL_SHOVEL && soil_sample_text)
+				tool.add_soil_sample(soil_sample_text)
+			return ITEM_INTERACT_SUCCESS
+	else if(istype(tool, /obj/item/storage/bag/ore))
 		for(var/obj/item/stack/ore/dropped_ore in src)
-			SEND_SIGNAL(attack_item, COMSIG_ATOM_ATTACKBY, dropped_ore)
-
+			SEND_SIGNAL(tool, COMSIG_ATOM_ATTACKBY, dropped_ore)
+		return ITEM_INTERACT_SUCCESS
 /// Drops itemstack when dug and changes icon
 /turf/open/misc/asteroid/proc/getDug()
 	if(!break_tile())
@@ -147,6 +147,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	base_icon_state = "basalt"
 	floor_variance = 15
 	dig_result = /obj/item/stack/ore/glass/basalt
+	smoothing_groups = SMOOTH_GROUP_FLOOR_BASALT
 	soil_sample_text = "Specks of volcanic ash"
 
 /turf/open/misc/asteroid/basalt/getDug()

@@ -149,11 +149,6 @@
 	ADD_TRAIT(src, TRAIT_NODROP, ORGAN_INSIDE_BODY_TRAIT)
 	interaction_flags_item &= ~INTERACT_ITEM_ATTACK_HAND_PICKUP
 
-	if(external_bodytypes)
-		limb.owner?.synchronize_bodytypes()
-	if(external_bodyshapes)
-		limb.owner?.synchronize_bodyshapes()
-
 	if(bodypart_overlay)
 		limb.add_bodypart_overlay(bodypart_overlay)
 
@@ -260,9 +255,6 @@
 	item_flags &= ~ABSTRACT
 	REMOVE_TRAIT(src, TRAIT_NODROP, ORGAN_INSIDE_BODY_TRAIT)
 	interaction_flags_item |= INTERACT_ITEM_ATTACK_HAND_PICKUP
-
-	limb.owner?.synchronize_bodytypes()
-	limb.owner?.synchronize_bodyshapes()
 
 	if(!bodypart_overlay)
 		return

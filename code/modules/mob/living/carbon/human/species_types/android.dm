@@ -109,6 +109,8 @@
 	name = "Robot Monkey"
 	id = SPECIES_ANDROIDMONKEY
 	examine_limb_id = SPECIES_MONKEY
+	mutanttongue = /obj/item/organ/tongue/robot/monkey
+
 	inherent_traits = list(
 		TRAIT_GENELESS,
 		TRAIT_LIMBATTACHMENT,
@@ -150,7 +152,7 @@
 		BODY_ZONE_R_LEG = /obj/item/bodypart/leg/right/robot/android/monkey,
 	)
 
-	inherent_biotypes = MOB_ROBOTIC|MOB_HUMANOID
+	inherent_biotypes = MOB_ROBOTIC|MOB_HUMANOID|MOB_BEAST
 	species_language_holder = /datum/language_holder/synthetic
 	sexes = FALSE
 	inherent_factions = list(FACTION_MONKEY)
@@ -161,27 +163,12 @@
 
 /datum/species/android/monkey/on_species_gain(mob/living/carbon/human/human_who_gained_species, datum/species/old_species, pref_load, regenerate_icons, replace_missing)
 	. = ..()
-	passtable_on(human_who_gained_species, SPECIES_TRAIT)
 	human_who_gained_species.AddElement(/datum/element/human_biter)
 	human_who_gained_species.update_mob_height()
 
 /datum/species/android/monkey/on_species_loss(mob/living/carbon/human/human, datum/species/new_species, pref_load)
 	. = ..()
-	passtable_off(human, SPECIES_TRAIT)
 	human.RemoveElement(/datum/element/human_biter)
-	human.update_mob_height()
-
-/datum/species/android/monkey/update_species_heights(mob/living/carbon/human/holder)
-	if(HAS_TRAIT(holder, TRAIT_DWARF))
-		return MONKEY_HEIGHT_DWARF
-
-	if(HAS_TRAIT(holder, TRAIT_TOO_TALL))
-		return MONKEY_HEIGHT_TALL
-
-	return MONKEY_HEIGHT_MEDIUM
-
-/datum/species/android/monkey/get_scream_sound(mob/living/carbon/human/monkey)
-	return get_sfx(SFX_ROBOT_SCREECH)
 
 /mob/living/carbon/human/species/androidmonkey
 	icon_state = "monkey" //for mapping
