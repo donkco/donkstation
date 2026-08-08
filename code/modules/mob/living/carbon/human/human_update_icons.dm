@@ -279,7 +279,7 @@ There are several things that need to be remembered:
 			leg_bodyshapes |= my_leg.bodyshape
 
 		var/variant_suffix = ""
-		if((leg_bodyshapes & BODYSHAPE_FAT_LEGS) && (w_uniform.supports_variations_flags & CLOTHING_FAT_TAILORED))
+		if((leg_bodyshapes & BODYSHAPE_FAT_LEGS) && (worn_item.supports_variations_flags & CLOTHING_FAT_TAILORED))
 			variant_suffix += "_o"
 
 		var/mutable_appearance/shoes_overlay = shoes.build_worn_icon(default_layer = SHOES_LAYER, default_icon_file = icon_file, suffix = variant_suffix)

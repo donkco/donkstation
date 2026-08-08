@@ -742,5 +742,5 @@ GAME_VERB_HIDDEN(/mob, quick_equip, "quick-equip")
 		if(can_equip(suspect_item, slot_id))
 			. |= slot_id
 			continue
-		doUnEquip(suspect_item)
+		dropItemToGround(suspect_item)
 
