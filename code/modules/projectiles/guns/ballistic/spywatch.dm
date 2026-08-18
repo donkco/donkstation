@@ -205,8 +205,6 @@
 	var/arrival_sound = SFX_PORTAL_ENTER
 	/// Volume used for both teleport sounds.
 	var/sound_volume = 50
-	/// Teleport channel used for the rewind.
-	var/teleport_channel = TELEPORT_CHANNEL_FREE
 
 	/// The mob currently carrying the watch directly.
 	var/mob/living/tracked_carrier
