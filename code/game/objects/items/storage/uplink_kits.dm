@@ -909,6 +909,13 @@
 	new /obj/item/spywatch(src)
 	new /obj/item/storage/fancy/spywatchammobox(src)
 
+/obj/item/storage/box/syndicate/rewind_watch_kit
+	name = "A temporal rewind watch kit"
+	desc = "A box containing a temporal rewind watch."
+
+/obj/item/storage/box/syndicate/rewind_watch_kit/PopulateContents()
+	new /obj/item/rewind_watch(src)
+
 
 #undef KIT_RECON
 #undef KIT_BLOODY_SPAI
