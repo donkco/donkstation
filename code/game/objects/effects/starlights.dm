@@ -31,4 +31,8 @@
 	icon_state = "starlight-sweeper"
 
 	color = "#aed2db"
+	bound_x = 96
+	bound_y = 96
+	appearance_flags = LONG_GLIDE
+
 	SET_BASE_PIXEL(-32,-32)

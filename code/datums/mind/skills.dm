@@ -50,9 +50,17 @@
 	var/datum/skill/S = GetSkillRef(skill)
 	return S.get_skill_modifier(modifier, known_skills[skill][SKILL_LVL])
 
-///Gets the player's current level number from the relevant skill
+///Gets the player's effective level number from the relevant skill
 /datum/mind/proc/get_skill_level(skill)
+	return known_skills[skill][SKILL_LVL] + known_skills[skill][SKILL_BONUS]
+
+/// Ges the base skill level, sans bonus / malus
+/datum/mind/proc/get_base_skill_level(skill)
 	return known_skills[skill][SKILL_LVL]
+
+/// Gets the skill bonus / malus, sans base skill level
+/datum/mind/proc/get_skill_bonus(skill)
+	return known_skills[skill][SKILL_BONUS]
 
 ///Gets the player's current exp from the relevant skill
 /datum/mind/proc/get_skill_exp(skill)
@@ -76,3 +84,6 @@
 		msg += "[initial(the_skill.name)] - [get_skill_level_name(the_skill)]\n"
 	msg += "</span>"
 	to_chat(user, boxed_message(msg))
+
+/datum/mind/proc/adjust_skill_bonus(skill, delta)
+	known_skills[skill][SKILL_BONUS] += delta

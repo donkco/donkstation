@@ -114,3 +114,42 @@
 /area/maintenance_closet
 	name = "\improper Maintenance Closet"
 	sound_environment = SOUND_AREA_SMALL_ENCLOSED
+
+
+// --------------------------- SYNDCOM ---------------------------
+
+/area/centcom/syndcom
+	name = "Syndicate Reconnaissance Outpost"
+	icon = 'icons/area/donk_area.dmi'
+	icon_state = "syndcom"
+	sound_environment = SOUND_ENVIRONMENT_SEWER_PIPE
+
+/area/centcom/syndcom/landing_pad
+	name = "Syndicate Outpost Landing Pad"
+	icon_state = "syndcom_landing_pad"
+	ambience_index = AMBIENCE_ICEMOON
+	sound_environment = SOUND_ENVIRONMENT_PARKING_LOT
+	outdoors = TRUE
+	static_lighting = FALSE
+	base_lighting_alpha = 128
+
+/area/centcom/syndcom/hangar
+	name = "Syndicate Hangar"
+	icon_state = "syndcom_hangar"
+	ambience_index = AMBIENCE_ENGI
+	sound_environment = SOUND_ENVIRONMENT_HANGAR
+
+/area/centcom/syndcom/hangar_break
+	name = "Outpost Hangar Breakroom"
+	icon_state = "hangar_breakroom"
+	ambience_index = AMBIENCE_GENERIC
+	sound_environment = SOUND_AREA_MEDIUM_SOFTFLOOR
+
+/area/centcom/syndcom/wilds
+	name = "Syndicate Outpost Wilderness"
+	icon_state = "syndcom_wilds"
+	ambience_index = AMBIENCE_ICEMOON
+	sound_environment = SOUND_AREA_LAVALAND
+	outdoors = TRUE
+	static_lighting = FALSE
+	base_lighting_alpha = 128

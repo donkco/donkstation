@@ -10,6 +10,7 @@
 
 #define SKILL_LVL 1
 #define SKILL_EXP 2
+#define SKILL_BONUS 3
 
 // Level experience requirements
 #define SKILL_EXP_NONE 0

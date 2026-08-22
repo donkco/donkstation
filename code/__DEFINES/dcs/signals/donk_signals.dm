@@ -5,3 +5,5 @@
 #define AILMENT_STAGE_CHANGED "ailment_stage_changed"
 
 #define COMSIG_BODYPART_BODYSHAPE_CHANGED "bodypart_bodyshape_changed"
+
+#define COMSIG_GLOB_ROUND_ENDED "!round_ended"

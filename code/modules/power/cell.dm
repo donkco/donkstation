@@ -161,7 +161,7 @@
 	cell_size = CELL_SIZE_AA
 
 /obj/item/stock_parts/power_store/cell/aa/lying
-	icon_state = "cell-aa-lying"
+	icon_state = "cell-aa_lying"
 
 /obj/item/stock_parts/power_store/cell/aa/fast_charge
 	name = "\improper Nanotrasen enviroloop AA cell"
@@ -179,7 +179,7 @@
 	chargerate = 0 //cant be recharged
 
 /obj/item/stock_parts/power_store/cell/aa/alkaline/lying
-	icon_state = "cell-aa-lying"
+	icon_state = "cell-aa_lying"
 
 /obj/item/stock_parts/power_store/cell/nine_volt
 	name = "9v power cell"
@@ -194,6 +194,13 @@
 /obj/item/stock_parts/power_store/cell/nine_volt/tactical
 	name = "tactical 9v cell"
 	desc = "A shielded 9v battery, useful if your house is ignited by a nuclear explosion!"
+
+	icon = 'icons/obj/donk_parts.dmi'
+	icon_state = "cell-9v-tactical"
+	base_icon_state = "cell-9v-tactical"
+
+	cell_size_prefix = "9v"
+	charge_light_type = "teal"
 	chargerate = NINE_VOLT_CHARGE * 0.10
 	emp_damage_modifier = 0.5
 
@@ -204,6 +211,7 @@
 	icon = 'icons/obj/donk_parts.dmi'
 	icon_state = "cell-d"
 	base_icon_state = "cell-d"
+	cell_size_prefix = "d"
 	charge_light_type = null
 	tiny_state = "cell-d_tiny"
 
@@ -234,6 +242,7 @@
 	name = "tactical military cell"
 	desc = "A powerful thionyl chloride battery. This one is outfitted with extra shielding for special operations."
 
+	icon_state = "cell-ba5800-tactical"
 	base_icon_state = "cell-ba5800-tactical"
 	cell_size_prefix = "ba5800"
 	charge_light_type = "teal"
@@ -245,15 +254,22 @@
 	desc = "Any builder appreciates a nice brick."
 
 	icon = 'icons/obj/donk_parts.dmi'
-	icon_state ="cell-toolpack"
-	base_icon_state = "cell-toolpack"
+	icon_state ="cell-tool_pack"
+	base_icon_state = "cell-tool_pack"
 	cell_size_prefix = "tool_pack"
 	charge_light_type = "teal"
 
 	maxcharge = TOOL_PACK_CHARGE
 	chargerate = TOOL_PACK_CHARGE * 0.03
 	cell_size = CELL_SIZE_TOOL
-	custom_materials = list(/datum/material/iron=SHEET_MATERIAL_AMOUNT, /datum/material/plastic = SHEET_MATERIAL_AMOUNT)
+	custom_materials = list(/datum/material/lead = SHEET_MATERIAL_AMOUNT * 3, /datum/material/plastic = SHEET_MATERIAL_AMOUNT)
+
+
+/obj/item/stock_parts/power_store/cell/lead/gel
+	name = "gel battery"
+
+	icon = 'icons/obj/donk_parts.dmi'
+	icon_state ="cell-lead-gel"
 
 // -------------- SPECIAL BATTERIES ---------------------------
 

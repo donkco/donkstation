@@ -182,7 +182,7 @@
 	gender = PLURAL
 	name = "snow"
 	desc = "The puffy snow clumps together to make a solid-looking floor, though it sinks beneath your feet."
-	icon = 'icons/turf/snow.dmi'
+	icon = 'icons/turf/snow_biome/snow_floors.dmi'
 	icon_state = "snow"
 	slowdown = 2
 	bullet_sizzle = TRUE

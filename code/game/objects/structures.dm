@@ -13,6 +13,8 @@
 	armor_type = /datum/armor/obj_structure
 	burning_particles = /particles/smoke/burning
 	var/broken = FALSE
+	var/list/smash_drops
+	var/list/disassemble_drops
 
 /datum/armor/obj_structure
 	fire = 50
@@ -83,3 +85,19 @@
 	// If we consumed in crafting, we should dump contents out before qdeling them.
 	if(!is_type_in_list(src, current_recipe.parts))
 		dump_contents()
+
+/obj/structure/atom_deconstruct(disassembled)
+	if(disassembled)
+		if(!disassemble_drops?.len)
+			return ..()
+		for(var/path in disassemble_drops)
+			var/atom/movable/drop = new path(get_turf(src)) // We spread the salvaged components out, but not too much.
+			drop.fling(min_dist = 6, max_dist = 10)
+	if(!smash_drops?.len)
+		return ..()
+
+	for(var/path in smash_drops)
+		var/atom/movable/drop = new path(get_turf(src))  // We launch the debris more violently.
+		drop.fling(min_dist = 10, max_dist = 20)
+	return ..()
+

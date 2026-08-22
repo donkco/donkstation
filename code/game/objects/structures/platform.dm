@@ -10,6 +10,7 @@
 	smoothing_flags = SMOOTH_BITMASK|SMOOTH_OBJ
 	smoothing_groups = SMOOTH_GROUP_PLATFORMS
 	canSmoothWith = SMOOTH_GROUP_PLATFORMS
+	layer = LOW_OBJ_LAYER
 	pass_flags_self = PASSTABLE | LETPASSTHROW | PASSGRILLE | PASSWINDOW
 	opacity = FALSE
 	density = TRUE

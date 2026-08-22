@@ -1,0 +1,9 @@
+output_name = "plastitanium_tracks"
+template = "bitmask/cardinal_32x32.toml"
+
+[prefabs]
+
+6 = 4
+10 = 5
+9 = 6
+5 = 7

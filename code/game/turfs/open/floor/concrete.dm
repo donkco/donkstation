@@ -42,7 +42,7 @@
 	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
 	can_have_footprints = TRUE
 	smoothing_flags = SMOOTH_BITMASK
-	smoothing_groups = SMOOTH_GROUP_FLOOR_CONCRETE + SMOOTH_GROUP_SLUDGE_POOL + SMOOTH_GROUP_OPEN_FLOOR + SMOOTH_GROUP_TURF_OPEN
+	smoothing_groups = SMOOTH_GROUP_FLOOR_CONCRETE  + SMOOTH_GROUP_OPEN_FLOOR + SMOOTH_GROUP_TURF_OPEN
 	canSmoothWith = SMOOTH_GROUP_FLOOR_CONCRETE + SMOOTH_GROUP_SLUDGE_POOL
 
 	custom_materials = list(/datum/material/concrete = SHEET_MATERIAL_AMOUNT * 1)
@@ -53,3 +53,8 @@
 		ScrapeAway(flags = CHANGETURF_INHERIT_AIR)
 		return ITEM_INTERACT_SUCCESS
 	return ..()
+
+/turf/open/floor/concrete/cold
+
+	initial_gas_mix = COLD_ATMOS
+
