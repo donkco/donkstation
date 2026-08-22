@@ -64,6 +64,7 @@ GLOBAL_LIST_INIT(inventory_slot_datums, initialize_inventory_slots())
 	// Reset pixel offsets in order to make it fit the box
 	slot_item.pixel_x = slot_item.base_pixel_x
 	slot_item.pixel_y = slot_item.base_pixel_y
+	slot_item.pixel_z = slot_item.base_pixel_z
 	slot.vis_contents += slot_item
 
 // Not a real inventory slot, but this is used as a generic abstraction for hand slot UI behaviors

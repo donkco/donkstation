@@ -22,6 +22,8 @@
 	var/turf_type = /turf/open/misc/asteroid
 			/// Whether this turf has different icon states
 	var/has_floor_variance = TRUE
+	/// How many variants do we have? For some reason we have null and 0 variants as well so remember that.
+	var/max_variant_integer = 12
 	/// Probability floor has a different icon state
 	var/floor_variance = 20
 	/// Itemstack to drop when dug by a shovel
@@ -31,7 +33,7 @@
 	/// Percentage chance of receiving a bonus worm
 	var/worm_chance = 30
 	/// Soil sample text added to a shovel's forensics when this turf is dug
-	var/soil_sample_text = "Grains of asteroid sand"
+	var/soil_sample_text = "Shards of sharp regolith: indicating a origin from an extraterrestrial body."
 
 /turf/open/misc/asteroid/broken_states()
 	if(initial(dug))
@@ -53,7 +55,7 @@
 	. = ..()
 	name = proper_name
 	if(has_floor_variance && prob(floor_variance))
-		icon_state = "[base_icon_state][rand(0,12)]"
+		icon_state = "[base_icon_state][rand(0, max_variant_integer)]"
 
 /turf/open/misc/asteroid/MakeSlippery(wet_setting, min_wet_time, wet_time_to_add, max_wet_time, permanent)
 	return
@@ -148,7 +150,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	floor_variance = 15
 	dig_result = /obj/item/stack/ore/glass/basalt
 	smoothing_groups = SMOOTH_GROUP_FLOOR_BASALT
-	soil_sample_text = "Specks of volcanic ash"
+	soil_sample_text = "Basalt particles and specks of volanic ash, with fine vitreous inclusions: indicative of a volcanic origin."
 
 /turf/open/misc/asteroid/basalt/getDug()
 	. = ..()
@@ -310,7 +312,7 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	gender = PLURAL
 	name = "snow"
 	desc = "Looks cold."
-	icon = 'icons/turf/snow.dmi'
+	icon = 'icons/turf/snow_biome/snow_floors.dmi'
 	damaged_dmi = 'icons/turf/snow.dmi'
 	baseturfs = /turf/open/misc/asteroid/snow
 	icon_state = "snow"
@@ -323,6 +325,8 @@ GLOBAL_LIST_EMPTY(dug_up_basalt)
 	bullet_bounce_sound = null
 	dig_result = /obj/item/stack/ore/snow
 	leave_footprints = TRUE
+	max_variant_integer = 17
+	floor_variance = 15
 
 /turf/open/misc/asteroid/snow/burn_tile()
 	if(!burnt)

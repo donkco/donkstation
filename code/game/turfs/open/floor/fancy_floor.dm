@@ -213,7 +213,7 @@
 /turf/open/floor/fake_snow
 	gender = PLURAL
 	name = "snow"
-	icon = 'icons/turf/snow.dmi'
+	icon = 'icons/turf/snow_biome/snow_floors.dmi'
 	damaged_dmi = 'icons/turf/snow.dmi'
 	desc = "Looks cold."
 	icon_state = "snow"

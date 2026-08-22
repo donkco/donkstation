@@ -451,7 +451,7 @@
 	desc = "A surprisingly compact bolt-action anti-materiel rifle, utilizing .50 BMG cartridges. \
 		While technically outdated in modern arms markets, it still works exceptionally well \
 		in anti-personnel and light anti-armor roles. Also, somehow, capable of fitting a suppressor."
-	icon = 'icons/obj/weapons/guns/ballistic.dmi'
+	icon = 'icons/obj/weapons/guns/donk_guns_wide.dmi'
 	icon_state = "sniper"
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
@@ -473,7 +473,7 @@
 	mag_display = TRUE
 	tac_reloads = TRUE
 	rack_delay = 1 SECONDS
-	barrel_mount_position = TEMP_VECTOR_TRICK(30, 31)
+	barrel_mount_position = TEMP_VECTOR_TRICK(43, 17)
 
 /obj/item/gun/ballistic/rifle/sniper_rifle/examine(mob/user)
 	. = ..()

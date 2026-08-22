@@ -168,8 +168,9 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_SUS_CARPET S_TURF(77) ///turf/open/floor/carpet/sus
 #define SMOOTH_GROUP_FLOOR_CONCRETE S_TURF(78) ///turf/open/floor/concrete (dry and wet)
 #define SMOOTH_GROUP_VENEER_WALLS S_TURF(79) ///turf/closed/wall/veneer
+#define SMOOTH_GROUP_PLASTITANIUM_TRACKS S_TURF(80) ///turf/open/floor/plastitanium_tile/tracks
 
-#define MAX_S_TURF 79 //Always match this value with the one above it.
+#define MAX_S_TURF 80 //Always match this value with the one above it.
 
 #define S_OBJ(num) ("-" + #num + ",")
 /* /obj included */
@@ -250,6 +251,7 @@ DEFINE_BITFIELD(smoothing_junction, list(
 #define SMOOTH_GROUP_PLATFORMS_PAPER S_OBJ(86) ///obj/structure/platform/paper
 
 #define SMOOTH_GROUP_BOULDER_PLATFORM S_OBJ(87) ///obj/structure/lattice/catwalk/boulder
+#define SMOOTH_GROUP_CONTROL_PANELS S_OBJ(88)
 
 /// Performs the work to set smoothing_groups and canSmoothWith.
 /// An inlined function used in both turf/Initialize and atom/Initialize.

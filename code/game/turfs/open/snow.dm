@@ -1,7 +1,7 @@
 /turf/open/misc/snow
 	gender = PLURAL
 	name = "snow"
-	icon = 'icons/turf/snow.dmi'
+	icon = 'icons/turf/snow_biome/snow_floors.dmi'
 	damaged_dmi = 'icons/turf/snow.dmi'
 	desc = "Looks cold."
 	icon_state = "snow"
@@ -17,7 +17,7 @@
 
 /turf/open/misc/snow/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/diggable, /obj/item/stack/ore/snow, 2, soil_sample_text = "Traces of snow")
+	AddElement(/datum/element/diggable, /obj/item/stack/ore/snow, 2, soil_sample_text = "Soil particles: shape indicative of being subjected to many freeze / thwaw cycles.")
 
 /turf/open/misc/snow/broken_states()
 	return list("snow_dug")

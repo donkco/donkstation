@@ -25,7 +25,7 @@
 	if(user?.mind)
 		for (var/type in GLOB.skill_types)
 			var/datum/skill/S = GetSkillRef(type)
-			var/lvl_num = targetmind.get_skill_level(type)
+			var/lvl_num = targetmind.get_base_skill_level(type)
 			var/lvl_name = uppertext(targetmind.get_skill_level_name(type))
 			var/exp = targetmind.get_skill_exp(type)
 			var/xp_prog_to_level = targetmind.exp_needed_to_level_up(type)

@@ -146,6 +146,19 @@
 
 	floor_tile = /obj/item/stack/tile/plastitanium/scale
 
+/turf/open/floor/plastitanium_tile/tracks
+	name = "plastitanium tracks"
+	desc = "These tiles have sunken channels containing a set of smooth metal tracks."
+
+	smoothing_flags = SMOOTH_BITMASK_CARDINALS
+	smoothing_groups = SMOOTH_GROUP_PLASTITANIUM_TRACKS + SMOOTH_GROUP_TURF_OPEN + SMOOTH_GROUP_OPEN_FLOOR
+	canSmoothWith = SMOOTH_GROUP_PLASTITANIUM_TRACKS
+
+	icon = 'icons/turf/floors/donkfloors/plastitanium_tracks.dmi'
+	icon_state = "plastitanium_tracks-15"
+	base_icon_state = "plastitanium_tracks"
+
+
 
 // -------------------- STONE AND CERAMIC TILES --------------------
 

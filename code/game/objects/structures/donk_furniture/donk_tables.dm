@@ -241,3 +241,61 @@
 		return /obj/structure/table/stratagem
 	else
 		return ..()
+
+/obj/structure/table_frame/plasteel
+	name = "industrial table frame"
+	desc = "A heavy duty metal frame. You could easily pass through this."
+	icon = 'icons/obj/donk_furniture/coarse_tables.dmi'
+	icon_state = "frame-plasteel"
+	framestack = /obj/item/stack/sheet/plasteel
+	framestackamount = 1
+	custom_materials = list(/datum/material/alloy/plasteel = SHEET_MATERIAL_AMOUNT)
+
+/obj/structure/table_frame/plastitanium/get_table_type(obj/item/stack/our_stack)
+	if(istype(our_stack, /obj/item/stack/cable_coil))
+		return /obj/structure/table/ctrl_panel
+
+	else
+		return ..()
+
+// --------------- CONTROL PANELS ------------------------------
+// A table where buttons live.
+//-------------------------------------------------------------
+#define POSITION_ONE vector(-9, -14)
+#define POSITION_TWO vector(9, -14)
+#define POSITION_THREE vector(-9, -5)
+#define POSITION_FOUR vector(9, -5)
+#define POSITION_FIVE vector(-9, 5)
+#define POSITION_SIX vector(9, 5)
+#define POSITION_SEVEN vector(-9, 14)
+#define POSITION_EIGHT vector(9, 14)
+
+/obj/structure/table/ctrl_panel
+	name = "control panel"
+	desc = "You see a structure hosting a sea of buttons, knobs, sliders and indicators. You feel in control."
+
+	icon = 'icons/obj/smooth_structures/donk_tables/control_panel.dmi'
+	icon_state = "control_panel-0"
+	base_icon_state = "control_panel"
+
+	frame = /obj/structure/table_frame/plasteel
+	framestack = /obj/item/stack/sheet/plasteel
+	buildstack = /obj/item/stack/cable_coil
+	max_integrity = 300
+	smoothing_groups = SMOOTH_GROUP_CONTROL_PANELS
+	canSmoothWith = SMOOTH_GROUP_CONTROL_PANELS
+	custom_materials = list(/datum/material/alloy/plasteel = SHEET_MATERIAL_AMOUNT)
+	can_flip = FALSE
+
+	var/list/hosted_buttons = list()
+
+/obj/structure/table/ctrl_panel/proc/host_mountable(obj/mountable)
+	if(hosted_buttons.len >= 8)
+		return
+
+	if(mountable.pixel_x >= 0)
+
+		if(!hosted_buttons[POSITION_THREE])
+			hosted_buttons[POSITION_THREE] = mountable
+
+

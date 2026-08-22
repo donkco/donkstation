@@ -292,6 +292,7 @@ GLOBAL_LIST_INIT(achievements_unlocked, list())
 	//stop collecting feedback during grifftime
 	SSblackbox.Seal()
 
+	SEND_GLOBAL_SIGNAL(src, COMSIG_GLOB_ROUND_ENDED)
 	TriggerRoundEndTgsEvent()
 
 	sleep(5 SECONDS)

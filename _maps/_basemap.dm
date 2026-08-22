@@ -1,5 +1,5 @@
 #ifndef MINIMAL_CENTCOM
-#include "map_files\generic\CentCom.dmm"
+#include "map_files\generic\Syndcom.dmm"
 #else
 #include "map_files\generic\CentCom_minimal.dmm"
 #endif
